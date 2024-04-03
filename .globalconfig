@@ -1,0 +1,38 @@
+# https://gitee.com/mikochen/PowerShell/blob/master/.globalconfig
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.DocumentationRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.ReadabilityRules'
+# dotnet_analyzer_diagnostic.category-StyleCop.CSharp.ReadabilityRules.severity = none
+dotnet_diagnostic.SA1101.severity = silent
+
+# Default severity for analyzer diagnostics with category 'CodeQuality'
+# dotnet_analyzer_diagnostic.category-CodeQuality.severity = none
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.NamingRules'
+# dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = none
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.LayoutRules'
+# dotnet_analyzer_diagnostic.category-StyleCop.CSharp.LayoutRules.severity = none
+
+#csharp_style_var_for_built_in_types=true:silent
+#csharp_style_var_when_type_is_apparent=true:silent
+#csharp_style_var_elsewhere=true:silent
+
+# XML 주석 관련
+dotnet_diagnostic.SA0001.severity=silent
+dotnet_diagnostic.CS1591.severity = none
+
+# File may only contain a single type
+dotnet_diagnostic.SA1402.severity = silent
+
+# Use trailing comma in multi-line initializers (for dotnet ef migrations)
+dotnet_diagnostic.SA1413.severity = silent
+
+# SA1516: Elements should be separated by blank line
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1516.md
+dotnet_diagnostic.SA1516.severity = silent
+
+## 필드 전방 선언 선언 관련
+dotnet_diagnostic.SA1201.severity = silent
