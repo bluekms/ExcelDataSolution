@@ -1,0 +1,13 @@
+name: _ Pull Request Main
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  CI:
+    uses: ./.github/workflows/ci.yml
+
+  DockerBuild:
+    needs: [CI]
+    uses: ./.github/workflows/ci-docker-AuthServer.yml

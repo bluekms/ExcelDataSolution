@@ -1,0 +1,30 @@
+name: Test
+on:
+  workflow_dispatch:
+
+jobs:
+  list_release_branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Last Branch
+        run: |
+          git fetch --prune --unshallow
+          echo "=== 1 ==="
+          last=$(git branch -r | sort -rn | head -n1)
+          echo "$last"
+          echo "=== 2 ==="
+          last=$(git branch -r | cut -c 18-23 | sort -rn | head -n1)
+          echo "$last"
+          echo "=== 3 ==="
+          last=$(git branch -r | grep "origin/Release/")
+          echo "$last"
+          echo "=== 4 ==="
+          last=$(git branch -r | grep "origin/Release/" | sort -rn | head -n1)
+          echo "$last"
+          echo "=== 5 ==="
+          last=$(git branch -r | grep "origin/Release/" | cut -c 18-23 | sort -rn | head -n1)
+          echo "$last"
+      - name: Use Last Branch
+        run: echo "$last"

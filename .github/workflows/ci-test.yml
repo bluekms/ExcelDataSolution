@@ -1,0 +1,33 @@
+name: _ Unit Test
+
+on:
+  workflow_call:
+    
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    
+    services:
+      redis:
+        image: redis:6
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6380:6379
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '7.x'
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run Test
+        run: dotnet test --no-restore --verbosity minimal
