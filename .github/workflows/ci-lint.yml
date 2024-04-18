@@ -1,0 +1,20 @@
+name: _ Lint
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Actions Repository
+        uses: actions/checkout@v3
+
+      - name: Formatting
+        run: dotnet format style
+
+      - name: Check spelling
+        uses: crate-ci/typos@master
+        with:
+          config: ./typos.toml
