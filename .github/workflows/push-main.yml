@@ -1,0 +1,14 @@
+name: _ Push Main
+
+on:
+  push:
+    branches: [ "main" ]
+    
+jobs:
+  CI:
+    uses: ./.github/workflows/ci.yml
+    
+  CD:
+    needs: [CI]
+    secrets: inherit
+    uses: ./.github/workflows/cd.yml

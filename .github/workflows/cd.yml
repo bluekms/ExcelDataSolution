@@ -1,0 +1,10 @@
+name: _ Continuous Delivery
+
+on:
+  workflow_call:
+
+jobs:
+  DeployLatestAuthServer:
+    name: Deploy latest AuthServer
+    secrets: inherit
+    uses: ./.github/workflows/cd-AuthServer.yml

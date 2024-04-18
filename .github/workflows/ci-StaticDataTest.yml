@@ -1,0 +1,40 @@
+name: Static Data Test
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  staticdata:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+          
+      - name: Install dependencies
+        run: dotnet restore
+        
+      - name: Build Converter
+        run: |
+          cd ./Tools/ExcelToCsvWithLibrary
+          dotnet publish --no-restore --configuration Release --output ../../StaticData/Converter
+          
+      - name: Run Converter
+        run: |
+          cd ./StaticData/Converter
+          ./ExcelToCsvWithLibrary -t -d ../__TestStaticData -o ../__TestStaticData/Output
+          
+      - name: Build Tester
+        run: |
+          cd ./Tools/CsvLoadTester
+          dotnet publish --no-restore --configuration Release --output ../../StaticData/Tester
+          
+      - name: Run Tester
+        run: |
+          cd ./StaticData/Tester
+          ./CsvLoadTester -t -d ../__TestStaticData/Output
