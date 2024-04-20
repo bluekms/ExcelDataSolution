@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Globalization;
+using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.TypeChecker;
 using StaticDataAttribute;
@@ -10,6 +12,7 @@ public static class Checker
 {
     public static void Check(SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
     {
+        var sb = new StringBuilder();
         foreach (var recordDeclaration in recordDeclarationList)
         {
             if (!recordDeclaration.HasAttribute<StaticDataRecordAttribute>() ||
@@ -32,11 +35,20 @@ public static class Checker
                     continue;
                 }
 
-                if (!SupportedTypeChecker.CheckSupportedType(namedTypeSymbol, semanticModel, recordDeclarationList))
+                try
                 {
-                    throw new NotSupportedException(parameter.Identifier.Text);
+                    SupportedTypeChecker.Check(namedTypeSymbol, semanticModel, recordDeclarationList);
+                }
+                catch (Exception e)
+                {
+                    sb.AppendLine(CultureInfo.InvariantCulture, $"{recordDeclaration.Identifier}.{parameter.Identifier} is not supported. {e.Message}");
                 }
             }
+        }
+
+        if (sb.Length is not 0)
+        {
+            throw new NotSupportedException(sb.ToString());
         }
     }
 }

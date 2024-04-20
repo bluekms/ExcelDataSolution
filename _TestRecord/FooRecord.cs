@@ -1,11 +1,13 @@
 ﻿namespace MyProject;
 
+// TODO 다른 파일에 정의된 enum 지원해야 함
 public enum Fruit
 {
     Apple,
     Banana,
     Cherry,
 }
+
 public sealed record UserScore(string Name, int Score);
 public sealed record UserScores(string Name, List<int> Scores);
 public sealed record UserClassData1(List<UserScore> UserScores);
@@ -50,6 +52,8 @@ public sealed record FooRecord(
     [Order] string StringType,
     [Order] Fruit EnumType,
 
+    // TODO 기본 타입의 nullable 지원해야 함
+
     // Collection Types
     [Order][ColumnPrefix("HashValue")] HashSet<int> HashValues,
     [Order][ColumnPrefix("HashString")] HashSet<string> HashStrings,
@@ -76,17 +80,18 @@ public sealed record FooRecord(
 
     // Exceptions
     // HastSet<Object>는 지원하지 않음
-    // [Order][ColumnPrefix("HashErr")] HashSet<FruitData> HashErrs,
+    [Order][ColumnPrefix("HashErr")] HashSet<FruitData> HashErrs,
 
     // List<class>는 지원하지 않음
-    // [Order][ColumnPrefix("ListErr")] List<Person> ListClassErrs,
+    [Order][ColumnPrefix("ListErr")] List<Person> ListClassErrs,
 
     // Key에 Object는 지원하지 않음
-    // [Order][ColumnPrefix("DictionaryKeyErr")] Dictionary<Person, FruitData> DictionaryKeyErrs;
+    [Order][ColumnPrefix("DictionaryKeyErr")] Dictionary<Person, FruitData> DictionaryKeyErrs,
 
     // Value에 class 및 KeyAttribute가 없는 class는 지원하지 않음
-    // [Order][ColumnPrefix("DictionaryValueClassErr")] Dictionary<string, Person> DictionaryValueClassErrs;
+    [Order][ColumnPrefix("DictionaryValueClassErr")] Dictionary<string, Person> DictionaryValueClassErrs,
 
+    // TODO 이게 그냥 통과되고 있음
     // Value에 KeyAttribute가 있는 필드의 타입이 Dictionary의 Key와 다르면 지원하지 않음
-    // [Order][ColumnPrefix("DictionaryValueKeyAttributeErr")] Dictionary<string, StudentWithIntKey> DictionaryValueKeyAttributeErrs;
+    [Order][ColumnPrefix("DictionaryValueKeyAttributeErr")] Dictionary<string, StudentWithIntKey> DictionaryValueKeyAttributeErrs,
 );

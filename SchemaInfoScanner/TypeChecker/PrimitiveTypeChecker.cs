@@ -4,7 +4,7 @@ namespace SchemaInfoScanner.TypeChecker;
 
 public class PrimitiveTypeChecker
 {
-    public static bool CheckSupportedType(INamedTypeSymbol symbol)
+    public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
     {
         var specialTypeCheck = symbol.SpecialType switch
         {
@@ -26,5 +26,13 @@ public class PrimitiveTypeChecker
         };
 
         return specialTypeCheck || symbol.TypeKind == TypeKind.Enum;
+    }
+
+    public static void Check(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedPrimitiveType(symbol))
+        {
+            throw new NotSupportedException($"{symbol} is not supported primitive type.");
+        }
     }
 }
