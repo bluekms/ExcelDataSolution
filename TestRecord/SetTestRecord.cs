@@ -1,7 +1,7 @@
 ﻿namespace MyProject;
 
 [StaticDataRecord]
-public sealed rcord SetTestRecord(
+public sealed record SetTestRecord(
     [Key]
     [Order]
     int Id,
