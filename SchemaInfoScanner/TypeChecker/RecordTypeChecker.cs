@@ -7,17 +7,17 @@ public static class RecordTypeChecker
 {
     private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
 
-    public static bool IsRecordType(INamedTypeSymbol symbol)
+    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
     {
         var methodSymbols = symbol.GetMembers().OfType<IMethodSymbol>().Select(x => x.Name);
         return !RecordMethodNames.Except(methodSymbols).Any();
     }
 
-    public static bool CheckSupportedType(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static void Check(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
     {
-        if (!IsRecordType(symbol))
+        if (!IsSupportedRecordType(symbol))
         {
-            return false;
+            throw new NotSupportedException($"{symbol} is not supported record type.");
         }
 
         foreach (var member in symbol.GetMembers()
@@ -25,13 +25,12 @@ public static class RecordTypeChecker
                      .Skip(1)
                      .OfType<IPropertySymbol>())
         {
-            var namedSymbol = member.Type as INamedTypeSymbol;
-            if (!SupportedTypeChecker.CheckSupportedType(namedSymbol!, semanticModel, recordDeclarationList))
+            if (member.Type is not INamedTypeSymbol namedSymbol)
             {
-                return false;
+                throw new NotSupportedException($"{symbol}.{member} is not INamedTypeSymbol for record type.");
             }
-        }
 
-        return true;
+            SupportedTypeChecker.Check(namedSymbol, semanticModel, recordDeclarationList);
+        }
     }
 }

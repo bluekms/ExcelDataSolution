@@ -3,25 +3,29 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner.TypeChecker;
 
-public class ListTypeChecker
+public static class ListTypeChecker
 {
-    public static bool IsList(INamedTypeSymbol symbol)
+    public static bool IsSupportedListType(INamedTypeSymbol symbol)
     {
-        return symbol.Name.StartsWith("List", StringComparison.Ordinal);
+        return symbol.Name.StartsWith("List", StringComparison.Ordinal) &&
+               symbol.TypeArguments is [INamedTypeSymbol];
     }
 
-    public static bool CheckSupportedType(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static void Check(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
     {
-        if (!IsList(symbol) || symbol.TypeArguments is not [INamedTypeSymbol namedTypeSymbol])
+        if (!IsSupportedListType(symbol))
         {
-            return false;
+            throw new NotSupportedException($"{symbol} is not supported list type.");
         }
 
-        if (PrimitiveTypeChecker.CheckSupportedType(namedTypeSymbol))
+        if (symbol.TypeArguments.First() is not INamedTypeSymbol namedTypeSymbol)
         {
-            return true;
+            throw new NotSupportedException($"{symbol} is not INamedTypeSymbol for List<T>.");
         }
 
-        return RecordTypeChecker.CheckSupportedType(namedTypeSymbol, semanticModel, recordDeclarationList);
+        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
+        {
+            RecordTypeChecker.Check(namedTypeSymbol, semanticModel, recordDeclarationList);
+        }
     }
 }

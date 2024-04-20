@@ -1,9 +1,7 @@
-﻿namespace DefaultNamespace;
-
-namespace MyProject;
+﻿namespace MyProject;
 
 [StaticDataRecord]
-public sealed NullableListTestRecord(
+public record NullableListTestRecord(
     [Key]
     [Order]
     int Id,

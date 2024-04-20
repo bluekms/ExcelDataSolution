@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Reflection;
+using System.Text;
 using SchemaInfoScanner;
 using Xunit.Abstractions;
 
@@ -23,22 +25,28 @@ public class UnitTest1
             "..",
             "..",
             "_TestRecord");
-        try
+
+        var loadResultList = Loader.Load(csPath);
+        var sb = new StringBuilder();
+        foreach (var loadResult in loadResultList)
         {
-            var loadResultList = Loader.Load(csPath);
-            foreach (var loadResult in loadResultList)
+            try
             {
                 Checker.Check(loadResult.SemanticModel, loadResult.RecordDeclarations);
             }
-
-            // Scanner.Scan(csPath);
+            catch (Exception e)
+            {
+                sb.AppendLine(e.Message);
+            }
         }
-        catch (Exception e)
+
+        // Scanner.Scan(csPath);
+
+        if (sb.Length is not 0)
         {
-            testOutputHelper.WriteLine(e.ToString());
-            throw;
+            this.testOutputHelper.WriteLine(sb.ToString());
         }
 
-        Assert.True(true);
+        Assert.True(sb.Length is 0);
     }
 }
