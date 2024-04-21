@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace SchemaInfoScanner.TypeChecker;
+namespace SchemaInfoScanner.TypeCheckers;
 
 public static class RecordTypeChecker
 {
