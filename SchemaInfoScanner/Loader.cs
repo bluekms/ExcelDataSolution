@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner;
 
-public sealed record LoadResult(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList);
+public sealed record LoadResult(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList, List<EnumDeclarationSyntax> EnumDeclarationList);
 
 public static class Loader
 {
@@ -64,7 +64,8 @@ public static class Loader
 
         var semanticModel = compilation.GetSemanticModel(syntaxTree);
         var recordDeclarationList = root.DescendantNodes().OfType<RecordDeclarationSyntax>().ToList();
+        var enumDeclarationList = root.DescendantNodes().OfType<EnumDeclarationSyntax>().ToList();
 
-        return new(semanticModel, recordDeclarationList);
+        return new(semanticModel, recordDeclarationList, enumDeclarationList);
     }
 }

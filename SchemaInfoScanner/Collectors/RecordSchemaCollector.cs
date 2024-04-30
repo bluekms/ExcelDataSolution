@@ -1,5 +1,7 @@
+using System.Collections.Frozen;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Collectors;
 
@@ -8,10 +10,11 @@ public sealed record RecordParameterSchema(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> Attributes);
 
-public sealed class RecordSchemaCollector
+public sealed partial class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
     private readonly Dictionary<RecordName, List<RecordParameterSchema>> recordMemberSchemaDictionary = new();
+    private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = new();
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -19,7 +22,7 @@ public sealed class RecordSchemaCollector
 
     public void Collect(LoadResult loadResult)
     {
-        var result = OnCollect(loadResult);
+        var result = LoadResultParser.Parse(loadResult);
 
         foreach (var (recordName, recordAttributes) in result.RecordAttributeCollector)
         {
@@ -41,6 +44,11 @@ public sealed class RecordSchemaCollector
                 recordMemberSchemaDictionary.Add(recordName, new List<RecordParameterSchema> { new(parameterName, namedTypeSymbol, attributes.ToList()) });
             }
         }
+
+        foreach (var (enumName, enumMemberList) in result.EnumMemberCollector)
+        {
+            enumMemberDictionary.Add(enumName, enumMemberList);
+        }
     }
 
     public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
@@ -58,63 +66,8 @@ public sealed class RecordSchemaCollector
         return Array.Empty<RecordParameterSchema>();
     }
 
-    private sealed class OnCollectResult
+    public FrozenDictionary<EnumName, IReadOnlyList<string>> GetEnumMemberFrozenDictionary()
     {
-        public RecordAttributeCollector RecordAttributeCollector { get; }
-        public ParameterAttributeCollector ParameterAttributeCollector { get; }
-        public ParameterNamedTypeSymbolCollector ParameterNamedTypeSymbolCollector { get; }
-
-        public OnCollectResult(
-            RecordAttributeCollector recordAttributeCollector,
-            ParameterAttributeCollector parameterAttributeCollector,
-            ParameterNamedTypeSymbolCollector parameterNamedTypeSymbolCollector)
-        {
-            if (parameterNamedTypeSymbolCollector.Count != parameterAttributeCollector.Count)
-            {
-                throw new ArgumentException("Count mismatch");
-            }
-
-            foreach (var parameterFullName in parameterNamedTypeSymbolCollector.ParameterNames)
-            {
-                if (!parameterAttributeCollector.ContainsRecord(parameterFullName))
-                {
-                    throw new ArgumentException($"{parameterFullName} not found");
-                }
-            }
-
-            RecordAttributeCollector = recordAttributeCollector;
-            ParameterAttributeCollector = parameterAttributeCollector;
-            ParameterNamedTypeSymbolCollector = parameterNamedTypeSymbolCollector;
-        }
-    }
-
-    private static OnCollectResult OnCollect(LoadResult loadResult)
-    {
-        var recordAttributeCollector = new RecordAttributeCollector();
-        var parameterAttributeCollector = new ParameterAttributeCollector();
-        var parameterNamedTypeSymbolCollector = new ParameterNamedTypeSymbolCollector(loadResult.SemanticModel);
-
-        foreach (var recordDeclaration in loadResult.RecordDeclarationList)
-        {
-            recordAttributeCollector.Collect(recordDeclaration);
-
-            if (recordDeclaration.ParameterList is null)
-            {
-                continue;
-            }
-
-            foreach (var parameter in recordDeclaration.ParameterList.Parameters)
-            {
-                if (string.IsNullOrEmpty(parameter.Identifier.ValueText))
-                {
-                    continue;
-                }
-
-                parameterAttributeCollector.Collect(recordDeclaration, parameter);
-                parameterNamedTypeSymbolCollector.Collect(recordDeclaration, parameter);
-            }
-        }
-
-        return new(recordAttributeCollector, parameterAttributeCollector, parameterNamedTypeSymbolCollector);
+        return enumMemberDictionary.ToFrozenDictionary();
     }
 }

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner;
 
@@ -14,6 +15,7 @@ public sealed record RecordSchema(
 public sealed class RecordSchemaContainer
 {
     private readonly FrozenDictionary<RecordName, RecordSchema> recordSchemaDictionary;
+    private readonly FrozenDictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary;
 
     public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
@@ -26,7 +28,8 @@ public sealed class RecordSchemaContainer
             recordSchemata.Add(recordName, new(recordName, recordAttributes, recordMemberSchemata));
         }
 
-        recordSchemaDictionary = recordSchemata.ToFrozenDictionary(x => x.Key, x => x.Value);
+        recordSchemaDictionary = recordSchemata.ToFrozenDictionary();
+        enumMemberDictionary = recordSchemaCollector.GetEnumMemberFrozenDictionary();
     }
 
     public override string ToString()
@@ -63,6 +66,17 @@ public sealed class RecordSchemaContainer
                         }
                     }
                 }
+            }
+
+            sb.AppendLine();
+        }
+
+        foreach (var (enumName, enumMemberList) in enumMemberDictionary)
+        {
+            sb.AppendLine(CultureInfo.InvariantCulture, $"Enum: {enumName}");
+            foreach (var enumMember in enumMemberList)
+            {
+                sb.AppendLine(CultureInfo.InvariantCulture, $"  {enumMember}");
             }
 
             sb.AppendLine();

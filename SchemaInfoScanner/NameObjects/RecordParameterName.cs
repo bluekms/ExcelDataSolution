@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace SchemaInfoScanner;
+namespace SchemaInfoScanner.NameObjects;
 
 public class RecordParameterName
 {
