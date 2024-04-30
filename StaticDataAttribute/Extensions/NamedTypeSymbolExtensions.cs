@@ -102,7 +102,7 @@ public static class NamedTypeSymbolExtensions
                     return false;
                 }
 
-                var valueRecordDeclaration = recordDeclarationList.FirstOrDefault(x => x.Identifier.Text == valueSymbol.Name);
+                var valueRecordDeclaration = recordDeclarationList.FirstOrDefault(x => x.Identifier.ValueText == valueSymbol.Name);
                 if (valueRecordDeclaration is null)
                 {
                     return false;
