@@ -5,6 +5,13 @@
     {
         namespace InnerInnerMyProject
         {
+            public enum Fruit
+            {
+                AApple,
+                BBanana,
+                CCherry,
+            }
+
             public sealed record MyRecord
             {
                 public record InnerRecord(int Number, string Data)
@@ -19,7 +26,6 @@
         }
     }
 
-// TODO 다른 파일에 정의된 enum 지원해야 함
     public enum Fruit
     {
         Apple,
