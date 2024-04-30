@@ -1,5 +1,6 @@
 using System.Collections;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Collectors;
 
