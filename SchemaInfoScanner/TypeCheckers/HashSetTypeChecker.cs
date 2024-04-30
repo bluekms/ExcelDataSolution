@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace SchemaInfoScanner.TypeChecker;
+namespace SchemaInfoScanner.TypeCheckers;
 
 public static class HashSetTypeChecker
 {

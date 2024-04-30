@@ -7,10 +7,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner;
 
+public sealed record LoadResult(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList);
+
 public static class Loader
 {
-    public sealed record LoadResult(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarations);
-
     private static readonly string[] SkipCompileErrorIds =
     {
         "CS1031",
@@ -42,7 +42,7 @@ public static class Loader
         var code = File.ReadAllText(csFile);
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var root = syntaxTree.GetRoot();
-        var compilation = CSharpCompilation.Create("SchemaInfoScanner", new[] {syntaxTree});
+        var compilation = CSharpCompilation.Create("SchemaInfoScanner", new[] { syntaxTree });
 
         var result = compilation.GetDiagnostics();
         var compileErrors = result

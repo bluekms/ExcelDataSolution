@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using StaticDataAttribute.Extensions;
 
-namespace SchemaInfoScanner.TypeChecker;
+namespace SchemaInfoScanner.TypeCheckers;
 
 public static class DictionaryTypeChecker
 {
@@ -44,7 +44,7 @@ public static class DictionaryTypeChecker
 
     private static void CheckKeyAttribute(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
     {
-        var valueRecordDeclaration = recordDeclarationList.FirstOrDefault(x => x.Identifier.Text == valueSymbol.Name);
+        var valueRecordDeclaration = recordDeclarationList.FirstOrDefault(x => x.Identifier.ValueText == valueSymbol.Name);
         if (valueRecordDeclaration?.ParameterList is null)
         {
             throw new NotSupportedException($"Not found {valueSymbol.Name} or has no member.");

@@ -1,7 +1,7 @@
-using System.Globalization;
 using System.Reflection;
 using System.Text;
 using SchemaInfoScanner;
+using SchemaInfoScanner.Collectors;
 using Xunit.Abstractions;
 
 namespace UnitTest;
@@ -16,7 +16,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public void Test1()
+    public void ScanTest()
     {
         var csPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
@@ -26,21 +26,16 @@ public class UnitTest1
             "..",
             "_TestRecord");
 
-        var loadResultList = Loader.Load(csPath);
         var sb = new StringBuilder();
+
+        var loadResultList = Loader.Load(csPath);
+        var recordSchemaCollector = new RecordSchemaCollector();
         foreach (var loadResult in loadResultList)
         {
-            try
-            {
-                Checker.Check(loadResult.SemanticModel, loadResult.RecordDeclarations);
-            }
-            catch (Exception e)
-            {
-                sb.AppendLine(e.Message);
-            }
+            recordSchemaCollector.Collect(loadResult);
         }
 
-        // Scanner.Scan(csPath);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         if (sb.Length is not 0)
         {
