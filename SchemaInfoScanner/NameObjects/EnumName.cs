@@ -5,20 +5,25 @@ namespace SchemaInfoScanner.NameObjects;
 
 public class EnumName
 {
-    private readonly EnumDeclarationSyntax enumDeclaration;
-
-    public string Name => enumDeclaration.Identifier.ValueText;
-
-    public string FullName => $"{enumDeclaration.GetNamespace()}.{Name}";
+    public string Name { get; }
+    public string FullName { get; }
 
     public EnumName(EnumDeclarationSyntax enumDeclaration)
     {
-        this.enumDeclaration = enumDeclaration;
+        Name = enumDeclaration.Identifier.ValueText;
+        FullName = $"{enumDeclaration.GetNamespace()}.{Name}";
     }
 
-    public override string ToString()
+    public EnumName(string fullName)
     {
-        return FullName;
+        if (string.IsNullOrEmpty(fullName) || fullName[^1] == '.')
+        {
+            throw new ArgumentException("fullName should not be null, empty, or end with '.'");
+        }
+
+        var parts = fullName.Split('.');
+        Name = parts[^1];
+        FullName = fullName;
     }
 
     public override bool Equals(object? obj)

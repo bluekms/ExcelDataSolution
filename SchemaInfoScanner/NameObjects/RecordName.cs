@@ -5,16 +5,25 @@ namespace SchemaInfoScanner.NameObjects;
 
 public class RecordName
 {
-    private readonly string fullName;
+    public string Name { get; }
+    public string FullName { get; }
 
     public RecordName(RecordDeclarationSyntax recordDeclarationSyntax)
     {
-        fullName = $"{recordDeclarationSyntax.GetNamespace()}.{recordDeclarationSyntax.Identifier.ValueText}";
+        Name = recordDeclarationSyntax.Identifier.ValueText;
+        FullName = $"{recordDeclarationSyntax.GetNamespace()}.{Name}";
     }
 
-    public override string ToString()
+    public RecordName(string fullName)
     {
-        return fullName;
+        if (string.IsNullOrEmpty(fullName) || fullName[^1] == '.')
+        {
+            throw new ArgumentException("fullName should not be null, empty, or end with '.'");
+        }
+
+        var parts = fullName.Split('.');
+        Name = parts[^1];
+        FullName = fullName;
     }
 
     public override bool Equals(object? obj)
@@ -24,11 +33,11 @@ public class RecordName
             return false;
         }
 
-        return fullName == ((RecordName)obj).fullName;
+        return FullName == ((RecordName)obj).FullName;
     }
 
     public override int GetHashCode()
     {
-        return fullName.GetHashCode();
+        return FullName.GetHashCode();
     }
 }

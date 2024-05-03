@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Text;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using Xunit.Abstractions;
@@ -26,9 +25,8 @@ public class UnitTest1
             "..",
             "_TestRecord");
 
-        var sb = new StringBuilder();
-
         var loadResultList = Loader.Load(csPath);
+
         var recordSchemaCollector = new RecordSchemaCollector();
         foreach (var loadResult in loadResultList)
         {
@@ -37,11 +35,6 @@ public class UnitTest1
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        if (sb.Length is not 0)
-        {
-            this.testOutputHelper.WriteLine(sb.ToString());
-        }
-
-        Assert.True(sb.Length is 0);
+        // Checker.Check(recordSchemaContainer);
     }
 }
