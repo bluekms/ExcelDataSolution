@@ -14,7 +14,6 @@ public sealed partial class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
     private readonly Dictionary<RecordName, List<RecordParameterSchema>> recordMemberSchemaDictionary = new();
-    private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = new();
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -44,11 +43,6 @@ public sealed partial class RecordSchemaCollector
                 recordMemberSchemaDictionary.Add(recordName, new List<RecordParameterSchema> { new(parameterName, namedTypeSymbol, attributes.ToList()) });
             }
         }
-
-        foreach (var (enumName, enumMemberList) in result.EnumMemberCollector)
-        {
-            enumMemberDictionary.Add(enumName, enumMemberList);
-        }
     }
 
     public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
@@ -64,10 +58,5 @@ public sealed partial class RecordSchemaCollector
         }
 
         return Array.Empty<RecordParameterSchema>();
-    }
-
-    public FrozenDictionary<EnumName, IReadOnlyList<string>> GetEnumMemberFrozenDictionary()
-    {
-        return enumMemberDictionary.ToFrozenDictionary();
     }
 }

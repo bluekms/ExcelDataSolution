@@ -15,7 +15,6 @@ public sealed record RecordSchema(
 public sealed class RecordSchemaContainer
 {
     private readonly FrozenDictionary<RecordName, RecordSchema> recordSchemaDictionary;
-    private readonly FrozenDictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary;
 
     public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
@@ -29,7 +28,6 @@ public sealed class RecordSchemaContainer
         }
 
         recordSchemaDictionary = recordSchemata.ToFrozenDictionary();
-        enumMemberDictionary = recordSchemaCollector.GetEnumMemberFrozenDictionary();
     }
 
     public override string ToString()
@@ -66,17 +64,6 @@ public sealed class RecordSchemaContainer
                         }
                     }
                 }
-            }
-
-            sb.AppendLine();
-        }
-
-        foreach (var (enumName, enumMemberList) in enumMemberDictionary)
-        {
-            sb.AppendLine(CultureInfo.InvariantCulture, $"Enum: {enumName}");
-            foreach (var enumMember in enumMemberList)
-            {
-                sb.AppendLine(CultureInfo.InvariantCulture, $"  {enumMember}");
             }
 
             sb.AppendLine();
