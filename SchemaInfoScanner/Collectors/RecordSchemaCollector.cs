@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
@@ -10,11 +9,10 @@ public sealed record RecordParameterSchema(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> Attributes);
 
-public sealed partial class RecordSchemaCollector
+public sealed class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
     private readonly Dictionary<RecordName, List<RecordParameterSchema>> recordMemberSchemaDictionary = new();
-    private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = new();
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -22,7 +20,7 @@ public sealed partial class RecordSchemaCollector
 
     public void Collect(LoadResult loadResult)
     {
-        var result = LoadResultParser.Parse(loadResult);
+        var result = Parse(loadResult);
 
         foreach (var (recordName, recordAttributes) in result.RecordAttributeCollector)
         {
@@ -44,11 +42,6 @@ public sealed partial class RecordSchemaCollector
                 recordMemberSchemaDictionary.Add(recordName, new List<RecordParameterSchema> { new(parameterName, namedTypeSymbol, attributes.ToList()) });
             }
         }
-
-        foreach (var (enumName, enumMemberList) in result.EnumMemberCollector)
-        {
-            enumMemberDictionary.Add(enumName, enumMemberList);
-        }
     }
 
     public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
@@ -66,8 +59,66 @@ public sealed partial class RecordSchemaCollector
         return Array.Empty<RecordParameterSchema>();
     }
 
-    public FrozenDictionary<EnumName, IReadOnlyList<string>> GetEnumMemberFrozenDictionary()
+    private static ParseResult Parse(LoadResult loadResult)
     {
-        return enumMemberDictionary.ToFrozenDictionary();
+        var recordAttributeCollector = new RecordAttributeCollector();
+        var parameterAttributeCollector = new ParameterAttributeCollector();
+        var parameterNamedTypeSymbolCollector = new ParameterNamedTypeSymbolCollector(loadResult.SemanticModel);
+
+        foreach (var recordDeclaration in loadResult.RecordDeclarationList)
+        {
+            recordAttributeCollector.Collect(recordDeclaration);
+
+            if (recordDeclaration.ParameterList is null)
+            {
+                continue;
+            }
+
+            foreach (var parameter in recordDeclaration.ParameterList.Parameters)
+            {
+                if (string.IsNullOrEmpty(parameter.Identifier.ValueText))
+                {
+                    continue;
+                }
+
+                parameterAttributeCollector.Collect(recordDeclaration, parameter);
+                parameterNamedTypeSymbolCollector.Collect(recordDeclaration, parameter);
+            }
+        }
+
+        return new(
+            recordAttributeCollector,
+            parameterAttributeCollector,
+            parameterNamedTypeSymbolCollector);
+    }
+
+    private sealed class ParseResult
+    {
+        public RecordAttributeCollector RecordAttributeCollector { get; }
+        public ParameterAttributeCollector ParameterAttributeCollector { get; }
+        public ParameterNamedTypeSymbolCollector ParameterNamedTypeSymbolCollector { get; }
+
+        public ParseResult(
+            RecordAttributeCollector recordAttributeCollector,
+            ParameterAttributeCollector parameterAttributeCollector,
+            ParameterNamedTypeSymbolCollector parameterNamedTypeSymbolCollector)
+        {
+            if (parameterNamedTypeSymbolCollector.Count != parameterAttributeCollector.Count)
+            {
+                throw new ArgumentException("Count mismatch");
+            }
+
+            foreach (var parameterFullName in parameterNamedTypeSymbolCollector.ParameterNames)
+            {
+                if (!parameterAttributeCollector.ContainsRecord(parameterFullName))
+                {
+                    throw new ArgumentException($"{parameterFullName} not found");
+                }
+            }
+
+            RecordAttributeCollector = recordAttributeCollector;
+            ParameterAttributeCollector = parameterAttributeCollector;
+            ParameterNamedTypeSymbolCollector = parameterNamedTypeSymbolCollector;
+        }
     }
 }

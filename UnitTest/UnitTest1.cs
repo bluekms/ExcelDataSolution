@@ -28,9 +28,12 @@ public class UnitTest1
         var loadResultList = Loader.Load(csPath);
 
         var recordSchemaCollector = new RecordSchemaCollector();
+        var enumMemberCollector = new EnumMemberCollector();
+
         foreach (var loadResult in loadResultList)
         {
             recordSchemaCollector.Collect(loadResult);
+            enumMemberCollector.Collect(loadResult);
         }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
