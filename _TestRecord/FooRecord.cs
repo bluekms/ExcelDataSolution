@@ -81,6 +81,9 @@
         [Order] decimal DecimalType,
         [Order] string StringType,
         [Order] Fruit EnumType,
+        [Order][NullString("0")] int? RewardId,
+        [Order][DefaultValue("1001")] int DefaultId,
+        [Order][DefaultValue("1001")][NullString("0")] int? ZeroIsNull_Default1001Value,
 
         // TODO 기본 타입의 nullable 지원해야 함
 
@@ -149,5 +152,11 @@
         [ColumnPrefix("DictionaryValueKeyAttributeErr")]
         Dictionary<string, StudentWithIntKey> DictionaryValueKeyAttributeErrs,
 
+        // TODO Err
+        // NullStringAttribute는 Nullable Supported Primitive Types에서만 쓰일 수 있다
+        [Order][NullString("0")] int RewardIdErr,
+
+        // DefaultValueAttribute를 Nullable Supported Primitive Types에 사용하려면 NullStringAttribute가 필요하다
+        [Order][DefaultValue("1001")] int? DefaultIdErr,
     );
 }

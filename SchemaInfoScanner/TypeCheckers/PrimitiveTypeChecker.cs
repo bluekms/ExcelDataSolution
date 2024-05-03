@@ -1,12 +1,45 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using StaticDataAttribute;
+using StaticDataAttribute.Extensions;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public class PrimitiveTypeChecker
+public static class PrimitiveTypeChecker
 {
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
     {
-        var specialTypeCheck = symbol.SpecialType switch
+        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
+        var specialTypeCheck = isNullable
+            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
+            : CheckSpecialType(symbol.SpecialType);
+
+        var typeKindCheck = isNullable
+            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
+            : CheckEnumType(symbol.TypeKind);
+
+        var isSupported = specialTypeCheck || typeKindCheck;
+        if (!isSupported)
+        {
+            return false;
+        }
+
+        // TODO Check NullString Attribute
+        return true;
+    }
+
+    public static void Check(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedPrimitiveType(symbol))
+        {
+            throw new NotSupportedException($"{symbol} is not supported primitive type.");
+        }
+    }
+
+    private static bool CheckSpecialType(SpecialType specialType)
+    {
+        return specialType switch
         {
             SpecialType.System_Boolean => true,
             SpecialType.System_Char => true,
@@ -24,15 +57,10 @@ public class PrimitiveTypeChecker
             SpecialType.System_String => true,
             _ => false
         };
-
-        return specialTypeCheck || symbol.TypeKind == TypeKind.Enum;
     }
 
-    public static void Check(INamedTypeSymbol symbol)
+    private static bool CheckEnumType(TypeKind typeKind)
     {
-        if (!IsSupportedPrimitiveType(symbol))
-        {
-            throw new NotSupportedException($"{symbol} is not supported primitive type.");
-        }
+        return typeKind is TypeKind.Enum;
     }
 }
