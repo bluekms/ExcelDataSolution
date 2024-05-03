@@ -12,6 +12,7 @@ public sealed record RecordSchema(
     IReadOnlyList<AttributeSyntax> RecordAttributeList,
     IReadOnlyList<RecordParameterSchema> RecordParameterSchemaList);
 
+// TODO foreach
 public sealed class RecordSchemaContainer
 {
     private readonly FrozenDictionary<RecordName, RecordSchema> recordSchemaDictionary;
