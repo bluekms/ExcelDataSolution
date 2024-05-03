@@ -4,24 +4,27 @@ namespace SchemaInfoScanner.NameObjects;
 
 public class RecordParameterName
 {
-    private readonly RecordName recordName;
-    private readonly ParameterSyntax parameterSyntax;
+    public string Name { get; }
+    public string FullName => $"{RecordName.FullName}.{Name}";
 
-    public RecordName RecordName => recordName;
-
-    public string Name => parameterSyntax.Identifier.ValueText;
-
-    public string FullName => $"{recordName}.{parameterSyntax.Identifier.ValueText}";
+    public RecordName RecordName { get; }
 
     public RecordParameterName(RecordName recordName, ParameterSyntax parameterSyntax)
     {
-        this.recordName = recordName;
-        this.parameterSyntax = parameterSyntax;
+        Name = parameterSyntax.Identifier.ValueText;
+        RecordName = recordName;
     }
 
-    public override string ToString()
+    public RecordParameterName(string fullName)
     {
-        return Name;
+        if (string.IsNullOrEmpty(fullName) || fullName[^1] == '.')
+        {
+            throw new ArgumentException("fullName should not be null, empty, or end with '.'");
+        }
+
+        var parts = fullName.Split('.');
+        Name = parts[^1];
+        RecordName = new RecordName(string.Join('.', parts[..^1]));
     }
 
     public override bool Equals(object? obj)
