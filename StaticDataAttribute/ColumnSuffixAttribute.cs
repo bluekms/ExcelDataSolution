@@ -1,13 +1,13 @@
 ﻿namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public class ColumnSubffixAttribute : Attribute
+public class ColumnSuffixAttribute : Attribute
 {
     public string Suffix { get; }
 
-    public ColumnSubffixAttribute(string suffix)
+    public ColumnSuffixAttribute(string suffix)
     {
-        this.Suffix = suffix;
+        Suffix = suffix;
     }
 
     public override bool Match(object? obj)
