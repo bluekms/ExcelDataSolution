@@ -4,11 +4,6 @@ using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Collectors;
 
-public sealed record RecordParameterSchema(
-    RecordParameterName ParameterName,
-    INamedTypeSymbol NamedTypeSymbol,
-    IReadOnlyList<AttributeSyntax> Attributes);
-
 public sealed class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
