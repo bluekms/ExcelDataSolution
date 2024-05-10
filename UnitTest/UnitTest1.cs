@@ -43,6 +43,21 @@ public class UnitTest1
         var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
         var semanticModelContainer = new SemanticModelContainer(semanticModelCollector);
 
-        Checker.Check(recordSchemaContainer, semanticModelContainer);
+        var log = new List<string>();
+
+        try
+        {
+            Checker.Check(recordSchemaContainer, semanticModelContainer, log);
+        }
+        catch (Exception e)
+        {
+            foreach (var s in log)
+            {
+                testOutputHelper.WriteLine(s);
+            }
+
+            testOutputHelper.WriteLine(e.Message);
+            throw;
+        }
     }
 }

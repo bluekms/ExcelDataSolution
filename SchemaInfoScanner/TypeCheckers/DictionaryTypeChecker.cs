@@ -17,7 +17,7 @@ public static class DictionaryTypeChecker
                recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
     }
 
-    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer)
+    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
     {
         if (!IsSupportedDictionaryType(recordParameter))
         {
@@ -32,7 +32,7 @@ public static class DictionaryTypeChecker
         }
 
         IsDictionaryKeyPrimitive(keySymbol);
-        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer);
+        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer, visited, log);
     }
 
     private static void CheckAttribute(RecordParameterSchema recordParameter)
@@ -65,7 +65,7 @@ public static class DictionaryTypeChecker
         }
     }
 
-    private static void IsDictionaryValueSupport(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer)
+    private static void IsDictionaryValueSupport(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
     {
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
@@ -75,7 +75,7 @@ public static class DictionaryTypeChecker
         var valueRecordName = new RecordName(valueSymbol);
         var valueRecordSchema = recordSchemaContainer.RecordSchemaDictionary[valueRecordName];
 
-        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, semanticModelContainer);
+        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, semanticModelContainer, visited, log);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .Single(x => x.HasAttribute<KeyAttribute>());

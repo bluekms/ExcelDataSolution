@@ -28,7 +28,7 @@ public static class HashSetTypeChecker
         }
         catch (Exception e)
         {
-            throw new TypeNotSupportedException($"Not support hash set with not primitive type.", e);
+            throw new TypeNotSupportedException($"Not support hash set with not primitive type. Use List Or Dictionary.", e);
         }
     }
 

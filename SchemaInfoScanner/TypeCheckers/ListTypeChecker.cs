@@ -15,7 +15,7 @@ public static class ListTypeChecker
                recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol];
     }
 
-    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer)
+    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
     {
         if (!IsSupportedListType(recordParameter))
         {
@@ -31,10 +31,10 @@ public static class ListTypeChecker
 
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
-            var recordName = new RecordName(typeArgument.Name);
-            RecordSchema typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+            var recordName = new RecordName(typeArgument);
+            var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer);
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, log);
         }
     }
 
