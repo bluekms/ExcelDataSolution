@@ -1,5 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Schemata;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
@@ -7,30 +9,25 @@ public static class RecordTypeChecker
 {
     private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
 
-    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
+    public static bool IsSupportedRecordType(RecordSchema recordSchema)
     {
-        var methodSymbols = symbol.GetMembers().OfType<IMethodSymbol>().Select(x => x.Name);
+        var methodSymbols = recordSchema.NamedTypeSymbol
+            .GetMembers().OfType<IMethodSymbol>()
+            .Select(x => x.Name);
+
         return !RecordMethodNames.Except(methodSymbols).Any();
     }
 
-    public static void Check(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static void Check(RecordSchema recordSchema, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer)
     {
-        if (!IsSupportedRecordType(symbol))
+        if (!IsSupportedRecordType(recordSchema))
         {
-            throw new NotSupportedException($"{symbol} is not supported record type.");
+            throw new TypeNotSupportedException($"{recordSchema.RecordName.FullName} is not supported record type.");
         }
 
-        foreach (var member in symbol.GetMembers()
-                     .Where(x => !x.IsImplicitlyDeclared)
-                     .Skip(1)
-                     .OfType<IPropertySymbol>())
+        foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            if (member.Type is not INamedTypeSymbol namedSymbol)
-            {
-                throw new NotSupportedException($"{symbol}.{member} is not INamedTypeSymbol for record type.");
-            }
-
-            SupportedTypeChecker.Check(namedSymbol, semanticModel, recordDeclarationList);
+            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, semanticModelContainer);
         }
     }
 }

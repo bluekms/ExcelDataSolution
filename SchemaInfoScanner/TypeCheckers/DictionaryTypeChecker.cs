@@ -1,77 +1,106 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using StaticDataAttribute.Extensions;
+using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata;
+using StaticDataAttribute;
+using KeyAttribute = System.ComponentModel.DataAnnotations.KeyAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
 public static class DictionaryTypeChecker
 {
-    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
+    public static bool IsSupportedDictionaryType(RecordParameterSchema recordParameter)
     {
-        return symbol.Name.StartsWith("Dictionary", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
+        return recordParameter.NamedTypeSymbol.Name.StartsWith("Dictionary", StringComparison.Ordinal) &&
+               recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
     }
 
-    public static void Check(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer)
     {
-        if (!IsSupportedDictionaryType(symbol))
+        if (!IsSupportedDictionaryType(recordParameter))
         {
-            throw new NotSupportedException($"{symbol} is not supported dictionary type.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported dictionary type.");
         }
 
-        if (symbol.TypeArguments is not [INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol])
+        CheckAttribute(recordParameter);
+
+        if (recordParameter.NamedTypeSymbol.TypeArguments is not [INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol])
         {
-            throw new NotSupportedException($"{symbol} is not INamedTypeSymbol for dictionary key.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not INamedTypeSymbol for dictionary key.");
         }
 
-        try
+        IsDictionaryKeyPrimitive(keySymbol);
+        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer);
+    }
+
+    private static void CheckAttribute(RecordParameterSchema recordParameter)
+    {
+        if (recordParameter.HasAttribute<ColumnNameAttribute>())
         {
-            PrimitiveTypeChecker.Check(keySymbol);
-        }
-        catch (Exception e)
-        {
-            throw new NotSupportedException($"Not support dictionary with not primitive type key.", e);
+            throw new InvalidUsageException("ColumnNameAttribute is not supported for dictionary type. Use ColumnPrefixAttribute or ColumnSuffixAttribute instead.");
         }
 
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
+        if (!recordParameter.HasAttribute<ColumnPrefixAttribute>() &&
+            !recordParameter.HasAttribute<ColumnSuffixAttribute>())
         {
-            RecordTypeChecker.Check(valueSymbol, semanticModel, recordDeclarationList);
-
-            CheckKeyAttribute(keySymbol, valueSymbol, semanticModel, recordDeclarationList);
+            throw new InvalidUsageException("ColumnPrefixAttribute or ColumnSuffixAttribute is required for dictionary type.");
         }
     }
 
-    private static void CheckKeyAttribute(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    private static void IsDictionaryKeyPrimitive(INamedTypeSymbol symbol)
     {
-        var valueRecordDeclaration = recordDeclarationList.FirstOrDefault(x => x.Identifier.ValueText == valueSymbol.Name);
-        if (valueRecordDeclaration?.ParameterList is null)
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T)
         {
-            throw new NotSupportedException($"Not found {valueSymbol.Name} or has no member.");
+            throw new TypeNotSupportedException($"Not support nullable key for dictionary.");
         }
 
-        var valueParameter = valueRecordDeclaration.ParameterList.Parameters
-            .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
-        if (valueParameter?.Type is null)
+        var specialTypeCheck = PrimitiveTypeChecker.CheckSpecialType(symbol.SpecialType);
+        var typeKindCheck = PrimitiveTypeChecker.CheckEnumType(symbol.TypeKind);
+
+        if (!(specialTypeCheck || typeKindCheck))
         {
-            throw new NotSupportedException($"Not found Key for dictionary as {valueSymbol.Name}'s member. Must KeyAttribute in {valueSymbol.Name}.");
+            throw new TypeNotSupportedException($"Not support dictionary with not primitive type key.");
+        }
+    }
+
+    private static void IsDictionaryValueSupport(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer)
+    {
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
+        {
+            return;
         }
 
-        var valueParameterTypeSymbol = semanticModel.GetTypeInfo(valueParameter.Type).Type;
-        if (valueParameterTypeSymbol is not INamedTypeSymbol valueParameterNamedTypeSymbol)
+        var valueRecordName = new RecordName(valueSymbol);
+        var valueRecordSchema = recordSchemaContainer.RecordSchemaDictionary[valueRecordName];
+
+        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, semanticModelContainer);
+
+        var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
+            .Single(x => x.HasAttribute<KeyAttribute>());
+
+        PrimitiveTypeChecker.Check(valueRecordKeyParameterSchema);
+
+        CheckSameType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
+    }
+
+    private static void CheckSameType(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol)
+    {
+        if (keySymbol.SpecialType is not SpecialType.None &&
+            keySymbol.SpecialType == valueSymbol.SpecialType)
         {
-            throw new NotSupportedException($"Not found {valueParameter.Type} {valueParameter}'s INamedTypeSymbol.");
+            return;
         }
 
-        PrimitiveTypeChecker.Check(valueParameterNamedTypeSymbol);
-
-        var isSame = keySymbol.TypeKind is TypeKind.Enum
-            ? keySymbol.Name == valueParameter.Type.ToString()
-            : keySymbol.SpecialType == valueParameterNamedTypeSymbol.SpecialType;
-
-        if (!isSame)
+        if (keySymbol.TypeKind is not TypeKind.Enum || valueSymbol.TypeKind is not TypeKind.Enum)
         {
-            throw new NotSupportedException($"Dictionary Key Type Error. {keySymbol} type is not same {valueSymbol}.{valueParameterTypeSymbol}'s type.");
+            throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
+        }
+
+        if (keySymbol.Name != valueSymbol.Name)
+        {
+            throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
         }
     }
 }

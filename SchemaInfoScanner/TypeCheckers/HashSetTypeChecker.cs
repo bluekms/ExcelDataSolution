@@ -1,34 +1,48 @@
 ﻿using Microsoft.CodeAnalysis;
+using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Schemata;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
 public static class HashSetTypeChecker
 {
-    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
+    public static bool IsSupportedHashSetType(RecordParameterSchema recordParameter)
     {
-        return symbol.Name.StartsWith("HashSet", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol];
+        return recordParameter.NamedTypeSymbol.Name.StartsWith("HashSet", StringComparison.Ordinal) &&
+               recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol];
     }
 
-    public static void Check(INamedTypeSymbol symbol)
+    public static void Check(RecordParameterSchema recordParameter)
     {
-        if (!IsSupportedHashSetType(symbol))
+        if (!IsSupportedHashSetType(recordParameter))
         {
-            throw new NotSupportedException($"{symbol} is not supported hash set type.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hash set type.");
         }
 
-        if (symbol.TypeArguments.First() is not INamedTypeSymbol namedTypeSymbol)
-        {
-            throw new NotSupportedException($"{symbol} is not INamedTypeSymbol for HashSet<T>.");
-        }
+        CheckAttributes(recordParameter);
 
         try
         {
-            PrimitiveTypeChecker.Check(namedTypeSymbol);
+            PrimitiveTypeChecker.Check(recordParameter);
         }
         catch (Exception e)
         {
-            throw new NotSupportedException($"Not support hash set with not primitive type.", e);
+            throw new TypeNotSupportedException($"Not support hash set with not primitive type.", e);
+        }
+    }
+
+    private static void CheckAttributes(RecordParameterSchema recordParameter)
+    {
+        if (recordParameter.HasAttribute<ColumnNameAttribute>())
+        {
+            throw new InvalidUsageException("ColumnNameAttribute is not supported for hash set type. Use ColumnPrefixAttribute or ColumnSuffixAttribute instead.");
+        }
+
+        if (!recordParameter.HasAttribute<ColumnPrefixAttribute>() &&
+            !recordParameter.HasAttribute<ColumnSuffixAttribute>())
+        {
+            throw new InvalidUsageException("ColumnPrefixAttribute or ColumnSuffixAttribute is required for hash set type.");
         }
     }
 }

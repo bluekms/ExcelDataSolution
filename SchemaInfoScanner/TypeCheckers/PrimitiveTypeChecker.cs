@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Schemata;
 using StaticDataAttribute;
-using StaticDataAttribute.Extensions;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
@@ -19,25 +19,39 @@ public static class PrimitiveTypeChecker
             ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
             : CheckEnumType(symbol.TypeKind);
 
-        var isSupported = specialTypeCheck || typeKindCheck;
-        if (!isSupported)
-        {
-            return false;
-        }
-
-        // TODO Check NullString Attribute
-        return true;
+        return specialTypeCheck || typeKindCheck;
     }
 
-    public static void Check(INamedTypeSymbol symbol)
+    public static bool IsSupportedPrimitiveType(RecordParameterSchema recordParameter)
     {
-        if (!IsSupportedPrimitiveType(symbol))
+        var symbol = recordParameter.NamedTypeSymbol;
+        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
+        var specialTypeCheck = isNullable
+            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
+            : CheckSpecialType(symbol.SpecialType);
+
+        var typeKindCheck = isNullable
+            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
+            : CheckEnumType(symbol.TypeKind);
+
+        return specialTypeCheck || typeKindCheck;
+    }
+
+    public static void Check(RecordParameterSchema recordParameter)
+    {
+        if (!IsSupportedPrimitiveType(recordParameter))
         {
-            throw new NotSupportedException($"{symbol} is not supported primitive type.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported primitive type.");
+        }
+
+        if (recordParameter.IsNullable() && !recordParameter.HasAttribute<NullStringAttribute>())
+        {
+            throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is nullable but has no NullStringAttribute.");
         }
     }
 
-    private static bool CheckSpecialType(SpecialType specialType)
+    public static bool CheckSpecialType(SpecialType specialType)
     {
         return specialType switch
         {
@@ -59,7 +73,7 @@ public static class PrimitiveTypeChecker
         };
     }
 
-    private static bool CheckEnumType(TypeKind typeKind)
+    public static bool CheckEnumType(TypeKind typeKind)
     {
         return typeKind is TypeKind.Enum;
     }
