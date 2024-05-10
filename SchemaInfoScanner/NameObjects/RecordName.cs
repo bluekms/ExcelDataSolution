@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 
@@ -24,6 +25,12 @@ public class RecordName
         var parts = fullName.Split('.');
         Name = parts[^1];
         FullName = fullName;
+    }
+
+    public RecordName(INamedTypeSymbol namedTypeSymbol)
+    {
+        Name = namedTypeSymbol.Name;
+        FullName = $"{namedTypeSymbol.ContainingNamespace.Name}.{Name}";
     }
 
     public override bool Equals(object? obj)
