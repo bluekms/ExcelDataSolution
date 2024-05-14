@@ -2,9 +2,8 @@ using System.Collections.Frozen;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner;
+namespace SchemaInfoScanner.Containers;
 
-// TODO foreach
 public sealed class EnumSchemaContainer
 {
     private readonly FrozenDictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary;

@@ -1,51 +1,56 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
 public static class SupportedTypeChecker
 {
-    public static void Check(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
     {
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(symbol))
+        log.Add(recordParameter.ParameterName.FullName);
+
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(recordParameter))
         {
             return;
         }
 
-        if (IsContainerType(symbol))
+        if (IsContainerType(recordParameter))
         {
-            CheckSupportedContainerType(symbol, semanticModel, recordDeclarationList);
+            CheckSupportedContainerType(recordParameter, recordSchemaContainer, semanticModelContainer, visited, log);
+            return;
+        }
+
+        var recordName = new RecordName(recordParameter.NamedTypeSymbol);
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+        RecordTypeChecker.Check(recordSchema, recordSchemaContainer, semanticModelContainer, visited, log);
+    }
+
+    private static void CheckSupportedContainerType(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
+    {
+        if (HashSetTypeChecker.IsSupportedHashSetType(recordParameter))
+        {
+            HashSetTypeChecker.Check(recordParameter);
+        }
+        else if (ListTypeChecker.IsSupportedListType(recordParameter))
+        {
+            ListTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, log);
+        }
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter))
+        {
+            DictionaryTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, log);
         }
         else
         {
-            RecordTypeChecker.Check(symbol, semanticModel, recordDeclarationList);
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported container type.");
         }
     }
 
-    private static void CheckSupportedContainerType(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    private static bool IsContainerType(RecordParameterSchema recordParameter)
     {
-        if (HashSetTypeChecker.IsSupportedHashSetType(symbol))
-        {
-            HashSetTypeChecker.Check(symbol);
-        }
-        else if (ListTypeChecker.IsSupportedListType(symbol))
-        {
-            ListTypeChecker.Check(symbol, semanticModel, recordDeclarationList);
-        }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(symbol))
-        {
-            DictionaryTypeChecker.Check(symbol, semanticModel, recordDeclarationList);
-        }
-        else
-        {
-            throw new NotSupportedException($"{symbol} is not supported container type.");
-        }
-    }
-
-    private static bool IsContainerType(INamedTypeSymbol symbol)
-    {
-        return HashSetTypeChecker.IsSupportedHashSetType(symbol) ||
-               ListTypeChecker.IsSupportedListType(symbol) ||
-               DictionaryTypeChecker.IsSupportedDictionaryType(symbol);
+        return HashSetTypeChecker.IsSupportedHashSetType(recordParameter) ||
+               ListTypeChecker.IsSupportedListType(recordParameter) ||
+               DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter);
     }
 }

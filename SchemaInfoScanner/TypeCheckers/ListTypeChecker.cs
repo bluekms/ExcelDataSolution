@@ -1,31 +1,54 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
 public static class ListTypeChecker
 {
-    public static bool IsSupportedListType(INamedTypeSymbol symbol)
+    public static bool IsSupportedListType(RecordParameterSchema recordParameter)
     {
-        return symbol.Name.StartsWith("List", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol];
+        return recordParameter.NamedTypeSymbol.Name.StartsWith("List", StringComparison.Ordinal) &&
+               recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol];
     }
 
-    public static void Check(INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
     {
-        if (!IsSupportedListType(symbol))
+        if (!IsSupportedListType(recordParameter))
         {
-            throw new NotSupportedException($"{symbol} is not supported list type.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type.");
         }
 
-        if (symbol.TypeArguments.First() is not INamedTypeSymbol namedTypeSymbol)
+        CheckAttributes(recordParameter);
+
+        if (recordParameter.NamedTypeSymbol.TypeArguments.First() is not INamedTypeSymbol typeArgument)
         {
-            throw new NotSupportedException($"{symbol} is not INamedTypeSymbol for List<T>.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. Type argument is null.");
         }
 
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
+        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
-            RecordTypeChecker.Check(namedTypeSymbol, semanticModel, recordDeclarationList);
+            var recordName = new RecordName(typeArgument);
+            var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, log);
+        }
+    }
+
+    private static void CheckAttributes(RecordParameterSchema recordParameter)
+    {
+        if (recordParameter.HasAttribute<ColumnNameAttribute>())
+        {
+            throw new InvalidUsageException("ColumnNameAttribute is not supported for list type. Use ColumnPrefixAttribute or ColumnSuffixAttribute instead.");
+        }
+
+        if (!recordParameter.HasAttribute<ColumnPrefixAttribute>() &&
+            !recordParameter.HasAttribute<ColumnSuffixAttribute>())
+        {
+            throw new InvalidUsageException("ColumnPrefixAttribute or ColumnSuffixAttribute is required for list type.");
         }
     }
 }

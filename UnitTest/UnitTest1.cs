@@ -1,6 +1,7 @@
 using System.Reflection;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.Containers;
 using Xunit.Abstractions;
 
 namespace UnitTest;
@@ -29,15 +30,34 @@ public class UnitTest1
 
         var recordSchemaCollector = new RecordSchemaCollector();
         var enumMemberCollector = new EnumMemberCollector();
+        var semanticModelCollector = new SemanticModelCollector();
 
         foreach (var loadResult in loadResultList)
         {
             recordSchemaCollector.Collect(loadResult);
             enumMemberCollector.Collect(loadResult);
+            semanticModelCollector.Collect(loadResult);
         }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
+        var semanticModelContainer = new SemanticModelContainer(semanticModelCollector);
 
-        // Checker.Check(recordSchemaContainer);
+        var log = new List<string>();
+
+        try
+        {
+            Checker.Check(recordSchemaContainer, semanticModelContainer, log);
+        }
+        catch (Exception e)
+        {
+            foreach (var s in log)
+            {
+                testOutputHelper.WriteLine(s);
+            }
+
+            testOutputHelper.WriteLine(e.Message);
+            throw;
+        }
     }
 }

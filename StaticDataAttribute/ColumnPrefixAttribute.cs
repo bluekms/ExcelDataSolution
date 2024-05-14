@@ -7,7 +7,7 @@ public class ColumnPrefixAttribute : Attribute
 
     public ColumnPrefixAttribute(string prefix)
     {
-        this.Prefix = prefix;
+        Prefix = prefix;
     }
 
     public override bool Match(object? obj)

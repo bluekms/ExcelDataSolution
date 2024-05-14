@@ -1,41 +1,36 @@
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Text;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata;
 
-namespace SchemaInfoScanner;
+namespace SchemaInfoScanner.Containers;
 
-public sealed record RecordSchema(
-    RecordName RecordName,
-    IReadOnlyList<AttributeSyntax> RecordAttributeList,
-    IReadOnlyList<RecordParameterSchema> RecordParameterSchemaList);
-
-// TODO foreach
 public sealed class RecordSchemaContainer
 {
-    private readonly FrozenDictionary<RecordName, RecordSchema> recordSchemaDictionary;
+    public FrozenDictionary<RecordName, RecordSchema> RecordSchemaDictionary { get; }
 
     public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
         var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaCollector.Count);
         foreach (var recordName in recordSchemaCollector.RecordNames)
         {
+            var namedTypeSymbol = recordSchemaCollector.GetNamedTypeSymbol(recordName);
             var recordAttributes = recordSchemaCollector.GetRecordAttributes(recordName);
             var recordMemberSchemata = recordSchemaCollector.GetRecordMemberSchemata(recordName);
 
-            recordSchemata.Add(recordName, new(recordName, recordAttributes, recordMemberSchemata));
+            recordSchemata.Add(recordName, new(recordName, namedTypeSymbol, recordAttributes, recordMemberSchemata));
         }
 
-        recordSchemaDictionary = recordSchemata.ToFrozenDictionary();
+        RecordSchemaDictionary = recordSchemata.ToFrozenDictionary();
     }
 
     public override string ToString()
     {
         // throw! return JsonSerializer.Serialize(recordSchemaDictionary);
         var sb = new StringBuilder();
-        foreach (var (recordName, recordSchema) in recordSchemaDictionary)
+        foreach (var (recordName, recordSchema) in this.RecordSchemaDictionary)
         {
             sb.AppendLine(CultureInfo.InvariantCulture, $"Record: {recordName}");
 
@@ -56,10 +51,10 @@ public sealed class RecordSchemaContainer
                     sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.ParameterName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");
 
-                    if (recordParameterSchema.Attributes.Count > 0)
+                    if (recordParameterSchema.AttributeList.Count > 0)
                     {
                         sb.AppendLine("    Attributes:");
-                        foreach (var attribute in recordParameterSchema.Attributes)
+                        foreach (var attribute in recordParameterSchema.AttributeList)
                         {
                             sb.AppendLine(CultureInfo.InvariantCulture, $"      {attribute}");
                         }

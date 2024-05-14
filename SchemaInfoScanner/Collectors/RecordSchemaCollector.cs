@@ -1,16 +1,14 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata;
 
 namespace SchemaInfoScanner.Collectors;
 
-public sealed record RecordParameterSchema(
-    RecordParameterName ParameterName,
-    INamedTypeSymbol NamedTypeSymbol,
-    IReadOnlyList<AttributeSyntax> Attributes);
-
 public sealed class RecordSchemaCollector
 {
+    private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = new();
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
     private readonly Dictionary<RecordName, List<RecordParameterSchema>> recordMemberSchemaDictionary = new();
 
@@ -21,6 +19,11 @@ public sealed class RecordSchemaCollector
     public void Collect(LoadResult loadResult)
     {
         var result = Parse(loadResult);
+
+        foreach (var (recordName, namedTypeSymbol) in result.RecordNamedTypeSymbolCollector)
+        {
+            recordNamedTypeSymbolDictionary.Add(recordName, namedTypeSymbol);
+        }
 
         foreach (var (recordName, recordAttributes) in result.RecordAttributeCollector)
         {
@@ -59,14 +62,29 @@ public sealed class RecordSchemaCollector
         return Array.Empty<RecordParameterSchema>();
     }
 
+    public INamedTypeSymbol GetNamedTypeSymbol(RecordName recordName)
+    {
+        return recordNamedTypeSymbolDictionary[recordName];
+    }
+
     private static ParseResult Parse(LoadResult loadResult)
     {
+        var recordNamedTypeSymbolCollector = new Dictionary<RecordName, INamedTypeSymbol>();
         var recordAttributeCollector = new RecordAttributeCollector();
         var parameterAttributeCollector = new ParameterAttributeCollector();
         var parameterNamedTypeSymbolCollector = new ParameterNamedTypeSymbolCollector(loadResult.SemanticModel);
 
         foreach (var recordDeclaration in loadResult.RecordDeclarationList)
         {
+            var recordName = new RecordName(recordDeclaration);
+            var namedTypeSymbol = loadResult.SemanticModel.GetDeclaredSymbol(recordDeclaration) as INamedTypeSymbol;
+            if (namedTypeSymbol is null)
+            {
+                throw new TypeNotSupportedException($"{recordName.FullName} is not a named type symbol");
+            }
+
+            recordNamedTypeSymbolCollector.Add(recordName, namedTypeSymbol);
+
             recordAttributeCollector.Collect(recordDeclaration);
 
             if (recordDeclaration.ParameterList is null)
@@ -87,6 +105,7 @@ public sealed class RecordSchemaCollector
         }
 
         return new(
+            recordNamedTypeSymbolCollector,
             recordAttributeCollector,
             parameterAttributeCollector,
             parameterNamedTypeSymbolCollector);
@@ -94,11 +113,13 @@ public sealed class RecordSchemaCollector
 
     private sealed class ParseResult
     {
+        public Dictionary<RecordName, INamedTypeSymbol> RecordNamedTypeSymbolCollector { get; }
         public RecordAttributeCollector RecordAttributeCollector { get; }
         public ParameterAttributeCollector ParameterAttributeCollector { get; }
         public ParameterNamedTypeSymbolCollector ParameterNamedTypeSymbolCollector { get; }
 
         public ParseResult(
+            Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolCollector,
             RecordAttributeCollector recordAttributeCollector,
             ParameterAttributeCollector parameterAttributeCollector,
             ParameterNamedTypeSymbolCollector parameterNamedTypeSymbolCollector)
@@ -116,6 +137,7 @@ public sealed class RecordSchemaCollector
                 }
             }
 
+            RecordNamedTypeSymbolCollector = recordNamedTypeSymbolCollector;
             RecordAttributeCollector = recordAttributeCollector;
             ParameterAttributeCollector = parameterAttributeCollector;
             ParameterNamedTypeSymbolCollector = parameterNamedTypeSymbolCollector;
