@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using StaticDataAttribute;
-using KeyAttribute = System.ComponentModel.DataAnnotations.KeyAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
@@ -17,7 +16,12 @@ public static class DictionaryTypeChecker
                recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
     }
 
-    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
+    public static void Check(
+        RecordParameterSchema recordParameter,
+        RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
     {
         if (!IsSupportedDictionaryType(recordParameter))
         {
@@ -32,7 +36,7 @@ public static class DictionaryTypeChecker
         }
 
         IsDictionaryKeyPrimitive(keySymbol);
-        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer, visited, log);
+        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer, visited, logger);
     }
 
     private static void CheckAttribute(RecordParameterSchema recordParameter)
@@ -65,7 +69,13 @@ public static class DictionaryTypeChecker
         }
     }
 
-    private static void IsDictionaryValueSupport(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
+    private static void IsDictionaryValueSupport(
+        INamedTypeSymbol keySymbol,
+        INamedTypeSymbol valueSymbol,
+        RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
     {
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
@@ -75,7 +85,7 @@ public static class DictionaryTypeChecker
         var valueRecordName = new RecordName(valueSymbol);
         var valueRecordSchema = recordSchemaContainer.RecordSchemaDictionary[valueRecordName];
 
-        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, semanticModelContainer, visited, log);
+        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .Single(x => x.HasAttribute<KeyAttribute>());
