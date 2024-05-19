@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
@@ -15,7 +16,12 @@ public static class ListTypeChecker
                recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol];
     }
 
-    public static void Check(RecordParameterSchema recordParameter, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
+    public static void Check(
+        RecordParameterSchema recordParameter,
+        RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
     {
         if (!IsSupportedListType(recordParameter))
         {
@@ -34,7 +40,7 @@ public static class ListTypeChecker
             var recordName = new RecordName(typeArgument);
             var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, log);
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
     }
 

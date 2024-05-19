@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
@@ -10,6 +11,9 @@ public static class RecordTypeChecker
 {
     private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
 
+    private static readonly Action<ILogger, string, Exception?> LogTrace =
+        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");
+
     public static bool IsSupportedRecordType(RecordSchema recordSchema)
     {
         var methodSymbols = recordSchema.NamedTypeSymbol
@@ -19,7 +23,12 @@ public static class RecordTypeChecker
         return !RecordMethodNames.Except(methodSymbols).Any();
     }
 
-    public static void Check(RecordSchema recordSchema, RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, HashSet<RecordName> visited, List<string> log)
+    public static void Check(
+        RecordSchema recordSchema,
+        RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
     {
         if (!IsSupportedRecordType(recordSchema))
         {
@@ -28,13 +37,13 @@ public static class RecordTypeChecker
 
         if (!visited.Add(recordSchema.RecordName))
         {
-            log.Add($"{recordSchema.RecordName.FullName} is already visited.");
+            LogTrace(logger, $"{recordSchema.RecordName.FullName} is already visited.", null);
             return;
         }
 
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, semanticModelContainer, visited, log);
+            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
     }
 }
