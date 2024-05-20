@@ -6,11 +6,13 @@ namespace UnitTest;
 public class TestOutputLoggerFactory : ILoggerFactory
 {
     private readonly ITestOutputHelper output;
+    private readonly LogLevel minLogLevel;
     private bool disposed;
 
-    public TestOutputLoggerFactory(ITestOutputHelper output)
+    public TestOutputLoggerFactory(ITestOutputHelper output, LogLevel minLogLevel)
     {
         this.output = output;
+        this.minLogLevel = minLogLevel;
         this.disposed = false;
     }
 
@@ -34,12 +36,12 @@ public class TestOutputLoggerFactory : ILoggerFactory
 
     public ILogger CreateLogger(string categoryName)
     {
-        return new TestOutputLogger<object>(output);
+        return new TestOutputLogger<object>(output, minLogLevel);
     }
 
     public ILogger<T> CreateLogger<T>()
     {
-        return new TestOutputLogger<T>(output);
+        return new TestOutputLogger<T>(output, minLogLevel);
     }
 
     public void AddProvider(ILoggerProvider provider)
