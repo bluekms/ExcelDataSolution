@@ -1,5 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using StaticDataAttribute;
 
@@ -7,13 +10,23 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class HashSetTypeChecker
 {
-    public static bool IsSupportedHashSetType(RecordParameterSchema recordParameter)
+    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
     {
-        return recordParameter.NamedTypeSymbol.Name.StartsWith("HashSet", StringComparison.Ordinal) &&
-               recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol];
+        return symbol.Name.StartsWith("HashSet", StringComparison.Ordinal) &&
+               symbol.TypeArguments is [INamedTypeSymbol];
     }
 
-    public static void Check(RecordParameterSchema recordParameter)
+    public static bool IsSupportedHashSetType(RecordParameterSchema recordParameter)
+    {
+        return IsSupportedHashSetType(recordParameter.NamedTypeSymbol);
+    }
+
+    public static void Check(
+        RecordParameterSchema recordParameter,
+        RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
     {
         if (!IsSupportedHashSetType(recordParameter))
         {
@@ -22,13 +35,17 @@ public static class HashSetTypeChecker
 
         CheckAttributes(recordParameter);
 
-        try
+        if (recordParameter.NamedTypeSymbol.TypeArguments.First() is not INamedTypeSymbol typeArgument)
         {
-            PrimitiveTypeChecker.Check(recordParameter);
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Type argument is null.");
         }
-        catch (Exception e)
+
+        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
-            throw new TypeNotSupportedException($"Not support hash set with not primitive type. Use List Or Dictionary.", e);
+            var recordName = new RecordName(typeArgument);
+            var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
     }
 

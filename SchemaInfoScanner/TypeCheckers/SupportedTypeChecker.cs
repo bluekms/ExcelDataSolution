@@ -25,7 +25,7 @@ public static class SupportedTypeChecker
             return;
         }
 
-        if (IsContainerType(recordParameter))
+        if (ContainerTypeChecker.IsSupportedContainerType(recordParameter))
         {
             CheckSupportedContainerType(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
             return;
@@ -45,7 +45,7 @@ public static class SupportedTypeChecker
     {
         if (HashSetTypeChecker.IsSupportedHashSetType(recordParameter))
         {
-            HashSetTypeChecker.Check(recordParameter);
+            HashSetTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
         else if (ListTypeChecker.IsSupportedListType(recordParameter))
         {
@@ -59,12 +59,5 @@ public static class SupportedTypeChecker
         {
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported container type.");
         }
-    }
-
-    private static bool IsContainerType(RecordParameterSchema recordParameter)
-    {
-        return HashSetTypeChecker.IsSupportedHashSetType(recordParameter) ||
-               ListTypeChecker.IsSupportedListType(recordParameter) ||
-               DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter);
     }
 }
