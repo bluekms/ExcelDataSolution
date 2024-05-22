@@ -1,13 +1,12 @@
 ﻿using System.Data;
 using System.Globalization;
 using System.Text;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner;
 
-public sealed record LoadResult(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList, List<EnumDeclarationSyntax> EnumDeclarationList);
+public sealed record LoadResult(List<RecordDeclarationSyntax> RecordDeclarationList, List<EnumDeclarationSyntax> EnumDeclarationList);
 
 public static class Loader
 {
@@ -62,10 +61,9 @@ public static class Loader
             throw new SyntaxErrorException(sb.ToString());
         }
 
-        var semanticModel = compilation.GetSemanticModel(syntaxTree);
         var recordDeclarationList = root.DescendantNodes().OfType<RecordDeclarationSyntax>().ToList();
         var enumDeclarationList = root.DescendantNodes().OfType<EnumDeclarationSyntax>().ToList();
 
-        return new(semanticModel, recordDeclarationList, enumDeclarationList);
+        return new(recordDeclarationList, enumDeclarationList);
     }
 }
