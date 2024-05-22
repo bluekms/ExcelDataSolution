@@ -10,10 +10,15 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class DictionaryTypeChecker
 {
+    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
+    {
+        return symbol.Name.StartsWith("Dictionary", StringComparison.Ordinal) &&
+               symbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
+    }
+
     public static bool IsSupportedDictionaryType(RecordParameterSchema recordParameter)
     {
-        return recordParameter.NamedTypeSymbol.Name.StartsWith("Dictionary", StringComparison.Ordinal) &&
-               recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
+        return IsSupportedDictionaryType(recordParameter.NamedTypeSymbol);
     }
 
     public static void Check(
@@ -35,7 +40,7 @@ public static class DictionaryTypeChecker
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not INamedTypeSymbol for dictionary key.");
         }
 
-        IsDictionaryKeyPrimitive(keySymbol);
+        IsDictionaryKeySupport(keySymbol, recordSchemaContainer, semanticModelContainer, visited, logger);
         IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer, visited, logger);
     }
 
@@ -53,11 +58,21 @@ public static class DictionaryTypeChecker
         }
     }
 
-    private static void IsDictionaryKeyPrimitive(INamedTypeSymbol symbol)
+    private static void IsDictionaryKeySupport(
+        INamedTypeSymbol symbol,
+        RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
     {
         if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T)
         {
             throw new TypeNotSupportedException($"Not support nullable key for dictionary.");
+        }
+
+        if (ContainerTypeChecker.IsSupportedContainerType(symbol))
+        {
+            throw new TypeNotSupportedException($"Not support container type for dictionary key.");
         }
 
         var specialTypeCheck = PrimitiveTypeChecker.CheckSpecialType(symbol.SpecialType);
@@ -65,7 +80,10 @@ public static class DictionaryTypeChecker
 
         if (!(specialTypeCheck || typeKindCheck))
         {
-            throw new TypeNotSupportedException($"Not support dictionary with not primitive type key.");
+            var recordName = new RecordName(symbol);
+            var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
     }
 
@@ -90,12 +108,17 @@ public static class DictionaryTypeChecker
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .Single(x => x.HasAttribute<KeyAttribute>());
 
-        PrimitiveTypeChecker.Check(valueRecordKeyParameterSchema);
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueRecordKeyParameterSchema))
+        {
+            CheckSamePrimitiveType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
+            return;
+        }
 
-        CheckSameType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
+        SupportedTypeChecker.Check(valueRecordKeyParameterSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
+        CheckSameRecordType(keySymbol, valueRecordKeyParameterSchema);
     }
 
-    private static void CheckSameType(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol)
+    private static void CheckSamePrimitiveType(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol)
     {
         if (keySymbol.SpecialType is not SpecialType.None &&
             keySymbol.SpecialType == valueSymbol.SpecialType)
@@ -109,6 +132,17 @@ public static class DictionaryTypeChecker
         }
 
         if (keySymbol.Name != valueSymbol.Name)
+        {
+            throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
+        }
+    }
+
+    private static void CheckSameRecordType(INamedTypeSymbol keySymbol, RecordParameterSchema valueRecordKeyParameterSchema)
+    {
+        var dictionaryKeyRecordName = new RecordName(keySymbol);
+        var valueKeyRecordName = new RecordName(valueRecordKeyParameterSchema.NamedTypeSymbol);
+
+        if (!dictionaryKeyRecordName.Equals(valueKeyRecordName))
         {
             throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
         }

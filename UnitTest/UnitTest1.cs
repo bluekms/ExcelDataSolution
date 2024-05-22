@@ -44,8 +44,8 @@ public class UnitTest1
         var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
         var semanticModelContainer = new SemanticModelContainer(semanticModelCollector);
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Error);
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<UnitTest1>();
-        Checker.TryCheck(recordSchemaContainer, semanticModelContainer, logger);
+        Checker.Check(recordSchemaContainer, semanticModelContainer, logger);
     }
 }

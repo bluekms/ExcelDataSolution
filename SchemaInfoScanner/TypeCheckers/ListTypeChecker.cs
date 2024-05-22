@@ -10,10 +10,15 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class ListTypeChecker
 {
+    public static bool IsSupportedListType(INamedTypeSymbol symbol)
+    {
+        return symbol.Name.StartsWith("List", StringComparison.Ordinal) &&
+               symbol.TypeArguments is [INamedTypeSymbol];
+    }
+
     public static bool IsSupportedListType(RecordParameterSchema recordParameter)
     {
-        return recordParameter.NamedTypeSymbol.Name.StartsWith("List", StringComparison.Ordinal) &&
-               recordParameter.NamedTypeSymbol.TypeArguments is [INamedTypeSymbol];
+        return IsSupportedListType(recordParameter.NamedTypeSymbol);
     }
 
     public static void Check(

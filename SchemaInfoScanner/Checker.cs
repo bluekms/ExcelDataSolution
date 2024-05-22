@@ -32,7 +32,15 @@ public static class Checker
 
             foreach (var recordParameter in recordSchema.RecordParameterSchemaList)
             {
-                SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
+                try
+                {
+                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
+                }
+                catch (Exception e)
+                {
+                    LogException(logger, $"{recordParameter.ParameterName.FullName}: {e.Message}", e);
+                    throw;
+                }
             }
         }
     }
