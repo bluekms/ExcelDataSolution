@@ -7,17 +7,17 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class UnitTest1
+public class ScanTest
 {
     private readonly ITestOutputHelper testOutputHelper;
 
-    public UnitTest1(ITestOutputHelper testOutputHelper)
+    public ScanTest(ITestOutputHelper testOutputHelper)
     {
         this.testOutputHelper = testOutputHelper;
     }
 
     [Fact]
-    public void ScanTest()
+    public void LoadAndCheckTest()
     {
         var csPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
@@ -31,21 +31,18 @@ public class UnitTest1
 
         var recordSchemaCollector = new RecordSchemaCollector();
         var enumMemberCollector = new EnumMemberCollector();
-        var semanticModelCollector = new SemanticModelCollector();
 
         foreach (var loadResult in loadResultList)
         {
             recordSchemaCollector.Collect(loadResult);
             enumMemberCollector.Collect(loadResult);
-            semanticModelCollector.Collect(loadResult);
         }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
-        var semanticModelContainer = new SemanticModelContainer(semanticModelCollector);
 
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<UnitTest1>();
-        Checker.Check(recordSchemaContainer, semanticModelContainer, logger);
+        var logger = factory.CreateLogger<ScanTest>();
+        Checker.Check(recordSchemaContainer, logger);
     }
 }
