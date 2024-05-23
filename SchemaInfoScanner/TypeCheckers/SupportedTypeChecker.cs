@@ -14,6 +14,7 @@ public static class SupportedTypeChecker
     public static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -26,32 +27,33 @@ public static class SupportedTypeChecker
 
         if (ContainerTypeChecker.IsSupportedContainerType(recordParameter))
         {
-            CheckSupportedContainerType(recordParameter, recordSchemaContainer, visited, logger);
+            CheckSupportedContainerType(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
             return;
         }
 
         var recordName = new RecordName(recordParameter.NamedTypeSymbol);
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
+        RecordTypeChecker.Check(recordSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
     }
 
     private static void CheckSupportedContainerType(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
         if (HashSetTypeChecker.IsSupportedHashSetType(recordParameter))
         {
-            HashSetTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+            HashSetTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
         else if (ListTypeChecker.IsSupportedListType(recordParameter))
         {
-            ListTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+            ListTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
         else if (DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter))
         {
-            DictionaryTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+            DictionaryTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
         else
         {

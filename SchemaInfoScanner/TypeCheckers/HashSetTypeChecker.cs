@@ -24,6 +24,7 @@ public static class HashSetTypeChecker
     public static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
+        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -44,7 +45,7 @@ public static class HashSetTypeChecker
             var recordName = new RecordName(typeArgument);
             var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
         }
     }
 

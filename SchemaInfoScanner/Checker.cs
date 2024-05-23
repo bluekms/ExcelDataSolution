@@ -14,7 +14,7 @@ public static class Checker
     private static readonly Action<ILogger, string, Exception?> LogException =
         LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
 
-    public static void Check(RecordSchemaContainer recordSchemaContainer, ILogger logger)
+    public static void Check(RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, ILogger logger)
     {
         var visited = new HashSet<RecordName>();
         foreach (var (_, recordSchema) in recordSchemaContainer.RecordSchemaDictionary)
@@ -34,7 +34,7 @@ public static class Checker
             {
                 try
                 {
-                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
                 }
                 catch (Exception e)
                 {
@@ -45,7 +45,7 @@ public static class Checker
         }
     }
 
-    public static void TryCheck(RecordSchemaContainer recordSchemaContainer, ILogger logger)
+    public static void TryCheck(RecordSchemaContainer recordSchemaContainer, SemanticModelContainer semanticModelContainer, ILogger logger)
     {
         var visited = new HashSet<RecordName>();
         foreach (var (_, recordSchema) in recordSchemaContainer.RecordSchemaDictionary)
@@ -65,7 +65,7 @@ public static class Checker
             {
                 try
                 {
-                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, semanticModelContainer, visited, logger);
                 }
                 catch (Exception e)
                 {

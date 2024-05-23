@@ -42,9 +42,10 @@ public class UnitTest1
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
+        var semanticModelContainer = new SemanticModelContainer(semanticModelCollector);
 
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<UnitTest1>();
-        Checker.Check(recordSchemaContainer, logger);
+        Checker.Check(recordSchemaContainer, semanticModelContainer, logger);
     }
 }
