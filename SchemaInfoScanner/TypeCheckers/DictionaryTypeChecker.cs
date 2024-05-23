@@ -24,7 +24,6 @@ public static class DictionaryTypeChecker
     public static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
-        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -40,8 +39,8 @@ public static class DictionaryTypeChecker
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not INamedTypeSymbol for dictionary key.");
         }
 
-        IsDictionaryKeySupport(keySymbol, recordSchemaContainer, semanticModelContainer, visited, logger);
-        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, semanticModelContainer, visited, logger);
+        IsDictionaryKeySupport(keySymbol, recordSchemaContainer, visited, logger);
+        IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, visited, logger);
     }
 
     private static void CheckAttribute(RecordParameterSchema recordParameter)
@@ -61,7 +60,6 @@ public static class DictionaryTypeChecker
     private static void IsDictionaryKeySupport(
         INamedTypeSymbol symbol,
         RecordSchemaContainer recordSchemaContainer,
-        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -83,7 +81,7 @@ public static class DictionaryTypeChecker
             var recordName = new RecordName(symbol);
             var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
+            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
         }
     }
 
@@ -91,7 +89,6 @@ public static class DictionaryTypeChecker
         INamedTypeSymbol keySymbol,
         INamedTypeSymbol valueSymbol,
         RecordSchemaContainer recordSchemaContainer,
-        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -103,7 +100,7 @@ public static class DictionaryTypeChecker
         var valueRecordName = new RecordName(valueSymbol);
         var valueRecordSchema = recordSchemaContainer.RecordSchemaDictionary[valueRecordName];
 
-        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
+        RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, visited, logger);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .Single(x => x.HasAttribute<KeyAttribute>());
@@ -114,7 +111,7 @@ public static class DictionaryTypeChecker
             return;
         }
 
-        SupportedTypeChecker.Check(valueRecordKeyParameterSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
+        SupportedTypeChecker.Check(valueRecordKeyParameterSchema, recordSchemaContainer, visited, logger);
         CheckSameRecordType(keySymbol, valueRecordKeyParameterSchema);
     }
 

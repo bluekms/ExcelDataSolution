@@ -26,7 +26,6 @@ public static class RecordTypeChecker
     public static void Check(
         RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
-        SemanticModelContainer semanticModelContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -43,7 +42,7 @@ public static class RecordTypeChecker
 
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, semanticModelContainer, visited, logger);
+            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, visited, logger);
         }
     }
 }
