@@ -45,8 +45,9 @@ public static class Checker
         }
     }
 
-    public static void TryCheck(RecordSchemaContainer recordSchemaContainer, ILogger logger)
+    public static int TryCheck(RecordSchemaContainer recordSchemaContainer, ILogger logger)
     {
+        var exceptionCount = 0;
         var visited = new HashSet<RecordName>();
         foreach (var (_, recordSchema) in recordSchemaContainer.RecordSchemaDictionary)
         {
@@ -69,9 +70,12 @@ public static class Checker
                 }
                 catch (Exception e)
                 {
+                    exceptionCount += 1;
                     LogException(logger, $"{recordParameter.ParameterName.FullName}: {e.Message}", e);
                 }
             }
         }
+
+        return exceptionCount;
     }
 }
