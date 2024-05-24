@@ -3,7 +3,7 @@ using SchemaInfoScanner.Extensions;
 
 namespace SchemaInfoScanner.NameObjects;
 
-public class EnumName
+public class EnumName : IEquatable<EnumName>
 {
     public string Name { get; }
     public string FullName { get; }
@@ -28,16 +28,47 @@ public class EnumName
 
     public override bool Equals(object? obj)
     {
-        if (obj is null || GetType() != obj.GetType())
+        if (ReferenceEquals(null, obj))
         {
             return false;
         }
 
-        return FullName == ((EnumName)obj).FullName;
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+
+        return Equals((EnumName)obj);
     }
 
     public override int GetHashCode()
     {
-        return FullName.GetHashCode();
+        return HashCode.Combine(this.Name, this.FullName);
+    }
+
+    public bool Equals(EnumName? other)
+    {
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return this.Name == other.Name &&
+               this.FullName == other.FullName;
+    }
+
+    public override string ToString()
+    {
+        return FullName;
     }
 }

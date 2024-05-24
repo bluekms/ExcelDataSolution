@@ -30,14 +30,16 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<string, Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        Checker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
@@ -65,14 +67,16 @@ public class DictionaryTypeCheckerTest
                 int Grade
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<Human, Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        Checker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
@@ -95,23 +99,16 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<string, Student>? Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -121,23 +118,16 @@ public class DictionaryTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<int, int> Values,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -152,23 +142,16 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<string?, Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -183,23 +166,16 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<string, Student?> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -214,23 +190,16 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<string, Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<InvalidOperationException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -245,23 +214,16 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<int, Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -276,23 +238,16 @@ public class DictionaryTypeCheckerTest
                 string Data,
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<List<int>, NestedRecord> Records,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -307,23 +262,16 @@ public class DictionaryTypeCheckerTest
                 string Data,
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<int, List<DataRecord>> Records,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -338,6 +286,7 @@ public class DictionaryTypeCheckerTest
                 int Age
             );
 
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 Dictionary<string, Student> DataA,
                 ImmutableDictionary<string, Student> DataB,
@@ -346,9 +295,10 @@ public class DictionaryTypeCheckerTest
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        Checker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];

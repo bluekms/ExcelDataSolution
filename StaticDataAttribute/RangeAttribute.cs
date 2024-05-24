@@ -1,5 +1,6 @@
 ﻿namespace StaticDataAttribute;
 
+[AttributeUsage(AttributeTargets.Parameter)]
 public class RangeAttribute : System.ComponentModel.DataAnnotations.RangeAttribute
 {
     public RangeAttribute(double minimum, double maximum)

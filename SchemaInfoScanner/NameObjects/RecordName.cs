@@ -4,7 +4,7 @@ using SchemaInfoScanner.Extensions;
 
 namespace SchemaInfoScanner.NameObjects;
 
-public class RecordName
+public class RecordName : IEquatable<RecordName>
 {
     public string Name { get; }
     public string FullName { get; }
@@ -35,16 +35,47 @@ public class RecordName
 
     public override bool Equals(object? obj)
     {
-        if (obj is null || GetType() != obj.GetType())
+        if (ReferenceEquals(null, obj))
         {
             return false;
         }
 
-        return FullName == ((RecordName)obj).FullName;
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+
+        return Equals((RecordName)obj);
     }
 
     public override int GetHashCode()
     {
-        return FullName.GetHashCode();
+        return HashCode.Combine(this.Name, this.FullName);
+    }
+
+    public bool Equals(RecordName? other)
+    {
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return this.Name == other.Name &&
+               this.FullName == other.FullName;
+    }
+
+    public override string ToString()
+    {
+        return FullName;
     }
 }

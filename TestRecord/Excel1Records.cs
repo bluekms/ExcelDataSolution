@@ -1,11 +1,14 @@
 namespace Excel1;
 
-[StaticData]
+[StaticDataRecord("Excel1", "FirstSheet")]
 public sealed record FirstSheet(string Name, int Score);
 
-[StaticData]
+[StaticDataRecord("Excel1", "ArraySheet")]
 public sealed record ArraySheet(string Name, [ColumnPrefixAttribute("Score")] List<int> Score);
 
-[StaticData]
-[SheetName("Excel1.SameNameSheet")]
+[StaticDataRecord("Excel1", "SameNameSheet")]
 public sealed record SameNameSheet(string Name, int Score);
+
+[StaticDataRecord("Excel1", "SingleColumnContainerSheet")]
+public sealed record SingleColumnContainerSheet(int Id, [SingleColumnContainer(", ")] List<float> Values);
+

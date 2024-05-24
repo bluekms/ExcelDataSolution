@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
@@ -28,13 +29,27 @@ public sealed record RecordParameterSchema(
             throw new ArgumentNullException($"{typeof(TAttribute).Name} has no property.");
         }
 
-        var valueString = attributeParameterIndex is 0
-            ? attribute.ArgumentList.Arguments.First().Expression.ToString().Trim('"')
-            : attribute.ArgumentList.Arguments[attributeParameterIndex].ToString().Trim('"');
-
+        var valueString = attribute.ArgumentList.Arguments[attributeParameterIndex].ToString().Trim('"');
         return typeof(TValue).IsEnum
             ? (TValue)Enum.Parse(typeof(TValue), valueString)
             : (TValue)Convert.ChangeType(valueString, typeof(TValue), CultureInfo.InvariantCulture);
+    }
+
+    public bool TryGetAttributeValue<TAttribute, TValue>(int attributeParameterIndex, out TValue? value)
+        where TAttribute : Attribute
+    {
+        value = default;
+
+        try
+        {
+            value = GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public bool IsNullable()

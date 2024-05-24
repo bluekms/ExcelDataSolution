@@ -32,7 +32,7 @@ public static class SupportedTypeChecker
             return;
         }
 
-        if (ContainerTypeChecker.IsSupportedContainerType(recordParameter))
+        if (ContainerTypeChecker.IsSupportedContainerType(recordParameter.NamedTypeSymbol))
         {
             CheckSupportedContainerType(recordParameter, recordSchemaContainer, visited, logger);
             return;
@@ -41,7 +41,8 @@ public static class SupportedTypeChecker
         var recordName = new RecordName(recordParameter.NamedTypeSymbol);
         if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
         {
-            throw new KeyNotFoundException($"{recordName.FullName} is not found in the record schema dictionary.");
+            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the record schema dictionary.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported record type.", innerException);
         }
 
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
@@ -53,15 +54,15 @@ public static class SupportedTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (HashSetTypeChecker.IsSupportedHashSetType(recordParameter))
+        if (HashSetTypeChecker.IsSupportedHashSetType(recordParameter.NamedTypeSymbol))
         {
             HashSetTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
         }
-        else if (ListTypeChecker.IsSupportedListType(recordParameter))
+        else if (ListTypeChecker.IsSupportedListType(recordParameter.NamedTypeSymbol))
         {
             ListTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter))
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter.NamedTypeSymbol))
         {
             DictionaryTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
         }

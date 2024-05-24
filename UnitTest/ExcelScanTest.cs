@@ -1,12 +1,13 @@
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Reflection;
-using ExcelColumnExtractor;
-using ExcelColumnExtractor.NameObject;
+using ExcelColumnExtractor.NameObjects;
+using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
+using StaticDataAttribute;
 using Xunit.Abstractions;
 
 namespace UnitTest;
@@ -46,16 +47,23 @@ public class ExcelScanTest
         var sheetNameDictionary = ScanExcelFiles(logger);
         var recordSchemaContainer = ScanRecordFiles(logger);
 
-        foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values)
+        foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values.OrderBy(x => x.RecordName.FullName))
         {
-            var sheetName = recordSchema.GetSheetName();
-            if (sheetNameDictionary.ContainsKey(sheetName))
+            if (!recordSchema.HasAttribute<StaticDataRecordAttribute>())
             {
-                LogTrace(logger, $"Match! {sheetName} : {recordSchema.RecordName.FullName}", null);
+                continue;
+            }
+
+            var sheetName = new SheetName(
+                recordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(0),
+                recordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1));
+            if (sheetNameDictionary.ContainsKey(sheetName.FullName))
+            {
+                LogTrace(logger, $"Match! {sheetName.FullName} : {recordSchema.RecordName.FullName}", null);
             }
             else
             {
-                LogWarning(logger, $"Not found sheet {sheetName}.", null);
+                LogWarning(logger, $"Not found sheet {sheetName.FullName}.", null);
             }
         }
     }
@@ -70,7 +78,7 @@ public class ExcelScanTest
             "..",
             "TestExcel");
 
-        return ExcelScanner.LoadExcelFiles(excelPath, logger);
+        return SheetScanner.Scan(excelPath, logger);
     }
 
     private static RecordSchemaContainer ScanRecordFiles(ILogger logger)

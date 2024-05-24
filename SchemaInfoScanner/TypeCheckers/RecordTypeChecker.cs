@@ -54,11 +54,9 @@ public static class RecordTypeChecker
             return;
         }
 
-        var parameterType = RecordParameterTypeInferencer.Infer(recordSchema.NamedTypeSymbol);
-        if (parameterType is not RecordType &&
-            parameterType is not NullableRecordType)
+        if (!IsSupportedRecordType(recordSchema.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected infer result to be {nameof(RecordType)} || {nameof(NullableRecordType)}, but actually {parameterType.GetType().FullName}.");
+            throw new InvalidOperationException($"{recordSchema.RecordName.FullName} is not supported record type.");
         }
 
         if (!visited.Add(recordSchema.RecordName))
@@ -69,11 +67,51 @@ public static class RecordTypeChecker
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Started.", null);
 
+        CheckUnavailableAttribute(recordSchema);
+
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, visited, logger);
         }
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
+    }
+
+    private static void CheckUnavailableAttribute(RecordSchema recordSchema)
+    {
+        if (recordSchema.HasAttribute<ColumnPrefixAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(ColumnPrefixAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
+
+        if (recordSchema.HasAttribute<DefaultValueAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(DefaultValueAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
+
+        if (recordSchema.HasAttribute<MaxCountAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
+
+        if (recordSchema.HasAttribute<NullStringAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
+
+        if (recordSchema.HasAttribute<RangeAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(RangeAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
+
+        if (recordSchema.HasAttribute<RegularExpressionAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(RegularExpressionAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
+
+        if (recordSchema.HasAttribute<SingleColumnContainerAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+        }
     }
 }

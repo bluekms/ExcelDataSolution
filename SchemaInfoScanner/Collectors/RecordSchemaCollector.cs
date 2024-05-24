@@ -41,17 +41,22 @@ public sealed class RecordSchemaCollector
 
         foreach (var parameterName in result.ParameterNamedTypeSymbolCollector.ParameterNames)
         {
-            var recordName = parameterName.RecordName;
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
             var attributes = result.ParameterAttributeCollector[parameterName];
 
+            var parameterSchema = new RecordParameterSchema(
+                parameterName,
+                namedTypeSymbol,
+                attributes.ToList());
+
+            var recordName = parameterName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
             {
-                recordMembers.Add(new(parameterName, namedTypeSymbol, attributes.ToList()));
+                recordMembers.Add(parameterSchema);
             }
             else
             {
-                recordMemberSchemaDictionary.Add(recordName, new List<RecordParameterSchema> { new(parameterName, namedTypeSymbol, attributes.ToList()) });
+                recordMemberSchemaDictionary.Add(recordName, new List<RecordParameterSchema> { parameterSchema });
             }
         }
     }

@@ -28,7 +28,6 @@ public sealed class RecordSchemaContainer
 
     public override string ToString()
     {
-        // throw! return JsonSerializer.Serialize(recordSchemaDictionary);
         var sb = new StringBuilder();
         foreach (var (recordName, recordSchema) in this.RecordSchemaDictionary)
         {

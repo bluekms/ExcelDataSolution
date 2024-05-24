@@ -26,6 +26,8 @@ public class ListTypeCheckerTest
 
         var code = @"
             public enum MyEnum { A, B, C, }
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<bool> BoolValues,
                 List<char> CharValues,
@@ -45,11 +47,12 @@ public class ListTypeCheckerTest
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
+        Checker.Check(recordSchemaContainer, logger);
+
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -64,6 +67,8 @@ public class ListTypeCheckerTest
 
         var code = @"
             public enum MyEnum { A, B, C, }
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<bool?> BoolValues,
                 List<char?> CharValues,
@@ -83,11 +88,12 @@ public class ListTypeCheckerTest
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
+        Checker.Check(recordSchemaContainer, logger);
+
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -101,23 +107,16 @@ public class ListTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<int>? Values
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -128,18 +127,20 @@ public class ListTypeCheckerTest
 
         var code = @"
             public sealed record Student(string Name, int Age);
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<Student> Students
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
+        Checker.Check(recordSchemaContainer, logger);
+
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -147,29 +148,24 @@ public class ListTypeCheckerTest
     }
 
     [Fact]
-    public void NullableRecordListTest()
+    public void NullableRecordListNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
             public sealed record Student(string Name, int Age);
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<Student?> Students
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -179,24 +175,17 @@ public class ListTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<List<int>> Nested,
                 List<SortedSet<int>> SortedSets
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -206,18 +195,19 @@ public class ListTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 [SingleColumnContainer("", "")] List<int> Values
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
+        Checker.Check(recordSchemaContainer, logger);
+
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -231,23 +221,16 @@ public class ListTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 [SingleColumnContainer("", "")][ColumnPrefix(""Num_"")] List<int> Values
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<InvalidUsageException>(() =>
-                ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -258,23 +241,17 @@ public class ListTypeCheckerTest
 
         var code = @"
             public sealed record Student(string Name, int Age);
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 [SingleColumnContainer("", "")] List<Student> Students
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -284,6 +261,7 @@ public class ListTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 List<int> ValuesA,
                 ImmutableList<int> ValuesB,
@@ -292,13 +270,13 @@ public class ListTypeCheckerTest
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
+        Checker.Check(recordSchemaContainer, logger);
+
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
