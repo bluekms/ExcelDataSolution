@@ -23,18 +23,28 @@ public static class Loader
         "CS8019",
     };
 
-    public static IReadOnlyList<LoadResult> Load(string csFilePath)
+    public static IReadOnlyList<LoadResult> Load(string csPath)
     {
-        var csFiles = Directory.GetFiles(csFilePath, "*.cs");
+        var results = new List<LoadResult>();
 
-        var loadResults = new List<LoadResult>();
-        foreach (var csFile in csFiles)
+        if (File.Exists(csPath))
         {
-            var loadResult = OnLoad(csFile);
-            loadResults.Add(loadResult);
+            results.Add(OnLoad(csPath));
+        }
+        else if (Directory.Exists(csPath))
+        {
+            var files = Directory.GetFiles(csPath, "*.cs");
+            foreach (var file in files)
+            {
+                results.Add(OnLoad(file));
+            }
+        }
+        else
+        {
+            throw new ArgumentException("The file or directory does not exist.", nameof(csPath));
         }
 
-        return loadResults.AsReadOnly();
+        return results;
     }
 
     private static LoadResult OnLoad(string csFile)
