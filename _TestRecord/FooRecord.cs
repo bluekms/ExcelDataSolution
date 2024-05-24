@@ -6,6 +6,6 @@ public sealed record NameAndScoreAndAge([Key] NameAndScore NameAndScore, int Age
 
 [StaticDataRecord]
 public sealed record MyClass(
-    [ColumnPrefix("NameAndScore")] HashSet<NameAndScore> NameAndScores,
+    [ColumnPrefix("NameAndScore")] Dictionary<NameAndScore, NameAndScoreAndAge> NameAndScores,
     int ClassValue,
 );

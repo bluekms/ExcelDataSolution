@@ -32,6 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ExcelColumnExtractor\ExcelColumnExtractor.csproj" />
       <ProjectReference Include="..\SchemaInfoScanner\SchemaInfoScanner.csproj" />
     </ItemGroup>
 
