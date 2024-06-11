@@ -10,12 +10,27 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class ListTypeChecker
 {
+    private static readonly HashSet<string> SupportedTypeNames = new()
+    {
+        "List<>",
+        "ImmutableList<>",
+        "ImmutableArray<>",
+        "SortedList<>",
+    };
+
     public static bool IsSupportedListType(INamedTypeSymbol symbol)
     {
-        // TODO: ReadonlyList, ImmutableList도 지원할 것
-        return symbol.Name.StartsWith("List", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol] &&
-               symbol.OriginalDefinition.SpecialType is not SpecialType.System_Nullable_T;
+        if (symbol.TypeArguments is not [INamedTypeSymbol] ||
+            symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T)
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
     public static bool IsSupportedListType(RecordParameterSchema recordParameter)

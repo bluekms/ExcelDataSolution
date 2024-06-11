@@ -10,12 +10,27 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class DictionaryTypeChecker
 {
+    private static readonly HashSet<string> SupportedTypeNames = new()
+    {
+        "Dictionary<, >",
+        "ImmutableDictionary<, >",
+        "ImmutableSortedDictionary<, >",
+        "FrozenDictionary<, >",
+    };
+
     public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
     {
-        // TODO: ImmutableDictionary, FrozenDictionary도 지원할 것
-        return symbol.Name.StartsWith("Dictionary", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol] &&
-               symbol.OriginalDefinition.SpecialType is not SpecialType.System_Nullable_T;
+        if (symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol] ||
+            symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T)
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
     public static bool IsSupportedDictionaryType(RecordParameterSchema recordParameter)

@@ -354,4 +354,37 @@ public class DictionaryTypeCheckerTest
                 DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
         }
     }
+
+    [Fact]
+    public void ImmutableDictionaryTest()
+    {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var code = @"
+            public sealed record Student(
+                [Key] string Name,
+                int Age
+            );
+
+            public sealed record MyRecord(
+                Dictionary<string, Student> DataA,
+                ImmutableDictionary<string, Student> DataB,
+                ImmutableSortedDictionary<string, Student> DataC,
+                FrozenDictionary<string, Student> DataD,
+            );";
+
+        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        var recordName = new RecordName(".MyRecord");
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        {
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+        }
+    }
 }
