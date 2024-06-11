@@ -19,6 +19,9 @@ public class RecordScanTest
     [Fact]
     public void LoadAndCheckTest()
     {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
         var csPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
             "..",
@@ -27,7 +30,7 @@ public class RecordScanTest
             "..",
             "_TestRecord");
 
-        var loadResults = Loader.Load(csPath);
+        var loadResults = Loader.Load(csPath, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector();
         var enumMemberCollector = new EnumMemberCollector();
@@ -43,8 +46,6 @@ public class RecordScanTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
         Checker.Check(recordSchemaContainer, logger);
     }
 }
