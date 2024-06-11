@@ -251,4 +251,31 @@ public class HashSetTypeCheckerTest
                 HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
         }
     }
+
+    [Fact]
+    public void ImmutableHashSetTest()
+    {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var code = @"
+            public sealed record MyRecord(
+                HashSet<int> ValuesA,
+                ImmutableHashSet<int> ValuesB,
+                ImmutableSortedSet<int> ValuesC
+            );";
+
+        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        var recordName = new RecordName(".MyRecord");
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        {
+            HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+        }
+    }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
@@ -249,6 +251,34 @@ public class ListTypeCheckerTest
         {
             Assert.Throws<TypeNotSupportedException>(() =>
                 ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
+        }
+    }
+
+    [Fact]
+    public void ImmutableListTest()
+    {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var code = @"
+            public sealed record MyRecord(
+                List<int> ValuesA,
+                ImmutableList<int> ValuesB,
+                ImmutableArray<int> ValuesC,
+                SortedList<int> ValuesD,
+            );";
+
+        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        var recordName = new RecordName(".MyRecord");
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        {
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
     }
 }

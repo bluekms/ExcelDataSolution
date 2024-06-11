@@ -10,12 +10,26 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class HashSetTypeChecker
 {
+    private static readonly HashSet<string> SupportedTypeNames = new()
+    {
+        "HashSet<>",
+        "ImmutableHashSet<>",
+        "ImmutableSortedSet<>",
+    };
+
     public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
     {
-        // TODO: ImmutableHashSet도 지원할 것
-        return symbol.Name.StartsWith("HashSet", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol] &&
-               symbol.OriginalDefinition.SpecialType is not SpecialType.System_Nullable_T;
+        if (symbol.TypeArguments is not [INamedTypeSymbol] ||
+            symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T)
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
     public static bool IsSupportedHashSetType(RecordParameterSchema recordParameter)
