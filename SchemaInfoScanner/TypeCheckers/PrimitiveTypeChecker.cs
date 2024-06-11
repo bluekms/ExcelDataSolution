@@ -45,9 +45,37 @@ public static class PrimitiveTypeChecker
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported primitive type.");
         }
 
-        if (recordParameter.IsNullable() && !recordParameter.HasAttribute<NullStringAttribute>())
+        if (!recordParameter.IsNullable())
         {
-            throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is nullable but has no NullStringAttribute.");
+            if (recordParameter.HasAttribute<NullStringAttribute>())
+            {
+                throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+            }
+        }
+
+        CheckUnavailableAttribute(recordParameter);
+    }
+
+    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
+    {
+        if (!recordParameter.IsNullable() && recordParameter.HasAttribute<NullStringAttribute>())
+        {
+            throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+        }
+
+        if (recordParameter.HasAttribute<ColumnPrefixAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(ColumnPrefixAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<MaxCountAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
         }
     }
 

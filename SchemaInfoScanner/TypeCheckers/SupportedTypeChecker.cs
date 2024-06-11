@@ -21,6 +21,7 @@ public static class SupportedTypeChecker
 
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(recordParameter))
         {
+            PrimitiveTypeChecker.Check(recordParameter);
             return;
         }
 
@@ -31,7 +32,11 @@ public static class SupportedTypeChecker
         }
 
         var recordName = new RecordName(recordParameter.NamedTypeSymbol);
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
+        {
+            throw new KeyNotFoundException($"{recordName.FullName} is not found in the record schema dictionary.");
+        }
+
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
     }
 

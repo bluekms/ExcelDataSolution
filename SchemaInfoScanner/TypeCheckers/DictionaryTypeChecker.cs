@@ -12,8 +12,10 @@ public static class DictionaryTypeChecker
 {
     public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
     {
+        // TODO: ImmutableDictionary, FrozenDictionary도 지원할 것
         return symbol.Name.StartsWith("Dictionary", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol];
+               symbol.TypeArguments is [INamedTypeSymbol, INamedTypeSymbol] &&
+               symbol.OriginalDefinition.SpecialType is not SpecialType.System_Nullable_T;
     }
 
     public static bool IsSupportedDictionaryType(RecordParameterSchema recordParameter)
@@ -32,7 +34,7 @@ public static class DictionaryTypeChecker
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported dictionary type.");
         }
 
-        CheckAttribute(recordParameter);
+        CheckUnavailableAttribute(recordParameter);
 
         if (recordParameter.NamedTypeSymbol.TypeArguments is not [INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol])
         {
@@ -43,17 +45,31 @@ public static class DictionaryTypeChecker
         IsDictionaryValueSupport(keySymbol, valueSymbol, recordSchemaContainer, visited, logger);
     }
 
-    private static void CheckAttribute(RecordParameterSchema recordParameter)
+    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
     {
         if (recordParameter.HasAttribute<ColumnNameAttribute>())
         {
-            throw new InvalidUsageException("ColumnNameAttribute is not supported for dictionary type. Use ColumnPrefixAttribute or ColumnSuffixAttribute instead.");
+            throw new InvalidUsageException($"{nameof(ColumnNameAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
         }
 
-        if (!recordParameter.HasAttribute<ColumnPrefixAttribute>() &&
-            !recordParameter.HasAttribute<ColumnSuffixAttribute>())
+        if (recordParameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException("ColumnPrefixAttribute or ColumnSuffixAttribute is required for dictionary type.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<KeyAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<NullStringAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
         }
     }
 
@@ -68,7 +84,7 @@ public static class DictionaryTypeChecker
             throw new TypeNotSupportedException($"Not support nullable key for dictionary.");
         }
 
-        if (ContainerTypeChecker.IsSupportedContainerType(symbol))
+        if (ContainerTypeChecker.IsContainerType(symbol))
         {
             throw new TypeNotSupportedException($"Not support container type for dictionary key.");
         }
@@ -78,8 +94,17 @@ public static class DictionaryTypeChecker
 
         if (!(specialTypeCheck || typeKindCheck))
         {
+            if (symbol.NullableAnnotation is NullableAnnotation.Annotated)
+            {
+                throw new TypeNotSupportedException($"Nullable key is not supported for dictionary.");
+            }
+
             var recordName = new RecordName(symbol);
-            var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+            if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
+            {
+                var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+                throw new TypeNotSupportedException($"{recordName.FullName} is not supported type.", innerException);
+            }
 
             RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
         }
@@ -94,11 +119,25 @@ public static class DictionaryTypeChecker
     {
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
-            return;
+            throw new TypeNotSupportedException($"Primitive value is not supported for dictionary.");
+        }
+
+        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Nullable value is not supported for dictionary.");
+        }
+
+        if (valueSymbol.TypeArguments.Any())
+        {
+            throw new TypeNotSupportedException($"Not support container type for dictionary value.");
         }
 
         var valueRecordName = new RecordName(valueSymbol);
-        var valueRecordSchema = recordSchemaContainer.RecordSchemaDictionary[valueRecordName];
+        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(valueRecordName, out var valueRecordSchema))
+        {
+            var innerException = new KeyNotFoundException($"{valueRecordName.FullName} is not found in the RecordSchemaDictionary");
+            throw new TypeNotSupportedException($"{valueRecordName.FullName} is not supported type.", innerException);
+        }
 
         RecordTypeChecker.Check(valueRecordSchema, recordSchemaContainer, visited, logger);
 
@@ -109,6 +148,11 @@ public static class DictionaryTypeChecker
         {
             CheckSamePrimitiveType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
             return;
+        }
+
+        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Nullable value is not supported for dictionary.");
         }
 
         SupportedTypeChecker.Check(valueRecordKeyParameterSchema, recordSchemaContainer, visited, logger);
