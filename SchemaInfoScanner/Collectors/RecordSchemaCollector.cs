@@ -16,6 +16,15 @@ public sealed class RecordSchemaCollector
 
     public IReadOnlyList<RecordName> RecordNames => recordAttributeDictionary.Keys.ToList();
 
+    public RecordSchemaCollector()
+    {
+    }
+
+    public RecordSchemaCollector(LoadResult loadResult)
+    {
+        Collect(loadResult);
+    }
+
     public void Collect(LoadResult loadResult)
     {
         var result = Parse(loadResult);

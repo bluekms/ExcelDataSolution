@@ -7,9 +7,9 @@ namespace ExcelColumnExtractor;
 
 public static class RecordScanner
 {
-    public static RecordSchemaContainer Scan(ILogger logger, string csPath)
+    public static RecordSchemaContainer Scan(string csPath, ILogger logger)
     {
-        var loadResults = Loader.Load(csPath);
+        var loadResults = Loader.Load(csPath, logger);
         var recordSchemaCollector = new RecordSchemaCollector();
         foreach (var loadResult in loadResults)
         {

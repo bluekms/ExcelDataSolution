@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using Microsoft.Extensions.Logging;
 
 namespace ExcelColumnExtractor;
 
@@ -16,7 +15,7 @@ public class Program
     {
         var logger = Logger.CreateLogger(options);
 
-        var recordSchemaContainer = RecordScanner.Scan(logger, options.ClassPath);
+        var recordSchemaContainer = RecordScanner.Scan(options.ClassPath, logger);
 
         // TODO
         // excel 파일 불러오기

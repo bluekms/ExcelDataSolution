@@ -83,7 +83,7 @@ public class ExcelScanTest
             "..",
             "TestRecord");
 
-        var loadResults = Loader.Load(csPath);
+        var loadResults = Loader.Load(csPath, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector();
         foreach (var loadResult in loadResults)

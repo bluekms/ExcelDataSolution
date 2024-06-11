@@ -12,8 +12,10 @@ public static class HashSetTypeChecker
 {
     public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
     {
+        // TODO: ImmutableHashSet도 지원할 것
         return symbol.Name.StartsWith("HashSet", StringComparison.Ordinal) &&
-               symbol.TypeArguments is [INamedTypeSymbol];
+               symbol.TypeArguments is [INamedTypeSymbol] &&
+               symbol.OriginalDefinition.SpecialType is not SpecialType.System_Nullable_T;
     }
 
     public static bool IsSupportedHashSetType(RecordParameterSchema recordParameter)
@@ -29,10 +31,10 @@ public static class HashSetTypeChecker
     {
         if (!IsSupportedHashSetType(recordParameter))
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hash set type.");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type.");
         }
 
-        CheckAttributes(recordParameter);
+        CheckUnavailableAttribute(recordParameter);
 
         if (recordParameter.NamedTypeSymbol.TypeArguments.First() is not INamedTypeSymbol typeArgument)
         {
@@ -41,24 +43,60 @@ public static class HashSetTypeChecker
 
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
+            if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+            {
+                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
+            }
+
+            if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
+            {
+                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nullable type argument is not supported.");
+            }
+
+            if (ContainerTypeChecker.IsContainerType(typeArgument))
+            {
+                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nested container type argument is not supported.");
+            }
+
             var recordName = new RecordName(typeArgument);
-            var typeArgumentSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+            if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
+            {
+                var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported type.", innerException);
+            }
 
             RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
         }
     }
 
-    private static void CheckAttributes(RecordParameterSchema recordParameter)
+    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
     {
         if (recordParameter.HasAttribute<ColumnNameAttribute>())
         {
-            throw new InvalidUsageException("ColumnNameAttribute is not supported for hash set type. Use ColumnPrefixAttribute or ColumnSuffixAttribute instead.");
+            throw new InvalidUsageException($"{nameof(ColumnNameAttribute)} is not available for hashset type {recordParameter.ParameterName.FullName}.");
         }
 
-        if (!recordParameter.HasAttribute<ColumnPrefixAttribute>() &&
-            !recordParameter.HasAttribute<ColumnSuffixAttribute>())
+        if (recordParameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException("ColumnPrefixAttribute or ColumnSuffixAttribute is required for hash set type.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for hashset type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<KeyAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for hashset type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<NullStringAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for hashset type {recordParameter.ParameterName.FullName}.");
+        }
+
+        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        {
+            if (recordParameter.HasAttribute<ColumnPrefixAttribute>())
+            {
+                throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} overwrites {nameof(ColumnPrefixAttribute)}. {recordParameter.ParameterName.FullName}.");
+            }
         }
     }
 }

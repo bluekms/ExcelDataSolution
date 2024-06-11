@@ -1,9 +1,8 @@
 ﻿using System.Data;
-using System.Globalization;
-using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 
 namespace SchemaInfoScanner;
 
@@ -21,22 +20,28 @@ public static class Loader
         "CS5001",
         "CS0103",
         "CS8019",
+        "CS8632",
     };
 
-    public static IReadOnlyList<LoadResult> Load(string csPath)
+    private static readonly Action<ILogger, string, Exception?> LogException =
+        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
+
+    public static IReadOnlyList<LoadResult> Load(string csPath, ILogger logger)
     {
         var results = new List<LoadResult>();
 
         if (File.Exists(csPath))
         {
-            results.Add(OnLoad(csPath));
+            var code = File.ReadAllText(csPath);
+            results.Add(OnLoad(csPath, code, logger));
         }
         else if (Directory.Exists(csPath))
         {
             var files = Directory.GetFiles(csPath, "*.cs");
             foreach (var file in files)
             {
-                results.Add(OnLoad(file));
+                var code = File.ReadAllText(file);
+                results.Add(OnLoad(file, code, logger));
             }
         }
         else
@@ -47,9 +52,8 @@ public static class Loader
         return results;
     }
 
-    private static LoadResult OnLoad(string csFile)
+    internal static LoadResult OnLoad(string filePath, string code, ILogger logger)
     {
-        var code = File.ReadAllText(csFile);
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var root = syntaxTree.GetRoot();
         var compilation = CSharpCompilation.Create("SchemaInfoScanner", new[] { syntaxTree });
@@ -61,15 +65,13 @@ public static class Loader
 
         if (compileErrors.Any())
         {
-            var sb = new StringBuilder();
-            sb.AppendLine(CultureInfo.InvariantCulture, $"{Path.GetFileName(csFile)}'s code is not compilable.");
-
+            LogException(logger, $"{Path.GetFileName(filePath)}'s code is not compilable.", null);
             foreach (var error in compileErrors)
             {
-                sb.AppendLine(error.ToString());
+                LogException(logger, error.ToString(), null);
             }
 
-            throw new SyntaxErrorException(sb.ToString());
+            throw new SyntaxErrorException($"{compileErrors.Count} compile errors occurred.");
         }
 
         var semanticModel = compilation.GetSemanticModel(syntaxTree);
