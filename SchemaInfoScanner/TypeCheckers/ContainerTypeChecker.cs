@@ -21,52 +21,50 @@ public static class ContainerTypeChecker
 
     public static bool IsContainerType(INamedTypeSymbol typeSymbol)
     {
-        foreach (var iface in ContainerInterfaces)
+        if (typeSymbol.TypeArguments.Length == 0)
         {
-            return typeSymbol.AllInterfaces.Any(i => i.ToDisplayString() == iface);
+            return false;
         }
 
-        // Check if the type is in the relevant namespaces
-        if (typeSymbol.ContainingNamespace != null)
+        var name = typeSymbol.ConstructedFrom.ToDisplayString();
+        var index = name.IndexOf('<');
+        if (index == -1)
         {
-            var namespaceName = typeSymbol.ContainingNamespace.ToDisplayString();
-            return ContainerNamespaces.Contains(namespaceName);
+            return false;
         }
 
-        return false;
+        return ContainerNames.Contains(name.Substring(0, index + 1));
     }
 
-    private static readonly string[] ContainerInterfaces = new[]
+    private static readonly string[] ContainerNames = new[]
     {
-        "System.Collections.IEnumerable",
-        "System.Collections.ICollection",
-        "System.Collections.IList",
-        "System.Collections.IDictionary",
-        "System.Collections.Generic.IEnumerable`1",
-        "System.Collections.Generic.ICollection`1",
-        "System.Collections.Generic.IList`1",
-        "System.Collections.Generic.IDictionary`2",
-        "System.Collections.Generic.ISet`1",
-        "System.Collections.Generic.IReadOnlyCollection`1",
-        "System.Collections.Generic.IReadOnlyList`1",
-        "System.Collections.Generic.IReadOnlyDictionary`2",
-        "System.Collections.Concurrent.IProducerConsumerCollection`1",
-        "System.Collections.Concurrent.ConcurrentBag`1",
-        "System.Collections.Concurrent.ConcurrentQueue`1",
-        "System.Collections.Concurrent.ConcurrentStack`1",
-        "System.Collections.Concurrent.ConcurrentDictionary`2",
-        "System.Collections.Immutable.IImmutableList`1",
-        "System.Collections.Immutable.IImmutableQueue`1",
-        "System.Collections.Immutable.IImmutableStack`1",
-        "System.Collections.Immutable.IImmutableSet`1",
-        "System.Collections.Immutable.IImmutableDictionary`2"
-    };
-
-    private static readonly string[] ContainerNamespaces = new[]
-    {
-        "System.Collections",
-        "System.Collections.Generic",
-        "System.Collections.Concurrent",
-        "System.Collections.Immutable"
+        "List<",
+        "Dictionary<",
+        "HashSet<",
+        "LinkedList<",
+        "Queue<",
+        "Stack<",
+        "SortedList<",
+        "SortedDictionary<",
+        "SortedSet<",
+        "ICollection<",
+        "IList<",
+        "IDictionary<",
+        "IEnumerable<",
+        "IReadOnlyCollection<",
+        "IReadOnlyList<",
+        "IReadOnlyDictionary<",
+        "ConcurrentDictionary<",
+        "ConcurrentBag<",
+        "ConcurrentQueue<",
+        "ConcurrentStack<",
+        "ImmutableList<",
+        "ImmutableDictionary<",
+        "ImmutableHashSet<",
+        "ImmutableQueue<",
+        "ImmutableStack<",
+        "ImmutableSortedSet<",
+        "ImmutableSortedDictionary<",
+        "BlockingCollection<"
     };
 }

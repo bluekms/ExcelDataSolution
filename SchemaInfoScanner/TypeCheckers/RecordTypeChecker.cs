@@ -14,13 +14,31 @@ public static class RecordTypeChecker
     private static readonly Action<ILogger, string, Exception?> LogTrace =
         LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");
 
-    public static bool IsSupportedRecordType(RecordSchema recordSchema)
+    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
     {
-        var methodSymbols = recordSchema.NamedTypeSymbol
+        var methodSymbols = symbol
             .GetMembers().OfType<IMethodSymbol>()
             .Select(x => x.Name);
 
         return !RecordMethodNames.Except(methodSymbols).Any();
+    }
+
+    public static RecordSchema CheckAndGetSchema(
+        INamedTypeSymbol symbol,
+        RecordSchemaContainer recordSchemaContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
+    {
+        var recordName = new RecordName(symbol);
+        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
+        {
+            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+            throw new TypeNotSupportedException($"{recordName.FullName} is not supported type.", innerException);
+        }
+
+        Check(recordSchema, recordSchemaContainer, visited, logger);
+
+        return recordSchema;
     }
 
     public static void Check(
@@ -29,9 +47,11 @@ public static class RecordTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedRecordType(recordSchema))
+        var parameterType = RecordParameterTypeInferencer.Infer(recordSchema.NamedTypeSymbol);
+        if (parameterType is not RecordType &&
+            parameterType is not NullableRecordType)
         {
-            throw new TypeNotSupportedException($"{recordSchema.RecordName.FullName} is not supported record type.");
+            throw new InvalidOperationException($"Expected infer result to be {nameof(RecordType)} || {nameof(NullableRecordType)}, but actually {parameterType.GetType().FullName}.");
         }
 
         if (!visited.Add(recordSchema.RecordName))
