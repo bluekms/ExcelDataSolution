@@ -44,44 +44,33 @@ public static class ListTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedListType(recordParameter))
+        var parameterType = RecordParameterTypeInferencer.Infer(recordParameter.NamedTypeSymbol);
+        if (parameterType is not IListType listParameter)
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type.");
+            throw new InvalidOperationException($"Expected infer result to be {nameof(IListType)}, but actually {parameterType.GetType().FullName}.");
         }
 
         CheckUnavailableAttribute(recordParameter);
 
-        if (recordParameter.NamedTypeSymbol.TypeArguments.First() is not INamedTypeSymbol typeArgument)
+        if (listParameter.Item() is PrimitiveType or NullablePrimitiveType)
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. Type argument is null.");
+            return;
         }
 
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
+        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
-            {
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
-            }
-
-            if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
-            {
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. Nullable type argument is not supported.");
-            }
-
-            if (ContainerTypeChecker.IsContainerType(typeArgument))
-            {
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. Nested container type argument is not supported.");
-            }
-
-            var recordName = new RecordName(typeArgument);
-            if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
-            {
-                var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported type.", innerException);
-            }
-
-            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
         }
+
+        var typeArgument = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments.Single();
+        var recordName = new RecordName(typeArgument);
+        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
+        {
+            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported type.", innerException);
+        }
+
+        RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
     }
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)

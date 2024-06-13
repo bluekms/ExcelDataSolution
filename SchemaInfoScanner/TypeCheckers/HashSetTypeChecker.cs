@@ -43,44 +43,33 @@ public static class HashSetTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedHashSetType(recordParameter))
+        var parameterType = RecordParameterTypeInferencer.Infer(recordParameter.NamedTypeSymbol);
+        if (parameterType is not IHashSetType hashSetParameter)
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type.");
+            throw new InvalidOperationException($"Expected infer result to be {nameof(IHashSetType)}, but actually {parameterType.GetType().FullName}.");
         }
 
         CheckUnavailableAttribute(recordParameter);
 
-        if (recordParameter.NamedTypeSymbol.TypeArguments.First() is not INamedTypeSymbol typeArgument)
+        if (hashSetParameter.Item() is PrimitiveType or NullablePrimitiveType)
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Type argument is null.");
+            return;
         }
 
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
+        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
-            {
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
-            }
-
-            if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
-            {
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nullable type argument is not supported.");
-            }
-
-            if (ContainerTypeChecker.IsContainerType(typeArgument))
-            {
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nested container type argument is not supported.");
-            }
-
-            var recordName = new RecordName(typeArgument);
-            if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
-            {
-                var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
-                throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported type.", innerException);
-            }
-
-            RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
         }
+
+        var typeArgument = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments.Single();
+        var recordName = new RecordName(typeArgument);
+        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
+        {
+            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported type.", innerException);
+        }
+
+        RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
     }
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
