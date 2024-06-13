@@ -19,7 +19,7 @@ public class DictionaryTypeCheckerTest
     }
 
     [Fact]
-    public void DictionaryTest()
+    public void PrimitiveKeyRecordValueDictionaryTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
@@ -49,7 +49,7 @@ public class DictionaryTypeCheckerTest
     }
 
     [Fact]
-    public void RecordKeyDictionaryTest()
+    public void RecordKeyRecordValueDictionaryTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
@@ -84,38 +84,7 @@ public class DictionaryTypeCheckerTest
     }
 
     [Fact]
-    public void RecordWithoutKeyDictionaryNotSupportedTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            public sealed record Student(
-                string Name,
-                int Age
-            );
-
-            public sealed record MyRecord(
-                Dictionary<string, Student> Students,
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<InvalidOperationException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
-    }
-
-    [Fact]
-    public void RecordWithDifferentKeyTypesDictionaryNotSupportedTest()
+    public void NullableDictionaryNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
@@ -127,7 +96,7 @@ public class DictionaryTypeCheckerTest
             );
 
             public sealed record MyRecord(
-                Dictionary<int, Student> Students,
+                Dictionary<string, Student>? Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -154,35 +123,6 @@ public class DictionaryTypeCheckerTest
         var code = @"
             public sealed record MyRecord(
                 Dictionary<int, int> Values,
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
-    }
-
-    [Fact]
-    public void NullableDictionaryNotSupportedTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            public sealed record Student(
-                [Key] string Name,
-                int Age
-            );
-
-            public sealed record MyRecord(
-                Dictionary<string, Student>? Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -232,7 +172,7 @@ public class DictionaryTypeCheckerTest
     }
 
     [Fact]
-    public void NullableRecordDictionaryNotSupportedTest()
+    public void NullableRecordValueDictionaryNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
@@ -245,6 +185,68 @@ public class DictionaryTypeCheckerTest
 
             public sealed record MyRecord(
                 Dictionary<string, Student?> Students,
+            );";
+
+        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        var recordName = new RecordName(".MyRecord");
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        {
+            Assert.Throws<TypeNotSupportedException>(() =>
+                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
+        }
+    }
+
+    [Fact]
+    public void RecordWithoutKeyDictionaryNotSupportedTest()
+    {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var code = @"
+            public sealed record Student(
+                string Name,
+                int Age
+            );
+
+            public sealed record MyRecord(
+                Dictionary<string, Student> Students,
+            );";
+
+        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        var recordName = new RecordName(".MyRecord");
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
+        }
+    }
+
+    [Fact]
+    public void RecordWithDifferentKeyTypesDictionaryNotSupportedTest()
+    {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var code = @"
+            public sealed record Student(
+                [Key] string Name,
+                int Age
+            );
+
+            public sealed record MyRecord(
+                Dictionary<int, Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -320,37 +322,6 @@ public class DictionaryTypeCheckerTest
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             Assert.Throws<TypeNotSupportedException>(() =>
-                DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
-    }
-
-    [Fact]
-    public void SingleColumnContainerDictionaryNotSupportedTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            public sealed record Student(
-                [Key] string Name,
-                int Age
-            );
-
-            public sealed record MyRecord(
-                [SingleColumnContainer("", "")] Dictionary<string, Student> Students,
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<InvalidUsageException>(() =>
                 DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
         }
     }

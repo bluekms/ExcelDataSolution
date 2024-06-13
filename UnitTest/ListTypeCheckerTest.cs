@@ -1,5 +1,3 @@
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
@@ -123,7 +121,33 @@ public class ListTypeCheckerTest
     }
 
     [Fact]
-    public void NullableRecordListNotSupportedTest()
+    public void RecordListTest()
+    {
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var code = @"
+            public sealed record Student(string Name, int Age);
+            public sealed record MyRecord(
+                List<Student> Students
+            );";
+
+        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+
+        var recordName = new RecordName(".MyRecord");
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
+
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        {
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+        }
+    }
+
+    [Fact]
+    public void NullableRecordListTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
@@ -144,8 +168,7 @@ public class ListTypeCheckerTest
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
     }
 
@@ -177,7 +200,7 @@ public class ListTypeCheckerTest
     }
 
     [Fact]
-    public void SingleColumnPrimitiveContainerNotSupportedTest()
+    public void SingleColumnPrimitiveContainerTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
