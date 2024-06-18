@@ -5,6 +5,8 @@ namespace UnitTest;
 
 public class TestOutputLogger<T> : ILogger<T>
 {
+    public List<string> Logs { get; } = new();
+
     private readonly ITestOutputHelper output;
     private readonly LogLevel minLogLevel;
 
@@ -25,6 +27,7 @@ public class TestOutputLogger<T> : ILogger<T>
         if (!string.IsNullOrEmpty(message))
         {
             this.output.WriteLine($"[{logLevel}] {message}");
+            Logs.Add(message);
         }
     }
 

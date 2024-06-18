@@ -4,6 +4,7 @@ using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
@@ -47,6 +48,12 @@ public static class RecordTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
+        if (recordSchema.HasAttribute<IgnoreAttribute>())
+        {
+            LogTrace(logger, $"{recordSchema.RecordName.FullName} is ignored.", null);
+            return;
+        }
+
         var parameterType = RecordParameterTypeInferencer.Infer(recordSchema.NamedTypeSymbol);
         if (parameterType is not RecordType &&
             parameterType is not NullableRecordType)
@@ -60,9 +67,13 @@ public static class RecordTypeChecker
             return;
         }
 
+        LogTrace(logger, $"{recordSchema.RecordName.FullName} Started.", null);
+
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, visited, logger);
         }
+
+        LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
     }
 }

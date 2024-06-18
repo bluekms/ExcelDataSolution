@@ -3,9 +3,6 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.Exceptions;
-using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.TypeCheckers;
 using Xunit.Abstractions;
 
 namespace UnitTest;
