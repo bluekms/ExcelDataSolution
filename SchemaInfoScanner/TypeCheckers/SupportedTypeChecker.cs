@@ -3,6 +3,7 @@ using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
@@ -17,6 +18,12 @@ public static class SupportedTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
+        if (recordParameter.HasAttribute<IgnoreAttribute>())
+        {
+            LogTrace(logger, $"{recordParameter.ParameterName.FullName} is ignored.", null);
+            return;
+        }
+
         LogTrace(logger, recordParameter.ParameterName.FullName, null);
 
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(recordParameter))
