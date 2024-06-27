@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner.NameObjects;
 
-public class RecordParameterName
+public class RecordParameterName : IEquatable<RecordParameterName>
 {
     public string Name { get; }
     public string FullName => $"{RecordName.FullName}.{Name}";
@@ -29,16 +29,47 @@ public class RecordParameterName
 
     public override bool Equals(object? obj)
     {
-        if (obj is null || GetType() != obj.GetType())
+        if (ReferenceEquals(null, obj))
         {
             return false;
         }
 
-        return FullName == ((RecordParameterName)obj).FullName;
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+
+        return Equals((RecordParameterName)obj);
     }
 
     public override int GetHashCode()
     {
-        return FullName.GetHashCode();
+        return HashCode.Combine(this.Name, this.RecordName);
+    }
+
+    public bool Equals(RecordParameterName? other)
+    {
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return this.Name == other.Name &&
+               this.RecordName.Equals(other.RecordName);
+    }
+
+    public override string ToString()
+    {
+        return FullName;
     }
 }

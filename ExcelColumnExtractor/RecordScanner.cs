@@ -17,6 +17,7 @@ public static class RecordScanner
         }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        Checker.Check(recordSchemaContainer, logger);
         var exceptionCount = Checker.TryCheck(recordSchemaContainer, logger);
         if (exceptionCount > 0)
         {

@@ -20,8 +20,8 @@ public static class DictionaryTypeChecker
 
     public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
     {
-        if (symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol] ||
-            symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T)
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
+            symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol])
         {
             return false;
         }
@@ -33,34 +33,37 @@ public static class DictionaryTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    public static bool IsSupportedDictionaryType(RecordParameterSchema recordParameter)
-    {
-        return IsSupportedDictionaryType(recordParameter.NamedTypeSymbol);
-    }
-
     public static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        var parameterType = RecordParameterTypeInferencer.Infer(recordParameter.NamedTypeSymbol);
-        if (parameterType is not IDictionaryType dictionaryParameter)
+        if (!IsSupportedDictionaryType(recordParameter.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected infer result to be {nameof(IDictionaryType)}, but actually {parameterType.GetType().FullName}.");
+            throw new InvalidOperationException($"Expected {recordParameter.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
         }
 
         CheckUnavailableAttribute(recordParameter);
 
         var keySymbol = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments[0];
+        if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+        }
+
         var valueSymbol = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments[1];
+        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+        }
 
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaContainer, visited, logger);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .Single(x => x.HasAttribute<KeyAttribute>());
 
-        if (dictionaryParameter.KeyItem() is RecordType)
+        if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
         {
             var keyRecordSchema = RecordTypeChecker.CheckAndGetSchema(keySymbol, recordSchemaContainer, visited, logger);
 

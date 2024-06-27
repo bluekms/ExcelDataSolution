@@ -17,13 +17,17 @@ public static class Checker
     public static void Check(RecordSchemaContainer recordSchemaContainer, ILogger logger)
     {
         var visited = new HashSet<RecordName>();
-        foreach (var (_, recordSchema) in recordSchemaContainer.RecordSchemaDictionary)
-        {
-            if (!recordSchema.HasAttribute<StaticDataRecordAttribute>())
-            {
-                continue;
-            }
 
+        var staticDataRecords = recordSchemaContainer.RecordSchemaDictionary
+            .Where(x => x.Value.HasAttribute<StaticDataRecordAttribute>())
+            .ToList();
+        if (!staticDataRecords.Any())
+        {
+            throw new InvalidOperationException("No static data record is found.");
+        }
+
+        foreach (var (_, recordSchema) in staticDataRecords)
+        {
             if (!visited.Add(recordSchema.RecordName))
             {
                 LogTrace(logger, $"{recordSchema.RecordName.FullName} is already visited.", null);

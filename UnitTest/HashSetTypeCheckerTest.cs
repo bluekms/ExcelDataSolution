@@ -26,6 +26,8 @@ public class HashSetTypeCheckerTest
 
         var code = @"
             public enum MyEnum { A, B, C, }
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<bool> BoolValues,
                 HashSet<char> CharValues,
@@ -50,6 +52,8 @@ public class HashSetTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
+        Checker.Check(recordSchemaContainer, logger);
+
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -64,6 +68,8 @@ public class HashSetTypeCheckerTest
 
         var code = @"
             public enum MyEnum { A, B, C, }
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<bool?> BoolValues,
                 HashSet<char?> CharValues,
@@ -86,8 +92,10 @@ public class HashSetTypeCheckerTest
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
+        Checker.Check(recordSchemaContainer, logger);
+
+        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -101,23 +109,16 @@ public class HashSetTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<int>? Values,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -128,18 +129,20 @@ public class HashSetTypeCheckerTest
 
         var code = @"
             public sealed record Student(string Name, int Age);
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<Student> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
+        Checker.Check(recordSchemaContainer, logger);
+
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -147,29 +150,24 @@ public class HashSetTypeCheckerTest
     }
 
     [Fact]
-    public void NullableRecordHashSetTest()
+    public void NullableRecordHashSetNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
             public sealed record Student(string Name, int Age);
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<Student?> Students,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -179,24 +177,17 @@ public class HashSetTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<HashSet<int>> Nested,
                 HashSet<SortedSet<int>> SortedSets,
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -206,6 +197,7 @@ public class HashSetTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 [SingleColumnContainer("", "")] HashSet<int> Values
             );";
@@ -215,9 +207,10 @@ public class HashSetTypeCheckerTest
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
+        Checker.Check(recordSchemaContainer, logger);
+
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -231,23 +224,16 @@ public class HashSetTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 [SingleColumnContainer("", "")][ColumnPrefix(""Num_"")] HashSet<int> Values
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<InvalidUsageException>(() =>
-                HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -258,23 +244,17 @@ public class HashSetTypeCheckerTest
 
         var code = @"
             public sealed record Student(string Name, int Age);
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 [SingleColumnContainer("", "")] HashSet<Student> Students
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<TypeNotSupportedException>(() =>
-                HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger));
-        }
+        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -284,6 +264,7 @@ public class HashSetTypeCheckerTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
                 HashSet<int> ValuesA,
                 ImmutableHashSet<int> ValuesB,
@@ -291,13 +272,13 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
+        Checker.Check(recordSchemaContainer, logger);
+
         var recordName = new RecordName(".MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);

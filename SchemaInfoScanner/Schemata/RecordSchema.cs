@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata;
 
@@ -13,6 +12,7 @@ public sealed record RecordSchema(
     IReadOnlyList<RecordParameterSchema> RecordParameterSchemaList)
 {
     public bool HasAttribute<T>()
+        where T : Attribute
     {
         var attributeName = typeof(T).Name.Replace("Attribute", string.Empty);
         return RecordAttributeList.Any(x => x.Name.ToString() == attributeName);
@@ -29,22 +29,26 @@ public sealed record RecordSchema(
             throw new ArgumentNullException($"{typeof(TAttribute).Name} has no property.");
         }
 
-        var valueString = attributeParameterIndex is 0
-            ? attribute.ArgumentList.Arguments.First().Expression.ToString().Trim('"')
-            : attribute.ArgumentList.Arguments[attributeParameterIndex].ToString().Trim('"');
-
+        var valueString = attribute.ArgumentList.Arguments[attributeParameterIndex].ToString().Trim('"');
         return typeof(TValue).IsEnum
             ? (TValue)Enum.Parse(typeof(TValue), valueString)
             : (TValue)Convert.ChangeType(valueString, typeof(TValue), CultureInfo.InvariantCulture);
     }
 
-    public string GetSheetName()
+    public bool TryGetAttributeValue<TAttribute, TValue>(int attributeParameterIndex, out TValue? value)
+        where TAttribute : Attribute
     {
-        if (!HasAttribute<SheetNameAttribute>())
+        value = default;
+
+        try
         {
-            return RecordName.Name;
+            value = GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
+        }
+        catch (Exception)
+        {
+            return false;
         }
 
-        return GetAttributeValue<SheetNameAttribute, string>();
+        return true;
     }
 }

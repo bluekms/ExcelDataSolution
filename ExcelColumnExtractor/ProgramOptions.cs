@@ -18,6 +18,6 @@ public sealed class ProgramOptions
     [Option('l', "log-path", Required = false, HelpText = "로그 파일 경로")]
     public string? LogPath { get; set; }
 
-    [Option(Default = LogEventLevel.Information, Required = false, HelpText = "최소 로그 레벨 (기본값: Information)")]
+    [Option('v', Default = LogEventLevel.Information, Required = false, HelpText = "최소 로그 레벨 (Verbose, Debug, Information, Warning, Error, Fatal)")]
     public LogEventLevel MinLogLevel { get; set; }
 }
