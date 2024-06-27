@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
@@ -47,7 +48,7 @@ public sealed class RecordSchemaCollector
             var parameterSchema = new RecordParameterSchema(
                 parameterName,
                 namedTypeSymbol,
-                attributes.ToList());
+                attributes.ToImmutableList());
 
             var recordName = parameterName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
@@ -61,19 +62,19 @@ public sealed class RecordSchemaCollector
         }
     }
 
-    public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
+    public ImmutableList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
     {
-        return recordAttributeDictionary[recordName];
+        return recordAttributeDictionary[recordName].ToImmutableList();
     }
 
-    public IReadOnlyList<RecordParameterSchema> GetRecordMemberSchemata(RecordName recordName)
+    public ImmutableList<RecordParameterSchema> GetRecordMemberSchemata(RecordName recordName)
     {
         if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
         {
-            return recordMembers;
+            return recordMembers.ToImmutableList();
         }
 
-        return Array.Empty<RecordParameterSchema>();
+        return ImmutableList<RecordParameterSchema>.Empty;
     }
 
     public INamedTypeSymbol GetNamedTypeSymbol(RecordName recordName)

@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Collections.Immutable;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Collectors;
@@ -17,8 +18,10 @@ public class EnumMemberCollector
         }
     }
 
-    public FrozenDictionary<EnumName, IReadOnlyList<string>> ToFrozenDictionary()
+    public FrozenDictionary<EnumName, ImmutableList<string>> ToFrozenDictionary()
     {
-        return enumMemberDictionary.ToFrozenDictionary();
+        return enumMemberDictionary
+            .ToDictionary(pair => pair.Key, pair => pair.Value.ToImmutableList())
+            .ToFrozenDictionary();
     }
 }

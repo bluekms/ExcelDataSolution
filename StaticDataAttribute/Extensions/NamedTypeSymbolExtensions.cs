@@ -1,11 +1,12 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace StaticDataAttribute.Extensions;
 
 public static class NamedTypeSymbolExtensions
 {
-    public static bool IsSupportedType(this INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    public static bool IsSupportedType(this INamedTypeSymbol symbol, SemanticModel semanticModel, ImmutableList<RecordDeclarationSyntax> recordDeclarationList)
     {
         if (symbol.IsSupportedPrimitiveType())
         {
@@ -49,7 +50,7 @@ public static class NamedTypeSymbolExtensions
         return symbol.IsHashSet() || symbol.IsList() || symbol.IsDictionary();
     }
 
-    private static bool IsSupportedContainerType(this INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    private static bool IsSupportedContainerType(this INamedTypeSymbol symbol, SemanticModel semanticModel, ImmutableList<RecordDeclarationSyntax> recordDeclarationList)
     {
         if (symbol.IsHashSet())
         {
@@ -165,7 +166,7 @@ public static class NamedTypeSymbolExtensions
         return symbol.Name.StartsWith("Dictionary", StringComparison.Ordinal);
     }
 
-    private static bool IsSupportedObjectType(this INamedTypeSymbol symbol, SemanticModel semanticModel, IReadOnlyList<RecordDeclarationSyntax> recordDeclarationList)
+    private static bool IsSupportedObjectType(this INamedTypeSymbol symbol, SemanticModel semanticModel, ImmutableList<RecordDeclarationSyntax> recordDeclarationList)
     {
         foreach (var member in symbol.GetMembers()
                      .Where(x => !x.IsImplicitlyDeclared)

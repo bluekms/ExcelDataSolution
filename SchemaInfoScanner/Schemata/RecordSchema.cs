@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Immutable;
+using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
@@ -8,8 +9,8 @@ namespace SchemaInfoScanner.Schemata;
 public sealed record RecordSchema(
     RecordName RecordName,
     INamedTypeSymbol NamedTypeSymbol,
-    IReadOnlyList<AttributeSyntax> RecordAttributeList,
-    IReadOnlyList<RecordParameterSchema> RecordParameterSchemaList)
+    ImmutableList<AttributeSyntax> RecordAttributeList,
+    ImmutableList<RecordParameterSchema> RecordParameterSchemaList)
 {
     public bool HasAttribute<T>()
         where T : Attribute
