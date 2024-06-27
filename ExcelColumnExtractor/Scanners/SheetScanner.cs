@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Collections.Immutable;
 using ExcelColumnExtractor.NameObjects;
 using ExcelDataReader;
 using Microsoft.Extensions.Logging;
@@ -42,7 +43,7 @@ public static class SheetScanner
         return sheetNames.ToFrozenDictionary();
     }
 
-    private static IReadOnlyList<SheetName> OnScan(string filePath, ILogger logger)
+    private static ImmutableList<SheetName> OnScan(string filePath, ILogger logger)
     {
         var sheetNames = new List<SheetName>();
 
@@ -60,6 +61,6 @@ public static class SheetScanner
         }
         while (reader.NextResult());
 
-        return sheetNames;
+        return sheetNames.ToImmutableList();
     }
 }

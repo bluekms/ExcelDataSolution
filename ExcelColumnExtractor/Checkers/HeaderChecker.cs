@@ -7,7 +7,7 @@ namespace ExcelColumnExtractor.Checkers;
 
 public static class HeaderChecker
 {
-    public static void Check(IReadOnlyList<RecordParameterSchema> parameterSchemaList, RecordSchemaContainer recordSchemaContainer, ImmutableList<string> headerList, SheetName sheetName)
+    public static void Check(ImmutableList<RecordParameterSchema> parameterSchemaList, RecordSchemaContainer recordSchemaContainer, ImmutableList<string> headerList, SheetName sheetName)
     {
     }
 }

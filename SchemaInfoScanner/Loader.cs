@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Immutable;
+using System.Data;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,7 +27,7 @@ public static class Loader
     private static readonly Action<ILogger, string, Exception?> LogException =
         LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
 
-    public static IReadOnlyList<LoadResult> Load(string csPath, ILogger logger)
+    public static ImmutableList<LoadResult> Load(string csPath, ILogger logger)
     {
         var results = new List<LoadResult>();
 
@@ -49,7 +50,7 @@ public static class Loader
             throw new ArgumentException("The file or directory does not exist.", nameof(csPath));
         }
 
-        return results;
+        return results.ToImmutableList();
     }
 
     internal static LoadResult OnLoad(string filePath, string code, ILogger logger)
