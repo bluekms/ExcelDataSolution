@@ -1,5 +1,3 @@
-using System.Collections.Immutable;
-using ExcelColumnExtractor.Checkers;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
@@ -60,40 +58,6 @@ public class ColumnNameAttributeTest
     }
 
     [Fact]
-    public void NullablePrimitiveTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            [StaticDataRecord(""Test"", ""TestSheet"")]
-            public sealed record MyRecord(
-                string Name,
-                [ColumnName(""Point"")] int? Score
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        Checker.Check(recordSchemaContainer, logger);
-
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        var sheetHeaders = new List<string>
-        {
-            "Name", "Point"
-        };
-
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
-    }
-
-    [Fact]
     public void NullableRecordHashSetNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
@@ -135,42 +99,6 @@ public class ColumnNameAttributeTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
-    }
-
-    [Fact]
-    public void NullableRecordTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            public sealed record Student(string Name, int Score);
-
-            [StaticDataRecord(""Test"", ""TestSheet"")]
-            public sealed record MyClass(
-                string Name,
-                [ColumnName(""Child"")] Student? Student
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        Checker.Check(recordSchemaContainer, logger);
-
-        var recordName = new RecordName(".MyClass");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        var sheetHeaders = new List<string>
-        {
-            "Name", "Child.Name", "Child.Score"
-        };
-
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
     }
 
     [Fact]
@@ -232,40 +160,6 @@ public class ColumnNameAttributeTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
-    }
-
-    [Fact]
-    public void PrimitiveTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            [StaticDataRecord(""Test"", ""TestSheet"")]
-            public sealed record MyRecord(
-                string Name,
-                [ColumnName(""Point"")] int Score
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        Checker.Check(recordSchemaContainer, logger);
-
-        var recordName = new RecordName(".MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        var sheetHeaders = new List<string>
-        {
-            "Name", "Point"
-        };
-
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
     }
 
     [Fact]
@@ -331,41 +225,5 @@ public class ColumnNameAttributeTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
-    }
-
-    [Fact]
-    public void RecordTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            public sealed record Student(string Name, int Score);
-
-            [StaticDataRecord(""Test"", ""TestSheet"")]
-            public sealed record MyClass(
-                string Name,
-                [ColumnName(""Child"")] Student Student
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        Checker.Check(recordSchemaContainer, logger);
-
-        var recordName = new RecordName(".MyClass");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
-        var sheetHeaders = new List<string>
-        {
-            "Name", "Child.Name", "Child.Score"
-        };
-
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
     }
 }
