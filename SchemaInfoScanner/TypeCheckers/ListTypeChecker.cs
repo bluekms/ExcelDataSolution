@@ -47,14 +47,14 @@ public static class ListTypeChecker
         CheckUnavailableAttribute(recordParameter);
 
         var typeArgument = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments.Single();
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
-        {
-            return;
-        }
-
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
+        }
+
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
+        {
+            return;
         }
 
         if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())

@@ -40,7 +40,7 @@ public class ColumnPrefixAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -49,10 +49,6 @@ public class ColumnPrefixAttributeTest
             "Score2.Id", "Score2.Name", "Score2.Age", "Score2.Subject1", "Score2.Subject2", "Score2.Subject3",
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 }

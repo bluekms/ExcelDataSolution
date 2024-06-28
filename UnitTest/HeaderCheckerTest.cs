@@ -33,7 +33,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -41,11 +41,7 @@ public class HeaderCheckerTest
             "Name", "Score"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -63,7 +59,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -71,11 +67,7 @@ public class HeaderCheckerTest
             "Name", "Point"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -93,7 +85,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -101,11 +93,7 @@ public class HeaderCheckerTest
             "Name", "Score1", "Score2", "Score3"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -123,7 +111,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -131,11 +119,7 @@ public class HeaderCheckerTest
             "Name", "Score1", "Score2", "Score3"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     /*
@@ -154,7 +138,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -187,7 +171,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -195,11 +179,7 @@ public class HeaderCheckerTest
             "Point1", "Point2", "Point3"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -217,7 +197,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -225,11 +205,7 @@ public class HeaderCheckerTest
             "Name", "Scores"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -247,7 +223,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -255,11 +231,7 @@ public class HeaderCheckerTest
             "Name", "Points"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -282,7 +254,7 @@ public class HeaderCheckerTest
         var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -290,10 +262,6 @@ public class HeaderCheckerTest
             "Id", "Students1.Name", "Students1.Score", "Students2.Name", "Students2.Score", "Students3.Name", "Students3.Score"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 }

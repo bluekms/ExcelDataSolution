@@ -141,7 +141,7 @@ public class HashSetTypeCheckerTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
@@ -209,7 +209,7 @@ public class HashSetTypeCheckerTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
@@ -277,7 +277,7 @@ public class HashSetTypeCheckerTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {

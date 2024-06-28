@@ -61,7 +61,12 @@ public static class DictionaryTypeChecker
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaContainer, visited, logger);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
-            .Single(x => x.HasAttribute<KeyAttribute>());
+            .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
+
+        if (valueRecordKeyParameterSchema is null)
+        {
+            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {recordParameter.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
+        }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
         {

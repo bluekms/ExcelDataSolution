@@ -50,7 +50,7 @@ public class Program
             var sheetHeaders = HeaderScanner.Scan(sheetNameContainer[sheetName.FullName], logger);
             LogTrace(logger, $"{sheetName.FullName}: {string.Join(", ", sheetHeaders)}", null);
 
-            HeaderChecker.Check(recordSchema.RecordParameterSchemaList, recordSchemaContainer, sheetHeaders, sheetName);
+            // HeaderChecker.Check(recordSchema.RecordParameterSchemaList, recordSchemaContainer, sheetHeaders, sheetName);
         }
     }
 

@@ -78,7 +78,7 @@ public class ColumnNameAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -86,11 +86,7 @@ public class ColumnNameAttributeTest
             "Name", "Point"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -158,7 +154,7 @@ public class ColumnNameAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -166,11 +162,7 @@ public class ColumnNameAttributeTest
             "Name", "Child.Name", "Child.Score"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -253,7 +245,7 @@ public class ColumnNameAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -261,11 +253,7 @@ public class ColumnNameAttributeTest
             "Name", "Point"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 
     [Fact]
@@ -354,7 +342,7 @@ public class ColumnNameAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -362,10 +350,6 @@ public class ColumnNameAttributeTest
             "Name", "Child.Name", "Child.Score"
         };
 
-        HeaderChecker.Check(
-            recordSchema.RecordParameterSchemaList,
-            recordSchemaContainer,
-            sheetHeaders.ToImmutableList(),
-            new("./Test.xlsx", "TestSheet"));
+        throw new NotImplementedException();
     }
 }

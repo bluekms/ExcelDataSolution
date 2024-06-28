@@ -46,6 +46,11 @@ public static class HashSetTypeChecker
         CheckUnavailableAttribute(recordParameter);
 
         var typeArgument = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments.Single();
+        if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
+        }
+
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
             return;
@@ -54,11 +59,6 @@ public static class HashSetTypeChecker
         if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
         {
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
-        }
-
-        if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
-        {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
         }
 
         var recordName = new RecordName(typeArgument);

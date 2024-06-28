@@ -38,7 +38,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -72,7 +72,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -109,7 +109,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -143,7 +143,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -180,7 +180,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -214,7 +214,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -252,7 +252,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -288,7 +288,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -327,7 +327,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -361,7 +361,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -399,7 +399,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -435,7 +435,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -471,7 +471,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -513,7 +513,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -551,7 +551,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -589,7 +589,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -629,7 +629,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -665,7 +665,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -701,7 +701,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
@@ -743,7 +743,7 @@ public class MaxCountAttributeTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyClass");
+        var recordName = new RecordName("MyClass");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         var sheetHeaders = new List<string>
