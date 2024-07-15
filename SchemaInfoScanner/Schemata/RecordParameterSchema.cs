@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -35,25 +36,28 @@ public sealed record RecordParameterSchema(
             : (TValue)Convert.ChangeType(valueString, typeof(TValue), CultureInfo.InvariantCulture);
     }
 
-    public bool TryGetAttributeValue<TAttribute, TValue>(int attributeParameterIndex, out TValue? value)
+    public bool TryGetAttributeValue<TAttribute, TValue>(int attributeParameterIndex, [NotNullWhen(true)] out TValue? value)
         where TAttribute : Attribute
     {
-        value = default;
-
         try
         {
             value = GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
+            return value is not null;
         }
         catch (Exception)
         {
+            value = default;
             return false;
         }
-
-        return true;
     }
 
     public bool IsNullable()
     {
         return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+    }
+
+    public override string ToString()
+    {
+        return ParameterName.FullName;
     }
 }
