@@ -10,4 +10,17 @@ public static class ContainerTypeChecker
                ListTypeChecker.IsSupportedListType(symbol) ||
                DictionaryTypeChecker.IsSupportedDictionaryType(symbol);
     }
+
+    public static bool IsPrimitiveContainer(INamedTypeSymbol symbol)
+    {
+        if (!ListTypeChecker.IsSupportedListType(symbol) &&
+            !HashSetTypeChecker.IsSupportedHashSetType(symbol))
+        {
+            return false;
+        }
+
+        var typeArgument = (INamedTypeSymbol)symbol.TypeArguments.Single();
+
+        return PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument);
+    }
 }
