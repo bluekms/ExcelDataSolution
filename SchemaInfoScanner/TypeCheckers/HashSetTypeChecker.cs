@@ -51,14 +51,14 @@ public static class HashSetTypeChecker
             return;
         }
 
-        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
-        {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
-        }
-
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
+        }
+
+        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        {
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
         }
 
         var recordName = new RecordName(typeArgument);
