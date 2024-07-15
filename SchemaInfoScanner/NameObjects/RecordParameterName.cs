@@ -24,7 +24,11 @@ public class RecordParameterName : IEquatable<RecordParameterName>
 
         var parts = fullName.Split('.');
         Name = parts[^1];
-        RecordName = new RecordName(string.Join('.', parts[..^1]));
+
+        var namespacePart = string.Join('.', parts[..^1]);
+        RecordName = string.IsNullOrEmpty(namespacePart)
+            ? new RecordName(Name)
+            : new RecordName(namespacePart);
     }
 
     public override bool Equals(object? obj)

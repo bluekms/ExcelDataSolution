@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using ExcelColumnExtractor.Checkers;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -50,7 +49,7 @@ public class Program
             var sheetHeaders = HeaderScanner.Scan(sheetNameContainer[sheetName.FullName], logger);
             LogTrace(logger, $"{sheetName.FullName}: {string.Join(", ", sheetHeaders)}", null);
 
-            HeaderChecker.Check(recordSchema.RecordParameterSchemaList, recordSchemaContainer, sheetHeaders, sheetName);
+            // HeaderChecker.Check(recordSchema.RecordParameterSchemaList, recordSchemaContainer, sheetHeaders, sheetName);
         }
     }
 

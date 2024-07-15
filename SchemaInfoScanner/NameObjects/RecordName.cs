@@ -12,12 +12,21 @@ public class RecordName : IEquatable<RecordName>
     public RecordName(RecordDeclarationSyntax recordDeclarationSyntax)
     {
         Name = recordDeclarationSyntax.Identifier.ValueText;
-        FullName = $"{recordDeclarationSyntax.GetNamespace()}.{Name}";
+
+        var namespaceName = recordDeclarationSyntax.GetNamespace();
+        FullName = string.IsNullOrEmpty(namespaceName)
+            ? Name
+            : $"{namespaceName}.{Name}";
     }
 
     public RecordName(string fullName)
     {
-        if (string.IsNullOrEmpty(fullName) || fullName[^1] == '.')
+        if (string.IsNullOrEmpty(fullName))
+        {
+            throw new ArgumentException("fullName should not be null, empty, or end with '.'");
+        }
+
+        if (fullName[^1] == '.')
         {
             throw new ArgumentException("fullName should not be null, empty, or end with '.'");
         }
@@ -30,7 +39,9 @@ public class RecordName : IEquatable<RecordName>
     public RecordName(INamedTypeSymbol namedTypeSymbol)
     {
         Name = namedTypeSymbol.Name;
-        FullName = $"{namedTypeSymbol.ContainingNamespace.Name}.{Name}";
+        FullName = string.IsNullOrEmpty(namedTypeSymbol.ContainingNamespace.Name)
+            ? Name
+            : $"{namedTypeSymbol.ContainingNamespace.Name}.{Name}";
     }
 
     public override bool Equals(object? obj)
