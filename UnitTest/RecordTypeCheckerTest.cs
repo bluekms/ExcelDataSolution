@@ -66,7 +66,7 @@ public class RecordTypeCheckerTest
             RecordTypeChecker.Check(recordSchema, recordSchemaContainer, new(), logger);
         }
 
-        Assert.Contains(".SkipRecord is ignored.", testOutputLogger.Logs);
+        Assert.Contains("SkipRecord is ignored.", testOutputLogger.Logs);
     }
 
     [Fact]
@@ -95,6 +95,6 @@ public class RecordTypeCheckerTest
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, new(), logger);
         }
 
-        Assert.Contains(".MyRecord.Age is ignored.", testOutputLogger.Logs);
+        Assert.Contains("MyRecord.Age is ignored.", testOutputLogger.Logs);
     }
 }

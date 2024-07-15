@@ -41,7 +41,7 @@ public class DictionaryTypeCheckerTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
@@ -78,7 +78,7 @@ public class DictionaryTypeCheckerTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
@@ -199,7 +199,7 @@ public class DictionaryTypeCheckerTest
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<InvalidOperationException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -300,7 +300,7 @@ public class DictionaryTypeCheckerTest
 
         Checker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName(".MyRecord");
+        var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
