@@ -53,6 +53,6 @@ public class RecordParameterSchemaFinderTest
         var results = recordSchema.Find("Subject.QuarterScore", recordSchemaContainer);
         Assert.Equal(2, results.Count);
         Assert.Equal("MyClass.SubjectA", results[0].ParentParameterSchema!.ParameterName.FullName);
-        Assert.Equal("MyClass.SubjectA", results[0].ParentParameterSchema!.ParameterName.FullName);
+        Assert.Equal("MyClass.SubjectB", results[1].ParentParameterSchema!.ParameterName.FullName);
     }
 }
