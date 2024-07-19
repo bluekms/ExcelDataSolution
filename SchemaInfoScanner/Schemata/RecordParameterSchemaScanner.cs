@@ -1,10 +1,9 @@
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 
-namespace SchemaInfoScanner;
+namespace SchemaInfoScanner.Schemata;
 
 public sealed record RecordParameterSchemaScannerResult(
     RecordParameterSchema RecordParameterSchema,
@@ -26,8 +25,7 @@ public static class RecordParameterSchemaScanner
             {
                 results.Add(new(parameter, parentParameterSchema));
             }
-
-            if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
+            else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
                 var innerRecordName = new RecordName(typeArgument);
@@ -35,19 +33,14 @@ public static class RecordParameterSchemaScanner
                 {
                     results.AddRange(innerRecordSchema.Scan(recordSchemaContainer, parameter));
                 }
-
-                continue;
             }
-
-            if (RecordTypeChecker.IsSupportedRecordType(parameter.NamedTypeSymbol))
+            else
             {
                 var innerRecordName = new RecordName(parameter.NamedTypeSymbol);
                 if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
                 {
                     results.AddRange(innerRecordSchema.Scan(recordSchemaContainer, parameter));
                 }
-
-                continue;
             }
         }
 
