@@ -79,11 +79,6 @@ public static class RecordTypeChecker
 
     private static void CheckUnavailableAttribute(RecordSchema recordSchema)
     {
-        if (recordSchema.HasAttribute<ColumnPrefixAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(ColumnPrefixAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
-
         if (recordSchema.HasAttribute<DefaultValueAttribute>())
         {
             throw new InvalidUsageException($"{nameof(DefaultValueAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");

@@ -63,11 +63,6 @@ public static class PrimitiveTypeChecker
             throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
         }
 
-        if (recordParameter.HasAttribute<ColumnPrefixAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(ColumnPrefixAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
-        }
-
         if (recordParameter.HasAttribute<MaxCountAttribute>())
         {
             throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
