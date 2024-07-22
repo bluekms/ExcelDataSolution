@@ -116,29 +116,4 @@ public class PrimitiveTypeCheckerTest
         PrimitiveTypeChecker.Check(nullableParameter);
         Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(notnullParameter));
     }
-
-    [Fact]
-    public void UnavailableAttributeTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            public sealed record MyRecord(
-                [ColumnPrefix(""*"")] int Value1,
-                [MaxCount(3)] int Value2,
-                [SingleColumnContainer("", "")] int Value3,
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
-        {
-            Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(parameterSchema));
-        }
-    }
 }

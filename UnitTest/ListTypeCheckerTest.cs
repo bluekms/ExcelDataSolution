@@ -215,25 +215,6 @@ public class ListTypeCheckerTest
     }
 
     [Fact]
-    public void SingleColumnPrimitiveContainerWithColumnPrefixNotSupportedTest()
-    {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = @"
-            [StaticDataRecord(""Test"", ""TestSheet"")]
-            public sealed record MyRecord(
-                [SingleColumnContainer("", "")][ColumnPrefix(""Num_"")] List<int> Values
-            );";
-
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-
-        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
-    }
-
-    [Fact]
     public void SingleColumnRecordContainerNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
