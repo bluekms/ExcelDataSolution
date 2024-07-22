@@ -74,14 +74,6 @@ public static class ListTypeChecker
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
     {
-        if (recordParameter.HasAttribute<ColumnNameAttribute>())
-        {
-            if (!recordParameter.HasAttribute<SingleColumnContainerAttribute>())
-            {
-                throw new InvalidUsageException($"{nameof(ColumnNameAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
-            }
-        }
-
         if (recordParameter.HasAttribute<ForeignKeyAttribute>())
         {
             throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
@@ -95,14 +87,6 @@ public static class ListTypeChecker
         if (recordParameter.HasAttribute<NullStringAttribute>())
         {
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
-        }
-
-        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
-        {
-            if (recordParameter.HasAttribute<ColumnPrefixAttribute>())
-            {
-                throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} overwrites {nameof(ColumnPrefixAttribute)}. {recordParameter.ParameterName.FullName}.");
-            }
         }
     }
 }

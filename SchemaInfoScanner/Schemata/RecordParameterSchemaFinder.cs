@@ -1,10 +1,9 @@
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 
-namespace SchemaInfoScanner;
+namespace SchemaInfoScanner.Schemata;
 
 public sealed record RecordParameterSchemaFindResult(
     RecordParameterSchema RecordParameterSchema,

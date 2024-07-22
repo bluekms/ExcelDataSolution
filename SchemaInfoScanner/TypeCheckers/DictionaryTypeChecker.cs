@@ -86,11 +86,6 @@ public static class DictionaryTypeChecker
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
     {
-        if (recordParameter.HasAttribute<ColumnNameAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(ColumnNameAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
-        }
-
         if (recordParameter.HasAttribute<ForeignKeyAttribute>())
         {
             throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
