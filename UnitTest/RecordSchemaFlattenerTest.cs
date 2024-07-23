@@ -19,14 +19,14 @@ public class RecordSchemaFlattenerTest
     {
         var code = @"
             public sealed record Subject(
-                [ColumnName(""Bar"")] string Name,
-                [ColumnPrefix(""Scores"")] List<int> QuarterScore
+                string Name,
+                List<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyClass(
                 string Name,
-                [ColumnPrefixAttribute(""SubjectF"")] List<Subject> SubjectA,
+                List<Subject> SubjectA,
                 int Age,
                 List<Subject> SubjectB,
             );";
