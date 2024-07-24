@@ -32,8 +32,9 @@ public sealed record RecordSchema(
         }
 
         var valueString = attribute.ArgumentList.Arguments[attributeParameterIndex].ToString().Trim('"');
+
         return typeof(TValue).IsEnum
-            ? (TValue)Enum.Parse(typeof(TValue), valueString)
+            ? (TValue)Enum.Parse(typeof(TValue), valueString.Split('.')[^1])
             : (TValue)Convert.ChangeType(valueString, typeof(TValue), CultureInfo.InvariantCulture);
     }
 

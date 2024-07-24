@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
 using Xunit.Abstractions;
 
@@ -96,5 +97,52 @@ public class RecordTypeCheckerTest
         }
 
         Assert.Contains("MyRecord.Age is ignored.", testOutputLogger.Logs);
+    }
+
+    [Fact]
+    public void NotSupportedInnerStaticDataRecordTest()
+    {
+        var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet2"")]
+            public sealed record Subject(
+                string Name,
+                List<int> QuarterScore
+            );
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyClass(
+                string Name,
+                Subject SubjectA,
+                int Age,
+            );";
+
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.ParseAll(code, logger));
+    }
+
+    [Fact]
+    public void NotSupportedInnerListStaticDataRecordTest()
+    {
+        var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet2"")]
+            public sealed record Subject(
+                string Name,
+                List<int> QuarterScore
+            );
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyClass(
+                string Name,
+                List<Subject> SubjectA,
+                int Age,
+                List<Subject> SubjectB,
+            );";
+
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.ParseAll(code, logger));
     }
 }

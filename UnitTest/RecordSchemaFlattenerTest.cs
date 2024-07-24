@@ -44,7 +44,7 @@ public class RecordSchemaFlattenerTest
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary());
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -83,7 +83,7 @@ public class RecordSchemaFlattenerTest
             { "SubjectB.Scores", 2 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary());
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -114,7 +114,7 @@ public class RecordSchemaFlattenerTest
             { "MyDictionary", 3 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary());
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -145,7 +145,7 @@ public class RecordSchemaFlattenerTest
             { "MyDictionary", 3 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary());
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -196,7 +196,7 @@ public class RecordSchemaFlattenerTest
             { "CoreDepartments.Projects.TeamMembers", 4 }
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary());
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
