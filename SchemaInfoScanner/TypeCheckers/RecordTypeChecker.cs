@@ -59,6 +59,8 @@ public static class RecordTypeChecker
             throw new InvalidOperationException($"{recordSchema.RecordName.FullName} is not supported record type.");
         }
 
+        CheckUnavailableAttribute(recordSchema);
+
         if (!visited.Add(recordSchema.RecordName))
         {
             LogTrace(logger, $"{recordSchema.RecordName.FullName} is already visited.", null);
@@ -66,8 +68,6 @@ public static class RecordTypeChecker
         }
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Started.", null);
-
-        CheckUnavailableAttribute(recordSchema);
 
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
@@ -79,6 +79,16 @@ public static class RecordTypeChecker
 
     private static void CheckUnavailableAttribute(RecordSchema recordSchema)
     {
+        if (recordSchema.HasAttribute<StaticDataRecordAttribute>())
+        {
+            throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. cannot be used as a parameter for another static data record.");
+        }
+
+        if (recordSchema.HasAttribute<RecordGlobalIndexingModeAttribute>())
+        {
+            throw new TypeNotSupportedException($"{nameof(RecordGlobalIndexingModeAttribute)} is not available. {recordSchema.RecordName.FullName} is not static data record.");
+        }
+
         if (recordSchema.HasAttribute<DefaultValueAttribute>())
         {
             throw new InvalidUsageException($"{nameof(DefaultValueAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
