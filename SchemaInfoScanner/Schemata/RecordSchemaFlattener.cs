@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.TypeCheckers;
@@ -10,6 +11,9 @@ namespace SchemaInfoScanner.Schemata;
 
 public static partial class RecordSchemaFlattener
 {
+    private static readonly Action<ILogger, string, Exception?> LogInformation =
+        LoggerMessage.Define<string>(LogLevel.Information, new EventId(0, nameof(RecordSchemaFlattener)), "{Message}");
+
     [GeneratedRegex("\\[.*?\\]")]
     private static partial Regex RegexForIndex();
 
@@ -17,9 +21,27 @@ public static partial class RecordSchemaFlattener
         this RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         FrozenDictionary<string, int> containerLengths,
-        string parentPrefix = "")
+        ILogger logger)
+    {
+        var globalIndexingMode = (IndexingMode?)null;
+        if (recordSchema.TryGetAttributeValue<RecordGlobalIndexingModeAttribute, IndexingMode>(0, out var mode))
+        {
+            globalIndexingMode = mode;
+        }
+
+        return OnFlatten(recordSchema, recordSchemaContainer, containerLengths, globalIndexingMode, string.Empty, logger);
+    }
+
+    private static List<string> OnFlatten(
+        this RecordSchema recordSchema,
+        RecordSchemaContainer recordSchemaContainer,
+        FrozenDictionary<string, int> containerLengths,
+        IndexingMode? globalIndexingMode,
+        string parentPrefix,
+        ILogger logger)
     {
         var headers = new List<string>();
+        var indexingMode = DetermineIndexingMode(globalIndexingMode, recordSchema);
 
         foreach (var parameter in recordSchema.RecordParameterSchemaList)
         {
@@ -39,19 +61,29 @@ public static partial class RecordSchemaFlattener
             }
             else if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
             {
-                headers.AddRange(HandlePrimitiveContainer(headerName, containerLengths));
+                headers.AddRange(HandlePrimitiveContainer(containerLengths, indexingMode, headerName, logger));
             }
             else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
                 var innerRecordName = new RecordName(typeArgument);
-                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
+                if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
                 {
-                    var parentPrefixWithoutIndex = RegexForIndex().Replace(headerName, string.Empty);
-                    var length = containerLengths.GetValueOrDefault(parentPrefixWithoutIndex, 1);
-                    for (var i = 0; i < length; ++i)
+                    LogInformation(logger, $"Cannot find {innerRecordName}", null);
+                }
+                else
+                {
+                    var indexRange = GetIndexRange(indexingMode, containerLengths, headerName, logger);
+                    for (var i = indexRange.Start; i < indexRange.ExclusiveEnd; ++i)
                     {
-                        headers.AddRange(innerRecordSchema.Flatten(recordSchemaContainer, containerLengths, $"{headerName}[{i}]"));
+                        var innerFlatten = innerRecordSchema.OnFlatten(
+                            recordSchemaContainer,
+                            containerLengths,
+                            globalIndexingMode,
+                            $"{headerName}[{i}]",
+                            logger);
+
+                        headers.AddRange(innerFlatten);
                     }
                 }
             }
@@ -59,13 +91,23 @@ public static partial class RecordSchemaFlattener
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
                 var innerRecordName = new RecordName(typeArgument);
-                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
+                if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
                 {
-                    var parentPrefixWithoutIndex = RegexForIndex().Replace(headerName, string.Empty);
-                    var length = containerLengths.GetValueOrDefault(parentPrefixWithoutIndex, 1);
-                    for (var i = 0; i < length; ++i)
+                    LogInformation(logger, $"Cannot find {innerRecordName}", null);
+                }
+                else
+                {
+                    var indexRange = GetIndexRange(indexingMode, containerLengths, headerName, logger);
+                    for (var i = indexRange.Start; i < indexRange.ExclusiveEnd; ++i)
                     {
-                        headers.AddRange(innerRecordSchema.Flatten(recordSchemaContainer, containerLengths, $"{headerName}[{i}]"));
+                        var innerFlatten = innerRecordSchema.OnFlatten(
+                            recordSchemaContainer,
+                            containerLengths,
+                            globalIndexingMode,
+                            $"{headerName}[{i}]",
+                            logger);
+
+                        headers.AddRange(innerFlatten);
                     }
                 }
             }
@@ -74,12 +116,53 @@ public static partial class RecordSchemaFlattener
                 var innerRecordName = new RecordName(parameter.NamedTypeSymbol);
                 if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
                 {
-                    headers.AddRange(innerRecordSchema.Flatten(recordSchemaContainer, containerLengths, headerName));
+                    var innerFlatten = innerRecordSchema.OnFlatten(
+                        recordSchemaContainer,
+                        containerLengths,
+                        globalIndexingMode,
+                        headerName,
+                        logger);
+
+                    headers.AddRange(innerFlatten);
                 }
             }
         }
 
         return headers;
+    }
+
+    private static IndexingMode DetermineIndexingMode(IndexingMode? globalIndexingMode, RecordSchema recordSchema)
+    {
+        if (globalIndexingMode is not null)
+        {
+            return globalIndexingMode.Value;
+        }
+
+        if (recordSchema.TryGetAttributeValue<IndexingModeAttribute, IndexingMode>(0, out var mode))
+        {
+            return mode;
+        }
+
+        return IndexingMode.ZeroBased;
+    }
+
+    private sealed record IndexRange(int Start, int ExclusiveEnd);
+
+    private static IndexRange GetIndexRange(
+        IndexingMode indexingMode,
+        FrozenDictionary<string, int> containerLengths,
+        string headerName,
+        ILogger logger)
+    {
+        var headerNameWithoutIndex = RegexForIndex().Replace(headerName, string.Empty);
+        if (!containerLengths.TryGetValue(headerNameWithoutIndex, out var length))
+        {
+            LogInformation(logger, $"Cannot find length for {headerNameWithoutIndex}", null);
+        }
+
+        return indexingMode is IndexingMode.ZeroBased
+            ? new(0, length)
+            : new(1, length + 1);
     }
 
     public static HashSet<string> FindLengthRequiredNames(
@@ -150,16 +233,17 @@ public static partial class RecordSchemaFlattener
     }
 
     private static List<string> HandlePrimitiveContainer(
-        string parentPrefix,
-        FrozenDictionary<string, int> containerLengths)
+        FrozenDictionary<string, int> containerLengths,
+        IndexingMode indexingMode,
+        string headerName,
+        ILogger logger)
     {
         var headers = new List<string>();
 
-        var parentPrefixWithoutIndex = RegexForIndex().Replace(parentPrefix, string.Empty);
-        var length = containerLengths.GetValueOrDefault(parentPrefixWithoutIndex, 1);
-        for (var i = 0; i < length; ++i)
+        var indexRange = GetIndexRange(indexingMode, containerLengths, headerName, logger);
+        for (var i = indexRange.Start; i < indexRange.ExclusiveEnd; ++i)
         {
-            headers.Add($"{parentPrefix}[{i}]");
+            headers.Add($"{headerName}[{i}]");
         }
 
         return headers;
