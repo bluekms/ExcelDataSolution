@@ -21,7 +21,7 @@ public static class Checker
         var staticDataRecords = recordSchemaContainer.RecordSchemaDictionary
             .Where(x => x.Value.HasAttribute<StaticDataRecordAttribute>())
             .ToList();
-        if (staticDataRecords.Count is not 0)
+        if (staticDataRecords.Count is 0)
         {
             throw new InvalidOperationException("No static data record is found.");
         }
