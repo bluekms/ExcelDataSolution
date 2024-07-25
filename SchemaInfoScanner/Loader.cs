@@ -64,7 +64,7 @@ public static class Loader
             .Where(x => !SkipCompileErrorIds.Contains(x.Id))
             .ToList();
 
-        if (compileErrors.Any())
+        if (compileErrors.Count is 0)
         {
             LogException(logger, $"{Path.GetFileName(filePath)}'s code is not compilable.", null);
             foreach (var error in compileErrors)
