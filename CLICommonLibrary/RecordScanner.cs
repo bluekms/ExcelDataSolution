@@ -3,7 +3,7 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 
-namespace ExcelColumnExtractor;
+namespace CLICommonLibrary;
 
 public static class RecordScanner
 {

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -31,8 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CLICommonLibrary\CLICommonLibrary.csproj" />
-    <ProjectReference Include="..\ExcelColumnExtractor\ExcelColumnExtractor.csproj" />
     <ProjectReference Include="..\SchemaInfoScanner\SchemaInfoScanner.csproj" />
   </ItemGroup>
 

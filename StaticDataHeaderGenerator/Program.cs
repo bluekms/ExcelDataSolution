@@ -1,9 +1,34 @@
-﻿namespace StaticDataHeaderGenerator;
+﻿using CommandLine;
+using StaticDataHeaderGenerator.OptionHandlers;
+using StaticDataHeaderGenerator.ProgramOptions;
 
-class Program
+namespace StaticDataHeaderGenerator;
+
+internal class Program
 {
-    static void Main(string[] args)
+    private static int Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        return Parser.Default.ParseArguments<
+                GenerateLengthOptions,
+                GenerateAllLengthOptions,
+                GenerateHeaderOptions>(args)
+            .MapResult(
+                (GenerateLengthOptions options) => GenerateLengthHandler.Generate(options),
+                (GenerateAllLengthOptions options) => GenerateAllLengthHandler.Generate(options),
+                (GenerateHeaderOptions options) => GenerateHeaderHandler.Generate(options),
+                HandleParseError);
+    }
+
+    private static int HandleParseError(IEnumerable<Error> errors)
+    {
+        var errorList = errors.ToList();
+
+        Console.WriteLine($"Errors {errorList.Count}");
+        foreach (var error in errorList)
+        {
+            Console.WriteLine(error.ToString());
+        }
+
+        return 1;
     }
 }

@@ -17,6 +17,76 @@ public static partial class RecordSchemaFlattener
     [GeneratedRegex("\\[.*?\\]")]
     private static partial Regex RegexForIndex();
 
+    public static HashSet<string> FindLengthRequiredNames(
+        this RecordSchema recordSchema,
+        RecordSchemaContainer recordSchemaContainer,
+        string parentPrefix = "")
+    {
+        var results = new HashSet<string>();
+        foreach (var parameter in recordSchema.RecordParameterSchemaList)
+        {
+            var name = parameter.ParameterName.Name;
+            if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))
+            {
+                name = columnName;
+            }
+
+            var headerName = string.IsNullOrEmpty(parentPrefix)
+                ? name
+                : $"{parentPrefix}.{name}";
+
+            if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
+            {
+                if (!parameter.HasAttribute<SingleColumnContainerAttribute>())
+                {
+                    results.Add(headerName);
+                }
+            }
+            else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
+            {
+                results.Add(headerName);
+                var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
+                var innerRecordName = new RecordName(typeArgument);
+                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
+                {
+                    var innerCollectionNames = innerRecordSchema.FindLengthRequiredNames(recordSchemaContainer, headerName);
+                    foreach (var innerName in innerCollectionNames)
+                    {
+                        results.Add(innerName);
+                    }
+                }
+            }
+            else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
+            {
+                results.Add(headerName);
+                var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
+                var innerRecordName = new RecordName(typeArgument);
+                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
+                {
+                    var innerCollectionNames = innerRecordSchema.FindLengthRequiredNames(recordSchemaContainer, headerName);
+                    foreach (var innerName in innerCollectionNames)
+                    {
+                        results.Add(innerName);
+                    }
+                }
+            }
+            else
+            {
+                var innerRecordName = new RecordName(parameter.NamedTypeSymbol);
+                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
+                {
+                    var innerCollectionNames = innerRecordSchema.FindLengthRequiredNames(recordSchemaContainer, headerName);
+                    foreach (var innerName in innerCollectionNames)
+                    {
+                        results.Add(innerName);
+                    }
+                }
+            }
+        }
+
+        return results;
+    }
+
     public static List<string> Flatten(
         this RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
@@ -61,7 +131,14 @@ public static partial class RecordSchemaFlattener
             }
             else if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
             {
-                headers.AddRange(HandlePrimitiveContainer(containerLengths, indexingMode, headerName, logger));
+                if (parameter.HasAttribute<SingleColumnContainerAttribute>())
+                {
+                    headers.Add(headerName);
+                }
+                else
+                {
+                    headers.AddRange(HandlePrimitiveContainer(containerLengths, indexingMode, headerName, logger));
+                }
             }
             else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
             {
@@ -163,73 +240,6 @@ public static partial class RecordSchemaFlattener
         return indexingMode is IndexingMode.ZeroBased
             ? new(0, length)
             : new(1, length + 1);
-    }
-
-    public static HashSet<string> FindLengthRequiredNames(
-        this RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
-        string parentPrefix = "")
-    {
-        var results = new HashSet<string>();
-        foreach (var parameter in recordSchema.RecordParameterSchemaList)
-        {
-            var name = parameter.ParameterName.Name;
-            if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))
-            {
-                name = columnName;
-            }
-
-            var headerName = string.IsNullOrEmpty(parentPrefix)
-                ? name
-                : $"{parentPrefix}.{name}";
-
-            if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
-            {
-                results.Add(headerName);
-            }
-            else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
-            {
-                results.Add(headerName);
-                var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
-                var innerRecordName = new RecordName(typeArgument);
-                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
-                {
-                    var innerCollectionNames = innerRecordSchema.FindLengthRequiredNames(recordSchemaContainer, headerName);
-                    foreach (var innerName in innerCollectionNames)
-                    {
-                        results.Add(innerName);
-                    }
-                }
-            }
-            else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
-            {
-                results.Add(headerName);
-                var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
-                var innerRecordName = new RecordName(typeArgument);
-                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
-                {
-                    var innerCollectionNames = innerRecordSchema.FindLengthRequiredNames(recordSchemaContainer, headerName);
-                    foreach (var innerName in innerCollectionNames)
-                    {
-                        results.Add(innerName);
-                    }
-                }
-            }
-            else
-            {
-                var innerRecordName = new RecordName(parameter.NamedTypeSymbol);
-                if (recordSchemaContainer.RecordSchemaDictionary.TryGetValue(innerRecordName, out var innerRecordSchema))
-                {
-                    var innerCollectionNames = innerRecordSchema.FindLengthRequiredNames(recordSchemaContainer, headerName);
-                    foreach (var innerName in innerCollectionNames)
-                    {
-                        results.Add(innerName);
-                    }
-                }
-            }
-        }
-
-        return results;
     }
 
     private static List<string> HandlePrimitiveContainer(

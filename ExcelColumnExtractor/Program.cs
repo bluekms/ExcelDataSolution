@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using CLICommonLibrary;
+using CommandLine;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -26,9 +27,11 @@ public class Program
 
     private static void RunOptions(ProgramOptions options)
     {
-        var logger = Logger.CreateLogger(options);
+        var logger = string.IsNullOrEmpty(options.LogPath)
+            ? Logger.CreateLoggerWithoutFile<Program>(options.MinLogLevel)
+            : Logger.CreateLogger<Program>(options.MinLogLevel, options.LogPath);
 
-        var recordSchemaContainer = RecordScanner.Scan(options.ClassPath, logger);
+        var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
         var sheetNameContainer = SheetScanner.Scan(options.ExcelPath, logger);
 
         foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values.OrderBy(x => x.RecordName.FullName))
