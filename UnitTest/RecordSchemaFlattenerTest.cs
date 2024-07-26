@@ -54,6 +54,84 @@ public class RecordSchemaFlattenerTest
     }
 
     [Fact]
+    public void MyClassWithSingleColumnTest()
+    {
+        var code = @"
+            public sealed record Subject(
+                string Name,
+                [SingleColumnContainer("", "")] List<int> QuarterScore
+            );
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyClass(
+                string Name,
+                List<Subject> SubjectA,
+                int Age,
+                List<Subject> SubjectB,
+            );";
+
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var parseResult = SimpleCordParser.Parse(code, logger);
+
+        var collectionLengths = new Dictionary<string, int>
+        {
+            { "SubjectA", 3 },
+            { "SubjectA.QuarterScore", 4 },
+            { "SubjectB", 4 },
+            { "SubjectB.QuarterScore", 2 },
+        };
+
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        foreach (var header in results)
+        {
+            this.testOutputHelper.WriteLine(header);
+        }
+
+        Assert.Equal(16, results.Count);
+    }
+
+    [Fact]
+    public void MyClassWithSingleColumnAndColumnNameTest()
+    {
+        var code = @"
+            public sealed record Subject(
+                string Name,
+                [SingleColumnContainer("", "")][ColumnName(""QuarterScores"")] List<int> QuarterScore
+            );
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyClass(
+                string Name,
+                List<Subject> SubjectA,
+                int Age,
+                List<Subject> SubjectB,
+            );";
+
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var parseResult = SimpleCordParser.Parse(code, logger);
+
+        var collectionLengths = new Dictionary<string, int>
+        {
+            { "SubjectA", 3 },
+            { "SubjectA.QuarterScore", 4 },
+            { "SubjectB", 4 },
+            { "SubjectB.QuarterScore", 2 },
+        };
+
+        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        foreach (var header in results)
+        {
+            this.testOutputHelper.WriteLine(header);
+        }
+
+        Assert.Equal(16, results.Count);
+    }
+
+    [Fact]
     public void MyClassWithNameAttributesTest()
     {
         var code = @"

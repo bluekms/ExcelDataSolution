@@ -61,7 +61,14 @@ public static partial class RecordSchemaFlattener
             }
             else if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
             {
-                headers.AddRange(HandlePrimitiveContainer(containerLengths, indexingMode, headerName, logger));
+                if (parameter.HasAttribute<SingleColumnContainerAttribute>())
+                {
+                    headers.Add(headerName);
+                }
+                else
+                {
+                    headers.AddRange(HandlePrimitiveContainer(containerLengths, indexingMode, headerName, logger));
+                }
             }
             else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
             {
