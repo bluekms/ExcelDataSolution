@@ -28,7 +28,6 @@ public class Program
     private static void RunOptions(ProgramOptions options)
     {
         var logger = Logger.CreateLogger<Program>(options.MinLogLevel, options.LogPath);
-
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
         var sheetNameContainer = SheetScanner.Scan(options.ExcelPath, logger);
 

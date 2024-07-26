@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CLICommonLibrary\CLICommonLibrary.csproj" />
     <ProjectReference Include="..\SchemaInfoScanner\SchemaInfoScanner.csproj" />
   </ItemGroup>
 
