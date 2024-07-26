@@ -6,8 +6,8 @@ namespace ExcelColumnExtractor;
 
 public sealed class ProgramOptions
 {
-    [Option('c', "class-path", Required = true, HelpText = "C# 클래스 파일 경로")]
-    public string ClassPath { get; set; } = null!;
+    [Option('c', "record-path", Required = true, HelpText = "C# 레코드 파일 경로")]
+    public string RecordCsPath { get; set; } = null!;
 
     [Option('e', "excel-path", Required = true, HelpText = "액셀 파일 경로")]
     public string ExcelPath { get; set; } = null!;

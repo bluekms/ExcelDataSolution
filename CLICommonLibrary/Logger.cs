@@ -1,30 +1,30 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 using Serilog.Formatting.Display;
 
-namespace ExcelColumnExtractor;
+namespace CLICommonLibrary;
 
 public static class Logger
 {
-    public static ILogger<Program> CreateLogger(ProgramOptions options)
+    public static ILogger<T> CreateLogger<T>(LogEventLevel minLogLevel, string? logPath)
     {
         var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}";
         var formatter = new MessageTemplateTextFormatter(outputTemplate, null);
 
         var loggerConfiguration = new LoggerConfiguration()
-            .MinimumLevel.Is(options.MinLogLevel)
+            .MinimumLevel.Is(minLogLevel)
             .WriteTo.Console(formatter);
 
-        if (!string.IsNullOrEmpty(options.LogPath))
+        if (!string.IsNullOrEmpty(logPath))
         {
-            loggerConfiguration.WriteTo.File(formatter, options.LogPath, rollingInterval: RollingInterval.Day);
+            loggerConfiguration.WriteTo.File(formatter, logPath, rollingInterval: RollingInterval.Day);
         }
 
         Log.Logger = loggerConfiguration.CreateLogger();
 
         var loggerFactory = new LoggerFactory().AddSerilog();
 
-        var logger = loggerFactory.CreateLogger<Program>();
-        return logger;
+        return loggerFactory.CreateLogger<T>();
     }
 }

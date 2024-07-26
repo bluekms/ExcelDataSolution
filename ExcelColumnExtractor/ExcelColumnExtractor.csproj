@@ -34,6 +34,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SchemaInfoScanner\SchemaInfoScanner.csproj" />
+      <ProjectReference Include="..\CLICommonLibrary\CLICommonLibrary.csproj" />
     </ItemGroup>
 
 </Project>
