@@ -1,10 +1,9 @@
 using CommandLine;
 using Serilog.Events;
 
-namespace StaticDataHeaderGenerator;
+namespace StaticDataHeaderGenerator.ProgramOptions;
 
-[Verb("header", HelpText = "Generate StaticData Header Names")]
-public class GenerateHeaderOptions
+public class GenerateAllHeaderOptions
 {
     [Option('r', "record-path", Required = true, HelpText = "C# 레코드 파일 경로")]
     public string RecordCsPath { get; set; } = null!;
