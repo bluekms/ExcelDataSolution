@@ -44,15 +44,32 @@ public static class GenerateHeaderHandler
         var lengthRequiredNames = targetRecordSchema.FindLengthRequiredNames(recordSchemaContainer);
         var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
 
-        var results = IniReader.Read(options.LengthIniPath, new() { recordContainerInfo });
+        var results = IniReader.Read(options.LengthIniPath, recordContainerInfo);
+        var iniFileResult = results[targetRecordSchema.RecordName];
+        var headers = targetRecordSchema.Flatten(recordSchemaContainer, iniFileResult.HeaderNameLengths, logger);
 
-        // targetRecordSchema.Flatten(recordSchemaContainer, results.First().ToFrozenDictionary(), logger);
+        var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(options.Separator, headers)}\n";
+        LogInformation(logger, $"\n{output}\n", null);
+
+        if (!string.IsNullOrEmpty(options.OutputFileName))
+        {
+            var outputFileName = string.IsNullOrEmpty(Path.GetExtension(options.OutputFileName))
+                ? $"{options.OutputFileName}.txt"
+                : options.OutputFileName;
+
+            var directoryName = Path.GetDirectoryName(outputFileName);
+            if (!string.IsNullOrEmpty(directoryName) && !Directory.Exists(directoryName))
+            {
+                Directory.CreateDirectory(directoryName);
+            }
+
+            File.WriteAllText(outputFileName, output);
+
+            LogInformation(logger, $"Header file saved to {outputFileName}", null);
+        }
 
         return 0;
     }
-
-    private static readonly Action<ILogger, string, Exception?> LogTrace =
-        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0, nameof(LogTrace)), "{Message}");
 
     private static readonly Action<ILogger, string, Exception?> LogInformation =
         LoggerMessage.Define<string>(LogLevel.Information, new EventId(0, nameof(LogInformation)), "{Message}");
