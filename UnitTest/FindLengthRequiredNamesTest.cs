@@ -82,6 +82,70 @@ public class FindLengthRequiredNamesTest
     }
 
     [Fact]
+    public void MyClassWithSingleColumnFindTest()
+    {
+        var code = @"
+            public sealed record Subject(
+                string Name,
+                [SingleColumnContainer("", "")] List<int> QuarterScore
+            );
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyClass(
+                string Name,
+                List<Subject> SubjectA,
+                int Age,
+                List<Subject> SubjectB,
+            );";
+
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var parseResult = SimpleCordParser.Parse(code, logger);
+        var results = parseResult.RecordSchema.FindLengthRequiredNames(parseResult.RecordSchemaContainer);
+
+        var expected = new HashSet<string>
+        {
+            "SubjectA",
+            "SubjectB",
+        };
+
+        Assert.Equal(expected, results);
+    }
+
+    [Fact]
+    public void MyClassWithSingleColumnAndColumnNameFindTest()
+    {
+        var code = @"
+            public sealed record Subject(
+                string Name,
+                [SingleColumnContainer("", "")][ColumnName(""QuarterScores"")] List<int> QuarterScore
+            );
+
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyClass(
+                string Name,
+                List<Subject> SubjectA,
+                int Age,
+                List<Subject> SubjectB,
+            );";
+
+        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var logger = factory.CreateLogger<RecordScanTest>();
+
+        var parseResult = SimpleCordParser.Parse(code, logger);
+        var results = parseResult.RecordSchema.FindLengthRequiredNames(parseResult.RecordSchemaContainer);
+
+        var expected = new HashSet<string>
+        {
+            "SubjectA",
+            "SubjectB",
+        };
+
+        Assert.Equal(expected, results);
+    }
+
+    [Fact]
     public void CompanyFindTest()
     {
         var code = @"
