@@ -6,5 +6,6 @@ public sealed record SameNameSheet(string Name, float Score);
 
 public sealed record SubjectData([Key][ColumnName("Subject")] string Name, int Score);
 
+// TODO ColumnPrefix 동작하지 않음
 [StaticDataRecord("Excel2", "DictionarySheet")]
 public sealed record DictionarySheet(string Name, [ColumnPrefix("Score")] Dictionary<string, SubjectData> Subjects);
