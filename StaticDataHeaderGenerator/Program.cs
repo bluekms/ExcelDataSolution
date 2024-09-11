@@ -11,11 +11,13 @@ internal class Program
         return Parser.Default.ParseArguments<
                 GenerateLengthOptions,
                 GenerateAllLengthOptions,
-                GenerateHeaderOptions>(args)
+                GenerateHeaderOptions,
+                GenerateAllHeaderOptions>(args)
             .MapResult(
                 (GenerateLengthOptions options) => GenerateLengthHandler.Generate(options),
                 (GenerateAllLengthOptions options) => GenerateAllLengthHandler.Generate(options),
                 (GenerateHeaderOptions options) => GenerateHeaderHandler.Generate(options),
+                (GenerateAllHeaderOptions options) => GenerateAllHeaderHandler.Generate(options),
                 HandleParseError);
     }
 
