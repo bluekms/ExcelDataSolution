@@ -9,7 +9,7 @@ public class GenerateAllLengthOptions
     [Option('r', "record-path", Required = true, HelpText = "C# 레코드 파일 경로")]
     public string RecordCsPath { get; set; } = null!;
 
-    [Option('o', "output-path", Required = true, HelpText = "생성할 ini 파일 경로")]
+    [Option('i', "ini-path", Required = true, HelpText = "생성할 ini 파일 경로")]
     public string OutputPath { get; set; } = null!;
 
     [Option('l', "log-path", Required = false, HelpText = "로그 파일 출력 경로")]
