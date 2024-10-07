@@ -1,9 +1,10 @@
 using System.Text;
 using CLICommonLibrary;
-using ExcelColumnExtractor.IniHandlers;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
+using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -33,7 +34,7 @@ public class GenerateAllHeaderHandler
         var sb = new StringBuilder();
         foreach (var targetRecordSchema in recordSchemaList)
         {
-            var lengthRequiredNames = targetRecordSchema.FindLengthRequiredNames(recordSchemaContainer);
+            var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
             var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
             if (recordContainerInfo.LengthRequiredHeaderNames.Count == 0)
             {
