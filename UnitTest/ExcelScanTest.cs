@@ -1,12 +1,14 @@
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Reflection;
+using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
 using Xunit.Abstractions;
 
@@ -44,7 +46,7 @@ public class ExcelScanTest
         var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
-        var sheetNameDictionary = ScanExcelFiles(logger);
+        var sheetNameContainer = ScanExcelFiles(logger);
         var recordSchemaContainer = ScanRecordFiles(logger);
 
         foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values.OrderBy(x => x.RecordName.FullName))
@@ -54,21 +56,21 @@ public class ExcelScanTest
                 continue;
             }
 
-            var sheetName = new SheetName(
-                recordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(0),
-                recordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1));
-            if (sheetNameDictionary.ContainsKey(sheetName.FullName))
+            var values = recordSchema.GetAttributeValueList<StaticDataRecordAttribute>();
+            var sheetNameString = $"{values[0]}.{values[1]}";
+
+            if (sheetNameContainer.TryGet(values[0], values[1], out _))
             {
-                LogTrace(logger, $"Match! {sheetName.FullName} : {recordSchema.RecordName.FullName}", null);
+                LogTrace(logger, $"Match! {sheetNameString} : {recordSchema.RecordName.FullName}", null);
             }
             else
             {
-                LogWarning(logger, $"Not found sheet {sheetName.FullName}.", null);
+                LogWarning(logger, $"Not found sheet {sheetNameString}.", null);
             }
         }
     }
 
-    private static FrozenDictionary<string, SheetName> ScanExcelFiles(ILogger logger)
+    private static ExcelSheetNameContainer ScanExcelFiles(ILogger logger)
     {
         var excelPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
@@ -78,7 +80,7 @@ public class ExcelScanTest
             "..",
             "TestExcel");
 
-        return SheetScanner.Scan(excelPath, logger);
+        return SheetNameScanner.Scan(excelPath, logger);
     }
 
     private static RecordSchemaContainer ScanRecordFiles(ILogger logger)
