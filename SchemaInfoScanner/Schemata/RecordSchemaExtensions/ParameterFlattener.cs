@@ -77,14 +77,16 @@ public static partial class ParameterFlattener
                 }
                 else
                 {
-                    var indexRange = GetIndexRange(indexingMode, containerLengths, headerName, logger);
-                    for (var i = indexRange.Start; i < indexRange.ExclusiveEnd; ++i)
+                    var indexRange = GetStartIndexAndLength(indexingMode, containerLengths, headerName, logger);
+                    for (var i = 0; i < indexRange.Length; ++i)
                     {
+                        var index = indexRange.Start + i;
+
                         var innerFlatten = innerRecordSchema.OnFlatten(
                             recordSchemaContainer,
                             containerLengths,
                             globalIndexingMode,
-                            $"{headerName}[{i}]",
+                            $"{headerName}[{index}]",
                             logger);
 
                         headers.AddRange(innerFlatten);
@@ -101,14 +103,16 @@ public static partial class ParameterFlattener
                 }
                 else
                 {
-                    var indexRange = GetIndexRange(indexingMode, containerLengths, headerName, logger);
-                    for (var i = indexRange.Start; i < indexRange.ExclusiveEnd; ++i)
+                    var indexRange = GetStartIndexAndLength(indexingMode, containerLengths, headerName, logger);
+                    for (var i = 0; i < indexRange.Length; ++i)
                     {
+                        var index = indexRange.Start + i;
+
                         var innerFlatten = innerRecordSchema.OnFlatten(
                             recordSchemaContainer,
                             containerLengths,
                             globalIndexingMode,
-                            $"{headerName}[{i}]",
+                            $"{headerName}[{index}]",
                             logger);
 
                         headers.AddRange(innerFlatten);
@@ -150,9 +154,9 @@ public static partial class ParameterFlattener
         return IndexingMode.ZeroBased;
     }
 
-    private sealed record IndexRange(int Start, int ExclusiveEnd);
+    private sealed record StartIndexAndLength(int Start, int Length);
 
-    private static IndexRange GetIndexRange(
+    private static StartIndexAndLength GetStartIndexAndLength(
         IndexingMode indexingMode,
         IReadOnlyDictionary<string, int> containerLengths,
         string headerName,
@@ -180,10 +184,11 @@ public static partial class ParameterFlattener
     {
         var headers = new List<string>();
 
-        var indexRange = GetIndexRange(indexingMode, containerLengths, headerName, logger);
-        for (var i = indexRange.Start; i < indexRange.ExclusiveEnd; ++i)
+        var indexRange = GetStartIndexAndLength(indexingMode, containerLengths, headerName, logger);
+        for (var i = 0; i < indexRange.Length; ++i)
         {
-            headers.Add($"{headerName}[{i}]");
+            var index = indexRange.Start + i;
+            headers.Add($"{headerName}[{index}]");
         }
 
         return headers;
