@@ -1,6 +1,6 @@
 using System.Collections.Frozen;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using Xunit.Abstractions;
 
 namespace UnitTest;

@@ -15,6 +15,6 @@ public class GenerateAllLengthOptions
     [Option('l', "log-path", Required = false, HelpText = "로그 파일 출력 경로")]
     public string? LogPath { get; set; }
 
-    [Option('v', Default = LogEventLevel.Information, Required = false, HelpText = "최소 로그 레벨 (Verbose, Debug, Information, Warning, Error, Fatal)")]
+    [Option('m', "min-log-level", Default = LogEventLevel.Information, Required = false, HelpText = "최소 로그 레벨 (Verbose, Debug, Information, Warning, Error, Fatal)")]
     public LogEventLevel MinLogLevel { get; set; }
 }

@@ -1,3 +1,8 @@
+// TODO
+[ ] DataBodyChecker 완성
+[ ] 프로그램 실행 시점과 파일을 여는 시점에 변경이 있는지 확인
+[ ] 유닛테스트 작성
+
 # ExcelColumnExtractor
 
 1. C#코드를 기반으로 스키마를 파악
@@ -21,3 +26,7 @@ foo
 ## 출력
 
 csv
+
+
+## 작업진행
+1.

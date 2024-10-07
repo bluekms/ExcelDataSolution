@@ -15,7 +15,7 @@ public enum GradeLevel
     Senior,
 }
 
-[StaticDataRecord("Excel3", "School")]
+[StaticDataRecord("Excel3", "SchoolSheet")]
 public record School(
     string? SchoolName,
     List<Student> Students,

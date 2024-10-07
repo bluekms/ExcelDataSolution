@@ -1,8 +1,9 @@
 using CLICommonLibrary;
-using ExcelColumnExtractor.IniHandlers;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
+using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -33,7 +34,7 @@ public static class GenerateAllLengthHandler
         var recordContainerInfos = new HashSet<RecordContainerInfo>();
         foreach (var targetRecordSchema in recordSchemaList)
         {
-            var lengthRequiredNames = targetRecordSchema.FindLengthRequiredNames(recordSchemaContainer);
+            var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
             if (lengthRequiredNames.Count == 0)
             {
                 LogTrace(logger, $"{targetRecordSchema.RecordName.FullName} does not have any length required fields.", null);

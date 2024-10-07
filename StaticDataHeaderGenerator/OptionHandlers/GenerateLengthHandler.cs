@@ -1,8 +1,9 @@
 using CLICommonLibrary;
-using ExcelColumnExtractor.IniHandlers;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
+using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -41,7 +42,7 @@ public static class GenerateLengthHandler
         }
 
         var targetRecordSchema = recordSchemaList.Single();
-        var lengthRequiredNames = targetRecordSchema.FindLengthRequiredNames(recordSchemaContainer);
+        var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
         var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
 
         IniWriter.Write(options.OutputPath, new() { recordContainerInfo });

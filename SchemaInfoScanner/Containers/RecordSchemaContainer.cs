@@ -1,15 +1,16 @@
-using System.Collections.Frozen;
 using System.Globalization;
 using System.Text;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Containers;
 
 public sealed class RecordSchemaContainer
 {
-    public FrozenDictionary<RecordName, RecordSchema> RecordSchemaDictionary { get; }
+    public IReadOnlyDictionary<RecordName, RecordSchema> RecordSchemaDictionary { get; }
 
     public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
@@ -23,7 +24,15 @@ public sealed class RecordSchemaContainer
             recordSchemata.Add(recordName, new(recordName, namedTypeSymbol, recordAttributes, recordMemberSchemata));
         }
 
-        RecordSchemaDictionary = recordSchemata.ToFrozenDictionary();
+        RecordSchemaDictionary = recordSchemata;
+    }
+
+    public IReadOnlyList<RecordSchema> GetStaticDataRecordSchemata()
+    {
+        return RecordSchemaDictionary.Values
+            .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
+            .OrderBy(x => x.RecordName.FullName)
+            .ToList();
     }
 
     public override string ToString()
