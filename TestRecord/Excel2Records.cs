@@ -7,4 +7,10 @@ public sealed record SameNameSheet(string Name, float Score);
 public sealed record SubjectData([Key][ColumnName("Subject")] string Name, int Score);
 
 [StaticDataRecord("Excel2", "DictionarySheet")]
-public sealed record DictionarySheet(string Name, [ColumnName("Score")] Dictionary<string, SubjectData> Subjects);
+public sealed record DictionarySheet(string Name, [ColumnName("SubjectAndScore")] Dictionary<string, SubjectData> Subjects);
+
+[StaticDataRecord("Excel2", "DifferentColumnsSheet")]
+public sealed record StudentInfoForServer(string StudentId, string PhoneNumber, [ColumnName("Nickname[1]")] string Alias);
+
+[StaticDataRecord("Excel2", "DifferentColumnsSheet")]
+public sealed record StudentInfoForClient(string StudentId, string StudentName, [ColumnName("Nickname")] HashSet<string?> Nicknames);
