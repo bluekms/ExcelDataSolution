@@ -4,7 +4,7 @@ namespace Excel1;
 public sealed record FirstSheet(string Name, int Score);
 
 [StaticDataRecord("Excel1", "ArraySheet")]
-public sealed record ArraySheet1(string Name, [ColumnName("Score[1]")]int Score1, [ColumnName("Score[3]")] int Score3);
+public sealed record ArraySheet1(string Name, [ColumnName("Score[1]")]int Score1, [ColumnName("Score[2]")] int Score3);
 
 [StaticDataRecord("Excel1", "ArraySheet")]
 public sealed record ArraySheet2(string Name, [ColumnName("Score")] List<int> Scores);
