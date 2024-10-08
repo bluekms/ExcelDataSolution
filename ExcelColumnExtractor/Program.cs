@@ -32,11 +32,9 @@ public class Program
         var beforeExcelState = FolderStateScanner.Scan(options.ExcelPath, ".xls", ".xlsx");
 
         var totalSw = Stopwatch.StartNew();
+
         var sw = Stopwatch.StartNew();
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
-        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordComplianceChecker), null);
-
         var staticDataRecordSchemaList = recordSchemaContainer.GetStaticDataRecordSchemata();
         if (staticDataRecordSchemaList.Count == 0)
         {
@@ -45,7 +43,8 @@ public class Program
             throw exception;
         }
 
-        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordScanner), null);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordComplianceChecker), null);
 
         sw.Restart();
         var sheetNameContainer = SheetNameScanner.Scan(options.ExcelPath, logger);
