@@ -11,6 +11,8 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 internal static class RecordTypeChecker
 {
+    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
+
     public static void Check(
         RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
@@ -110,8 +112,6 @@ internal static class RecordTypeChecker
             throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
     }
-
-    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
 
     private static readonly Action<ILogger, string, Exception?> LogTrace =
         LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");

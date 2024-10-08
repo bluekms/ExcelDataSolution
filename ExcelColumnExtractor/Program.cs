@@ -8,6 +8,7 @@ using ExcelColumnExtractor.Checkers;
 using ExcelColumnExtractor.Scanners;
 using ExcelColumnExtractor.Writers;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner;
 using StaticDataAttribute;
 
 namespace ExcelColumnExtractor;
@@ -33,6 +34,9 @@ public class Program
         var totalSw = Stopwatch.StartNew();
         var sw = Stopwatch.StartNew();
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordComplianceChecker), null);
+
         var staticDataRecordSchemaList = recordSchemaContainer.GetStaticDataRecordSchemata();
         if (staticDataRecordSchemaList.Count == 0)
         {
