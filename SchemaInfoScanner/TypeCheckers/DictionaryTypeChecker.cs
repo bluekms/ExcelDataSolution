@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public static class DictionaryTypeChecker
+internal static class DictionaryTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames = new()
     {
@@ -18,21 +18,6 @@ public static class DictionaryTypeChecker
         "ImmutableSortedDictionary<, >",
         "FrozenDictionary<, >",
     };
-
-    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
-    {
-        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
-            symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol])
-        {
-            return false;
-        }
-
-        var genericTypeDefinitionName = symbol
-            .ConstructUnboundGenericType()
-            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-
-        return SupportedTypeNames.Contains(genericTypeDefinitionName);
-    }
 
     public static void Check(
         RecordParameterSchema recordParameter,
@@ -83,6 +68,21 @@ public static class DictionaryTypeChecker
         }
 
         CheckSamePrimitiveType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
+    }
+
+    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
+    {
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
+            symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol])
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)

@@ -43,7 +43,7 @@ public class PrimitiveTypeCheckerTest
                 MyEnum EnumValue,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
@@ -81,7 +81,7 @@ public class PrimitiveTypeCheckerTest
                 MyEnum? EnumValue,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
@@ -105,7 +105,7 @@ public class PrimitiveTypeCheckerTest
                 [NullString(""*"")] int notnullValue,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);

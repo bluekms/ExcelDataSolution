@@ -8,11 +8,8 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public static class SupportedTypeChecker
+internal static class SupportedTypeChecker
 {
-    private static readonly Action<ILogger, string, Exception?> LogTrace =
-        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");
-
     public static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
@@ -72,4 +69,7 @@ public static class SupportedTypeChecker
             throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported container type.");
         }
     }
+
+    private static readonly Action<ILogger, string, Exception?> LogTrace =
+        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");
 }

@@ -7,10 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace SchemaInfoScanner;
 
-public sealed record LoadResult(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList, List<EnumDeclarationSyntax> EnumDeclarationList);
-
-public static class Loader
+public static class RecordSchemaLoader
 {
+    public sealed record Result(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList, List<EnumDeclarationSyntax> EnumDeclarationList);
+
     private static readonly string[] SkipCompileErrorIds =
     {
         "CS1031",
@@ -24,12 +24,9 @@ public static class Loader
         "CS8632",
     };
 
-    private static readonly Action<ILogger, string, Exception?> LogException =
-        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
-
-    public static ImmutableList<LoadResult> Load(string csPath, ILogger logger)
+    public static ImmutableList<Result> Load(string csPath, ILogger logger)
     {
-        var results = new List<LoadResult>();
+        var results = new List<Result>();
 
         if (File.Exists(csPath))
         {
@@ -53,7 +50,7 @@ public static class Loader
         return results.ToImmutableList();
     }
 
-    internal static LoadResult OnLoad(string filePath, string code, ILogger logger)
+    internal static Result OnLoad(string filePath, string code, ILogger logger)
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var root = syntaxTree.GetRoot();
@@ -81,4 +78,7 @@ public static class Loader
 
         return new(semanticModel, recordDeclarationList, enumDeclarationList);
     }
+
+    private static readonly Action<ILogger, string, Exception?> LogException =
+        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
 }

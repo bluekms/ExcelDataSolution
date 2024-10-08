@@ -30,7 +30,7 @@ public class RecordScanTest
             "..",
             "_TestRecord");
 
-        var loadResults = Loader.Load(csPath, logger);
+        var loadResults = RecordSchemaLoader.Load(csPath, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector();
         var enumMemberCollector = new EnumMemberCollector();
@@ -46,6 +46,6 @@ public class RecordScanTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
     }
 }

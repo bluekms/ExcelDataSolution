@@ -7,14 +7,8 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner;
 
-public static class Checker
+public static class RecordComplianceChecker
 {
-    private static readonly Action<ILogger, string, Exception?> LogTrace =
-        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0, nameof(LogTrace)), "{Message}");
-
-    private static readonly Action<ILogger, string, Exception?> LogException =
-        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
-
     public static void Check(RecordSchemaContainer recordSchemaContainer, ILogger logger)
     {
         var visited = new HashSet<RecordName>();
@@ -83,4 +77,10 @@ public static class Checker
 
         return exceptionCount;
     }
+
+    private static readonly Action<ILogger, string, Exception?> LogTrace =
+        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0, nameof(LogTrace)), "{Message}");
+
+    private static readonly Action<ILogger, string, Exception?> LogException =
+        LoggerMessage.Define<string>(LogLevel.Error, new EventId(1, nameof(LogException)), "{Message}");
 }

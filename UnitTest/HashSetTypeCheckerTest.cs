@@ -46,13 +46,13 @@ public class HashSetTypeCheckerTest
                 HashSet<MyEnum> EnumValues,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
@@ -88,12 +88,12 @@ public class HashSetTypeCheckerTest
                 HashSet<MyEnum?> EnumValues,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
@@ -114,11 +114,11 @@ public class HashSetTypeCheckerTest
                 HashSet<int>? Values,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -135,11 +135,11 @@ public class HashSetTypeCheckerTest
                 HashSet<Student> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
@@ -163,11 +163,11 @@ public class HashSetTypeCheckerTest
                 HashSet<Student?> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -183,11 +183,11 @@ public class HashSetTypeCheckerTest
                 HashSet<SortedSet<int>> SortedSets,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -202,12 +202,12 @@ public class HashSetTypeCheckerTest
                 [SingleColumnContainer("", "")] HashSet<int> Values
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
@@ -231,11 +231,11 @@ public class HashSetTypeCheckerTest
                 [SingleColumnContainer("", "")] HashSet<Student> Students
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -252,11 +252,11 @@ public class HashSetTypeCheckerTest
                 ImmutableSortedSet<int> ValuesC
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];

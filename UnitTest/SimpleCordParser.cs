@@ -14,11 +14,11 @@ public static class SimpleCordParser
 
     public static Result Parse(string code, ILogger logger)
     {
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values
             .Single(x => x.HasAttribute<StaticDataRecordAttribute>());
@@ -28,11 +28,11 @@ public static class SimpleCordParser
 
     public static List<Result> ParseAll(string code, ILogger logger)
     {
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         return recordSchemaContainer.RecordSchemaDictionary.Values
             .Where(x => x.HasAttribute<StaticDataRecordAttribute>())

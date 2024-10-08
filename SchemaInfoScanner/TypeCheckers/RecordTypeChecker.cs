@@ -9,40 +9,8 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public static class RecordTypeChecker
+internal static class RecordTypeChecker
 {
-    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
-
-    private static readonly Action<ILogger, string, Exception?> LogTrace =
-        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");
-
-    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
-    {
-        var methodSymbols = symbol
-            .GetMembers().OfType<IMethodSymbol>()
-            .Select(x => x.Name);
-
-        return !RecordMethodNames.Except(methodSymbols).Any();
-    }
-
-    public static RecordSchema CheckAndGetSchema(
-        INamedTypeSymbol symbol,
-        RecordSchemaContainer recordSchemaContainer,
-        HashSet<RecordName> visited,
-        ILogger logger)
-    {
-        var recordName = new RecordName(symbol);
-        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
-        {
-            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{recordName.FullName} is not supported type.", innerException);
-        }
-
-        Check(recordSchema, recordSchemaContainer, visited, logger);
-
-        return recordSchema;
-    }
-
     public static void Check(
         RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
@@ -76,6 +44,33 @@ public static class RecordTypeChecker
         }
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
+    }
+
+    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
+    {
+        var methodSymbols = symbol
+            .GetMembers().OfType<IMethodSymbol>()
+            .Select(x => x.Name);
+
+        return !RecordMethodNames.Except(methodSymbols).Any();
+    }
+
+    public static RecordSchema CheckAndGetSchema(
+        INamedTypeSymbol symbol,
+        RecordSchemaContainer recordSchemaContainer,
+        HashSet<RecordName> visited,
+        ILogger logger)
+    {
+        var recordName = new RecordName(symbol);
+        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
+        {
+            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+            throw new TypeNotSupportedException($"{recordName.FullName} is not supported type.", innerException);
+        }
+
+        Check(recordSchema, recordSchemaContainer, visited, logger);
+
+        return recordSchema;
     }
 
     private static void CheckUnavailableAttribute(RecordSchema recordSchema)
@@ -115,4 +110,9 @@ public static class RecordTypeChecker
             throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
     }
+
+    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
+
+    private static readonly Action<ILogger, string, Exception?> LogTrace =
+        LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");
 }
