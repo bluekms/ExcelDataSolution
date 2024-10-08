@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public static class HashSetTypeChecker
+internal static class HashSetTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames = new()
     {
@@ -17,21 +17,6 @@ public static class HashSetTypeChecker
         "ImmutableHashSet<>",
         "ImmutableSortedSet<>",
     };
-
-    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
-    {
-        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
-            symbol.TypeArguments is not [INamedTypeSymbol])
-        {
-            return false;
-        }
-
-        var genericTypeDefinitionName = symbol
-            .ConstructUnboundGenericType()
-            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-
-        return SupportedTypeNames.Contains(genericTypeDefinitionName);
-    }
 
     public static void Check(
         RecordParameterSchema recordParameter,
@@ -88,5 +73,20 @@ public static class HashSetTypeChecker
         {
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for hashset type {recordParameter.ParameterName.FullName}.");
         }
+    }
+
+    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
+    {
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
+            symbol.TypeArguments is not [INamedTypeSymbol])
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 }

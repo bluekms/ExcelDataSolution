@@ -6,8 +6,26 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public static class PrimitiveTypeChecker
+internal static class PrimitiveTypeChecker
 {
+    public static void Check(RecordParameterSchema recordParameter)
+    {
+        if (!IsSupportedPrimitiveType(recordParameter))
+        {
+            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported primitive type.");
+        }
+
+        if (!recordParameter.IsNullable())
+        {
+            if (recordParameter.HasAttribute<NullStringAttribute>())
+            {
+                throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+            }
+        }
+
+        CheckUnavailableAttribute(recordParameter);
+    }
+
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
     {
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
@@ -37,24 +55,6 @@ public static class PrimitiveTypeChecker
             : CheckEnumType(symbol.TypeKind);
 
         return specialTypeCheck || typeKindCheck;
-    }
-
-    public static void Check(RecordParameterSchema recordParameter)
-    {
-        if (!IsSupportedPrimitiveType(recordParameter))
-        {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported primitive type.");
-        }
-
-        if (!recordParameter.IsNullable())
-        {
-            if (recordParameter.HasAttribute<NullStringAttribute>())
-            {
-                throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
-            }
-        }
-
-        CheckUnavailableAttribute(recordParameter);
     }
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
