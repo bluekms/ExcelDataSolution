@@ -11,7 +11,7 @@ public sealed class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = new();
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
-    private readonly Dictionary<RecordName, List<RecordParameterSchema>> recordMemberSchemaDictionary = new();
+    private readonly Dictionary<RecordName, List<ParameterSchemaBase>> recordMemberSchemaDictionary = new();
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -45,7 +45,8 @@ public sealed class RecordSchemaCollector
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
             var attributes = result.ParameterAttributeCollector[parameterName];
 
-            var parameterSchema = new RecordParameterSchema(
+            // TODO 팩토리를 만들어서 적당한 타입으로 생성해서 넣어주자
+            var parameterSchema = new ParameterSchemaBase(
                 parameterName,
                 namedTypeSymbol,
                 attributes.ToImmutableList());
@@ -57,7 +58,7 @@ public sealed class RecordSchemaCollector
             }
             else
             {
-                recordMemberSchemaDictionary.Add(recordName, new List<RecordParameterSchema> { parameterSchema });
+                recordMemberSchemaDictionary.Add(recordName, new List<ParameterSchemaBase> { parameterSchema });
             }
         }
     }
@@ -67,14 +68,14 @@ public sealed class RecordSchemaCollector
         return recordAttributeDictionary[recordName].ToImmutableList();
     }
 
-    public ImmutableList<RecordParameterSchema> GetRecordMemberSchemata(RecordName recordName)
+    public ImmutableList<ParameterSchemaBase> GetRecordMemberSchemata(RecordName recordName)
     {
         if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
         {
             return recordMembers.ToImmutableList();
         }
 
-        return ImmutableList<RecordParameterSchema>.Empty;
+        return ImmutableList<ParameterSchemaBase>.Empty;
     }
 
     public INamedTypeSymbol GetNamedTypeSymbol(RecordName recordName)

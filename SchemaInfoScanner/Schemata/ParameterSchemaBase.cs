@@ -5,7 +5,7 @@ using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
 
-public sealed record RecordParameterSchema(
+public abstract record ParameterSchemaBase(
     RecordParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList)
@@ -19,4 +19,6 @@ public sealed record RecordParameterSchema(
     {
         return ParameterName.FullName;
     }
+
+    public abstract void CheckCompatibility(string argument);
 }
