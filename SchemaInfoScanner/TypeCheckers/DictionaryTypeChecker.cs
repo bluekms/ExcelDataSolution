@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class DictionaryTypeChecker
+public static class DictionaryTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames = new()
     {
@@ -19,7 +19,22 @@ internal static class DictionaryTypeChecker
         "FrozenDictionary<, >",
     };
 
-    public static void Check(
+    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
+    {
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
+            symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol])
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
+    }
+
+    internal static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -68,21 +83,6 @@ internal static class DictionaryTypeChecker
         }
 
         CheckSamePrimitiveType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
-    }
-
-    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
-    {
-        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
-            symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol])
-        {
-            return false;
-        }
-
-        var genericTypeDefinitionName = symbol
-            .ConstructUnboundGenericType()
-            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-
-        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
     private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)

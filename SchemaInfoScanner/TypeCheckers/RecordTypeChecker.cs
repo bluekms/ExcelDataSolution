@@ -9,9 +9,20 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class RecordTypeChecker
+public static class RecordTypeChecker
 {
-    public static void Check(
+    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
+
+    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
+    {
+        var methodSymbols = symbol
+            .GetMembers().OfType<IMethodSymbol>()
+            .Select(x => x.Name);
+
+        return !RecordMethodNames.Except(methodSymbols).Any();
+    }
+
+    internal static void Check(
         RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -46,16 +57,7 @@ internal static class RecordTypeChecker
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
     }
 
-    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
-    {
-        var methodSymbols = symbol
-            .GetMembers().OfType<IMethodSymbol>()
-            .Select(x => x.Name);
-
-        return !RecordMethodNames.Except(methodSymbols).Any();
-    }
-
-    public static RecordSchema CheckAndGetSchema(
+    internal static RecordSchema CheckAndGetSchema(
         INamedTypeSymbol symbol,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -110,8 +112,6 @@ internal static class RecordTypeChecker
             throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
     }
-
-    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
 
     private static readonly Action<ILogger, string, Exception?> LogTrace =
         LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");

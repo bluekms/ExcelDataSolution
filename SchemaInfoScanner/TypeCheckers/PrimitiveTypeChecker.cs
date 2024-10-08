@@ -6,9 +6,25 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class PrimitiveTypeChecker
+public static class PrimitiveTypeChecker
 {
-    public static void Check(RecordParameterSchema recordParameter)
+    public static bool IsSupportedPrimitiveType(RecordParameterSchema recordParameter)
+    {
+        var symbol = recordParameter.NamedTypeSymbol;
+        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
+        var specialTypeCheck = isNullable
+            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
+            : CheckSpecialType(symbol.SpecialType);
+
+        var typeKindCheck = isNullable
+            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
+            : CheckEnumType(symbol.TypeKind);
+
+        return specialTypeCheck || typeKindCheck;
+    }
+
+    internal static void Check(RecordParameterSchema recordParameter)
     {
         if (!IsSupportedPrimitiveType(recordParameter))
         {
@@ -26,24 +42,8 @@ internal static class PrimitiveTypeChecker
         CheckUnavailableAttribute(recordParameter);
     }
 
-    public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
+    internal static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
     {
-        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
-
-        var specialTypeCheck = isNullable
-            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
-            : CheckSpecialType(symbol.SpecialType);
-
-        var typeKindCheck = isNullable
-            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
-            : CheckEnumType(symbol.TypeKind);
-
-        return specialTypeCheck || typeKindCheck;
-    }
-
-    public static bool IsSupportedPrimitiveType(RecordParameterSchema recordParameter)
-    {
-        var symbol = recordParameter.NamedTypeSymbol;
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
         var specialTypeCheck = isNullable
@@ -75,7 +75,7 @@ internal static class PrimitiveTypeChecker
         }
     }
 
-    public static bool CheckSpecialType(SpecialType specialType)
+    private static bool CheckSpecialType(SpecialType specialType)
     {
         return specialType switch
         {
@@ -97,7 +97,7 @@ internal static class PrimitiveTypeChecker
         };
     }
 
-    public static bool CheckEnumType(TypeKind typeKind)
+    private static bool CheckEnumType(TypeKind typeKind)
     {
         return typeKind is TypeKind.Enum;
     }

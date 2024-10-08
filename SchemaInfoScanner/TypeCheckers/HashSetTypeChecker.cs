@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class HashSetTypeChecker
+public static class HashSetTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames = new()
     {
@@ -18,7 +18,22 @@ internal static class HashSetTypeChecker
         "ImmutableSortedSet<>",
     };
 
-    public static void Check(
+    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
+    {
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
+            symbol.TypeArguments is not [INamedTypeSymbol])
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
+    }
+
+    internal static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -73,20 +88,5 @@ internal static class HashSetTypeChecker
         {
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for hashset type {recordParameter.ParameterName.FullName}.");
         }
-    }
-
-    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
-    {
-        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
-            symbol.TypeArguments is not [INamedTypeSymbol])
-        {
-            return false;
-        }
-
-        var genericTypeDefinitionName = symbol
-            .ConstructUnboundGenericType()
-            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-
-        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 }

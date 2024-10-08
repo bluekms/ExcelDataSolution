@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class ContainerTypeChecker
+public static class ContainerTypeChecker
 {
     public static bool IsSupportedContainerType(INamedTypeSymbol symbol)
     {
