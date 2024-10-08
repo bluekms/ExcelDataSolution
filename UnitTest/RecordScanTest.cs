@@ -32,20 +32,24 @@ public class RecordScanTest
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector();
         var enumMemberCollector = new EnumMemberCollector();
+        foreach (var loadResult in loadResults)
+        {
+            enumMemberCollector.Collect(loadResult);
+        }
+
+        var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
+
+        var recordSchemaCollector = new RecordSchemaCollector();
         var semanticModelCollector = new SemanticModelCollector();
 
         foreach (var loadResult in loadResults)
         {
-            recordSchemaCollector.Collect(loadResult);
-            enumMemberCollector.Collect(loadResult);
+            recordSchemaCollector.Collect(loadResult, enumMemberContainer);
             semanticModelCollector.Collect(loadResult);
         }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
-
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
     }
 }

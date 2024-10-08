@@ -6,22 +6,11 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-public static class PrimitiveTypeChecker
+internal static class PrimitiveTypeChecker
 {
-    public static bool IsSupportedPrimitiveType(ParameterSchemaBase parameter)
+    internal static bool IsSupportedPrimitiveType(ParameterSchemaBase parameter)
     {
-        var symbol = parameter.NamedTypeSymbol;
-        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
-
-        var specialTypeCheck = isNullable
-            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
-            : CheckSpecialType(symbol.SpecialType);
-
-        var typeKindCheck = isNullable
-            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
-            : CheckEnumType(symbol.TypeKind);
-
-        return specialTypeCheck || typeKindCheck;
+        return IsSupportedPrimitiveType(parameter.NamedTypeSymbol);
     }
 
     internal static void Check(ParameterSchemaBase parameter)

@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
@@ -21,12 +22,12 @@ public sealed class RecordSchemaCollector
     {
     }
 
-    public RecordSchemaCollector(RecordSchemaLoader.Result loadResult)
+    public RecordSchemaCollector(RecordSchemaLoader.Result loadResult, EnumSchemaContainer enumMemberContainer)
     {
         Collect(loadResult);
     }
 
-    public void Collect(RecordSchemaLoader.Result loadResult)
+    public void Collect(RecordSchemaLoader.Result loadResult, EnumSchemaContainer enumMemberContainer)
     {
         var result = Parse(loadResult);
 
