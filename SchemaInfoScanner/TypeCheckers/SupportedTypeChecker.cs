@@ -8,9 +8,9 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class SupportedTypeChecker
+public static class SupportedTypeChecker
 {
-    public static void Check(
+    internal static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,

@@ -9,11 +9,20 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class RecordTypeChecker
+public static class RecordTypeChecker
 {
     private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
 
-    public static void Check(
+    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
+    {
+        var methodSymbols = symbol
+            .GetMembers().OfType<IMethodSymbol>()
+            .Select(x => x.Name);
+
+        return !RecordMethodNames.Except(methodSymbols).Any();
+    }
+
+    internal static void Check(
         RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -48,16 +57,7 @@ internal static class RecordTypeChecker
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
     }
 
-    public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
-    {
-        var methodSymbols = symbol
-            .GetMembers().OfType<IMethodSymbol>()
-            .Select(x => x.Name);
-
-        return !RecordMethodNames.Except(methodSymbols).Any();
-    }
-
-    public static RecordSchema CheckAndGetSchema(
+    internal static RecordSchema CheckAndGetSchema(
         INamedTypeSymbol symbol,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,

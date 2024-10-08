@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class ListTypeChecker
+public static class ListTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames = new()
     {
@@ -19,7 +19,22 @@ internal static class ListTypeChecker
         "SortedList<>",
     };
 
-    public static void Check(
+    public static bool IsSupportedListType(INamedTypeSymbol symbol)
+    {
+        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
+            symbol.TypeArguments is not [INamedTypeSymbol])
+        {
+            return false;
+        }
+
+        var genericTypeDefinitionName = symbol
+            .ConstructUnboundGenericType()
+            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        return SupportedTypeNames.Contains(genericTypeDefinitionName);
+    }
+
+    internal static void Check(
         RecordParameterSchema recordParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -74,20 +89,5 @@ internal static class ListTypeChecker
         {
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
         }
-    }
-
-    public static bool IsSupportedListType(INamedTypeSymbol symbol)
-    {
-        if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
-            symbol.TypeArguments is not [INamedTypeSymbol])
-        {
-            return false;
-        }
-
-        var genericTypeDefinitionName = symbol
-            .ConstructUnboundGenericType()
-            .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-
-        return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 }
