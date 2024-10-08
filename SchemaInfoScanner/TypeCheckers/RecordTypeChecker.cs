@@ -85,11 +85,6 @@ public static class RecordTypeChecker
             throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. cannot be used as a parameter for another static data record.");
         }
 
-        if (recordSchema.HasAttribute<RecordGlobalIndexingModeAttribute>())
-        {
-            throw new TypeNotSupportedException($"{nameof(RecordGlobalIndexingModeAttribute)} is not available. {recordSchema.RecordName.FullName} is not static data record.");
-        }
-
         if (recordSchema.HasAttribute<DefaultValueAttribute>())
         {
             throw new InvalidUsageException($"{nameof(DefaultValueAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
