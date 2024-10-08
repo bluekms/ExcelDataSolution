@@ -24,7 +24,7 @@ public class FolderUpdateCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void ThrowDifferancePath()
+    public void ThrowDifferencePath()
     {
         var now = DateTime.UtcNow;
         var dummy = new Dictionary<string, DateTime>();
