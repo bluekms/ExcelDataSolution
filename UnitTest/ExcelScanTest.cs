@@ -93,7 +93,7 @@ public class ExcelScanTest
             "..",
             "TestRecord");
 
-        var loadResults = Loader.Load(csPath, logger);
+        var loadResults = RecordSchemaLoader.Load(csPath, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector();
         foreach (var loadResult in loadResults)
@@ -102,7 +102,7 @@ public class ExcelScanTest
         }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         return recordSchemaContainer;
     }

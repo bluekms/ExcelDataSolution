@@ -21,12 +21,12 @@ public sealed class RecordSchemaCollector
     {
     }
 
-    public RecordSchemaCollector(LoadResult loadResult)
+    public RecordSchemaCollector(RecordSchemaLoader.Result loadResult)
     {
         Collect(loadResult);
     }
 
-    public void Collect(LoadResult loadResult)
+    public void Collect(RecordSchemaLoader.Result loadResult)
     {
         var result = Parse(loadResult);
 
@@ -82,7 +82,7 @@ public sealed class RecordSchemaCollector
         return recordNamedTypeSymbolDictionary[recordName];
     }
 
-    private static ParseResult Parse(LoadResult loadResult)
+    private static ParseResult Parse(RecordSchemaLoader.Result loadResult)
     {
         var recordNamedTypeSymbolCollector = new Dictionary<RecordName, INamedTypeSymbol>();
         var recordAttributeCollector = new RecordAttributeCollector();

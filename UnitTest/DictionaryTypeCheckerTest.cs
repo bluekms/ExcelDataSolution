@@ -35,11 +35,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<string, Student> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
@@ -72,11 +72,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<Human, Student> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
@@ -104,11 +104,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<string, Student>? Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -123,11 +123,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<int, int> Values,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -147,11 +147,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<string?, Student> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -171,11 +171,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<string, Student?> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -195,11 +195,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<string, Student> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -219,11 +219,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<int, Student> Students,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -243,11 +243,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<List<int>, NestedRecord> Records,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<InvalidUsageException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -267,11 +267,11 @@ public class DictionaryTypeCheckerTest
                 Dictionary<int, List<DataRecord>> Records,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Assert.Throws<TypeNotSupportedException>(() => Checker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
 
     [Fact]
@@ -294,11 +294,11 @@ public class DictionaryTypeCheckerTest
                 FrozenDictionary<string, Student> DataD,
             );";
 
-        var loadResult = Loader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
-        Checker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];

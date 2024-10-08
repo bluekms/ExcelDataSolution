@@ -8,7 +8,7 @@ public class EnumMemberCollector
 {
     private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = new();
 
-    public void Collect(LoadResult loadResult)
+    public void Collect(RecordSchemaLoader.Result loadResult)
     {
         foreach (var enumDeclaration in loadResult.EnumDeclarationList)
         {

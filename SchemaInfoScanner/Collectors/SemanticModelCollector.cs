@@ -8,7 +8,7 @@ public class SemanticModelCollector
 {
     private readonly Dictionary<RecordName, SemanticModel> semanticModelDictionary = new();
 
-    public void Collect(LoadResult loadResult)
+    public void Collect(RecordSchemaLoader.Result loadResult)
     {
         foreach (var recordDeclaration in loadResult.RecordDeclarationList)
         {
