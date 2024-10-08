@@ -63,12 +63,7 @@ public static class RequiredHeadersChecker
         var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
         var standardHeaders = BuildStandardHeaders(staticDataRecordSchema, recordSchemaContainer, sheetHeaders, logger);
 
-        if (!staticDataRecordSchema.TryGetAttributeValue<IndexingModeAttribute, IndexingMode>(0, out var indexingMode))
-        {
-            indexingMode = IndexingMode.ZeroBased;
-        }
-
-        var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(indexingMode, standardHeaders, sheetHeaders);
+        var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(standardHeaders, sheetHeaders);
         var targetHeaders = targetColumnIndexSet.Select(index => sheetHeaders[index]).ToList();
 
         if (targetHeaders.Count != targetColumnIndexSet.Count)
@@ -95,7 +90,7 @@ public static class RequiredHeadersChecker
         return recordSchema.Flatten(recordSchemaContainer, containerLengths, logger);
     }
 
-    private static HashSet<int> CheckAndGetTargetHeaderIndexSet(IndexingMode indexingMode, IReadOnlyList<string> standardHeaders, IReadOnlyList<string> sheetHeaders)
+    private static HashSet<int> CheckAndGetTargetHeaderIndexSet(IReadOnlyList<string> standardHeaders, IReadOnlyList<string> sheetHeaders)
     {
         var targetHeaderIndexSet = new HashSet<int>();
         foreach (var standardHeader in standardHeaders)
@@ -114,17 +109,6 @@ public static class RequiredHeadersChecker
             if (!sheetHeaders[index].Equals(standardHeader, StringComparison.OrdinalIgnoreCase))
             {
                 throw new ArgumentException($"Header case sensitivity: {standardHeader}");
-            }
-
-            // 내부에서 생성하기 때문에 OneBase일때 [0]이 들어오는 겯우는 존재하지 않는다.
-            if (indexingMode is IndexingMode.OneBased && standardHeader.Contains("[1]"))
-            {
-                var zeroHeader = standardHeader.Replace("[1]", "[0]");
-                var zeroIndex = sheetHeaders.IndexOf(zeroHeader);
-                if (zeroIndex is not -1)
-                {
-                    throw new ArgumentException($"Sheet header contains zero index({sheetHeaders[zeroIndex]}). But records are {indexingMode}.");
-                }
             }
 
             targetHeaderIndexSet.Add(index);

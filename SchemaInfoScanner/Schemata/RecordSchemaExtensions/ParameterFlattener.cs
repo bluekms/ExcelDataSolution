@@ -20,25 +20,17 @@ public static partial class ParameterFlattener
         IReadOnlyDictionary<string, int> containerLengths,
         ILogger logger)
     {
-        var globalIndexingMode = (IndexingMode?)null;
-        if (recordSchema.TryGetAttributeValue<RecordGlobalIndexingModeAttribute, IndexingMode>(0, out var mode))
-        {
-            globalIndexingMode = mode;
-        }
-
-        return OnFlatten(recordSchema, recordSchemaContainer, containerLengths, globalIndexingMode, string.Empty, logger);
+        return OnFlatten(recordSchema, recordSchemaContainer, containerLengths, string.Empty, logger);
     }
 
     private static List<string> OnFlatten(
         this RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         IReadOnlyDictionary<string, int> containerLengths,
-        IndexingMode? globalIndexingMode,
         string parentPrefix,
         ILogger logger)
     {
         var headers = new List<string>();
-        var indexingMode = DetermineIndexingMode(globalIndexingMode, recordSchema);
 
         foreach (var parameter in recordSchema.RecordParameterSchemaList)
         {
@@ -64,7 +56,7 @@ public static partial class ParameterFlattener
                 }
                 else
                 {
-                    headers.AddRange(HandlePrimitiveContainer(containerLengths, indexingMode, headerName, logger));
+                    headers.AddRange(HandlePrimitiveContainer(containerLengths, headerName, logger));
                 }
             }
             else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
@@ -77,7 +69,7 @@ public static partial class ParameterFlattener
                 }
                 else
                 {
-                    var indexRange = GetStartIndexAndLength(indexingMode, containerLengths, headerName, logger);
+                    var indexRange = GetStartIndexAndLength(containerLengths, headerName, logger);
                     for (var i = 0; i < indexRange.Length; ++i)
                     {
                         var index = indexRange.Start + i;
@@ -85,7 +77,6 @@ public static partial class ParameterFlattener
                         var innerFlatten = innerRecordSchema.OnFlatten(
                             recordSchemaContainer,
                             containerLengths,
-                            globalIndexingMode,
                             $"{headerName}[{index}]",
                             logger);
 
@@ -103,7 +94,7 @@ public static partial class ParameterFlattener
                 }
                 else
                 {
-                    var indexRange = GetStartIndexAndLength(indexingMode, containerLengths, headerName, logger);
+                    var indexRange = GetStartIndexAndLength(containerLengths, headerName, logger);
                     for (var i = 0; i < indexRange.Length; ++i)
                     {
                         var index = indexRange.Start + i;
@@ -111,7 +102,6 @@ public static partial class ParameterFlattener
                         var innerFlatten = innerRecordSchema.OnFlatten(
                             recordSchemaContainer,
                             containerLengths,
-                            globalIndexingMode,
                             $"{headerName}[{index}]",
                             logger);
 
@@ -127,7 +117,6 @@ public static partial class ParameterFlattener
                     var innerFlatten = innerRecordSchema.OnFlatten(
                         recordSchemaContainer,
                         containerLengths,
-                        globalIndexingMode,
                         headerName,
                         logger);
 
@@ -139,25 +128,9 @@ public static partial class ParameterFlattener
         return headers;
     }
 
-    private static IndexingMode DetermineIndexingMode(IndexingMode? globalIndexingMode, RecordSchema recordSchema)
-    {
-        if (globalIndexingMode is not null)
-        {
-            return globalIndexingMode.Value;
-        }
-
-        if (recordSchema.TryGetAttributeValue<IndexingModeAttribute, IndexingMode>(0, out var mode))
-        {
-            return mode;
-        }
-
-        return IndexingMode.ZeroBased;
-    }
-
     private sealed record StartIndexAndLength(int Start, int Length);
 
     private static StartIndexAndLength GetStartIndexAndLength(
-        IndexingMode indexingMode,
         IReadOnlyDictionary<string, int> containerLengths,
         string headerName,
         ILogger logger)
@@ -168,23 +141,17 @@ public static partial class ParameterFlattener
             LogInformation(logger, "Cannot find length for", headerNameWithoutIndex, null);
         }
 
-        return indexingMode switch
-        {
-            IndexingMode.OneBased => new(1, length),
-            IndexingMode.ZeroBased => new(0, length),
-            _ => throw new ArgumentOutOfRangeException(nameof(indexingMode), indexingMode, null)
-        };
+        return new(0, length);
     }
 
     private static List<string> HandlePrimitiveContainer(
         IReadOnlyDictionary<string, int> containerLengths,
-        IndexingMode indexingMode,
         string headerName,
         ILogger logger)
     {
         var headers = new List<string>();
 
-        var indexRange = GetStartIndexAndLength(indexingMode, containerLengths, headerName, logger);
+        var indexRange = GetStartIndexAndLength(containerLengths, headerName, logger);
         for (var i = 0; i < indexRange.Length; ++i)
         {
             var index = indexRange.Start + i;
