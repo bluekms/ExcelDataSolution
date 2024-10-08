@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -40,24 +39,6 @@ public static class AttributeAccessors
             : (TValue)Convert.ChangeType(valueString, typeof(TValue), CultureInfo.InvariantCulture);
     }
 
-    public static bool TryGetAttributeValue<TAttribute, TValue>(
-        this RecordSchema recordSchema,
-        int attributeParameterIndex,
-        [NotNullWhen(true)] out TValue? value)
-        where TAttribute : Attribute
-    {
-        try
-        {
-            value = recordSchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
-            return value is not null;
-        }
-        catch (Exception)
-        {
-            value = default;
-            return false;
-        }
-    }
-
     public static IReadOnlyList<string> GetAttributeValueList<TAttribute>(this RecordSchema recordSchema)
     {
         var attributeName = typeof(TAttribute).Name.Replace("Attribute", string.Empty);
@@ -72,7 +53,7 @@ public static class AttributeAccessors
             .Select(x => x.Expression switch
             {
                 LiteralExpressionSyntax literal => literal.Token.ValueText,
-                MemberAccessExpressionSyntax memberAccess => memberAccess.Name.Identifier.Text,
+                MemberAccessExpressionSyntax memberAccess => memberAccess.Name.Identifier.Text, // for enum
                 _ => throw new InvalidOperationException("Unsupported expression type."),
             }).ToList();
     }
