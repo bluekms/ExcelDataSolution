@@ -1,5 +1,4 @@
-using System.Collections.Frozen;
-using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
 
@@ -7,10 +6,10 @@ namespace SchemaInfoScanner.Containers;
 
 public sealed class EnumSchemaContainer
 {
-    private readonly FrozenDictionary<EnumName, ImmutableList<string>> enumMemberDictionary;
+    private readonly ReadOnlyDictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary;
 
     public EnumSchemaContainer(EnumMemberCollector enumMemberCollector)
     {
-        enumMemberDictionary = enumMemberCollector.ToFrozenDictionary();
+        enumMemberDictionary = enumMemberCollector.AsReadOnly();
     }
 }
