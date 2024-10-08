@@ -8,9 +8,9 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 public static class PrimitiveTypeChecker
 {
-    public static bool IsSupportedPrimitiveType(RecordParameterSchema recordParameter)
+    public static bool IsSupportedPrimitiveType(ParameterSchemaBase parameter)
     {
-        var symbol = recordParameter.NamedTypeSymbol;
+        var symbol = parameter.NamedTypeSymbol;
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
         var specialTypeCheck = isNullable
@@ -24,22 +24,22 @@ public static class PrimitiveTypeChecker
         return specialTypeCheck || typeKindCheck;
     }
 
-    internal static void Check(RecordParameterSchema recordParameter)
+    internal static void Check(ParameterSchemaBase parameter)
     {
-        if (!IsSupportedPrimitiveType(recordParameter))
+        if (!IsSupportedPrimitiveType(parameter))
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported primitive type.");
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported primitive type.");
         }
 
-        if (!recordParameter.IsNullable())
+        if (!parameter.IsNullable())
         {
-            if (recordParameter.HasAttribute<NullStringAttribute>())
+            if (parameter.HasAttribute<NullStringAttribute>())
             {
-                throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+                throw new InvalidUsageException($"{parameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
             }
         }
 
-        CheckUnavailableAttribute(recordParameter);
+        CheckUnavailableAttribute(parameter);
     }
 
     internal static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
@@ -57,21 +57,21 @@ public static class PrimitiveTypeChecker
         return specialTypeCheck || typeKindCheck;
     }
 
-    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
+    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
     {
-        if (!recordParameter.IsNullable() && recordParameter.HasAttribute<NullStringAttribute>())
+        if (!parameter.IsNullable() && parameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+            throw new InvalidUsageException($"{parameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
         }
 
-        if (recordParameter.HasAttribute<MaxCountAttribute>())
+        if (parameter.HasAttribute<MaxCountAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {parameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {parameter.ParameterName.FullName}.");
         }
     }
 

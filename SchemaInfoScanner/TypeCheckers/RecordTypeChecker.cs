@@ -82,11 +82,6 @@ public static class RecordTypeChecker
             throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. cannot be used as a parameter for another static data record.");
         }
 
-        if (recordSchema.HasAttribute<DefaultValueAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(DefaultValueAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
-
         if (recordSchema.HasAttribute<MaxCountAttribute>())
         {
             throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
