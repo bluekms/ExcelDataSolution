@@ -1,17 +1,17 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
 
-public sealed record RawRecordSchema(
+public sealed record RecordSchema(
     RecordName RecordName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> RecordAttributeList,
-    IReadOnlyList<RawParameterSchema> RawParameterSchemaList)
+    IReadOnlyList<ParameterSchemaBase> RecordParameterSchemaList)
 {
     public override string ToString()
     {
-        return $"(Raw) {RecordName.FullName}";
+        return RecordName.FullName;
     }
 }
