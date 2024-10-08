@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
+using StaticDataAttribute;
 
 namespace ExcelColumnExtractor.Parsers;
 
@@ -63,7 +64,6 @@ public static class HeaderLengthParser
             }
         }
 
-        // maxNumber is zero-base index
         return maxNumber + 1;
     }
 
