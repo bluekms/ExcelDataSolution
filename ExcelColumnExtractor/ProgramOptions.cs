@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using Microsoft.Extensions.Logging;
 using Serilog.Events;
 
 namespace ExcelColumnExtractor;

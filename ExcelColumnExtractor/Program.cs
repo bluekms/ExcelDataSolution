@@ -27,6 +27,10 @@ public class Program
             ? Logger.CreateLoggerWithoutFile<Program>(options.MinLogLevel)
             : Logger.CreateLogger<Program>(options.MinLogLevel, options.LogPath);
 
+        var beforeCsState = FolderStateScanner.Scan(options.RecordCsPath, ".cs");
+        var beforeExcelState = FolderStateScanner.Scan(options.ExcelPath, ".xls", ".xlsx");
+
+        var totalSw = Stopwatch.StartNew();
         var sw = Stopwatch.StartNew();
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
         var staticDataRecordSchemaList = recordSchemaContainer.GetStaticDataRecordSchemata();
@@ -37,11 +41,11 @@ public class Program
             throw exception;
         }
 
-        LogInformation(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordScanner), null);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordScanner), null);
 
         sw.Restart();
         var sheetNameContainer = SheetNameScanner.Scan(options.ExcelPath, logger);
-        LogInformation(logger, sw.Elapsed.TotalMilliseconds, nameof(SheetNameScanner), null);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(SheetNameScanner), null);
 
         sw.Restart();
         var targetColumnIndicesContainer = RequiredHeadersChecker.Check(
@@ -49,7 +53,7 @@ public class Program
             recordSchemaContainer,
             sheetNameContainer,
             logger);
-        LogInformation(logger, sw.Elapsed.TotalMilliseconds, nameof(RequiredHeadersChecker), null);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RequiredHeadersChecker), null);
 
         sw.Restart();
         var extractedTableContainer = BodyColumnAggregator.Aggregate(
@@ -57,7 +61,7 @@ public class Program
             sheetNameContainer,
             targetColumnIndicesContainer,
             logger);
-        LogInformation(logger, sw.Elapsed.TotalMilliseconds, nameof(BodyColumnAggregator), null);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(BodyColumnAggregator), null);
 
         sw.Restart();
         DataBodyChecker.Check(
@@ -65,14 +69,24 @@ public class Program
             recordSchemaContainer,
             extractedTableContainer,
             logger);
-        LogInformation(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
 
         sw.Restart();
         CsvWriter.Write(
             CheckAndCreateOutputDirectory(options, logger),
             ParseEncoding(options.Encoding),
             extractedTableContainer);
-        LogInformation(logger, sw.Elapsed.TotalMilliseconds, nameof(CsvWriter), null);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(CsvWriter), null);
+
+        sw.Restart();
+        var afterCsState = FolderStateScanner.Scan(options.RecordCsPath, ".cs");
+        var afterExcelState = FolderStateScanner.Scan(options.ExcelPath, ".xls", ".xlsx");
+
+        FolderUpdateChecker.Check(beforeCsState, afterCsState, logger);
+        FolderUpdateChecker.Check(beforeExcelState, afterExcelState, logger);
+
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(FolderStateScanner), null);
+        LogInformation(logger, totalSw.Elapsed.TotalMilliseconds, nameof(ExcelColumnExtractor), null);
     }
 
     private static Encoding ParseEncoding(string? encoding)
@@ -129,11 +143,11 @@ public class Program
         }
     }
 
+    private static readonly Action<ILogger, double, string, Exception?> LogTrace =
+        LoggerMessage.Define<double, string>(LogLevel.Trace, new EventId(0, nameof(LogTrace)), "Complete({Ms:00.0000}ms) {Work}");
+
     private static readonly Action<ILogger, double, string, Exception?> LogInformation =
         LoggerMessage.Define<double, string>(LogLevel.Information, new EventId(0, nameof(LogInformation)), "Complete({Ms:00.0000}ms) {Work}");
-
-    private static readonly Action<ILogger, string, Exception?> LogWarning =
-        LoggerMessage.Define<string>(LogLevel.Warning, new EventId(0, nameof(LogWarning)), "{Message}");
 
     private static readonly Action<ILogger, string, Exception?> LogError =
         LoggerMessage.Define<string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{Message}");
