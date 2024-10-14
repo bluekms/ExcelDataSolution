@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ExcelColumnExtractor.NameObjects;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
 
 namespace ExcelColumnExtractor.Containers;

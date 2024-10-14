@@ -1,29 +1,29 @@
 ﻿using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordParameterSchemaExtensions;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
 internal static class PrimitiveTypeChecker
 {
-    public static void Check(RecordParameterSchema recordParameter)
+    public static void Check(RawParameterSchema rawParameter)
     {
-        if (!IsSupportedPrimitiveType(recordParameter))
+        if (!IsSupportedPrimitiveType(rawParameter))
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported primitive type.");
+            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported primitive type.");
         }
 
-        if (!recordParameter.IsNullable())
+        if (!rawParameter.IsNullable())
         {
-            if (recordParameter.HasAttribute<NullStringAttribute>())
+            if (rawParameter.HasAttribute<NullStringAttribute>())
             {
-                throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+                throw new InvalidUsageException($"{rawParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
             }
         }
 
-        CheckUnavailableAttribute(recordParameter);
+        CheckUnavailableAttribute(rawParameter);
     }
 
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
@@ -41,9 +41,9 @@ internal static class PrimitiveTypeChecker
         return specialTypeCheck || typeKindCheck;
     }
 
-    public static bool IsSupportedPrimitiveType(RecordParameterSchema recordParameter)
+    public static bool IsSupportedPrimitiveType(RawParameterSchema rawParameter)
     {
-        var symbol = recordParameter.NamedTypeSymbol;
+        var symbol = rawParameter.NamedTypeSymbol;
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
         var specialTypeCheck = isNullable
@@ -57,21 +57,21 @@ internal static class PrimitiveTypeChecker
         return specialTypeCheck || typeKindCheck;
     }
 
-    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
+    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
     {
-        if (!recordParameter.IsNullable() && recordParameter.HasAttribute<NullStringAttribute>())
+        if (!rawParameter.IsNullable() && rawParameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{recordParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+            throw new InvalidUsageException($"{rawParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
         }
 
-        if (recordParameter.HasAttribute<MaxCountAttribute>())
+        if (rawParameter.HasAttribute<MaxCountAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {rawParameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {rawParameter.ParameterName.FullName}.");
         }
     }
 

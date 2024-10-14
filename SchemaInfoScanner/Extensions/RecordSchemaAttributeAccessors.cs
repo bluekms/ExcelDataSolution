@@ -1,10 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SchemaInfoScanner.Schemata;
 
-namespace SchemaInfoScanner.Schemata.RecordSchemaExtensions;
+namespace SchemaInfoScanner.Extensions;
 
-public static class AttributeAccessors
+public static class RecordSchemaAttributeAccessors
 {
     public static bool HasAttribute<T>(
         this RecordSchema recordSchema)

@@ -3,13 +3,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.RecordParameterSchemaExtensions;
+using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata.RecordSchemaExtensions;
+namespace SchemaInfoScanner.Extensions;
 
-public static partial class ParameterFlattener
+public static partial class RecordSchemaParameterFlattener
 {
     [GeneratedRegex("\\[.*?\\]")]
     private static partial Regex RegexForIndex();
@@ -163,5 +163,5 @@ public static partial class ParameterFlattener
 
     private static readonly Action<ILogger, string, string, Exception?> LogInformation =
         LoggerMessage.Define<string, string>(
-            LogLevel.Information, new EventId(0, nameof(ParameterFlattener)), "{Message} {Argument}");
+            LogLevel.Information, new EventId(0, nameof(RecordSchemaParameterFlattener)), "{Message} {Argument}");
 }

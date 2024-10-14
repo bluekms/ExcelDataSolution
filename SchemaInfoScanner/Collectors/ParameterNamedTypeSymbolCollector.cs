@@ -8,13 +8,13 @@ namespace SchemaInfoScanner.Collectors;
 public sealed class ParameterNamedTypeSymbolCollector
 {
     private readonly SemanticModel semanticModel;
-    private readonly Dictionary<RecordParameterName, INamedTypeSymbol> namedTypeSymbolDictionary = new();
+    private readonly Dictionary<ParameterName, INamedTypeSymbol> namedTypeSymbolDictionary = new();
 
     public int Count => namedTypeSymbolDictionary.Count;
 
-    public IEnumerable<RecordParameterName> ParameterNames => namedTypeSymbolDictionary.Keys;
+    public IEnumerable<ParameterName> ParameterNames => namedTypeSymbolDictionary.Keys;
 
-    public INamedTypeSymbol this[RecordParameterName parameterName] => namedTypeSymbolDictionary[parameterName];
+    public INamedTypeSymbol this[ParameterName parameterName] => namedTypeSymbolDictionary[parameterName];
 
     public ParameterNamedTypeSymbolCollector(SemanticModel semanticModel)
     {
@@ -34,7 +34,7 @@ public sealed class ParameterNamedTypeSymbolCollector
             throw new TypeNotSupportedException();
         }
 
-        var recordPropertyName = new RecordParameterName(new RecordName(recordDeclaration), parameter);
+        var recordPropertyName = new ParameterName(new RecordName(recordDeclaration), parameter);
         namedTypeSymbolDictionary.Add(recordPropertyName, namedTypeSymbol);
     }
 }

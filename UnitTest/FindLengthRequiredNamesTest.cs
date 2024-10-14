@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
 using Xunit.Abstractions;
 

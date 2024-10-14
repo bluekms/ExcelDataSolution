@@ -2,8 +2,8 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
 
 namespace UnitTest;

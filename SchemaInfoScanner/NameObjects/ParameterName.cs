@@ -2,20 +2,20 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner.NameObjects;
 
-public class RecordParameterName : IEquatable<RecordParameterName>
+public class ParameterName : IEquatable<ParameterName>
 {
     public string Name { get; }
     public string FullName => $"{RecordName.FullName}.{Name}";
 
     public RecordName RecordName { get; }
 
-    public RecordParameterName(RecordName recordName, ParameterSyntax parameterSyntax)
+    public ParameterName(RecordName recordName, ParameterSyntax parameterSyntax)
     {
         Name = parameterSyntax.Identifier.ValueText;
         RecordName = recordName;
     }
 
-    public RecordParameterName(string fullName)
+    public ParameterName(string fullName)
     {
         if (string.IsNullOrEmpty(fullName) || fullName[^1] == '.')
         {
@@ -48,7 +48,7 @@ public class RecordParameterName : IEquatable<RecordParameterName>
             return false;
         }
 
-        return Equals((RecordParameterName)obj);
+        return Equals((ParameterName)obj);
     }
 
     public override int GetHashCode()
@@ -56,7 +56,7 @@ public class RecordParameterName : IEquatable<RecordParameterName>
         return HashCode.Combine(this.Name, this.RecordName);
     }
 
-    public bool Equals(RecordParameterName? other)
+    public bool Equals(ParameterName? other)
     {
         if (ReferenceEquals(null, other))
         {

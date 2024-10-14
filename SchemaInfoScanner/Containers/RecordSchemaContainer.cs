@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Text;
 using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Containers;

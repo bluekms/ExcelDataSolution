@@ -1,16 +1,15 @@
 using System.Collections.Frozen;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
+using SchemaInfoScanner.Extensions;
 using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class ParameterFlattenerTest
+public class RecordSchemaParameterFlattenerTest
 {
     private readonly ITestOutputHelper testOutputHelper;
 
-    public ParameterFlattenerTest(ITestOutputHelper testOutputHelper)
+    public RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelper)
     {
         this.testOutputHelper = testOutputHelper;
     }

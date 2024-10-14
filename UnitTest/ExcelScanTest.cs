@@ -1,14 +1,12 @@
-using System.Collections.Frozen;
 using System.Globalization;
 using System.Reflection;
 using ExcelColumnExtractor.Containers;
-using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
+using SchemaInfoScanner.Extensions;
 using StaticDataAttribute;
 using Xunit.Abstractions;
 

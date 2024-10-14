@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordParameterSchemaExtensions;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
@@ -20,19 +20,19 @@ internal static class ListTypeChecker
     };
 
     public static void Check(
-        RecordParameterSchema recordParameter,
+        RawParameterSchema rawParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedListType(recordParameter.NamedTypeSymbol))
+        if (!IsSupportedListType(rawParameter.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {recordParameter.ParameterName.FullName} to be supported list type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {rawParameter.ParameterName.FullName} to be supported list type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(recordParameter);
+        CheckUnavailableAttribute(rawParameter);
 
-        var typeArgument = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments.Single();
+        var typeArgument = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments.Single();
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
             return;
@@ -40,39 +40,39 @@ internal static class ListTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
+            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
         }
 
-        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
+            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
         }
 
         var recordName = new RecordName(typeArgument);
         if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
         {
             var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported type.", innerException);
+            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported type.", innerException);
         }
 
         RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
     }
 
-    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
+    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
     {
-        if (recordParameter.HasAttribute<ForeignKeyAttribute>())
+        if (rawParameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {rawParameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<KeyAttribute>())
+        if (rawParameter.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {rawParameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<NullStringAttribute>())
+        if (rawParameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {rawParameter.ParameterName.FullName}.");
         }
     }
 

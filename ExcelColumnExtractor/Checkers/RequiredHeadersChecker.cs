@@ -1,14 +1,12 @@
 using System.Globalization;
 using System.Text;
 using ExcelColumnExtractor.Containers;
-using ExcelColumnExtractor.Extensions;
 using ExcelColumnExtractor.Parsers;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordSchemaExtensions;
-using StaticDataAttribute;
 
 namespace ExcelColumnExtractor.Checkers;
 
