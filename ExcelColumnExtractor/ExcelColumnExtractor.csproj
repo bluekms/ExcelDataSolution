@@ -21,7 +21,7 @@
   <ItemGroup>
     <!-- https://github.com/advisories/GHSA-hh2w-p6rv-4g7w 해당 취약점이 해결되면 제거 -->
     <PackageReference Include="ini-parser-netstandard" Version="2.5.2" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
