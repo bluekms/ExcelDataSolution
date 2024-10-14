@@ -5,8 +5,8 @@ using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
 
-public sealed record RecordParameterSchema(
-    RecordParameterName ParameterName,
+public sealed record RawParameterSchema(
+    ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList)
 {

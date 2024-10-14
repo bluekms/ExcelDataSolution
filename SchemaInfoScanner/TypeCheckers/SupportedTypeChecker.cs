@@ -11,62 +11,62 @@ namespace SchemaInfoScanner.TypeCheckers;
 internal static class SupportedTypeChecker
 {
     public static void Check(
-        RecordParameterSchema recordParameter,
+        RawParameterSchema rawParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (recordParameter.HasAttribute<IgnoreAttribute>())
+        if (rawParameter.HasAttribute<IgnoreAttribute>())
         {
-            LogTrace(logger, $"{recordParameter.ParameterName.FullName} is ignored.", null);
+            LogTrace(logger, $"{rawParameter.ParameterName.FullName} is ignored.", null);
             return;
         }
 
-        LogTrace(logger, recordParameter.ParameterName.FullName, null);
+        LogTrace(logger, rawParameter.ParameterName.FullName, null);
 
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(recordParameter))
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(rawParameter))
         {
-            PrimitiveTypeChecker.Check(recordParameter);
+            PrimitiveTypeChecker.Check(rawParameter);
             return;
         }
 
-        if (ContainerTypeChecker.IsSupportedContainerType(recordParameter.NamedTypeSymbol))
+        if (ContainerTypeChecker.IsSupportedContainerType(rawParameter.NamedTypeSymbol))
         {
-            CheckSupportedContainerType(recordParameter, recordSchemaContainer, visited, logger);
+            CheckSupportedContainerType(rawParameter, recordSchemaContainer, visited, logger);
             return;
         }
 
-        var recordName = new RecordName(recordParameter.NamedTypeSymbol);
+        var recordName = new RecordName(rawParameter.NamedTypeSymbol);
         if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
         {
             var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the record schema dictionary.");
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported record type.", innerException);
+            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported record type.", innerException);
         }
 
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
     }
 
     private static void CheckSupportedContainerType(
-        RecordParameterSchema recordParameter,
+        RawParameterSchema rawParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (HashSetTypeChecker.IsSupportedHashSetType(recordParameter.NamedTypeSymbol))
+        if (HashSetTypeChecker.IsSupportedHashSetType(rawParameter.NamedTypeSymbol))
         {
-            HashSetTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+            HashSetTypeChecker.Check(rawParameter, recordSchemaContainer, visited, logger);
         }
-        else if (ListTypeChecker.IsSupportedListType(recordParameter.NamedTypeSymbol))
+        else if (ListTypeChecker.IsSupportedListType(rawParameter.NamedTypeSymbol))
         {
-            ListTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+            ListTypeChecker.Check(rawParameter, recordSchemaContainer, visited, logger);
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(recordParameter.NamedTypeSymbol))
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(rawParameter.NamedTypeSymbol))
         {
-            DictionaryTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+            DictionaryTypeChecker.Check(rawParameter, recordSchemaContainer, visited, logger);
         }
         else
         {
-            throw new TypeNotSupportedException($"{recordParameter.ParameterName.FullName} is not supported container type.");
+            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported container type.");
         }
     }
 

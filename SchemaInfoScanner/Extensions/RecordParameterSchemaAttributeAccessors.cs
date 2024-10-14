@@ -7,20 +7,20 @@ namespace SchemaInfoScanner.Extensions;
 public static class RecordParameterSchemaAttributeAccessors
 {
     public static bool HasAttribute<T>(
-        this RecordParameterSchema recordParameterSchema)
+        this RawParameterSchema rawParameterSchema)
         where T : Attribute
     {
         var attributeName = typeof(T).Name.Replace("Attribute", string.Empty);
-        return recordParameterSchema.AttributeList.Any(x => x.Name.ToString() == attributeName);
+        return rawParameterSchema.AttributeList.Any(x => x.Name.ToString() == attributeName);
     }
 
     public static TValue GetAttributeValue<TAttribute, TValue>(
-        this RecordParameterSchema recordParameterSchema,
+        this RawParameterSchema rawParameterSchema,
         int attributeParameterIndex = 0)
         where TAttribute : Attribute
     {
         var attributeName = typeof(TAttribute).Name.Replace("Attribute", string.Empty);
-        var attribute = recordParameterSchema.AttributeList.Single(x => x.Name.ToString() == attributeName);
+        var attribute = rawParameterSchema.AttributeList.Single(x => x.Name.ToString() == attributeName);
 
         if (attribute.ArgumentList is null)
         {
@@ -34,14 +34,14 @@ public static class RecordParameterSchemaAttributeAccessors
     }
 
     public static bool TryGetAttributeValue<TAttribute, TValue>(
-        this RecordParameterSchema recordParameterSchema,
+        this RawParameterSchema rawParameterSchema,
         int attributeParameterIndex,
         [NotNullWhen(true)] out TValue? value)
         where TAttribute : Attribute
     {
         try
         {
-            value = recordParameterSchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
+            value = rawParameterSchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
             return value is not null;
         }
         catch (Exception)

@@ -9,7 +9,7 @@ public sealed record RecordSchema(
     RecordName RecordName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> RecordAttributeList,
-    ImmutableList<RecordParameterSchema> RecordParameterSchemaList)
+    ImmutableList<RawParameterSchema> RecordParameterSchemaList)
 {
     public override string ToString()
     {

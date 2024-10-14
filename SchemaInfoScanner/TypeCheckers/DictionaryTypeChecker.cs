@@ -20,25 +20,25 @@ internal static class DictionaryTypeChecker
     };
 
     public static void Check(
-        RecordParameterSchema recordParameter,
+        RawParameterSchema rawParameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedDictionaryType(recordParameter.NamedTypeSymbol))
+        if (!IsSupportedDictionaryType(rawParameter.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {recordParameter.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {rawParameter.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(recordParameter);
+        CheckUnavailableAttribute(rawParameter);
 
-        var keySymbol = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments[0];
+        var keySymbol = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
-        var valueSymbol = (INamedTypeSymbol)recordParameter.NamedTypeSymbol.TypeArguments[1];
+        var valueSymbol = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments[1];
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
@@ -51,7 +51,7 @@ internal static class DictionaryTypeChecker
 
         if (valueRecordKeyParameterSchema is null)
         {
-            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {recordParameter.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
+            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {rawParameter.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
         }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
@@ -85,26 +85,26 @@ internal static class DictionaryTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    private static void CheckUnavailableAttribute(RecordParameterSchema recordParameter)
+    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
     {
-        if (recordParameter.HasAttribute<ForeignKeyAttribute>())
+        if (rawParameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<KeyAttribute>())
+        if (rawParameter.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<NullStringAttribute>())
+        if (rawParameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
         }
 
-        if (recordParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {recordParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
         }
     }
 
