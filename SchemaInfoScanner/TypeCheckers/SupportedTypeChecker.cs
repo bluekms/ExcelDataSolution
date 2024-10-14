@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.RecordParameterSchemaExtensions;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;

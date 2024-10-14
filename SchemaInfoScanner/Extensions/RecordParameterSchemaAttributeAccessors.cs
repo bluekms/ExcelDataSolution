@@ -1,9 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using SchemaInfoScanner.Schemata;
 
-namespace SchemaInfoScanner.Schemata.RecordParameterSchemaExtensions;
+namespace SchemaInfoScanner.Extensions;
 
-public static class AttributeAccessors
+public static class RecordParameterSchemaAttributeAccessors
 {
     public static bool HasAttribute<T>(
         this RecordParameterSchema recordParameterSchema)

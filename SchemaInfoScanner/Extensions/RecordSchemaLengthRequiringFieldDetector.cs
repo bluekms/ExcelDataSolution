@@ -1,11 +1,11 @@
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.RecordParameterSchemaExtensions;
+using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata;
+namespace SchemaInfoScanner.Extensions;
 
 public static class RecordSchemaLengthRequiringFieldDetector
 {
