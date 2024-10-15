@@ -6,7 +6,7 @@ using SchemaInfoScanner.NameObjects;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 
 public sealed record BooleanParameterSchema(
-    RecordParameterName ParameterName,
+    ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)

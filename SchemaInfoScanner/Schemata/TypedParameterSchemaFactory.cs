@@ -12,24 +12,24 @@ namespace SchemaInfoScanner.Schemata;
 public static class TypedParameterSchemaFactory
 {
     public static ParameterSchemaBase Create(
-        RecordParameterName parameterName,
+        ParameterName parameterName,
         INamedTypeSymbol namedTypeSymbol,
         ImmutableList<AttributeSyntax> attributeList,
-        EnumSchemaContainer enumSchemaContainer)
+        EnumMemberContainer enumMemberContainer)
     {
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
         {
-            return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList, enumSchemaContainer);
+            return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList, enumMemberContainer);
         }
 
         throw new NotImplementedException();
     }
 
     private static ParameterSchemaBase CreatePrimitiveParameterSchema(
-        RecordParameterName parameterName,
+        ParameterName parameterName,
         INamedTypeSymbol namedTypeSymbol,
         ImmutableList<AttributeSyntax> attributeList,
-        EnumSchemaContainer enumSchemaContainer)
+        EnumMemberContainer enumMemberContainer)
     {
         var isNullable = namedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 

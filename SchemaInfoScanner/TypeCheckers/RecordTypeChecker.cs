@@ -46,6 +46,7 @@ internal static class RecordTypeChecker
         LogTrace(logger, $"{rawRecordSchema.RecordName.FullName} Finished.", null);
     }
 
+    internal static RawRecordSchema CheckAndGetSchema(
     public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
     {
         var methodSymbols = symbol

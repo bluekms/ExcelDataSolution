@@ -11,12 +11,16 @@ public static class RecordScanner
     {
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
         var recordSchemaCollector = new RecordSchemaCollector();
+        var enumMemberCollector = new EnumMemberCollector();
         foreach (var loadResult in loadResults)
         {
             recordSchemaCollector.Collect(loadResult);
+            enumMemberCollector.Collect(loadResult);
         }
 
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
         var exceptionCount = RecordComplianceChecker.TryCheck(recordSchemaContainer, logger);
         if (exceptionCount > 0)

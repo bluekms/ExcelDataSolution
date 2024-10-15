@@ -7,7 +7,7 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 
 public sealed record NullableInt16ParameterSchema(
-    RecordParameterName ParameterName,
+    ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)

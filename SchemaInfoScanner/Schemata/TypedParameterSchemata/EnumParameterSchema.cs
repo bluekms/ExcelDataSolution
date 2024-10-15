@@ -6,7 +6,7 @@ using SchemaInfoScanner.NameObjects;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 
 public sealed record EnumParameterSchema(
-    RecordParameterName ParameterName,
+    ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList,
     IReadOnlyList<string> EnumMembers)

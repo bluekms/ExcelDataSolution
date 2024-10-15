@@ -8,7 +8,7 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 
 public sealed record SByteParameterSchema(
-    RecordParameterName ParameterName,
+    ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)

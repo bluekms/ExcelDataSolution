@@ -1,13 +1,14 @@
-﻿using Microsoft.CodeAnalysis;
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
 
-public sealed record RawParameterSchema(
+public abstract record ParameterSchemaBase(
     ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
-    IReadOnlyList<AttributeSyntax> AttributeList)
+    ImmutableList<AttributeSyntax> AttributeList)
 {
     public bool IsNullable()
     {
@@ -18,4 +19,6 @@ public sealed record RawParameterSchema(
     {
         return ParameterName.FullName;
     }
+
+    public abstract void CheckCompatibility(string argument);
 }

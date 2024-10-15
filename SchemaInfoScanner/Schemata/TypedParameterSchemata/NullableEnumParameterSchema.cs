@@ -7,7 +7,7 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 
 public sealed record NullableEnumParameterSchema(
-    RecordParameterName ParameterName,
+    ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> AttributeList,
     IReadOnlyList<string> EnumMembers)
