@@ -5,7 +5,7 @@ using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
 
-public sealed record RecordSchema(
+public sealed record RawRecordSchema(
     RecordName RecordName,
     INamedTypeSymbol NamedTypeSymbol,
     ImmutableList<AttributeSyntax> RecordAttributeList,

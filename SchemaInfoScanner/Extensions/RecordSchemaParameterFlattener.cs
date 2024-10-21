@@ -15,16 +15,16 @@ public static partial class RecordSchemaParameterFlattener
     private static partial Regex RegexForIndex();
 
     public static IReadOnlyList<string> Flatten(
-        this RecordSchema recordSchema,
+        this RawRecordSchema rawRecordSchema,
         RecordSchemaContainer recordSchemaContainer,
         IReadOnlyDictionary<string, int> containerLengths,
         ILogger logger)
     {
-        return OnFlatten(recordSchema, recordSchemaContainer, containerLengths, string.Empty, logger);
+        return OnFlatten(rawRecordSchema, recordSchemaContainer, containerLengths, string.Empty, logger);
     }
 
     private static List<string> OnFlatten(
-        this RecordSchema recordSchema,
+        this RawRecordSchema rawRecordSchema,
         RecordSchemaContainer recordSchemaContainer,
         IReadOnlyDictionary<string, int> containerLengths,
         string parentPrefix,
@@ -32,7 +32,7 @@ public static partial class RecordSchemaParameterFlattener
     {
         var headers = new List<string>();
 
-        foreach (var parameter in recordSchema.RecordParameterSchemaList)
+        foreach (var parameter in rawRecordSchema.RecordParameterSchemaList)
         {
             var name = parameter.ParameterName.Name;
             if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))

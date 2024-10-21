@@ -10,12 +10,12 @@ namespace SchemaInfoScanner.Extensions;
 public static class RecordSchemaLengthRequiringFieldDetector
 {
     public static HashSet<string> DetectLengthRequiringFields(
-        this RecordSchema recordSchema,
+        this RawRecordSchema rawRecordSchema,
         RecordSchemaContainer recordSchemaContainer,
         string parentPrefix = "")
     {
         var results = new HashSet<string>();
-        foreach (var parameter in recordSchema.RecordParameterSchemaList)
+        foreach (var parameter in rawRecordSchema.RecordParameterSchemaList)
         {
             var name = parameter.ParameterName.Name;
             if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))

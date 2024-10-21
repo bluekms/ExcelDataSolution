@@ -35,7 +35,7 @@ public class FindLengthRequiredNamesTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
 
         var expected = new HashSet<string>
         {
@@ -69,7 +69,7 @@ public class FindLengthRequiredNamesTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
 
         var expected = new HashSet<string>
         {
@@ -103,7 +103,7 @@ public class FindLengthRequiredNamesTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
 
         var expected = new HashSet<string>
         {
@@ -135,7 +135,7 @@ public class FindLengthRequiredNamesTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
 
         var expected = new HashSet<string>
         {
@@ -176,7 +176,7 @@ public class FindLengthRequiredNamesTest
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
 
         var expected = new HashSet<string>
         {

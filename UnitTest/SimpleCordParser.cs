@@ -10,7 +10,7 @@ namespace UnitTest;
 
 public static class SimpleCordParser
 {
-    public sealed record Result(RecordSchema RecordSchema, RecordSchemaContainer RecordSchemaContainer);
+    public sealed record Result(RawRecordSchema RawRecordSchema, RecordSchemaContainer RecordSchemaContainer);
 
     public static Result Parse(string code, ILogger logger)
     {

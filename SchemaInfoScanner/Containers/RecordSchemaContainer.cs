@@ -10,11 +10,11 @@ namespace SchemaInfoScanner.Containers;
 
 public sealed class RecordSchemaContainer
 {
-    public IReadOnlyDictionary<RecordName, RecordSchema> RecordSchemaDictionary { get; }
+    public IReadOnlyDictionary<RecordName, RawRecordSchema> RecordSchemaDictionary { get; }
 
     public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
-        var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaCollector.Count);
+        var recordSchemata = new Dictionary<RecordName, RawRecordSchema>(recordSchemaCollector.Count);
         foreach (var recordName in recordSchemaCollector.RecordNames)
         {
             var namedTypeSymbol = recordSchemaCollector.GetNamedTypeSymbol(recordName);
@@ -27,7 +27,7 @@ public sealed class RecordSchemaContainer
         RecordSchemaDictionary = recordSchemata;
     }
 
-    public IReadOnlyList<RecordSchema> GetStaticDataRecordSchemata()
+    public IReadOnlyList<RawRecordSchema> GetStaticDataRecordSchemata()
     {
         return RecordSchemaDictionary.Values
             .Where(x => x.HasAttribute<StaticDataRecordAttribute>())

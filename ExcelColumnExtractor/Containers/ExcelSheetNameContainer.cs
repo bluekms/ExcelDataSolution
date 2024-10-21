@@ -11,9 +11,9 @@ public sealed class ExcelSheetNameContainer(
 {
     public int Count => sheetNames.Count;
 
-    public ExcelSheetName Get(RecordSchema recordSchema)
+    public ExcelSheetName Get(RawRecordSchema rawRecordSchema)
     {
-        var values = recordSchema.GetAttributeValueList<StaticDataRecordAttribute>();
+        var values = rawRecordSchema.GetAttributeValueList<StaticDataRecordAttribute>();
         var excelSheetNameString = $"{values[0]}.{values[1]}";
 
         return sheetNames[excelSheetNameString];
