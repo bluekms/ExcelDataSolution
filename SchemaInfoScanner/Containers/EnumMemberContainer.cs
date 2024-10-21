@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
 
@@ -16,11 +15,8 @@ public sealed class EnumMemberContainer
 
     public EnumMemberContainer(RecordSchemaLoader.Result loadResult)
     {
-        Collect(loadResult);
-    }
-
-    public void Collect(RecordSchemaLoader.Result loadResult)
-    {
-        var result = ParseOptions(l)
+        var enumMemberCollector = new EnumMemberCollector();
+        enumMemberCollector.Collect(loadResult);
+        enumMemberDictionary = enumMemberCollector.AsReadOnly();
     }
 }

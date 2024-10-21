@@ -46,7 +46,9 @@ public class PrimitiveTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
@@ -84,7 +86,9 @@ public class PrimitiveTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
@@ -108,7 +112,9 @@ public class PrimitiveTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
         var nullableParameter = recordSchema.RecordParameterSchemaList[0];
         var notnullParameter = recordSchema.RecordParameterSchemaList[1];

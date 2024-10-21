@@ -31,7 +31,9 @@ public class RecordTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, new(), logger);
@@ -60,7 +62,8 @@ public class RecordTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values)
         {
@@ -88,7 +91,9 @@ public class RecordTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)

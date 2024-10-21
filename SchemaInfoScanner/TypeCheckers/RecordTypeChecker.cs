@@ -46,7 +46,6 @@ internal static class RecordTypeChecker
         LogTrace(logger, $"{rawRecordSchema.RecordName.FullName} Finished.", null);
     }
 
-    internal static RawRecordSchema CheckAndGetSchema(
     public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
     {
         var methodSymbols = symbol
@@ -79,11 +78,6 @@ internal static class RecordTypeChecker
         if (rawRecordSchema.HasAttribute<StaticDataRecordAttribute>())
         {
             throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}. cannot be used as a parameter for another static data record.");
-        }
-
-        if (rawRecordSchema.HasAttribute<DefaultValueAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(DefaultValueAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}.");
         }
 
         if (rawRecordSchema.HasAttribute<MaxCountAttribute>())
