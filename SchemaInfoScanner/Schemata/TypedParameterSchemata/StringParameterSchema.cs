@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
@@ -11,7 +10,7 @@ namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 public sealed record StringParameterSchema(
     ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
-    ImmutableList<AttributeSyntax> AttributeList)
+    IReadOnlyList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
 {
     public override void CheckCompatibility(string argument)

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
@@ -9,7 +8,7 @@ namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 public sealed record NullableInt32ParameterSchema(
     ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
-    ImmutableList<AttributeSyntax> AttributeList)
+    IReadOnlyList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
 {
     public override void CheckCompatibility(string argument)
