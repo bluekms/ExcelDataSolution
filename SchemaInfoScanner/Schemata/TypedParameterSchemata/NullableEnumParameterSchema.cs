@@ -25,7 +25,11 @@ public sealed record NullableEnumParameterSchema(
             return;
         }
 
-        var schema = new EnumParameterSchema(ParameterName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(argument, enumMemberContainer);
+        var enumName = new EnumName(NamedTypeSymbol.TypeArguments.First().Name);
+        var enumMembers = enumMemberContainer.GetEnumMembers(enumName);
+        if (!enumMembers.Contains(argument))
+        {
+            throw new InvalidOperationException($"{argument} is not a member of {enumName.FullName}.");
+        }
     }
 }

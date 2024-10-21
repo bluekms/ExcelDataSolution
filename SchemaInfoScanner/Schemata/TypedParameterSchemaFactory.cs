@@ -1,7 +1,5 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedParameterSchemata;
@@ -11,36 +9,32 @@ namespace SchemaInfoScanner.Schemata;
 
 public static class TypedParameterSchemaFactory
 {
-    public static ParameterSchemaBase Create(
-        ParameterName parameterName,
-        INamedTypeSymbol namedTypeSymbol,
-        ImmutableList<AttributeSyntax> attributeList,
-        EnumMemberContainer enumMemberContainer)
+    public static ParameterSchemaBase Create(RawParameterSchema rawParameterSchema)
     {
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
+        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(rawParameterSchema.NamedTypeSymbol))
         {
-            return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList, enumMemberContainer);
+            throw new TypeNotSupportedException($"{rawParameterSchema.NamedTypeSymbol.Name} is not supported primitive type.");
         }
 
-        throw new NotImplementedException();
+        return CreatePrimitiveParameterSchema(
+            rawParameterSchema.ParameterName,
+            rawParameterSchema.NamedTypeSymbol,
+            rawParameterSchema.AttributeList);
     }
 
     private static ParameterSchemaBase CreatePrimitiveParameterSchema(
         ParameterName parameterName,
         INamedTypeSymbol namedTypeSymbol,
-        ImmutableList<AttributeSyntax> attributeList,
-        EnumMemberContainer enumMemberContainer)
+        IReadOnlyList<AttributeSyntax> attributeList)
     {
         var isNullable = namedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
-        /*
         if (namedTypeSymbol.TypeKind is TypeKind.Enum)
         {
             return isNullable
                 ? new NullableEnumParameterSchema(parameterName, namedTypeSymbol, attributeList)
                 : new EnumParameterSchema(parameterName, namedTypeSymbol, attributeList);
         }
-        */
 
         if (isNullable)
         {

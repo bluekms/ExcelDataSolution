@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
@@ -8,7 +7,7 @@ namespace SchemaInfoScanner.Schemata;
 public abstract record ParameterSchemaBase(
     ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
-    ImmutableList<AttributeSyntax> AttributeList)
+    IReadOnlyList<AttributeSyntax> AttributeList)
 {
     public bool IsNullable()
     {

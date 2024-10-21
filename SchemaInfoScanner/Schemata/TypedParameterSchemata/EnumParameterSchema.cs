@@ -18,11 +18,11 @@ public sealed record EnumParameterSchema(
 
     public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer)
     {
-        /*
-        if (EnumMembers.Contains(argument) is false)
+        var enumName = new EnumName(NamedTypeSymbol.Name);
+        var enumMembers = enumMemberContainer.GetEnumMembers(enumName);
+        if (!enumMembers.Contains(argument))
         {
-            throw new ArgumentException($"{argument} is not a valid enum member.");
+            throw new InvalidOperationException($"{argument} is not a member of {enumName.FullName}.");
         }
-        */
     }
 }

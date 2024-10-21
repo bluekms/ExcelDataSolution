@@ -19,4 +19,9 @@ public sealed class EnumMemberContainer
         enumMemberCollector.Collect(loadResult);
         enumMemberDictionary = enumMemberCollector.AsReadOnly();
     }
+
+    public IReadOnlyList<string> GetEnumMembers(EnumName enumName)
+    {
+        return enumMemberDictionary[enumName];
+    }
 }
