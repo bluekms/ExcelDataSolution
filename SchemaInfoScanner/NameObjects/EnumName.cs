@@ -11,7 +11,11 @@ public class EnumName : IEquatable<EnumName>
     public EnumName(EnumDeclarationSyntax enumDeclaration)
     {
         Name = enumDeclaration.Identifier.ValueText;
-        FullName = $"{enumDeclaration.GetNamespace()}.{Name}";
+
+        var namespaceName = enumDeclaration.GetNamespace();
+        FullName = string.IsNullOrEmpty(namespaceName)
+            ? Name
+            : $"{namespaceName}.{Name}";
     }
 
     public EnumName(string fullName)
