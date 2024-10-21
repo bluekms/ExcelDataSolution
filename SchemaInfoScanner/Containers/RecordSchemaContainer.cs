@@ -52,10 +52,10 @@ public sealed class RecordSchemaContainer
                 }
             }
 
-            if (recordSchema.RecordParameterSchemaList.Count > 0)
+            if (recordSchema.RawParameterSchemaList.Count > 0)
             {
                 sb.AppendLine("Parameters:");
-                foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+                foreach (var recordParameterSchema in recordSchema.RawParameterSchemaList)
                 {
                     sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.ParameterName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");

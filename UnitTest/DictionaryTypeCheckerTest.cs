@@ -45,7 +45,7 @@ public class DictionaryTypeCheckerTest
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -83,7 +83,7 @@ public class DictionaryTypeCheckerTest
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -320,7 +320,7 @@ public class DictionaryTypeCheckerTest
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }

@@ -16,6 +16,6 @@ public sealed record RawParameterSchema(
 
     public override string ToString()
     {
-        return ParameterName.FullName;
+        return $"(Raw) {ParameterName.FullName}";
     }
 }

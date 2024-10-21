@@ -32,7 +32,7 @@ public static partial class RecordSchemaParameterFlattener
     {
         var headers = new List<string>();
 
-        foreach (var parameter in rawRecordSchema.RecordParameterSchemaList)
+        foreach (var parameter in rawRecordSchema.RawParameterSchemaList)
         {
             var name = parameter.ParameterName.Name;
             if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))

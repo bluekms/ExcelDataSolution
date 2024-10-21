@@ -96,7 +96,7 @@ public class RecordTypeCheckerTest
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
-        foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var recordParameterSchema in recordSchema.RawParameterSchemaList)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, new(), logger);
         }

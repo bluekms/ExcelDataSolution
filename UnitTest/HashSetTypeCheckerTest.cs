@@ -56,7 +56,7 @@ public class HashSetTypeCheckerTest
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -99,7 +99,7 @@ public class HashSetTypeCheckerTest
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -150,7 +150,7 @@ public class HashSetTypeCheckerTest
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -223,7 +223,7 @@ public class HashSetTypeCheckerTest
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -276,7 +276,7 @@ public class HashSetTypeCheckerTest
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }

@@ -51,7 +51,7 @@ public class PrimitiveTypeCheckerTest
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -91,7 +91,7 @@ public class PrimitiveTypeCheckerTest
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -116,8 +116,8 @@ public class PrimitiveTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-        var nullableParameter = recordSchema.RecordParameterSchemaList[0];
-        var notnullParameter = recordSchema.RecordParameterSchemaList[1];
+        var nullableParameter = recordSchema.RawParameterSchemaList[0];
+        var notnullParameter = recordSchema.RawParameterSchemaList[1];
 
         PrimitiveTypeChecker.Check(nullableParameter);
         Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(notnullParameter));
