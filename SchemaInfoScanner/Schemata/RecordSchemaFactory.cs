@@ -4,6 +4,7 @@ using SchemaInfoScanner.TypeCheckers;
 
 namespace SchemaInfoScanner.Schemata;
 
+// TODO RawRecordSchema가 필요없을것 같음. 이걸 하는곳은 DataBodyChecker 이기 때문 여기는 length정보도 있음
 public static class RecordSchemaFactory
 {
     public static RecordSchema Create(RawRecordSchema schema, EnumMemberContainer enumMemberContainer)
