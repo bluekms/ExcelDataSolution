@@ -4,10 +4,10 @@ using SchemaInfoScanner.Schemata;
 namespace ExcelColumnExtractor.Containers;
 
 public class TargetColumnIndicesContainer(
-    IReadOnlyDictionary<RecordSchema, RequiredHeadersChecker.TargetColumnIndices> targetColumnIndices)
+    IReadOnlyDictionary<RawRecordSchema, RequiredHeadersChecker.TargetColumnIndices> targetColumnIndices)
 {
-    public RequiredHeadersChecker.TargetColumnIndices Get(RecordSchema recordSchema)
+    public RequiredHeadersChecker.TargetColumnIndices Get(RawRecordSchema rawRecordSchema)
     {
-        return targetColumnIndices[recordSchema];
+        return targetColumnIndices[rawRecordSchema];
     }
 }

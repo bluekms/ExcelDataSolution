@@ -44,7 +44,7 @@ public class RecordSchemaParameterFlattenerTest
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -83,7 +83,7 @@ public class RecordSchemaParameterFlattenerTest
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -122,7 +122,7 @@ public class RecordSchemaParameterFlattenerTest
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -161,7 +161,7 @@ public class RecordSchemaParameterFlattenerTest
             { "SubjectB.Scores", 2 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -192,7 +192,7 @@ public class RecordSchemaParameterFlattenerTest
             { "MyDictionary", 3 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -223,7 +223,7 @@ public class RecordSchemaParameterFlattenerTest
             { "MyDictionary", 3 },
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);
@@ -274,7 +274,7 @@ public class RecordSchemaParameterFlattenerTest
             { "CoreDepartments.Projects.TeamMembers", 4 }
         };
 
-        var results = parseResult.RecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
             this.testOutputHelper.WriteLine(header);

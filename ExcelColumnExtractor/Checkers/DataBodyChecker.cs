@@ -9,7 +9,7 @@ namespace ExcelColumnExtractor.Checkers;
 public static class DataBodyChecker
 {
     public static void Check(
-        IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
+        IReadOnlyList<RawRecordSchema> staticDataRecordSchemaList,
         RecordSchemaContainer recordSchemaContainer,
         ExtractedTableContainer extractedTableContainer,
         ILogger<Program> logger)

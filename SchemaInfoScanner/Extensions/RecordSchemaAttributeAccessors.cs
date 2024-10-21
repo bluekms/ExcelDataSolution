@@ -8,20 +8,20 @@ namespace SchemaInfoScanner.Extensions;
 public static class RecordSchemaAttributeAccessors
 {
     public static bool HasAttribute<T>(
-        this RecordSchema recordSchema)
+        this RawRecordSchema rawRecordSchema)
         where T : Attribute
     {
         var attributeName = typeof(T).Name.Replace("Attribute", string.Empty);
-        return recordSchema.RecordAttributeList.Any(x => x.Name.ToString() == attributeName);
+        return rawRecordSchema.RecordAttributeList.Any(x => x.Name.ToString() == attributeName);
     }
 
     public static TValue GetAttributeValue<TAttribute, TValue>(
-        this RecordSchema recordSchema,
+        this RawRecordSchema rawRecordSchema,
         int attributeParameterIndex)
         where TAttribute : Attribute
     {
         var attributeName = typeof(TAttribute).Name.Replace("Attribute", string.Empty);
-        var attribute = recordSchema.RecordAttributeList.Single(x => x.Name.ToString() == attributeName);
+        var attribute = rawRecordSchema.RecordAttributeList.Single(x => x.Name.ToString() == attributeName);
 
         if (attribute.ArgumentList is null)
         {
@@ -42,14 +42,14 @@ public static class RecordSchemaAttributeAccessors
     }
 
     public static bool TryGetAttributeValue<TAttribute, TValue>(
-        this RecordSchema recordSchema,
+        this RawRecordSchema rawRecordSchema,
         int attributeParameterIndex,
         [NotNullWhen(true)] out TValue? value)
         where TAttribute : Attribute
     {
         try
         {
-            value = recordSchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
+            value = rawRecordSchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
             return value is not null;
         }
         catch (Exception)
@@ -59,10 +59,10 @@ public static class RecordSchemaAttributeAccessors
         }
     }
 
-    public static IReadOnlyList<string> GetAttributeValueList<TAttribute>(this RecordSchema recordSchema)
+    public static IReadOnlyList<string> GetAttributeValueList<TAttribute>(this RawRecordSchema rawRecordSchema)
     {
         var attributeName = typeof(TAttribute).Name.Replace("Attribute", string.Empty);
-        var attribute = recordSchema.RecordAttributeList.Single(x => x.Name.ToString() == attributeName);
+        var attribute = rawRecordSchema.RecordAttributeList.Single(x => x.Name.ToString() == attributeName);
 
         if (attribute.ArgumentList is null)
         {
