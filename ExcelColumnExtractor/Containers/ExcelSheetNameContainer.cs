@@ -6,8 +6,7 @@ using StaticDataAttribute;
 
 namespace ExcelColumnExtractor.Containers;
 
-public sealed class ExcelSheetNameContainer(
-    IReadOnlyDictionary<string, ExcelSheetName> sheetNames)
+public sealed class ExcelSheetNameContainer(IReadOnlyDictionary<string, ExcelSheetName> sheetNames)
 {
     public int Count => sheetNames.Count;
 
