@@ -22,6 +22,19 @@ public static class TypedParameterSchemaFactory
             rawParameterSchema.AttributeList);
     }
 
+    public static ParameterSchemaBase Create(
+        ParameterName parameterName,
+        INamedTypeSymbol namedTypeSymbol,
+        IReadOnlyList<AttributeSyntax> attributeList)
+    {
+        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
+        {
+            throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported primitive type.");
+        }
+
+        return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList);
+    }
+
     private static ParameterSchemaBase CreatePrimitiveParameterSchema(
         ParameterName parameterName,
         INamedTypeSymbol namedTypeSymbol,

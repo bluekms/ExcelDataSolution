@@ -1,18 +1,25 @@
+using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Extensions;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata;
 using SchemaInfoScanner.TypeCheckers;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata;
 
 // TODO RawRecordSchema가 필요없을것 같음. 이걸 하는곳은 DataBodyChecker 이기 때문 여기는 length정보도 있음
 public static class RecordSchemaFactory
 {
-    public static RecordSchema Create(RawRecordSchema schema, EnumMemberContainer enumMemberContainer)
+    public static RecordSchema Create(
+        RawRecordSchema schema,
+        EnumMemberContainer enumMemberContainer,
+        IReadOnlyDictionary<string, int> headerLengths)
     {
         var parameterList = new List<ParameterSchemaBase>();
         foreach (var parameter in schema.RawParameterSchemaList)
         {
-            var list = Process(parameter);
+            var list = Process(parameter, headerLengths);
             parameterList.AddRange(list);
         }
 
@@ -23,7 +30,9 @@ public static class RecordSchemaFactory
             parameterList);
     }
 
-    private static IReadOnlyList<ParameterSchemaBase> Process(RawParameterSchema parameter)
+    private static IReadOnlyList<ParameterSchemaBase> Process(
+        RawParameterSchema parameter,
+        IReadOnlyDictionary<string, int> headerLengths)
     {
         var list = new List<ParameterSchemaBase>();
 
@@ -33,7 +42,28 @@ public static class RecordSchemaFactory
         }
         else if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
         {
-            // length 정보가 필요함
+            var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
+            var innerParameterSchema = TypedParameterSchemaFactory.Create(
+                parameter.ParameterName,
+                typeArgument,
+                parameter.AttributeList);
+
+            if (parameter.HasAttribute<SingleColumnContainerAttribute>())
+            {
+                var separator = parameter.GetAttributeValue<SingleColumnContainerAttribute, string>();
+
+                list.Add(new SingleColumnContainerParameterSchema(
+                    parameter.ParameterName,
+                    parameter.NamedTypeSymbol,
+                    parameter.AttributeList,
+                    separator,
+                    innerParameterSchema));
+            }
+            else
+            {
+                var length = headerLengths[parameter.ParameterName.Name];
+                list.AddRange(Enumerable.Repeat(innerParameterSchema, length));
+            }
         }
         else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
         {
