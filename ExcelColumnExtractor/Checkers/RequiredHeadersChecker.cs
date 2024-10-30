@@ -1,7 +1,8 @@
 using System.Globalization;
 using System.Text;
 using ExcelColumnExtractor.Containers;
-using ExcelColumnExtractor.Parsers;
+using ExcelColumnExtractor.HeaderProcessors;
+using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
@@ -18,28 +19,33 @@ public static class RequiredHeadersChecker
         IReadOnlyList<RawRecordSchema> staticDataRecordSchemaList,
         RecordSchemaContainer recordSchemaContainer,
         ExcelSheetNameContainer sheetNameContainer,
+        HeaderLengthContainer headerLengthContainer,
         ILogger logger)
     {
         var result = new Dictionary<RawRecordSchema, TargetColumnIndices>(staticDataRecordSchemaList.Count);
 
         var sb = new StringBuilder();
-        foreach (var staticDataRecordSchema in staticDataRecordSchemaList)
+        foreach (var recordSchema in staticDataRecordSchemaList)
         {
             try
             {
+                var excelSheetName = sheetNameContainer.Get(recordSchema);
+                var headerLengths = headerLengthContainer.Get(recordSchema);
+
                 var targetColumnIndexSet = CheckAndGetTargetColumns(
-                    staticDataRecordSchema,
+                    recordSchema,
                     recordSchemaContainer,
-                    sheetNameContainer,
+                    excelSheetName,
+                    headerLengths,
                     logger);
 
-                result.Add(staticDataRecordSchema, targetColumnIndexSet);
+                result.Add(recordSchema, targetColumnIndexSet);
             }
             catch (Exception e)
             {
-                var msg = $"{staticDataRecordSchema.RecordName.FullName}: {e.Message}";
+                var msg = $"{recordSchema.RecordName.FullName}: {e.Message}";
                 sb.AppendLine(msg);
-                LogError(logger, staticDataRecordSchema, msg, e);
+                LogError(logger, recordSchema, msg, e);
             }
         }
 
@@ -52,18 +58,17 @@ public static class RequiredHeadersChecker
     }
 
     private static TargetColumnIndices CheckAndGetTargetColumns(
-        RawRecordSchema staticDataRawRecordSchema,
+        RawRecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
-        ExcelSheetNameContainer sheetNameContainer,
+        ExcelSheetName excelSheetName,
+        IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
-        var excelSheetName = sheetNameContainer.Get(staticDataRawRecordSchema);
         var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
-        var standardHeaders = BuildStandardHeaders(staticDataRawRecordSchema, recordSchemaContainer, sheetHeaders, logger);
+        var standardHeaders = recordSchema.Flatten(recordSchemaContainer, headerLengths, logger);
 
         var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(standardHeaders, sheetHeaders);
         var targetHeaders = targetColumnIndexSet.Select(index => sheetHeaders[index]).ToList();
-
         if (targetHeaders.Count != targetColumnIndexSet.Count)
         {
             var sb = new StringBuilder();
@@ -75,17 +80,6 @@ public static class RequiredHeadersChecker
         }
 
         return new(targetHeaders, targetColumnIndexSet);
-    }
-
-    private static IReadOnlyList<string> BuildStandardHeaders(
-        RawRecordSchema rawRecordSchema,
-        RecordSchemaContainer recordSchemaContainer,
-        IReadOnlyList<string> sheetHeaders,
-        ILogger logger)
-    {
-        var lengthRequiredNames = rawRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
-        var containerLengths = HeaderLengthParser.Parse(sheetHeaders, lengthRequiredNames);
-        return rawRecordSchema.Flatten(recordSchemaContainer, containerLengths, logger);
     }
 
     private static HashSet<int> CheckAndGetTargetHeaderIndexSet(IReadOnlyList<string> standardHeaders, IReadOnlyList<string> sheetHeaders)

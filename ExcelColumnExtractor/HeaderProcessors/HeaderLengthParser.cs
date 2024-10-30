@@ -1,8 +1,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
-using StaticDataAttribute;
 
-namespace ExcelColumnExtractor.Parsers;
+namespace ExcelColumnExtractor.HeaderProcessors;
 
 public static class HeaderLengthParser
 {

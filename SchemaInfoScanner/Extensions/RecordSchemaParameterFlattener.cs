@@ -17,10 +17,10 @@ public static partial class RecordSchemaParameterFlattener
     public static IReadOnlyList<string> Flatten(
         this RawRecordSchema rawRecordSchema,
         RecordSchemaContainer recordSchemaContainer,
-        IReadOnlyDictionary<string, int> containerLengths,
+        IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
-        return OnFlatten(rawRecordSchema, recordSchemaContainer, containerLengths, string.Empty, logger);
+        return OnFlatten(rawRecordSchema, recordSchemaContainer, headerLengths, string.Empty, logger);
     }
 
     private static List<string> OnFlatten(
