@@ -5,6 +5,8 @@ using CLICommonLibrary;
 using CommandLine;
 using ExcelColumnExtractor.Aggregator;
 using ExcelColumnExtractor.Checkers;
+using ExcelColumnExtractor.Containers;
+using ExcelColumnExtractor.HeaderProcessors;
 using ExcelColumnExtractor.Scanners;
 using ExcelColumnExtractor.Writers;
 using Microsoft.Extensions.Logging;
@@ -48,10 +50,20 @@ public class Program
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(SheetNameScanner), null);
 
         sw.Restart();
+        var headerLengthContainer = HeaderLengthBuilder.Build(
+            staticDataRecordSchemaList,
+            recordSchemaContainer,
+            sheetNameContainer,
+            logger);
+        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(HeaderLengthBuilder), null);
+
+        sw.Restart();
+
         var targetColumnIndicesContainer = RequiredHeadersChecker.Check(
             staticDataRecordSchemaList,
             recordSchemaContainer,
             sheetNameContainer,
+            headerLengthContainer,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RequiredHeadersChecker), null);
 
@@ -64,10 +76,13 @@ public class Program
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(BodyColumnAggregator), null);
 
         sw.Restart();
+
+        // use length
         DataBodyChecker.Check(
             staticDataRecordSchemaList,
             recordSchemaContainer,
             extractedTableContainer,
+            headerLengthContainer,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
 
