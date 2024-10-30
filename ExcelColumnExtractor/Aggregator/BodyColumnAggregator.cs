@@ -1,5 +1,6 @@
 using System.Text;
 using ExcelColumnExtractor.Containers;
+using ExcelColumnExtractor.Exceptions;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata;
@@ -13,7 +14,7 @@ public static class BodyColumnAggregator
     public sealed record ExtractedTable(IReadOnlyList<string> Headers, IReadOnlyList<ExtractedRow> Rows);
 
     public static ExtractedTableContainer Aggregate(
-        IReadOnlyList<RawRecordSchema> staticDataRecordSchemaList,
+        IReadOnlyList<RawRecordSchema> recordSchemaList,
         ExcelSheetNameContainer sheetNameContainer,
         TargetColumnIndicesContainer targetColumnIndicesContainer,
         ILogger logger)
@@ -21,13 +22,13 @@ public static class BodyColumnAggregator
         var result = new Dictionary<RawRecordSchema, ExtractedTable>();
 
         var sb = new StringBuilder();
-        foreach (var staticDataRecordSchema in staticDataRecordSchemaList)
+        foreach (var recordSchema in recordSchemaList)
         {
             try
             {
-                var excelSheetName = sheetNameContainer.Get(staticDataRecordSchema);
+                var excelSheetName = sheetNameContainer.Get(recordSchema);
                 var sheetBody = SheetBodyScanner.Scan(excelSheetName, logger);
-                var targetColumnData = targetColumnIndicesContainer.Get(staticDataRecordSchema);
+                var targetColumnData = targetColumnIndicesContainer.Get(recordSchema);
 
                 var filteredRows = sheetBody.Rows
                     .Select(row => new ExtractedRow(row.Data
@@ -35,18 +36,18 @@ public static class BodyColumnAggregator
                         .ToList()))
                     .ToList();
 
-                result.Add(staticDataRecordSchema, new(targetColumnData.Headers, filteredRows));
+                result.Add(recordSchema, new(targetColumnData.Headers, filteredRows));
             }
             catch (Exception e)
             {
                 sb.AppendLine(e.Message);
-                LogError(logger, staticDataRecordSchema, e.Message, e);
+                LogError(logger, recordSchema, e.Message, e);
             }
         }
 
         if (sb.Length > 0)
         {
-            throw new AggregateException(sb.ToString());
+            throw new BodyColumnAggregatorException(sb.ToString());
         }
 
         return new(result);
