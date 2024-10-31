@@ -67,6 +67,9 @@ public static class RecordSchemaFactory
         }
         else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
         {
+            var typeArgument = DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol)
+                ? (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last()
+                : (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
         }
         else if (RecordTypeChecker.IsSupportedRecordType(parameter.NamedTypeSymbol))
         {
