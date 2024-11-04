@@ -47,14 +47,8 @@ internal static class HashSetTypeChecker
             throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
         }
 
-        var recordName = new RecordName(typeArgument);
-        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
-        {
-            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported type.", innerException);
-        }
-
-        RecordTypeChecker.Check(typeArgumentSchema, recordSchemaContainer, visited, logger);
+        var innerRecordSchema = rawParameter.FindInnerRecordSchema(recordSchemaContainer);
+        RecordTypeChecker.Check(innerRecordSchema, recordSchemaContainer, visited, logger);
     }
 
     private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
