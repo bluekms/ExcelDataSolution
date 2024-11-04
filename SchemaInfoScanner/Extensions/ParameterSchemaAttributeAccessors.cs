@@ -4,7 +4,7 @@ using SchemaInfoScanner.Schemata;
 
 namespace SchemaInfoScanner.Extensions;
 
-public static class RecordParameterSchemaAttributeAccessors
+public static class ParameterSchemaAttributeAccessors
 {
     public static bool HasAttribute<T>(
         this RawParameterSchema rawParameterSchema)
