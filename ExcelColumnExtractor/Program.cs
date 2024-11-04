@@ -16,6 +16,7 @@ namespace ExcelColumnExtractor;
 
 public class Program
 {
+    // TODO 대용량 파일 예제까지 잘 처리한 뒤에 파일별 병렬성을 도입해 시간단축 여부를 확인해보자
     public static void Main(string[] args)
     {
         Parser.Default.ParseArguments<ProgramOptions>(args)
