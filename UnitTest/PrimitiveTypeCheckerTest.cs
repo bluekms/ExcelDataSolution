@@ -8,19 +8,12 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class PrimitiveTypeCheckerTest
+public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void Test()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
@@ -60,7 +53,7 @@ public class PrimitiveTypeCheckerTest
     [Fact]
     public void NullableTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
@@ -100,7 +93,7 @@ public class PrimitiveTypeCheckerTest
     [Fact]
     public void NullableAttributeTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
@@ -13,13 +14,14 @@ public static class RecordSchemaFactory
 {
     public static RecordSchema Create(
         RawRecordSchema schema,
+        RecordSchemaContainer recordSchemaContainer,
         EnumMemberContainer enumMemberContainer,
         IReadOnlyDictionary<string, int> headerLengths)
     {
         var parameterList = new List<ParameterSchemaBase>();
         foreach (var parameter in schema.RawParameterSchemaList)
         {
-            var list = Process(parameter, headerLengths);
+            var list = Process(parameter, recordSchemaContainer, headerLengths);
             parameterList.AddRange(list);
         }
 
@@ -30,8 +32,9 @@ public static class RecordSchemaFactory
             parameterList);
     }
 
-    private static IReadOnlyList<ParameterSchemaBase> Process(
+    private static ReadOnlyCollection<ParameterSchemaBase> Process(
         RawParameterSchema parameter,
+        RecordSchemaContainer recordSchemaContainer,
         IReadOnlyDictionary<string, int> headerLengths)
     {
         var list = new List<ParameterSchemaBase>();
@@ -67,18 +70,27 @@ public static class RecordSchemaFactory
         }
         else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
         {
-            var typeArgument = DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol)
-                ? (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last()
-                : (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
+            var innerRecordSchema = parameter.FindInnerRecordSchema(recordSchemaContainer);
+
+            var innerList = new List<ParameterSchemaBase>();
+            foreach (var innerRecordParameter in innerRecordSchema.RawParameterSchemaList)
+            {
+                var result = Process(innerRecordParameter, recordSchemaContainer, headerLengths);
+                innerList.AddRange(result);
+            }
+
+            var length = headerLengths[parameter.ParameterName.Name];
+            list.AddRange(Enumerable.Repeat(innerList, length).SelectMany(x => x));
         }
         else if (RecordTypeChecker.IsSupportedRecordType(parameter.NamedTypeSymbol))
         {
+            //var recordSchema = recordSchemaContainer
         }
         else
         {
             throw new TypeNotSupportedException($"{parameter.NamedTypeSymbol.Name} is not supported type.");
         }
 
-        return list;
+        return list.AsReadOnly();
     }
 }
