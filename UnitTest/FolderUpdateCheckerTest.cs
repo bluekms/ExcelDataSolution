@@ -1,6 +1,7 @@
 using ExcelColumnExtractor.Checkers;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
+using UnitTest.Utility;
 using Xunit.Abstractions;
 
 namespace UnitTest;
