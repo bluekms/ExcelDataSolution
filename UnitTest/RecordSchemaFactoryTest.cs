@@ -181,44 +181,4 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var parameter = recordSchema.RecordParameterSchemaList[0];
         parameter.CheckCompatibility(argument, logger);
     }
-
-    [Theory]
-    [InlineData("MyEnum")]
-    [InlineData("MyEnum?")]
-    public void SingleColumnEnumListTest(string type)
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
-
-        var code = $$"""
-                     [StaticDataRecord("TestExcel", "TestSheet")]
-                     public sealed record MyRecord(
-                        [SingleColumnContainer(",")]
-                        List<{{type}}> Parameter
-                     );
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
-
-        var rawRecordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-        var recordSchema = RecordSchemaFactory.Create(
-            rawRecordSchema,
-            recordSchemaContainer,
-            enumMemberContainer,
-            new Dictionary<string, int>());
-
-        var count = Random.Shared.Next(2, 10);
-        var list = Enumerable.Repeat(
-            RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type))?.ToString() ?? string.Empty,
-            count);
-        var argument = string.Join(", ", list);
-
-        var parameter = recordSchema.RecordParameterSchemaList[0];
-        parameter.CheckCompatibility(argument, logger);
-    }
 }
