@@ -1,12 +1,19 @@
-using System.Reflection;
-
 namespace UnitTest.Utility;
 
 public static class RandomValueGenerator
 {
-    public static T Generate<T>()
+    public static T? Generate<T>()
     {
         var type = typeof(T);
+        var isNullable = Nullable.GetUnderlyingType(type) != null;
+        if (isNullable)
+        {
+            if (Random.Shared.NextDouble() < 0.25)
+            {
+                return default;
+            }
+        }
+
         if (type.IsEnum)
         {
             var values = Enum.GetValues(type);
@@ -29,8 +36,17 @@ public static class RandomValueGenerator
         throw new NotSupportedException($"Type {type} is not supported");
     }
 
-    public static object Generate(Type type)
+    public static object? Generate(Type type)
     {
+        var isNullable = Nullable.GetUnderlyingType(type) != null;
+        if (isNullable)
+        {
+            if (Random.Shared.NextDouble() < 0.25)
+            {
+                return null;
+            }
+        }
+
         if (type.IsEnum)
         {
             var values = Enum.GetValues(type);
