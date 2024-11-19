@@ -1,5 +1,4 @@
-using System.Collections.Frozen;
-using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Collectors;
@@ -7,6 +6,10 @@ namespace SchemaInfoScanner.Collectors;
 public class EnumMemberCollector
 {
     private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = new();
+
+    public EnumMemberCollector()
+    {
+    }
 
     public void Collect(RecordSchemaLoader.Result loadResult)
     {
@@ -18,10 +21,8 @@ public class EnumMemberCollector
         }
     }
 
-    public FrozenDictionary<EnumName, ImmutableList<string>> ToFrozenDictionary()
+    public ReadOnlyDictionary<EnumName, IReadOnlyList<string>> AsReadOnly()
     {
-        return enumMemberDictionary
-            .ToDictionary(pair => pair.Key, pair => pair.Value.ToImmutableList())
-            .ToFrozenDictionary();
+        return enumMemberDictionary.AsReadOnly();
     }
 }
