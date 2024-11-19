@@ -12,7 +12,8 @@ public sealed class RecordSchemaContainer
 {
     public IReadOnlyDictionary<RecordName, RawRecordSchema> RecordSchemaDictionary { get; }
 
-    public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
+    // TODO RawParameterSchema 를 TypedParameterSchema로 생성해주는 팩토리를 추가하고 그 과정에서 enumMemberContainer가 사용된다
+    public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector, EnumMemberContainer enumMemberContainer)
     {
         var recordSchemata = new Dictionary<RecordName, RawRecordSchema>(recordSchemaCollector.Count);
         foreach (var recordName in recordSchemaCollector.RecordNames)
@@ -51,10 +52,10 @@ public sealed class RecordSchemaContainer
                 }
             }
 
-            if (recordSchema.RecordParameterSchemaList.Count > 0)
+            if (recordSchema.RawParameterSchemaList.Count > 0)
             {
                 sb.AppendLine("Parameters:");
-                foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+                foreach (var recordParameterSchema in recordSchema.RawParameterSchemaList)
                 {
                     sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.ParameterName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");

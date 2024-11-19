@@ -15,7 +15,7 @@ public static class RecordSchemaLengthRequiringFieldDetector
         string parentPrefix = "")
     {
         var results = new HashSet<string>();
-        foreach (var parameter in rawRecordSchema.RecordParameterSchemaList)
+        foreach (var parameter in rawRecordSchema.RawParameterSchemaList)
         {
             var name = parameter.ParameterName.Name;
             if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))
