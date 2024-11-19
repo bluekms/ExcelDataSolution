@@ -4,23 +4,17 @@ using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
+using UnitTest.Utility;
 using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class PrimitiveTypeCheckerTest
+public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void Test()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
@@ -46,10 +40,12 @@ public class PrimitiveTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -58,7 +54,7 @@ public class PrimitiveTypeCheckerTest
     [Fact]
     public void NullableTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
@@ -84,10 +80,12 @@ public class PrimitiveTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -96,7 +94,7 @@ public class PrimitiveTypeCheckerTest
     [Fact]
     public void NullableAttributeTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
         var logger = factory.CreateLogger<RecordScanTest>();
 
         var code = @"
@@ -108,10 +106,12 @@ public class PrimitiveTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-        var nullableParameter = recordSchema.RecordParameterSchemaList[0];
-        var notnullParameter = recordSchema.RecordParameterSchemaList[1];
+        var nullableParameter = recordSchema.RawParameterSchemaList[0];
+        var notnullParameter = recordSchema.RawParameterSchemaList[1];
 
         PrimitiveTypeChecker.Check(nullableParameter);
         Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(notnullParameter));

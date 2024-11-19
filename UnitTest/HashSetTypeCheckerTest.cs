@@ -5,6 +5,7 @@ using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.TypeCheckers;
+using UnitTest.Utility;
 using Xunit.Abstractions;
 
 namespace UnitTest;
@@ -49,12 +50,14 @@ public class HashSetTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -91,12 +94,13 @@ public class HashSetTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -115,8 +119,10 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
@@ -136,14 +142,16 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -164,8 +172,10 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
@@ -184,8 +194,10 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
@@ -205,13 +217,14 @@ public class HashSetTypeCheckerTest
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
@@ -232,8 +245,10 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
     }
@@ -253,14 +268,16 @@ public class HashSetTypeCheckerTest
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordName = new RecordName("MyRecord");
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }

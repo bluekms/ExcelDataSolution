@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
-namespace UnitTest;
+namespace UnitTest.Utility;
 
 public class TestOutputLoggerFactory : ILoggerFactory
 {

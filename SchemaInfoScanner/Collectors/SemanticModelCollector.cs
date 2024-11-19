@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.NameObjects;
 
@@ -17,8 +16,8 @@ public class SemanticModelCollector
         }
     }
 
-    public FrozenDictionary<RecordName, SemanticModel> ToFrozenDictionary()
+    public IReadOnlyDictionary<RecordName, SemanticModel> GetSemanticModels()
     {
-        return semanticModelDictionary.ToFrozenDictionary();
+        return semanticModelDictionary;
     }
 }

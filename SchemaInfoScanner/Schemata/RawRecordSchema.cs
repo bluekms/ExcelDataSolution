@@ -8,10 +8,10 @@ public sealed record RawRecordSchema(
     RecordName RecordName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> RecordAttributeList,
-    IReadOnlyList<RawParameterSchema> RecordParameterSchemaList)
+    IReadOnlyList<RawParameterSchema> RawParameterSchemaList)
 {
     public override string ToString()
     {
-        return RecordName.FullName;
+        return $"(Raw) {RecordName.FullName}";
     }
 }

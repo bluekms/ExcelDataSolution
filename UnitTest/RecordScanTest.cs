@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
+using UnitTest.Utility;
 using Xunit.Abstractions;
 
 namespace UnitTest;
@@ -35,7 +36,6 @@ public class RecordScanTest
         var recordSchemaCollector = new RecordSchemaCollector();
         var enumMemberCollector = new EnumMemberCollector();
         var semanticModelCollector = new SemanticModelCollector();
-
         foreach (var loadResult in loadResults)
         {
             recordSchemaCollector.Collect(loadResult);
@@ -43,9 +43,8 @@ public class RecordScanTest
             semanticModelCollector.Collect(loadResult);
         }
 
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        var enumMemberContainer = new EnumSchemaContainer(enumMemberCollector);
-
+        var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
     }
 }

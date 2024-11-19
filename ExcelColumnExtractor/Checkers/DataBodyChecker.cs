@@ -38,5 +38,5 @@ public static class DataBodyChecker
     }
 
     private static readonly Action<ILogger, RawRecordSchema, string, Exception?> LogError =
-        LoggerMessage.Define<RawRecordSchema, string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{RecordSchema}: {ErrorMessage}");
+        LoggerMessage.Define<RawRecordSchema, string>(LogLevel.Error, new EventId(0, nameof(DataBodyChecker)), "{RecordSchema}: {ErrorMessage}");
 }
