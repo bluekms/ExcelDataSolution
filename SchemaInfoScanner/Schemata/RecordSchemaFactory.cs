@@ -84,7 +84,7 @@ public static class RecordSchemaFactory
         }
         else if (RecordTypeChecker.IsSupportedRecordType(parameter.NamedTypeSymbol))
         {
-            //var recordSchema = recordSchemaContainer
+            throw new NotImplementedException();
         }
         else
         {
