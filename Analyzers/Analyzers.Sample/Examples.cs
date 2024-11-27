@@ -4,17 +4,16 @@
 namespace Analyzers.Sample;
 
 // If you don't see warnings, build the Analyzers Project.
-
 public class Examples
 {
     public class MyCompanyClass // Try to apply quick fix using the IDE.
     {
     }
 
-    public void ToStars()
+    public static void ToStars()
     {
         var spaceship = new Spaceship();
-        spaceship.SetSpeed(300000000); // Invalid value, it should be highlighted.
-        spaceship.SetSpeed(42);
+        Spaceship.SetSpeed(300000000); // Invalid value, it should be highlighted.
+        Spaceship.SetSpeed(42);
     }
 }
