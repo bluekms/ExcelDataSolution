@@ -115,27 +115,18 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             enumMemberContainer,
             new Dictionary<string, int>());
 
-        var valueStr = "A";
-
-        if (type.EndsWith('?'))
+        var parameter = recordSchema.RecordParameterSchemaList[0];
+        if (parameter is EnumParameterSchema enumParameter)
         {
-            var parameter = recordSchema.RecordParameterSchemaList[0];
-            if (parameter is not NullableEnumParameterSchema nullableEnumParameter)
-            {
-                throw new InvalidOperationException("NullableEnumParameterSchema is expected.");
-            }
-
-            nullableEnumParameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
+            enumParameter.CheckCompatibility("A", enumMemberContainer, logger);
+        }
+        else if (parameter is NullableEnumParameterSchema nullableEnumParameter)
+        {
+            nullableEnumParameter.CheckCompatibility(string.Empty, enumMemberContainer, logger);
         }
         else
         {
-            var parameter = recordSchema.RecordParameterSchemaList[0];
-            if (parameter is not EnumParameterSchema enumParameter)
-            {
-                throw new InvalidOperationException("EnumParameterSchema is expected.");
-            }
-
-            enumParameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
+            throw new InvalidOperationException("EnumParameterSchema or NullableEnumParameterSchema is expected.");
         }
 
         Assert.Empty(logger.Logs);
