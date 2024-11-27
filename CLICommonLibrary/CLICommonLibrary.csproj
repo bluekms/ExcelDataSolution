@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Analyzers\Analyzers\Analyzers.csproj" />
     <ProjectReference Include="..\SchemaInfoScanner\SchemaInfoScanner.csproj" />
   </ItemGroup>
 

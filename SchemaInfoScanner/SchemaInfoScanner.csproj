@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Analyzers\Analyzers\Analyzers.csproj" />
       <ProjectReference Include="..\StaticDataAttribute\StaticDataAttribute.csproj" />
     </ItemGroup>
 
