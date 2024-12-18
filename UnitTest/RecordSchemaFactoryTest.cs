@@ -202,4 +202,56 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         Assert.Empty(logger.Logs);
     }
+
+    private enum MyEnumForTest
+    {
+        A,
+        B,
+        C,
+    }
+
+    [Theory]
+    [InlineData("List", "MyEnumForTest")]
+    [InlineData("List", "MyEnumForTest?")]
+    [InlineData("HashSet", "MyEnumForTest")]
+    [InlineData("HashSet", "MyEnumForTest?")]
+    public void SingleColumnEnumListTest(string container, string type)
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger Type Error.");
+        }
+
+        var code = $$"""
+                     public enum MyEnumForTest { A, B, C }
+
+                     [StaticDataRecord("TestExcel", "TestSheet")]
+                     public sealed record MyRecord(
+                        [SingleColumnContainer(",")]
+                        {{container}}<{{type}}> Parameter
+                     );
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+
+        var rawRecordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
+        var recordSchema = RecordSchemaFactory.Create(
+            rawRecordSchema,
+            recordSchemaContainer,
+            enumMemberContainer,
+            new Dictionary<string, int>());
+
+        const string argument = "A, B, C";
+
+        var parameter = recordSchema.RecordParameterSchemaList[0];
+        parameter.CheckCompatibility(argument, enumMemberContainer, logger);
+
+        Assert.Empty(logger.Logs);
+    }
 }
