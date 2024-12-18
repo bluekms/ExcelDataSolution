@@ -10,20 +10,16 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class ListTypeCheckerTest
+public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void PrimitiveListTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public enum MyEnum { A, B, C, }
@@ -60,13 +56,18 @@ public class ListTypeCheckerTest
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullablePrimitiveListTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public enum MyEnum { A, B, C, }
@@ -103,13 +104,18 @@ public class ListTypeCheckerTest
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableListNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -124,13 +130,17 @@ public class ListTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void RecordListTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(string Name, int Age);
@@ -154,13 +164,18 @@ public class ListTypeCheckerTest
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableRecordListNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(string Name, int Age);
@@ -177,13 +192,17 @@ public class ListTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NestedContainerListNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -199,13 +218,17 @@ public class ListTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void SingleColumnPrimitiveContainerTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -227,13 +250,18 @@ public class ListTypeCheckerTest
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void SingleColumnRecordContainerNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(string Name, int Age);
@@ -250,13 +278,17 @@ public class ListTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void ImmutableListTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -281,5 +313,7 @@ public class ListTypeCheckerTest
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 }

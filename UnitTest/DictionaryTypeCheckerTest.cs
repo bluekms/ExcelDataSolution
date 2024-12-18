@@ -10,20 +10,16 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class DictionaryTypeCheckerTest
+public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void PrimitiveKeyRecordValueDictionaryTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -50,13 +46,18 @@ public class DictionaryTypeCheckerTest
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void RecordKeyRecordValueDictionaryTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Human(
@@ -88,13 +89,18 @@ public class DictionaryTypeCheckerTest
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -113,13 +119,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void PrimitiveValueDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -133,13 +143,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NullableKeyDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -158,13 +172,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NullableRecordValueDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -184,13 +202,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void RecordWithoutKeyDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -210,13 +232,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void RecordWithDifferentKeyTypesDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -236,13 +262,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NestedContainerKeyDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record NestedRecord(
@@ -262,13 +292,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NestedContainerValueDictionaryNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record DataRecord(
@@ -288,13 +322,17 @@ public class DictionaryTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void ImmutableDictionaryTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(
@@ -325,5 +363,7 @@ public class DictionaryTypeCheckerTest
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 }

@@ -14,16 +14,20 @@ public sealed record EnumParameterSchema(
 {
     protected override void OnCheckCompatibility(string argument, ILogger logger)
     {
-        throw new InvalidOperationException($"{ParameterName.FullName} is enum. Use CheckCompatibility(string, EnumMemberContainer) instead.");
+        throw new InvalidOperationException($"{ParameterName.FullName} is enum. Use CheckCompatibility(string, EnumMemberContainer, ILogger) instead");
     }
 
-    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer)
+    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         var enumName = new EnumName(NamedTypeSymbol.Name);
         var enumMembers = enumMemberContainer.GetEnumMembers(enumName);
         if (!enumMembers.Contains(argument))
         {
-            throw new InvalidOperationException($"{argument} is not a member of {enumName.FullName}.");
+            var ex = new InvalidOperationException($"{argument} is not a member of {enumName.FullName}");
+            LogError(logger, argument, enumName.FullName, ex);
         }
     }
+
+    private static readonly Action<ILogger, string, string, Exception?> LogError =
+        LoggerMessage.Define<string, string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{Argument} is not a member of {EnumFullName}");
 }

@@ -3,6 +3,7 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
@@ -41,8 +42,11 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     [InlineData("ushort?")]
     public void PrimitiveTypeTest(string type)
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = $$"""
                      [StaticDataRecord("TestExcel", "TestSheet")]
@@ -73,6 +77,8 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
             parameter.CheckCompatibility(valueStr, logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Theory]
@@ -80,8 +86,11 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     [InlineData("MyEnum?")]
     public void EnumTypeTest(string type)
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = $$"""
                      public enum MyEnum { A, B, C }
@@ -108,12 +117,28 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var valueStr = "A";
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
-        parameter.CheckCompatibility(valueStr, logger);
         if (type.EndsWith('?'))
         {
-            parameter.CheckCompatibility(string.Empty, logger);
+            var parameter = recordSchema.RecordParameterSchemaList[0];
+            if (parameter is not NullableEnumParameterSchema nullableEnumParameter)
+            {
+                throw new InvalidOperationException("NullableEnumParameterSchema is expected.");
+            }
+
+            nullableEnumParameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
         }
+        else
+        {
+            var parameter = recordSchema.RecordParameterSchemaList[0];
+            if (parameter is not EnumParameterSchema enumParameter)
+            {
+                throw new InvalidOperationException("EnumParameterSchema is expected.");
+            }
+
+            enumParameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
+        }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Theory]
@@ -147,8 +172,11 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     [InlineData("ushort?")]
     public void SingleColumnListTest(string type)
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = $$"""
                      [StaticDataRecord("TestExcel", "TestSheet")]
@@ -180,5 +208,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
         parameter.CheckCompatibility(argument, logger);
+
+        Assert.Empty(logger.Logs);
     }
 }

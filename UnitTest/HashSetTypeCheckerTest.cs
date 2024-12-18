@@ -10,20 +10,16 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class HashSetTypeCheckerTest
+public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void PrimitiveHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public enum MyEnum { A, B, C, }
@@ -61,13 +57,18 @@ public class HashSetTypeCheckerTest
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullablePrimitiveHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public enum MyEnum { A, B, C, }
@@ -104,13 +105,18 @@ public class HashSetTypeCheckerTest
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableHashSetNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -125,13 +131,17 @@ public class HashSetTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void RecordHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(string Name, int Age);
@@ -155,13 +165,18 @@ public class HashSetTypeCheckerTest
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableRecordHashSetNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(string Name, int Age);
@@ -178,13 +193,17 @@ public class HashSetTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NestedContainerHashSetNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -200,13 +219,17 @@ public class HashSetTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void SingleColumnPrimitiveContainerNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -228,13 +251,18 @@ public class HashSetTypeCheckerTest
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void SingleColumnRecordContainerNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record Student(string Name, int Age);
@@ -251,13 +279,17 @@ public class HashSetTypeCheckerTest
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void ImmutableHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -281,5 +313,7 @@ public class HashSetTypeCheckerTest
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 }

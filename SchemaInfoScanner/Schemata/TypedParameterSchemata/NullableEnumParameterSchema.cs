@@ -18,7 +18,7 @@ public sealed record NullableEnumParameterSchema(
         throw new InvalidOperationException($"{ParameterName.FullName} is nullable enum. Use CheckCompatibility(string, EnumMemberContainer) instead.");
     }
 
-    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer)
+    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         var result = NullStringAttributeChecker.Check(this, argument);
         if (result.IsNull)
@@ -26,11 +26,8 @@ public sealed record NullableEnumParameterSchema(
             return;
         }
 
-        var enumName = new EnumName(NamedTypeSymbol.TypeArguments.First().Name);
-        var enumMembers = enumMemberContainer.GetEnumMembers(enumName);
-        if (!enumMembers.Contains(argument))
-        {
-            throw new InvalidOperationException($"{argument} is not a member of {enumName.FullName}.");
-        }
+        var actualNamedTypeSymbol = (INamedTypeSymbol)NamedTypeSymbol.TypeArguments[0];
+        var schema = new EnumParameterSchema(ParameterName, actualNamedTypeSymbol, AttributeList);
+        schema.CheckCompatibility(argument, enumMemberContainer, logger);
     }
 }

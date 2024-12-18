@@ -9,20 +9,16 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class RecordTypeCheckerTest
+public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void Test()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordTypeCheckerTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordTypeCheckerTest>() is not TestOutputLogger<RecordTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record MyRecord(
@@ -38,16 +34,17 @@ public class RecordTypeCheckerTest
         var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
 
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, new(), logger);
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void IgnoreRecordTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordTypeCheckerTest>();
-        if (logger is not TestOutputLogger<RecordTypeCheckerTest> testOutputLogger)
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordTypeCheckerTest>() is not TestOutputLogger<RecordTypeCheckerTest> logger)
         {
-            throw new InvalidOperationException("Logger is not TestOutputLogger<RecordTypeCheckerTest>.");
+            throw new InvalidOperationException("Logger creation failed.");
         }
 
         var code = @"
@@ -71,17 +68,16 @@ public class RecordTypeCheckerTest
             RecordTypeChecker.Check(recordSchema, recordSchemaContainer, new(), logger);
         }
 
-        Assert.Contains("SkipRecord is ignored.", testOutputLogger.Logs.Select(x => x.Message));
+        Assert.Contains("SkipRecord is ignored.", logger.Logs.Select(x => x.Message));
     }
 
     [Fact]
     public void IgnoreParameterTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordTypeCheckerTest>();
-        if (logger is not TestOutputLogger<RecordTypeCheckerTest> testOutputLogger)
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordTypeCheckerTest>() is not TestOutputLogger<RecordTypeCheckerTest> logger)
         {
-            throw new InvalidOperationException("Logger is not TestOutputLogger<RecordTypeCheckerTest>.");
+            throw new InvalidOperationException("Logger creation failed.");
         }
 
         var code = @"
@@ -102,7 +98,7 @@ public class RecordTypeCheckerTest
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, new(), logger);
         }
 
-        Assert.Contains("MyRecord.Age is ignored.", testOutputLogger.Logs.Select(x => x.Message));
+        Assert.Contains("MyRecord.Age is ignored.", logger.Logs.Select(x => x.Message));
     }
 
     [Fact]
@@ -122,10 +118,14 @@ public class RecordTypeCheckerTest
                 int Age,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordTypeCheckerTest>() is not TestOutputLogger<RecordTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.ParseAll(code, logger));
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
@@ -146,9 +146,13 @@ public class RecordTypeCheckerTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordTypeCheckerTest>() is not TestOutputLogger<RecordTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.ParseAll(code, logger));
+        Assert.Single(logger.Logs);
     }
 }

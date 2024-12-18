@@ -8,20 +8,16 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class RecordScanTest
+public class RecordScanTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public RecordScanTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void LoadAndCheckTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordScanTest>() is not TestOutputLogger<RecordScanTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var csPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
@@ -46,5 +42,7 @@ public class RecordScanTest
         var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
+
+        Assert.Empty(logger.Logs);
     }
 }
