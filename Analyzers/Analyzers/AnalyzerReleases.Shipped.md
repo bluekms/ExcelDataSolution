@@ -4,3 +4,4 @@
 
 Rule ID | Category               | Severity | Notes
 --------|------------------------|----------|--------------------
+EDS1001 | Style | Error | Ensure the logger type is
