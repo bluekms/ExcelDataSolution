@@ -13,7 +13,7 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void LoadAndCheckTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordScanTest>() is not TestOutputLogger<RecordScanTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");

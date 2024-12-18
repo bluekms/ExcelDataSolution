@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Extensions;
-using SchemaInfoScanner.Schemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
@@ -25,7 +24,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -63,7 +62,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -101,7 +100,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -137,7 +136,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -182,7 +181,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
                 List<Department> CoreDepartments
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");

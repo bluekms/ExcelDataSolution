@@ -25,7 +25,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -68,7 +68,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -111,7 +111,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -154,7 +154,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -192,7 +192,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 Dictionary<int, MyRecord> MyDictionary,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -227,7 +227,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 Dictionary<Human, MyRecord> MyDictionary,
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -276,7 +276,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 List<Department> CoreDepartments
             );";
 
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");

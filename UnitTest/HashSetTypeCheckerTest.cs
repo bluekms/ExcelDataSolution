@@ -15,7 +15,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void PrimitiveHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -64,7 +64,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void NullablePrimitiveHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -112,7 +112,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void NullableHashSetNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -131,13 +131,13 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
-        Assert.Empty(logger.Logs);
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void RecordHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -172,7 +172,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void NullableRecordHashSetNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -193,13 +193,13 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
-        Assert.Empty(logger.Logs);
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void NestedContainerHashSetNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -219,13 +219,13 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
-        Assert.Empty(logger.Logs);
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void SingleColumnPrimitiveContainerNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -258,7 +258,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void SingleColumnRecordContainerNotSupportedTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
@@ -279,13 +279,13 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
-        Assert.Empty(logger.Logs);
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
     public void ImmutableHashSetTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
