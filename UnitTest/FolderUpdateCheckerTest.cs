@@ -59,7 +59,7 @@ public class FolderUpdateCheckerTest(ITestOutputHelper testOutputHelper)
         FolderUpdateChecker.Check(before, after, logger);
 
         Assert.Single(logger.Logs);
-        Assert.Equal("File Foo was added.", logger.Logs.First());
+        Assert.Equal("File Foo was added.", logger.Logs.First().Message);
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class FolderUpdateCheckerTest(ITestOutputHelper testOutputHelper)
         FolderUpdateChecker.Check(before, after, logger);
 
         Assert.Single(logger.Logs);
-        Assert.Equal("File Foo was removed.", logger.Logs.First());
+        Assert.Equal("File Foo was removed.", logger.Logs.First().Message);
     }
 
     [Fact]
@@ -102,7 +102,7 @@ public class FolderUpdateCheckerTest(ITestOutputHelper testOutputHelper)
         FolderUpdateChecker.Check(before, after, logger);
 
         Assert.Single(logger.Logs);
-        Assert.Equal("File dummy was updated after the last capture.", logger.Logs.First());
+        Assert.Equal("File dummy was updated after the last capture.", logger.Logs.First().Message);
     }
 
     [Fact]
