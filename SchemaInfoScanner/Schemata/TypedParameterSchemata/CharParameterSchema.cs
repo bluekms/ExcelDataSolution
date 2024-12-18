@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
@@ -14,7 +15,7 @@ public sealed record CharParameterSchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(string argument, ILogger logger)
+    protected override void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         var value = char.Parse(argument);
 

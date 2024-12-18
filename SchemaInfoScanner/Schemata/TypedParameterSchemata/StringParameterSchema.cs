@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 
@@ -14,7 +15,7 @@ public sealed record StringParameterSchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(string argument, ILogger logger)
+    protected override void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         if (!this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {

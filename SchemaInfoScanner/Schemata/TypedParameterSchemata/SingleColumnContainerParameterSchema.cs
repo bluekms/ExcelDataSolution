@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
@@ -13,7 +14,7 @@ public sealed record SingleColumnContainerParameterSchema(
     ParameterSchemaBase InnerParameterSchema)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(string argument, ILogger logger)
+    protected override void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         var split = argument
             .Split(Separator)
@@ -21,7 +22,7 @@ public sealed record SingleColumnContainerParameterSchema(
 
         foreach (var item in split)
         {
-            InnerParameterSchema.CheckCompatibility(item, logger);
+            InnerParameterSchema.CheckCompatibility(item, enumMemberContainer, logger);
         }
     }
 }

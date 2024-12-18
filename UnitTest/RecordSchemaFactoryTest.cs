@@ -75,7 +75,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             var value = RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type));
             var valueStr = value?.ToString() ?? string.Empty;
 
-            parameter.CheckCompatibility(valueStr, logger);
+            parameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -207,7 +207,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var argument = string.Join(", ", list);
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
-        parameter.CheckCompatibility(argument, logger);
+        parameter.CheckCompatibility(argument, enumMemberContainer, logger);
 
         Assert.Empty(logger.Logs);
     }

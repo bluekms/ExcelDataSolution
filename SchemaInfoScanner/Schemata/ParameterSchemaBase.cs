@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
@@ -10,21 +11,16 @@ public abstract record ParameterSchemaBase(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
-    public bool IsNullable()
-    {
-        return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
-    }
-
     public override string ToString()
     {
         return ParameterName.FullName;
     }
 
-    public void CheckCompatibility(string argument, ILogger logger)
+    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         try
         {
-            OnCheckCompatibility(argument, logger);
+            OnCheckCompatibility(argument, enumMemberContainer, logger);
         }
         catch (Exception e)
         {
@@ -32,7 +28,7 @@ public abstract record ParameterSchemaBase(
         }
     }
 
-    protected abstract void OnCheckCompatibility(string argument, ILogger logger);
+    protected abstract void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger);
 
     private static readonly Action<ILogger, Type, string, Exception?> LogError =
         LoggerMessage.Define<Type, string>(
