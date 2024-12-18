@@ -13,12 +13,7 @@ public sealed record NullableEnumParameterSchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : ParameterSchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(string argument, ILogger logger)
-    {
-        throw new InvalidOperationException($"{ParameterName.FullName} is nullable enum. Use CheckCompatibility(string, EnumMemberContainer) instead.");
-    }
-
-    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
+    protected override void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         var result = NullStringAttributeChecker.Check(this, argument);
         if (result.IsNull)
