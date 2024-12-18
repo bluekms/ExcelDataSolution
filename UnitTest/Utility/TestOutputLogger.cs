@@ -8,7 +8,15 @@ public class TestOutputLogger<T>(
     LogLevel minLogLevel)
     : ILogger<T>
 {
-    public List<string> Logs { get; } = new();
+    public sealed record LogMessage(LogLevel LogLevel, string Message)
+    {
+        public override string ToString()
+        {
+            return $"[{LogLevel}]:\t{Message}";
+        }
+    }
+
+    public List<LogMessage> Logs { get; } = new();
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
@@ -17,8 +25,9 @@ public class TestOutputLogger<T>(
         var message = formatter(state, exception);
         if (!string.IsNullOrEmpty(message))
         {
-            output.WriteLine($"[{logLevel}] {message}");
-            Logs.Add(message);
+            var logMessage = new LogMessage(logLevel, message);
+            output.WriteLine(logMessage.ToString());
+            Logs.Add(logMessage);
         }
     }
 
