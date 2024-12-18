@@ -42,7 +42,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     public void PrimitiveTypeTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = $$"""
                      [StaticDataRecord("TestExcel", "TestSheet")]
@@ -73,6 +76,8 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
             parameter.CheckCompatibility(valueStr, logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Theory]
@@ -81,7 +86,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     public void EnumTypeTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = $$"""
                      public enum MyEnum { A, B, C }
@@ -114,6 +122,8 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         {
             parameter.CheckCompatibility(string.Empty, logger);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Theory]
@@ -148,7 +158,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     public void SingleColumnListTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = $$"""
                      [StaticDataRecord("TestExcel", "TestSheet")]
@@ -180,5 +193,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
         parameter.CheckCompatibility(argument, logger);
+
+        Assert.Empty(logger.Logs);
     }
 }
