@@ -15,7 +15,10 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
     public void Test()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        if (factory.CreateLogger<PrimitiveTypeCheckerTest>() is not TestOutputLogger<PrimitiveTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public enum MyEnum { A, B, C, }
@@ -49,13 +52,18 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        if (factory.CreateLogger<PrimitiveTypeCheckerTest>() is not TestOutputLogger<PrimitiveTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public enum MyEnum { A, B, C, }
@@ -89,13 +97,18 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void NullableAttributeTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        if (factory.CreateLogger<PrimitiveTypeCheckerTest>() is not TestOutputLogger<PrimitiveTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var code = @"
             public sealed record MyRecord(
@@ -115,5 +128,6 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         PrimitiveTypeChecker.Check(nullableParameter);
         Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(notnullParameter));
+        Assert.Empty(logger.Logs);
     }
 }

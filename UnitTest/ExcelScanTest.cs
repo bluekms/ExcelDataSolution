@@ -13,7 +13,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class ExcelScanTest
+public class ExcelScanTest(ITestOutputHelper testOutputHelper)
 {
     private static readonly Action<ILogger, string, Exception?> LogTrace =
         LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0, nameof(LogTrace)), "{Message}");
@@ -21,29 +21,29 @@ public class ExcelScanTest
     private static readonly Action<ILogger, string, Exception?> LogWarning =
         LoggerMessage.Define<string>(LogLevel.Warning, new EventId(0, nameof(LogWarning)), "{Message}");
 
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public ExcelScanTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void LoadTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<ExcelScanTest>() is not TestOutputLogger<ExcelScanTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var sheetNames = ScanExcelFiles(logger);
 
         testOutputHelper.WriteLine(sheetNames.Count.ToString(CultureInfo.InvariantCulture));
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void LoadAndCompareRecordTest()
     {
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<ExcelScanTest>() is not TestOutputLogger<ExcelScanTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var sheetNameContainer = ScanExcelFiles(logger);
         var recordSchemaContainer = ScanRecordFiles(logger);
@@ -67,6 +67,8 @@ public class ExcelScanTest
                 LogWarning(logger, $"Not found sheet {sheetNameString}.", null);
             }
         }
+
+        Assert.Empty(logger.Logs);
     }
 
     private static ExcelSheetNameContainer ScanExcelFiles(ILogger logger)

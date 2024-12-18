@@ -6,15 +6,8 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class FindLengthRequiredNamesTest
+public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void MyClassFindTest()
     {
@@ -32,8 +25,11 @@ public class FindLengthRequiredNamesTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
@@ -47,6 +43,7 @@ public class FindLengthRequiredNamesTest
         };
 
         Assert.Equal(expected, results);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -66,8 +63,11 @@ public class FindLengthRequiredNamesTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
@@ -81,6 +81,7 @@ public class FindLengthRequiredNamesTest
         };
 
         Assert.Equal(expected, results);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -100,8 +101,11 @@ public class FindLengthRequiredNamesTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
@@ -113,6 +117,7 @@ public class FindLengthRequiredNamesTest
         };
 
         Assert.Equal(expected, results);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -132,8 +137,11 @@ public class FindLengthRequiredNamesTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
@@ -145,6 +153,7 @@ public class FindLengthRequiredNamesTest
         };
 
         Assert.Equal(expected, results);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -173,8 +182,11 @@ public class FindLengthRequiredNamesTest
                 List<Department> CoreDepartments
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<FindLengthRequiredNamesTest>() is not TestOutputLogger<FindLengthRequiredNamesTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
@@ -191,5 +203,6 @@ public class FindLengthRequiredNamesTest
         };
 
         Assert.Equal(expected, results);
+        Assert.Empty(logger.Logs);
     }
 }

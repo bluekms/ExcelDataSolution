@@ -6,15 +6,8 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class RecordSchemaParameterFlattenerTest
+public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper testOutputHelper;
-
-    public RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelper)
-    {
-        this.testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void MyClassTest()
     {
@@ -32,8 +25,11 @@ public class RecordSchemaParameterFlattenerTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -48,10 +44,11 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(29, results.Count);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -71,8 +68,11 @@ public class RecordSchemaParameterFlattenerTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -87,10 +87,11 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(16, results.Count);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -110,8 +111,11 @@ public class RecordSchemaParameterFlattenerTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -126,10 +130,11 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(16, results.Count);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -149,8 +154,11 @@ public class RecordSchemaParameterFlattenerTest
                 List<Subject> SubjectB,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -165,10 +173,11 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(29, results.Count);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -183,8 +192,11 @@ public class RecordSchemaParameterFlattenerTest
                 Dictionary<int, MyRecord> MyDictionary,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -196,10 +208,11 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(7, results.Count);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -214,8 +227,11 @@ public class RecordSchemaParameterFlattenerTest
                 Dictionary<Human, MyRecord> MyDictionary,
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -227,10 +243,11 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(9, results.Count);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -259,8 +276,11 @@ public class RecordSchemaParameterFlattenerTest
                 List<Department> CoreDepartments
             );";
 
-        var factory = new TestOutputLoggerFactory(this.testOutputHelper, LogLevel.Trace);
-        var logger = factory.CreateLogger<RecordScanTest>();
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        if (factory.CreateLogger<RecordSchemaParameterFlattenerTest>() is not TestOutputLogger<RecordSchemaParameterFlattenerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
@@ -278,9 +298,10 @@ public class RecordSchemaParameterFlattenerTest
         var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
         foreach (var header in results)
         {
-            this.testOutputHelper.WriteLine(header);
+            testOutputHelper.WriteLine(header);
         }
 
         Assert.Equal(425, results.Count);
+        Assert.Empty(logger.Logs);
     }
 }
