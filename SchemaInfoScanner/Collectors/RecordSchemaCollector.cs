@@ -28,6 +28,8 @@ public sealed class RecordSchemaCollector
 
     public void Collect(RecordSchemaLoader.Result loadResult)
     {
+        // TODO Parse 수정해야 함
+        // 내가 원하는건 맴버 변수를 트리로 갖고 있어야 하는데 recordMemberes를 제우는 것은 파라메터네임타입심볼을 보고 넣고 있음
         var result = Parse(loadResult);
 
         foreach (var (recordName, namedTypeSymbol) in result.RecordNamedTypeSymbolCollector)
@@ -40,6 +42,8 @@ public sealed class RecordSchemaCollector
             recordAttributeDictionary.Add(recordName, recordAttributes.ToList());
         }
 
+        // 그래서 이것만 순회해서 값을 체우면 Parents를 알 수 없음
+        // 따라서 트리 순회를 시켜야 하고 트리로 구성해줘야 함
         foreach (var parameterName in result.ParameterNamedTypeSymbolCollector.ParameterNames)
         {
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
@@ -48,7 +52,8 @@ public sealed class RecordSchemaCollector
             var parameterSchema = new RawParameterSchema(
                 parameterName,
                 namedTypeSymbol,
-                attributes.ToImmutableList());
+                attributes,
+                null);
 
             var recordName = parameterName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
