@@ -18,6 +18,11 @@ public class CategoryDataNode
         Name = name;
     }
 
+    public override string ToString()
+    {
+        return $"{CategoryId}: {Name}";
+    }
+
     public long CategoryId { get; init; }
     public string Name { get; init; }
 }
