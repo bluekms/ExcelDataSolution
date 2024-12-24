@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analyzers.Sample", "Analyze
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analyzers.Tests", "Analyzers\Analyzers.Tests\Analyzers.Tests.csproj", "{C0C83B2B-5A38-484F-8A6B-F05F5332DB12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyTreeCollections", "StudyTreeCollections\StudyTreeCollections.csproj", "{48BCAACF-F966-47A4-84E2-282D6C678D18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{C0C83B2B-5A38-484F-8A6B-F05F5332DB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0C83B2B-5A38-484F-8A6B-F05F5332DB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0C83B2B-5A38-484F-8A6B-F05F5332DB12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48BCAACF-F966-47A4-84E2-282D6C678D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48BCAACF-F966-47A4-84E2-282D6C678D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48BCAACF-F966-47A4-84E2-282D6C678D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48BCAACF-F966-47A4-84E2-282D6C678D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
