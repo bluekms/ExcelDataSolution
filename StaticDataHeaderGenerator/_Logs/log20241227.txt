@@ -1,0 +1,2 @@
+2024-12-27 13:02:40 [Information] "Generate All Length Ini File"
+2024-12-27 13:02:41 [Information] "Generate is done. (Count: 5)"
