@@ -15,6 +15,9 @@ public sealed class GenerateLengthOptions
     [Option('i', "ini-path", Required = true, HelpText = "생성할 ini 파일 경로")]
     public string OutputPath { get; set; } = null!;
 
+    [Option('w', "write-mode", Default = WriteModes.Skip, Required = false, HelpText = "쓰기 모드 (Skip, Overwrite)")]
+    public WriteModes WriteMode { get; set; } = WriteModes.Skip;
+
     [Option('l', "log-path", Required = false, HelpText = "로그 파일 경로")]
     public string? LogPath { get; set; }
 

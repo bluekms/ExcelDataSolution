@@ -4,6 +4,12 @@ using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator;
 
+public enum WriteModes
+{
+    Skip,
+    Overwrite
+}
+
 internal class Program
 {
     private static int Main(string[] args)
@@ -25,7 +31,7 @@ internal class Program
     {
         var errorList = errors.ToList();
 
-        Console.WriteLine($"Errors {errorList.Count}");
+        Console.WriteLine($@"Errors {errorList.Count}");
         foreach (var error in errorList)
         {
             Console.WriteLine(error.ToString());
