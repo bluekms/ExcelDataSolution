@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExcelColumnExtractor\ExcelColumnExtractor.csproj" />
+    <ProjectReference Include="..\StaticDataHeaderGenerator\StaticDataHeaderGenerator.csproj" />
     <ProjectReference Include="..\SchemaInfoScanner\SchemaInfoScanner.csproj" />
   </ItemGroup>
 
