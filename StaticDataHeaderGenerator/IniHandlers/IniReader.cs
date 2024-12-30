@@ -13,6 +13,11 @@ public static class IniReader
     {
         var parser = new FileIniDataParser();
         var fileName = Path.Combine(path, $"{recordContainerInfo.RecordName}.ini");
+        if (!File.Exists(fileName))
+        {
+            throw new FileNotFoundException($"File {fileName} not found. Please use 'length' or 'all-length' command to generate the ini file.");
+        }
+
         var iniData = parser.ReadFile(fileName);
 
         var results = new Dictionary<RecordName, IniFileResult>();

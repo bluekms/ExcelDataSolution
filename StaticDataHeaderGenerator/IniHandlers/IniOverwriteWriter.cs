@@ -17,6 +17,12 @@ public static class IniOverwriteWriter
         var writeCount = 0;
         foreach (var recordContainerInfo in recordContainerInfos)
         {
+            var fileName = Path.Combine(path, $"{recordContainerInfo.RecordName.FullName}.ini");
+            if (File.Exists(fileName))
+            {
+                continue;
+            }
+
             var section = new SectionData(recordContainerInfo.RecordName.FullName);
             foreach (var headerName in recordContainerInfo.LengthRequiredHeaderNames)
             {
@@ -25,8 +31,6 @@ public static class IniOverwriteWriter
 
             var iniData = new IniData();
             iniData.Sections.Add(section);
-
-            var fileName = Path.Combine(path, $"{recordContainerInfo.RecordName.FullName}.ini");
             parser.WriteFile(fileName, iniData);
 
             ++writeCount;
