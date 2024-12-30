@@ -44,7 +44,20 @@ public static class GenerateLengthHandler
         var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
         var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
 
-        IniWriter.Write(options.OutputPath, new() { recordContainerInfo });
+        switch (options.WriteMode)
+        {
+            case WriteModes.Overwrite:
+                IniOverwriteWriter.Write(options.OutputPath, new() { recordContainerInfo });
+                break;
+
+            case WriteModes.Skip:
+                IniSkipWriter.Write(options.OutputPath, new() { recordContainerInfo }, logger);
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(options), options.WriteMode, null);
+        }
+
         LogInformation(logger, "Generate is done.", null);
 
         return 0;
