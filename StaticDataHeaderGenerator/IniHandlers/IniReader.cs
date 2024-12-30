@@ -23,7 +23,14 @@ public static class IniReader
             {
                 if (!int.TryParse(key.Value, out var value))
                 {
-                    throw new FormatException($"Value {key.Value} is not a valid integer.");
+                    if (string.IsNullOrEmpty(key.Value))
+                    {
+                        throw new FormatException($"{fileName}'s {section.SectionName}.{key.KeyName} Value is empty.");
+                    }
+                    else
+                    {
+                        throw new FormatException($"{fileName}'s {section.SectionName}.{key.KeyName} Value {key.Value} is not a valid integer.");
+                    }
                 }
 
                 headerNameLengths[key.KeyName] = value;
