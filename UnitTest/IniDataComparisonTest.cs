@@ -27,6 +27,27 @@ public class IniDataComparisonTest
     }
 
     [Fact]
+    public void NewIsSameTest()
+    {
+        var srcIniText = """
+                         [TestExcel.TestSheet]
+                         Score = 100
+                         """;
+
+        var dstIniText = """
+                         [TestExcel.TestSheet]
+                         Score =
+                         """;
+
+        var parser = new IniDataParser();
+        var srcIniData = parser.Parse(srcIniText);
+        var dstIniData = parser.Parse(dstIniText);
+
+        var result = IniDataComparator.Compare(srcIniData, dstIniData);
+        Assert.True(result.IsSame);
+    }
+
+    [Fact]
     public void ChangeValueTest()
     {
         var srcIniText = """
