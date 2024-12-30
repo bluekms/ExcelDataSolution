@@ -5,7 +5,7 @@ namespace StaticDataHeaderGenerator.IniHandlers;
 
 public static class IniOverwriteWriter
 {
-    public static void Write(string path, HashSet<RecordContainerInfo> recordContainerInfos)
+    public static WriteResult Write(string path, HashSet<RecordContainerInfo> recordContainerInfos)
     {
         if (!Directory.Exists(path))
         {
@@ -14,6 +14,7 @@ public static class IniOverwriteWriter
 
         var parser = new FileIniDataParser();
 
+        var writeCount = 0;
         foreach (var recordContainerInfo in recordContainerInfos)
         {
             var section = new SectionData(recordContainerInfo.RecordName.FullName);
@@ -27,6 +28,10 @@ public static class IniOverwriteWriter
 
             var fileName = Path.Combine(path, $"{recordContainerInfo.RecordName.FullName}.ini");
             parser.WriteFile(fileName, iniData);
+
+            ++writeCount;
         }
+
+        return new(writeCount, 0);
     }
 }
