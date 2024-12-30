@@ -68,6 +68,11 @@ public class IniDataComparisonResultBuilder
 
     public void AddModifiedSectionModifiedKey(string sectionName, string key, string srcValue, string dstValue)
     {
+        if (string.IsNullOrEmpty(dstValue))
+        {
+            return;
+        }
+
         if (!rawResult.ModifiedSections.TryGetValue(sectionName, out var rawModifiedSection))
         {
             rawModifiedSection = RawModifiedSection.CreateEmpty();
