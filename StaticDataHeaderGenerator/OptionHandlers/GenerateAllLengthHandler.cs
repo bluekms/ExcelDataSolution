@@ -51,21 +51,14 @@ public static class GenerateAllLengthHandler
 
         LogTrace(logger, "Start writing ini files.", null);
 
-        switch (options.WriteMode)
+        var writeResult = options.WriteMode switch
         {
-            case WriteModes.Overwrite:
-                IniOverwriteWriter.Write(options.OutputPath, recordContainerInfos);
-                break;
+            WriteModes.Overwrite => IniOverwriteWriter.Write(options.OutputPath, recordContainerInfos),
+            WriteModes.Skip => IniSkipWriter.Write(options.OutputPath, recordContainerInfos, logger),
+            _ => throw new ArgumentOutOfRangeException(nameof(options), options.WriteMode, null)
+        };
 
-            case WriteModes.Skip:
-                IniSkipWriter.Write(options.OutputPath, recordContainerInfos, logger);
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException(nameof(options), options.WriteMode, null);
-        }
-
-        LogInformation(logger, $"Generate is done. (Count: {recordContainerInfos.Count})", null);
+        LogInformation(logger, $"Generate is done. (WriteCount: {writeResult.WriteCount}, (Skip: {writeResult.SkipCount}))", null);
 
         return 0;
     }
