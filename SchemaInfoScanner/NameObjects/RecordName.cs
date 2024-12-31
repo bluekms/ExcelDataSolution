@@ -6,17 +6,18 @@ namespace SchemaInfoScanner.NameObjects;
 
 public class RecordName : IEquatable<RecordName>
 {
+    public string Namespace { get; }
     public string Name { get; }
-    public string FullName { get; }
+
+    public string FullName =>
+        string.IsNullOrEmpty(Namespace)
+            ? Name
+            : $"{Namespace}.{Name}";
 
     public RecordName(RecordDeclarationSyntax recordDeclarationSyntax)
     {
+        Namespace = recordDeclarationSyntax.GetNamespace();
         Name = recordDeclarationSyntax.Identifier.ValueText;
-
-        var namespaceName = recordDeclarationSyntax.GetNamespace();
-        FullName = string.IsNullOrEmpty(namespaceName)
-            ? Name
-            : $"{namespaceName}.{Name}";
     }
 
     public RecordName(string fullName)
@@ -32,16 +33,22 @@ public class RecordName : IEquatable<RecordName>
         }
 
         var parts = fullName.Split('.');
-        Name = parts[^1];
-        FullName = fullName;
+        if (parts.Length == 1)
+        {
+            Namespace = string.Empty;
+            Name = parts[0];
+        }
+        else
+        {
+            Namespace = parts[0];
+            Name = parts[^1];
+        }
     }
 
     public RecordName(INamedTypeSymbol namedTypeSymbol)
     {
+        Namespace = namedTypeSymbol.ContainingNamespace.Name;
         Name = namedTypeSymbol.Name;
-        FullName = string.IsNullOrEmpty(namedTypeSymbol.ContainingNamespace.Name)
-            ? Name
-            : $"{namedTypeSymbol.ContainingNamespace.Name}.{Name}";
     }
 
     public override bool Equals(object? obj)
