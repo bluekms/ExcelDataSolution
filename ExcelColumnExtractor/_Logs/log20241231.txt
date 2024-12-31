@@ -1,0 +1,166 @@
+2024-12-31 15:24:20 [Verbose] "Excel1.FirstSheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.FirstSheet.Score"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet1.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet1.Score1"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet1.Score3"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet2.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet2.Scores"
+2024-12-31 15:24:20 [Verbose] "Excel1.SameNameSheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.SameNameSheet.Score"
+2024-12-31 15:24:20 [Verbose] "Excel1.SingleColumnContainerSheet.Id"
+2024-12-31 15:24:20 [Verbose] "Excel1.SingleColumnContainerSheet.Values"
+2024-12-31 15:24:20 [Verbose] "Excel2.SameNameSheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel2.SameNameSheet.Score"
+2024-12-31 15:24:20 [Verbose] "Excel2.DictionarySheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel2.DictionarySheet.Subjects"
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData Started."
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData.Name"
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData.Score"
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData Finished."
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForServer.StudentId"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForServer.PhoneNumber"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForServer.Alias"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForClient.StudentId"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForClient.StudentName"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForClient.Nicknames"
+2024-12-31 15:24:20 [Verbose] "Excel3.School.SchoolName"
+2024-12-31 15:24:20 [Verbose] "Excel3.School.Students"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student Started."
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.StudentId"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.FirstName"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.LastName"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.Gender"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.Grades"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.Extracurriculars"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student Finished."
+2024-12-31 15:24:20 [Verbose] "Excel3.School.AvailableCourses"
+2024-12-31 15:24:20 [Verbose] "Excel3.School.Teachers"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher Started."
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher.TeacherId"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher.Name"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher.Subject"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher Finished."
+2024-12-31 15:24:20 [Verbose] "Excel3.School.StudentEnrollments"
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment Started."
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment.Student"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student is already visited."
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment.Course"
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment.GradeLevel"
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment Finished."
+2024-12-31 15:24:20 [Verbose] "Excel3.Student is already visited."
+2024-12-31 15:24:20 [Verbose] "Excel4.School.Name"
+2024-12-31 15:24:20 [Verbose] "Excel4.School.ClassA"
+2024-12-31 15:24:20 [Verbose] "Excel4.Student Started."
+2024-12-31 15:24:20 [Verbose] "Excel4.Student.Name"
+2024-12-31 15:24:20 [Verbose] "Excel4.Student.Grades"
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade Started."
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade.Name"
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade.Grade"
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade Finished."
+2024-12-31 15:24:20 [Verbose] "Excel4.Student Finished."
+2024-12-31 15:24:20 [Verbose] "Excel4.School.ClassB"
+2024-12-31 15:24:20 [Verbose] "Excel4.Student is already visited."
+2024-12-31 15:24:20 [Verbose] "Excel1.FirstSheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.FirstSheet.Score"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet1.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet1.Score1"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet1.Score3"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet2.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet2.Scores"
+2024-12-31 15:24:20 [Verbose] "Excel1.SameNameSheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel1.SameNameSheet.Score"
+2024-12-31 15:24:20 [Verbose] "Excel1.SingleColumnContainerSheet.Id"
+2024-12-31 15:24:20 [Verbose] "Excel1.SingleColumnContainerSheet.Values"
+2024-12-31 15:24:20 [Verbose] "Excel2.SameNameSheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel2.SameNameSheet.Score"
+2024-12-31 15:24:20 [Verbose] "Excel2.DictionarySheet.Name"
+2024-12-31 15:24:20 [Verbose] "Excel2.DictionarySheet.Subjects"
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData Started."
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData.Name"
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData.Score"
+2024-12-31 15:24:20 [Verbose] "Excel2.SubjectData Finished."
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForServer.StudentId"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForServer.PhoneNumber"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForServer.Alias"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForClient.StudentId"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForClient.StudentName"
+2024-12-31 15:24:20 [Verbose] "Excel2.StudentInfoForClient.Nicknames"
+2024-12-31 15:24:20 [Verbose] "Excel3.School.SchoolName"
+2024-12-31 15:24:20 [Verbose] "Excel3.School.Students"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student Started."
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.StudentId"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.FirstName"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.LastName"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.Gender"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.Grades"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student.Extracurriculars"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student Finished."
+2024-12-31 15:24:20 [Verbose] "Excel3.School.AvailableCourses"
+2024-12-31 15:24:20 [Verbose] "Excel3.School.Teachers"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher Started."
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher.TeacherId"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher.Name"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher.Subject"
+2024-12-31 15:24:20 [Verbose] "Excel3.Teacher Finished."
+2024-12-31 15:24:20 [Verbose] "Excel3.School.StudentEnrollments"
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment Started."
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment.Student"
+2024-12-31 15:24:20 [Verbose] "Excel3.Student is already visited."
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment.Course"
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment.GradeLevel"
+2024-12-31 15:24:20 [Verbose] "Excel3.Enrollment Finished."
+2024-12-31 15:24:20 [Verbose] "Excel3.Student is already visited."
+2024-12-31 15:24:20 [Verbose] "Excel4.School.Name"
+2024-12-31 15:24:20 [Verbose] "Excel4.School.ClassA"
+2024-12-31 15:24:20 [Verbose] "Excel4.Student Started."
+2024-12-31 15:24:20 [Verbose] "Excel4.Student.Name"
+2024-12-31 15:24:20 [Verbose] "Excel4.Student.Grades"
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade Started."
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade.Name"
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade.Grade"
+2024-12-31 15:24:20 [Verbose] "Excel4.SubjectGrade Finished."
+2024-12-31 15:24:20 [Verbose] "Excel4.Student Finished."
+2024-12-31 15:24:20 [Verbose] "Excel4.School.ClassB"
+2024-12-31 15:24:20 [Verbose] "Excel4.Student is already visited."
+2024-12-31 15:24:20 [Verbose] Complete(1787.9945ms) "RecordScanner"
+2024-12-31 15:24:20 [Verbose] Complete(145.0083ms) "SheetNameScanner"
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet": ["Name, Score[0], Score[1], Score[2]"]
+2024-12-31 15:24:20 [Verbose] "Excel1.ArraySheet": ["Name, Score[0], Score[1], Score[2]"]
+2024-12-31 15:24:20 [Verbose] "Excel1.FirstSheet": ["Name, Score"]
+2024-12-31 15:24:20 [Verbose] "Excel1.SameNameSheet": ["Name, Score"]
+2024-12-31 15:24:20 [Verbose] "Excel1.SingleColumnContainerSheet": ["Id, Values"]
+2024-12-31 15:24:20 [Verbose] "Excel2.DictionarySheet": ["Name, SubjectAndScore[0].Subject, SubjectAndScore[0].Score, SubjectAndScore[1].Subject, SubjectAndScore[1].Score, SubjectAndScore[2].Subject, SubjectAndScore[2].Score"]
+2024-12-31 15:24:20 [Verbose] "Excel2.SameNameSheet": ["Name, Score"]
+2024-12-31 15:24:20 [Verbose] "Excel2.DifferentColumnsSheet": ["StudentId, StudentName, , Nickname[0], Nickname[1], Nickname[2], PhoneNumber"]
+2024-12-31 15:24:20 [Verbose] "Excel2.DifferentColumnsSheet": ["StudentId, StudentName, , Nickname[0], Nickname[1], Nickname[2], PhoneNumber"]
+2024-12-31 15:24:20 [Verbose] "Excel3.SchoolSheet": ["SchoolName, Students[0].StudentId, Students[0].FirstName, Students[0].LastName, Students[0].Gender, Students[0].Grades[0], Students[0].Grades[1], Students[0].Grades[2], Students[0].Grades[3], Students[0].Grades[4], Students[0].Extracurriculars[0], Students[0].Extracurriculars[1], Students[1].StudentId, Students[1].FirstName, Students[1].LastName, Students[1].Gender, Students[1].Grades[0], Students[1].Grades[1], Students[1].Grades[2], Students[1].Grades[3], Students[1].Grades[4], Students[1].Extracurriculars[0], Students[1].Extracurriculars[1], Students[2].StudentId, Students[2].FirstName, Students[2].LastName, Students[2].Gender, Students[2].Grades[0], Students[2].Grades[1], Students[2].Grades[2], Students[2].Grades[3], Students[2].Grades[4], Students[2].Extracurriculars[0], Students[2].Extracurriculars[1], AvailableCourses[0], AvailableCourses[1], AvailableCourses[2], AvailableCourses[3], AvailableCourses[4], AvailableCourses[5], Teachers[0].TeacherId, Teachers[0].Name, Teachers[0].Subject, Teachers[1].TeacherId, Teachers[1].Name, Teachers[1].Subject, Teachers[2].TeacherId, Teachers[2].Name, Teachers[2].Subject, StudentEnrollments[0].Student.StudentId, StudentEnrollments[0].Student.FirstName, StudentEnrollments[0].Student.LastName, StudentEnrollments[0].Student.Gender, StudentEnrollments[0].Student.Grades[0], StudentEnrollments[0].Student.Grades[1], StudentEnrollments[0].Student.Grades[2], StudentEnrollments[0].Student.Grades[3], StudentEnrollments[0].Student.Extracurriculars[0], StudentEnrollments[0].Student.Extracurriculars[1], StudentEnrollments[0].Student.Extracurriculars[2], StudentEnrollments[0].Course, StudentEnrollments[0].GradeLevel, StudentEnrollments[1].Student.StudentId, StudentEnrollments[1].Student.FirstName, StudentEnrollments[1].Student.LastName, StudentEnrollments[1].Student.Gender, StudentEnrollments[1].Student.Grades[0], StudentEnrollments[1].Student.Grades[1], StudentEnrollments[1].Student.Grades[2], StudentEnrollments[1].Student.Grades[3], StudentEnrollments[1].Student.Extracurriculars[0], StudentEnrollments[1].Student.Extracurriculars[1], StudentEnrollments[1].Student.Extracurriculars[2], StudentEnrollments[1].Course, StudentEnrollments[1].GradeLevel, StudentEnrollments[2].Student.StudentId, StudentEnrollments[2].Student.FirstName, StudentEnrollments[2].Student.LastName, StudentEnrollments[2].Student.Gender, StudentEnrollments[2].Student.Grades[0], StudentEnrollments[2].Student.Grades[1], StudentEnrollments[2].Student.Grades[2], StudentEnrollments[2].Student.Grades[3], StudentEnrollments[2].Student.Extracurriculars[0], StudentEnrollments[2].Student.Extracurriculars[1], StudentEnrollments[2].Student.Extracurriculars[2], StudentEnrollments[2].Course, StudentEnrollments[2].GradeLevel, 비고"]
+2024-12-31 15:24:21 [Verbose] "Excel4.School": ["Name, ClassA[0].Name, ClassA[0].Grades[0].Name, ClassA[0].Grades[0].Grade, ClassA[0].Grades[1].Name, ClassA[0].Grades[1].Grade, ClassA[0].Grades[2].Name, ClassA[0].Grades[2].Grade, ClassA[1].Name, ClassA[1].Grades[0].Name, ClassA[1].Grades[0].Grade, ClassA[1].Grades[1].Name, ClassA[1].Grades[1].Grade, ClassA[1].Grades[2].Name, ClassA[1].Grades[2].Grade, ClassA[2].Name, ClassA[2].Grades[0].Name, ClassA[2].Grades[0].Grade, ClassA[2].Grades[1].Name, ClassA[2].Grades[1].Grade, ClassA[2].Grades[2].Name, ClassA[2].Grades[2].Grade, ClassB[0].Name, ClassB[0].Grades[0].Name, ClassB[0].Grades[0].Grade, ClassB[0].Grades[1].Name, ClassB[0].Grades[1].Grade, ClassB[0].Grades[2].Name, ClassB[0].Grades[2].Grade, ClassB[1].Name, ClassB[1].Grades[0].Name, ClassB[1].Grades[0].Grade, ClassB[1].Grades[1].Name, ClassB[1].Grades[1].Grade, ClassB[1].Grades[2].Name, ClassB[1].Grades[2].Grade"]
+2024-12-31 15:24:21 [Verbose] Complete(1017.5298ms) "HeaderLengthBuilder"
+2024-12-31 15:24:21 [Verbose] "Excel1.ArraySheet": ["Name, Score[0], Score[1], Score[2]"]
+2024-12-31 15:24:21 [Verbose] "Excel1.ArraySheet": ["Name, Score[0], Score[1], Score[2]"]
+2024-12-31 15:24:21 [Verbose] "Excel1.FirstSheet": ["Name, Score"]
+2024-12-31 15:24:21 [Verbose] "Excel1.SameNameSheet": ["Name, Score"]
+2024-12-31 15:24:21 [Verbose] "Excel1.SingleColumnContainerSheet": ["Id, Values"]
+2024-12-31 15:24:21 [Verbose] "Excel2.DictionarySheet": ["Name, SubjectAndScore[0].Subject, SubjectAndScore[0].Score, SubjectAndScore[1].Subject, SubjectAndScore[1].Score, SubjectAndScore[2].Subject, SubjectAndScore[2].Score"]
+2024-12-31 15:24:21 [Verbose] "Excel2.SameNameSheet": ["Name, Score"]
+2024-12-31 15:24:21 [Verbose] "Excel2.DifferentColumnsSheet": ["StudentId, StudentName, , Nickname[0], Nickname[1], Nickname[2], PhoneNumber"]
+2024-12-31 15:24:21 [Verbose] "Excel2.DifferentColumnsSheet": ["StudentId, StudentName, , Nickname[0], Nickname[1], Nickname[2], PhoneNumber"]
+2024-12-31 15:24:21 [Verbose] "Excel3.SchoolSheet": ["SchoolName, Students[0].StudentId, Students[0].FirstName, Students[0].LastName, Students[0].Gender, Students[0].Grades[0], Students[0].Grades[1], Students[0].Grades[2], Students[0].Grades[3], Students[0].Grades[4], Students[0].Extracurriculars[0], Students[0].Extracurriculars[1], Students[1].StudentId, Students[1].FirstName, Students[1].LastName, Students[1].Gender, Students[1].Grades[0], Students[1].Grades[1], Students[1].Grades[2], Students[1].Grades[3], Students[1].Grades[4], Students[1].Extracurriculars[0], Students[1].Extracurriculars[1], Students[2].StudentId, Students[2].FirstName, Students[2].LastName, Students[2].Gender, Students[2].Grades[0], Students[2].Grades[1], Students[2].Grades[2], Students[2].Grades[3], Students[2].Grades[4], Students[2].Extracurriculars[0], Students[2].Extracurriculars[1], AvailableCourses[0], AvailableCourses[1], AvailableCourses[2], AvailableCourses[3], AvailableCourses[4], AvailableCourses[5], Teachers[0].TeacherId, Teachers[0].Name, Teachers[0].Subject, Teachers[1].TeacherId, Teachers[1].Name, Teachers[1].Subject, Teachers[2].TeacherId, Teachers[2].Name, Teachers[2].Subject, StudentEnrollments[0].Student.StudentId, StudentEnrollments[0].Student.FirstName, StudentEnrollments[0].Student.LastName, StudentEnrollments[0].Student.Gender, StudentEnrollments[0].Student.Grades[0], StudentEnrollments[0].Student.Grades[1], StudentEnrollments[0].Student.Grades[2], StudentEnrollments[0].Student.Grades[3], StudentEnrollments[0].Student.Extracurriculars[0], StudentEnrollments[0].Student.Extracurriculars[1], StudentEnrollments[0].Student.Extracurriculars[2], StudentEnrollments[0].Course, StudentEnrollments[0].GradeLevel, StudentEnrollments[1].Student.StudentId, StudentEnrollments[1].Student.FirstName, StudentEnrollments[1].Student.LastName, StudentEnrollments[1].Student.Gender, StudentEnrollments[1].Student.Grades[0], StudentEnrollments[1].Student.Grades[1], StudentEnrollments[1].Student.Grades[2], StudentEnrollments[1].Student.Grades[3], StudentEnrollments[1].Student.Extracurriculars[0], StudentEnrollments[1].Student.Extracurriculars[1], StudentEnrollments[1].Student.Extracurriculars[2], StudentEnrollments[1].Course, StudentEnrollments[1].GradeLevel, StudentEnrollments[2].Student.StudentId, StudentEnrollments[2].Student.FirstName, StudentEnrollments[2].Student.LastName, StudentEnrollments[2].Student.Gender, StudentEnrollments[2].Student.Grades[0], StudentEnrollments[2].Student.Grades[1], StudentEnrollments[2].Student.Grades[2], StudentEnrollments[2].Student.Grades[3], StudentEnrollments[2].Student.Extracurriculars[0], StudentEnrollments[2].Student.Extracurriculars[1], StudentEnrollments[2].Student.Extracurriculars[2], StudentEnrollments[2].Course, StudentEnrollments[2].GradeLevel, 비고"]
+2024-12-31 15:24:22 [Verbose] "Excel4.School": ["Name, ClassA[0].Name, ClassA[0].Grades[0].Name, ClassA[0].Grades[0].Grade, ClassA[0].Grades[1].Name, ClassA[0].Grades[1].Grade, ClassA[0].Grades[2].Name, ClassA[0].Grades[2].Grade, ClassA[1].Name, ClassA[1].Grades[0].Name, ClassA[1].Grades[0].Grade, ClassA[1].Grades[1].Name, ClassA[1].Grades[1].Grade, ClassA[1].Grades[2].Name, ClassA[1].Grades[2].Grade, ClassA[2].Name, ClassA[2].Grades[0].Name, ClassA[2].Grades[0].Grade, ClassA[2].Grades[1].Name, ClassA[2].Grades[1].Grade, ClassA[2].Grades[2].Name, ClassA[2].Grades[2].Grade, ClassB[0].Name, ClassB[0].Grades[0].Name, ClassB[0].Grades[0].Grade, ClassB[0].Grades[1].Name, ClassB[0].Grades[1].Grade, ClassB[0].Grades[2].Name, ClassB[0].Grades[2].Grade, ClassB[1].Name, ClassB[1].Grades[0].Name, ClassB[1].Grades[0].Grade, ClassB[1].Grades[1].Name, ClassB[1].Grades[1].Grade, ClassB[1].Grades[2].Name, ClassB[1].Grades[2].Grade"]
+2024-12-31 15:24:23 [Verbose] Complete(1727.6600ms) "RequiredHeadersChecker"
+2024-12-31 15:24:23 [Verbose] "Excel1.ArraySheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel1.ArraySheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel1.FirstSheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel1.SameNameSheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel1.SingleColumnContainerSheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel2.DictionarySheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel2.SameNameSheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel2.DifferentColumnsSheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel2.DifferentColumnsSheet"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] "Excel3.SchoolSheet"'s data is scanned. (6)
+2024-12-31 15:24:23 [Verbose] "Excel4.School"'s data is scanned. (9)
+2024-12-31 15:24:23 [Verbose] Complete(61.2669ms) "BodyColumnAggregator"
+2024-12-31 15:24:23 [Verbose] Complete(00.6444ms) "DataBodyChecker"
+2024-12-31 15:24:23 [Verbose] Complete(18.3840ms) "CsvWriter"
+2024-12-31 15:24:23 [Verbose] Complete(04.5644ms) "FolderStateScanner"
+2024-12-31 15:24:23 [Information] Complete(4776.8387ms) "ExcelColumnExtractor"
