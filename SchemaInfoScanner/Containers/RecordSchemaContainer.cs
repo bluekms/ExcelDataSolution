@@ -1,5 +1,7 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
+using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -10,10 +12,13 @@ namespace SchemaInfoScanner.Containers;
 
 public sealed class RecordSchemaContainer
 {
-    public IReadOnlyDictionary<RecordName, RawRecordSchema> RecordSchemaDictionary { get; }
+    private readonly IReadOnlyDictionary<RecordName, RawRecordSchema> recordSchemaDictionary;
 
-    // TODO RawParameterSchema 를 TypedParameterSchema로 생성해주는 팩토리를 추가하고 그 과정에서 enumMemberContainer가 사용된다
-    public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector, EnumMemberContainer enumMemberContainer)
+    public IReadOnlyList<RawRecordSchema> StaticDataRecordSchemata { get; init; }
+
+    public IReadOnlyList<RawRecordSchema> WholeRecordSchemata { get; init; }
+
+    public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
         var recordSchemata = new Dictionary<RecordName, RawRecordSchema>(recordSchemaCollector.Count);
         foreach (var recordName in recordSchemaCollector.RecordNames)
@@ -25,21 +30,49 @@ public sealed class RecordSchemaContainer
             recordSchemata.Add(recordName, new(recordName, namedTypeSymbol, recordAttributes, recordMemberSchemata));
         }
 
-        RecordSchemaDictionary = recordSchemata;
-    }
+        recordSchemaDictionary = recordSchemata.Values
+            .Where(x => !x.HasAttribute<IgnoreAttribute>())
+            .ToDictionary(x => x.RecordName);
 
-    public IReadOnlyList<RawRecordSchema> GetStaticDataRecordSchemata()
-    {
-        return RecordSchemaDictionary.Values
+        StaticDataRecordSchemata = recordSchemaDictionary.Values
             .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
             .OrderBy(x => x.RecordName.FullName)
+            .ToList();
+
+        WholeRecordSchemata = recordSchemaDictionary
+            .OrderBy(pair => pair.Key.FullName)
+            .Select(pair => pair.Value)
+            .ToList();
+    }
+
+    public RawRecordSchema Find(INamedTypeSymbol namedTypeSymbol)
+    {
+        var name = new RecordName(namedTypeSymbol);
+        if (!recordSchemaDictionary.TryGetValue(name, out var recordSchema))
+        {
+            throw new InvalidOperationException($"Record schema not found: {name}");
+        }
+
+        return recordSchema;
+    }
+
+    public RawRecordSchema? TryFind(INamedTypeSymbol namedTypeSymbol)
+    {
+        var name = new RecordName(namedTypeSymbol);
+        return recordSchemaDictionary.GetValueOrDefault(name);
+    }
+
+    public IReadOnlyList<RawRecordSchema> FindAll(string recordName)
+    {
+        return WholeRecordSchemata
+            .Where(x => x.RecordName.FullName.Contains(recordName))
             .ToList();
     }
 
     public override string ToString()
     {
         var sb = new StringBuilder();
-        foreach (var (recordName, recordSchema) in this.RecordSchemaDictionary)
+        foreach (var (recordName, recordSchema) in recordSchemaDictionary)
         {
             sb.AppendLine(CultureInfo.InvariantCulture, $"Record: {recordName}");
 
