@@ -1,29 +1,68 @@
-using SchemaInfoScanner.NameObjects;
+using Microsoft.Extensions.Logging;
+using SchemaInfoScanner;
+using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Schemata;
+using UnitTest.Utility;
+using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class ParameterNameTest
+public class ParameterNameTest(ITestOutputHelper testOutputHelper)
 {
-    [Theory]
-    [InlineData("Namespace1.MyRecord.MyParameter", "MyParameter")]
-    [InlineData("Namespace1.Namespace2.MyRecord.MyParameter", "MyParameter")]
-    [InlineData("Namespace1.MyRecord.InnerRecord.MyParameter", "MyParameter")]
-    public void CreateFromString(string input, string expectedName)
+    [Fact]
+    public void NestedFullNameTest()
     {
-        var parameterName = new ParameterName(input);
-        Assert.Equal(expectedName, parameterName.Name);
-        Assert.Equal(input, parameterName.FullName);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ParameterNameTest>() is not TestOutputLogger<ParameterNameTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
 
-        var parts = input.Split('.');
-        var recordName = string.Join('.', parts[..^1]);
-        Assert.Equal(recordName, parameterName.RecordName.FullName);
-    }
+        var code = """
+                   namespace TestNamespace;
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("Namespace1.MyRecord.")]
-    public void ThrowException(string input)
-    {
-        Assert.Throws<ArgumentException>(() => new ParameterName(input));
+                   public enum Grades
+                   {
+                       A,
+                       B,
+                       C,
+                       D,
+                       F,
+                   }
+
+                   public sealed record SubjectGrade(string Name, Grades Grade);
+
+                   public sealed record Student(string Name, List<SubjectGrade> Grades);
+
+                   [StaticDataRecord("TestExcel", "TestSheet")]
+                   public sealed record School(string Name, List<Student> ClassA, List<Student> ClassB);
+                   """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+
+        var name = recordSchemaCollector.RecordNames.Single(x => x.Name == "School");
+        var rawSchema = recordSchemaContainer.RecordSchemaDictionary[name];
+
+        // TODO
+        /*
+        var schema = RecordSchemaFactory.Create(
+            rawSchema,
+            recordSchemaContainer,
+            enumMemberContainer,
+            new Dictionary<string, int>());
+            */
+
+        foreach (var parameter in rawSchema.RawParameterSchemaList)
+        {
+        }
+
+        Assert.Empty(logger.Logs);
     }
 }

@@ -10,7 +10,7 @@ internal static class PrimitiveTypeChecker
 {
     public static void Check(RawParameterSchema rawParameter)
     {
-        if (!IsSupportedPrimitiveType(rawParameter))
+        if (!IsSupportedPrimitiveType(rawParameter.NamedTypeSymbol))
         {
             throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported primitive type.");
         }
@@ -28,22 +28,6 @@ internal static class PrimitiveTypeChecker
 
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
     {
-        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
-
-        var specialTypeCheck = isNullable
-            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
-            : CheckSpecialType(symbol.SpecialType);
-
-        var typeKindCheck = isNullable
-            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
-            : CheckEnumType(symbol.TypeKind);
-
-        return specialTypeCheck || typeKindCheck;
-    }
-
-    public static bool IsSupportedPrimitiveType(RawParameterSchema rawParameter)
-    {
-        var symbol = rawParameter.NamedTypeSymbol;
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
 
         var specialTypeCheck = isNullable

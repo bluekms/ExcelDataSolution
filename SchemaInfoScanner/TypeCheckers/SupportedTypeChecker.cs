@@ -24,7 +24,7 @@ internal static class SupportedTypeChecker
 
         LogTrace(logger, rawParameter.ParameterName.FullName, null);
 
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(rawParameter))
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(rawParameter.NamedTypeSymbol))
         {
             PrimitiveTypeChecker.Check(rawParameter);
             return;
