@@ -12,7 +12,7 @@ namespace SchemaInfoScanner.Containers;
 
 public sealed class RecordSchemaContainer
 {
-    private readonly IReadOnlyDictionary<RecordName, RawRecordSchema> recordSchemaDictionary;
+    private readonly Dictionary<RecordName, RawRecordSchema> recordSchemaDictionary;
 
     public IReadOnlyList<RawRecordSchema> StaticDataRecordSchemata { get; init; }
 
