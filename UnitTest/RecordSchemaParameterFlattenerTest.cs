@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner;
 using SchemaInfoScanner.Extensions;
 using UnitTest.Utility;
 using Xunit.Abstractions;
@@ -41,7 +42,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);
@@ -84,7 +90,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);
@@ -127,7 +138,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "SubjectB.QuarterScore", 2 },
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);
@@ -170,7 +186,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "SubjectB.Scores", 2 },
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);
@@ -205,7 +226,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "MyDictionary", 3 },
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);
@@ -240,7 +266,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "MyDictionary", 3 },
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);
@@ -295,7 +326,12 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             { "CoreDepartments.Projects.TeamMembers", 4 }
         };
 
-        var results = parseResult.RawRecordSchema.Flatten(parseResult.RecordSchemaContainer, collectionLengths.ToFrozenDictionary(), logger);
+        var results = RecordFlattener.Flatten(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            collectionLengths,
+            logger);
+
         foreach (var header in results)
         {
             testOutputHelper.WriteLine(header);

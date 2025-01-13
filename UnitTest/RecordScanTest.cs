@@ -40,7 +40,7 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
         }
 
         var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         Assert.Empty(logger.Logs);

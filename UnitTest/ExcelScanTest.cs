@@ -48,7 +48,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
         var sheetNameContainer = ScanExcelFiles(logger);
         var recordSchemaContainer = ScanRecordFiles(logger);
 
-        foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values.OrderBy(x => x.RecordName.FullName))
+        foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
         {
             if (!recordSchema.HasAttribute<StaticDataRecordAttribute>())
             {
@@ -105,7 +105,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
         }
 
         var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         return recordSchemaContainer;

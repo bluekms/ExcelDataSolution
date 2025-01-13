@@ -59,10 +59,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var rawRecordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
+        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
@@ -105,10 +105,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var rawRecordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
+        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
@@ -181,10 +181,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var rawRecordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
+        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
@@ -237,10 +237,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var rawRecordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
+        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,

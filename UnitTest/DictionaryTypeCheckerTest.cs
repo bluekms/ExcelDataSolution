@@ -3,7 +3,6 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
-using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
@@ -34,14 +33,10 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName("MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
+        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -77,14 +72,10 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName("MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
+        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
@@ -115,8 +106,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -139,8 +129,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -168,8 +157,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -198,8 +186,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -228,8 +215,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -258,8 +244,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -288,8 +273,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -318,8 +302,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
         Assert.Single(logger.Logs);
@@ -351,14 +334,10 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var recordName = new RecordName("MyRecord");
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary[recordName];
-
+        var recordSchema = recordSchemaContainer.FindAll("MyRecord").Single();
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);

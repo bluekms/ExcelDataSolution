@@ -5,6 +5,7 @@ using ExcelColumnExtractor.HeaderProcessors;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
@@ -65,7 +66,11 @@ public static class RequiredHeadersChecker
         ILogger logger)
     {
         var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
-        var standardHeaders = recordSchema.Flatten(recordSchemaContainer, headerLengths, logger);
+        var standardHeaders = RecordFlattener.Flatten(
+            recordSchema,
+            recordSchemaContainer,
+            headerLengths,
+            logger);
 
         var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(standardHeaders, sheetHeaders);
         var targetHeaders = targetColumnIndexSet.Select(index => sheetHeaders[index]).ToList();

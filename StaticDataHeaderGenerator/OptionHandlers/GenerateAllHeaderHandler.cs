@@ -1,6 +1,7 @@
 using System.Text;
 using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner;
 using SchemaInfoScanner.Extensions;
 using StaticDataAttribute;
 using StaticDataHeaderGenerator.IniHandlers;
@@ -19,11 +20,7 @@ public class GenerateAllHeaderHandler
         LogInformation(logger, "Generate Header File", null);
 
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        var recordSchemaList = recordSchemaContainer.RecordSchemaDictionary.Values
-            .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
-            .ToList();
-
-        if (recordSchemaList.Count == 0)
+        if (recordSchemaContainer.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException("No records found.");
             LogError(logger, exception.Message, exception);
@@ -31,9 +28,13 @@ public class GenerateAllHeaderHandler
         }
 
         var sb = new StringBuilder();
-        foreach (var targetRecordSchema in recordSchemaList)
+        foreach (var targetRecordSchema in recordSchemaContainer.StaticDataRecordSchemata)
         {
-            var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
+            var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
+                targetRecordSchema,
+                recordSchemaContainer,
+                logger);
+
             var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
             if (recordContainerInfo.LengthRequiredHeaderNames.Count == 0)
             {
@@ -43,7 +44,11 @@ public class GenerateAllHeaderHandler
 
             var results = IniReader.Read(options.LengthIniPath, recordContainerInfo);
             var iniFileResult = results[targetRecordSchema.RecordName];
-            var headers = targetRecordSchema.Flatten(recordSchemaContainer, iniFileResult.HeaderNameLengths, logger);
+            var headers = RecordFlattener.Flatten(
+                targetRecordSchema,
+                recordSchemaContainer,
+                iniFileResult.HeaderNameLengths,
+                logger);
 
             var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(options.Separator, headers)}\n";
             sb.AppendLine(output);

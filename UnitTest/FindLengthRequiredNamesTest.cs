@@ -31,7 +31,10 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = LengthRequiringFieldDetector.Detect(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            logger);
 
         var expected = new HashSet<string>
         {
@@ -69,7 +72,10 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = LengthRequiringFieldDetector.Detect(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            logger);
 
         var expected = new HashSet<string>
         {
@@ -107,7 +113,10 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = LengthRequiringFieldDetector.Detect(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            logger);
 
         var expected = new HashSet<string>
         {
@@ -143,7 +152,10 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = LengthRequiringFieldDetector.Detect(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            logger);
 
         var expected = new HashSet<string>
         {
@@ -188,7 +200,10 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         }
 
         var parseResult = SimpleCordParser.Parse(code, logger);
-        var results = parseResult.RawRecordSchema.DetectLengthRequiringFields(parseResult.RecordSchemaContainer);
+        var results = LengthRequiringFieldDetector.Detect(
+            parseResult.RawRecordSchema,
+            parseResult.RecordSchemaContainer,
+            logger);
 
         var expected = new HashSet<string>
         {

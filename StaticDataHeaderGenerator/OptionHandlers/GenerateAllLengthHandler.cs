@@ -18,12 +18,8 @@ public static class GenerateAllLengthHandler
         LogInformation(logger, "Generate All Length Ini File", null);
 
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        var recordSchemaList = recordSchemaContainer.RecordSchemaDictionary.Values
-            .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
-            .OrderBy(x => x.RecordName.FullName)
-            .ToList();
 
-        if (recordSchemaList.Count == 0)
+        if (recordSchemaContainer.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"Record is not found.");
             LogError(logger, exception.Message, exception);
@@ -31,9 +27,13 @@ public static class GenerateAllLengthHandler
         }
 
         var recordContainerInfos = new HashSet<RecordContainerInfo>();
-        foreach (var targetRecordSchema in recordSchemaList)
+        foreach (var targetRecordSchema in recordSchemaContainer.StaticDataRecordSchemata)
         {
-            var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
+            var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
+                targetRecordSchema,
+                recordSchemaContainer,
+                logger);
+
             if (lengthRequiredNames.Count == 0)
             {
                 LogTrace(logger, $"{targetRecordSchema.RecordName.FullName} does not have any length required fields.", null);

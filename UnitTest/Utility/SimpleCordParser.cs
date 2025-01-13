@@ -16,28 +16,24 @@ public static class SimpleCordParser
     {
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values
-            .Single(x => x.HasAttribute<StaticDataRecordAttribute>());
-
+        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         return new(recordSchema, recordSchemaContainer);
     }
 
+    // TODO 이거 리턴형식이 같은 컨테이너를 리스트로 반환하고 있다
     public static List<Result> ParseAll(string code, ILogger logger)
     {
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        return recordSchemaContainer.RecordSchemaDictionary.Values
-            .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
+        return recordSchemaContainer.StaticDataRecordSchemata
             .Select(x => new Result(x, recordSchemaContainer))
             .ToList();
     }

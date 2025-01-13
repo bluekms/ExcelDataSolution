@@ -44,13 +44,10 @@ public class RecordNameTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var name = recordSchemaCollector.RecordNames.Single(x => x.Name == "Level2");
-        var rawSchema = recordSchemaContainer.RecordSchemaDictionary[name];
+        var rawSchema = recordSchemaContainer.FindAll("Level2").Single();
 
         Assert.Empty(logger.Logs);
         Assert.Equal("TestNamespace.Level1.Level2", rawSchema.NestedFullName);
@@ -82,12 +79,10 @@ public class RecordNameTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var name = recordSchemaCollector.RecordNames.Single(x => x.Name == "Level2");
-        var rawSchema = recordSchemaContainer.RecordSchemaDictionary[name];
+        var rawSchema = recordSchemaContainer.FindAll("Level2").Single();
         var schema = RecordSchemaFactory.Create(
             rawSchema,
             recordSchemaContainer,

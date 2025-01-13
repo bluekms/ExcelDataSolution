@@ -22,7 +22,11 @@ public static class HeaderLengthBuilder
             {
                 var excelSheetName = sheetNameContainer.Get(rawRecordSchema);
                 var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
-                var lengthRequiredNames = rawRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
+                var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
+                    rawRecordSchema,
+                    recordSchemaContainer,
+                    logger);
+
                 var containerLengths = HeaderLengthParser.Parse(sheetHeaders, lengthRequiredNames);
 
                 headerLengths.Add(rawRecordSchema, containerLengths);
