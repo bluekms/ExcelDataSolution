@@ -13,15 +13,12 @@ public static class RecordComplianceChecker
     {
         var visited = new HashSet<RecordName>();
 
-        var staticDataRecords = recordSchemaContainer.RecordSchemaDictionary
-            .Where(x => x.Value.HasAttribute<StaticDataRecordAttribute>())
-            .ToList();
-        if (staticDataRecords.Count is 0)
+        if (recordSchemaContainer.StaticDataRecordSchemata.Count is 0)
         {
             throw new InvalidOperationException("No static data record is found.");
         }
 
-        foreach (var (_, recordSchema) in staticDataRecords)
+        foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
         {
             if (!visited.Add(recordSchema.RecordName))
             {
@@ -48,7 +45,7 @@ public static class RecordComplianceChecker
     {
         var exceptionCount = 0;
         var visited = new HashSet<RecordName>();
-        foreach (var (_, recordSchema) in recordSchemaContainer.RecordSchemaDictionary)
+        foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
         {
             if (!recordSchema.HasAttribute<StaticDataRecordAttribute>())
             {

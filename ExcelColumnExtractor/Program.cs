@@ -36,8 +36,7 @@ public class Program
         var totalSw = Stopwatch.StartNew();
         var sw = Stopwatch.StartNew();
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        var staticDataRecordSchemaList = recordSchemaContainer.GetStaticDataRecordSchemata();
-        if (staticDataRecordSchemaList.Count == 0)
+        if (recordSchemaContainer.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"{nameof(StaticDataRecordAttribute)} is not found.");
             LogError(logger, exception.Message, exception);
@@ -52,7 +51,7 @@ public class Program
 
         sw.Restart();
         var headerLengthContainer = HeaderLengthBuilder.Build(
-            staticDataRecordSchemaList,
+            recordSchemaContainer.StaticDataRecordSchemata,
             recordSchemaContainer,
             sheetNameContainer,
             logger);
@@ -61,7 +60,7 @@ public class Program
         sw.Restart();
 
         var targetColumnIndicesContainer = RequiredHeadersChecker.Check(
-            staticDataRecordSchemaList,
+            recordSchemaContainer.StaticDataRecordSchemata,
             recordSchemaContainer,
             sheetNameContainer,
             headerLengthContainer,
@@ -70,7 +69,7 @@ public class Program
 
         sw.Restart();
         var extractedTableContainer = BodyColumnAggregator.Aggregate(
-            staticDataRecordSchemaList,
+            recordSchemaContainer.StaticDataRecordSchemata,
             sheetNameContainer,
             targetColumnIndicesContainer,
             logger);
@@ -80,7 +79,7 @@ public class Program
 
         // use length
         DataBodyChecker.Check(
-            staticDataRecordSchemaList,
+            recordSchemaContainer.StaticDataRecordSchemata,
             recordSchemaContainer,
             extractedTableContainer,
             headerLengthContainer,

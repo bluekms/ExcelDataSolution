@@ -61,15 +61,14 @@ internal static class RecordTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        var recordName = new RecordName(symbol);
-        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
+        var recordSchema = recordSchemaContainer.TryFind(symbol);
+        if (recordSchema is null)
         {
-            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{recordName.FullName} is not supported type.", innerException);
+            var innerException = new KeyNotFoundException($"{symbol.Name} is not found in the RecordSchemaDictionary");
+            throw new TypeNotSupportedException($"{symbol.Name} is not supported type.", innerException);
         }
 
         Check(recordSchema, recordSchemaContainer, visited, logger);
-
         return recordSchema;
     }
 
@@ -77,7 +76,7 @@ internal static class RecordTypeChecker
     {
         if (rawRecordSchema.HasAttribute<StaticDataRecordAttribute>())
         {
-            throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}. cannot be used as a parameter for another static data record.");
+            throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}. use RecordComplianceChecker.");
         }
 
         if (rawRecordSchema.HasAttribute<MaxCountAttribute>())

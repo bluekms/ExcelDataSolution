@@ -18,10 +18,9 @@ public static class RecordScanner
             enumMemberCollector.Collect(loadResult);
         }
 
-        var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
+
         var exceptionCount = RecordComplianceChecker.TryCheck(recordSchemaContainer, logger);
         if (exceptionCount > 0)
         {

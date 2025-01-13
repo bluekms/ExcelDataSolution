@@ -42,13 +42,10 @@ public class ParameterNameTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var name = recordSchemaCollector.RecordNames.Single(x => x.Name == "School");
-        var rawSchema = recordSchemaContainer.RecordSchemaDictionary[name];
+        var rawSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
 
         // TODO
         /*

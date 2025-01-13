@@ -20,20 +20,18 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var code = @"
-            public sealed record MyRecord(
-                string Name,
-                int Age);";
+        var code = """
+                   [StaticDataRecord("Test", "TestSheet")]
+                   public sealed record MyRecord(
+                       string Name,
+                       int Age);
+                   """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
-
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-
-        RecordTypeChecker.Check(recordSchema, recordSchemaContainer, new(), logger);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -41,34 +39,32 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void IgnoreRecordTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordTypeCheckerTest>() is not TestOutputLogger<RecordTypeCheckerTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var code = @"
-            public sealed record MyRecord(
-                string Name,
-                int Age);
+        var code = """
+                   [StaticDataRecord("TestExcel", "TestSheet")]
+                   public sealed record MyRecord(
+                       string Name,
+                       int Age);
 
-            [Ignore]
-            public sealed record SkipRecord(
-                string Name,
-                int Age);";
+                   [Ignore]
+                   public sealed record SkipRecord(
+                       string Name,
+                       int Age);
+                   """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        foreach (var recordSchema in recordSchemaContainer.RecordSchemaDictionary.Values)
-        {
-            RecordTypeChecker.Check(recordSchema, recordSchemaContainer, new(), logger);
-        }
-
-        Assert.Contains("SkipRecord is ignored.", logger.Logs.Select(x => x.Message));
+        Assert.Single(recordSchemaContainer.WholeRecordSchemata);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
@@ -80,19 +76,20 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var code = @"
-            public sealed record MyRecord(
-                string Name,
-                [Ignore] int Age);";
+        var code = """
+                   [StaticDataRecord("Test", "TestSheet")]
+                   public sealed record MyRecord(
+                       string Name,
+                       [Ignore] int Age);
+                   """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector, enumMemberContainer);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
-        var recordSchema = recordSchemaContainer.RecordSchemaDictionary.Values.First();
-
+        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var recordParameterSchema in recordSchema.RawParameterSchemaList)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, new(), logger);

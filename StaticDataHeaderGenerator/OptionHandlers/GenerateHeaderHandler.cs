@@ -1,5 +1,6 @@
 using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner;
 using SchemaInfoScanner.Extensions;
 using StaticDataAttribute;
 using StaticDataHeaderGenerator.IniHandlers;
@@ -18,21 +19,16 @@ public static class GenerateHeaderHandler
         LogInformation(logger, "Generate Header File", null);
 
         var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        var recordSchemaList = recordSchemaContainer.RecordSchemaDictionary.Values
-            .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
-            .Where(x => x.RecordName.Name == options.RecordName || x.RecordName.FullName.Contains(options.RecordName))
-            .ToList();
-
-        if (recordSchemaList.Count == 0)
+        if (recordSchemaContainer.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"RecordName {options.RecordName} is not found.");
             LogError(logger, exception.Message, exception);
             throw exception;
         }
-        else if (recordSchemaList.Count > 1)
+        else if (recordSchemaContainer.StaticDataRecordSchemata.Count > 1)
         {
             LogWarning(logger, "Multiple records found with the specified name. Please provide a more specific name from the following options:", null);
-            foreach (var recordSchema in recordSchemaList)
+            foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
             {
                 LogWarning(logger, $"\t{recordSchema.RecordName.FullName}", null);
             }
@@ -40,13 +36,21 @@ public static class GenerateHeaderHandler
             return 0;
         }
 
-        var targetRecordSchema = recordSchemaList.Single();
-        var lengthRequiredNames = targetRecordSchema.DetectLengthRequiringFields(recordSchemaContainer);
+        var targetRecordSchema = recordSchemaContainer.StaticDataRecordSchemata.Single();
+        var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
+            targetRecordSchema,
+            recordSchemaContainer,
+            logger);
+
         var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
 
         var results = IniReader.Read(options.LengthIniPath, recordContainerInfo);
         var iniFileResult = results[targetRecordSchema.RecordName];
-        var headers = targetRecordSchema.Flatten(recordSchemaContainer, iniFileResult.HeaderNameLengths, logger);
+        var headers = RecordFlattener.Flatten(
+            targetRecordSchema,
+            recordSchemaContainer,
+            iniFileResult.HeaderNameLengths,
+            logger);
 
         var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(options.Separator, headers)}\n";
         LogInformation(logger, $"\n{output}\n", null);

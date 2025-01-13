@@ -14,10 +14,10 @@ public static class ParameterSchemaInnerSchemaFinder
         RecordSchemaContainer recordSchemaContainer)
     {
         var typeArgument = GetTypeArgument(rawParameter);
-        var recordName = new RecordName(typeArgument);
-        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var typeArgumentSchema))
+        var typeArgumentSchema = recordSchemaContainer.TryFind(typeArgument);
+        if (typeArgumentSchema is null)
         {
-            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the RecordSchemaDictionary");
+            var innerException = new KeyNotFoundException($"{typeArgument.Name} is not found in the RecordSchemaDictionary");
             throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported type.", innerException);
         }
 

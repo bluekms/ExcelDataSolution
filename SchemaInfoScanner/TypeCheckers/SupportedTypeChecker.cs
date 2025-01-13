@@ -36,10 +36,10 @@ internal static class SupportedTypeChecker
             return;
         }
 
-        var recordName = new RecordName(rawParameter.NamedTypeSymbol);
-        if (!recordSchemaContainer.RecordSchemaDictionary.TryGetValue(recordName, out var recordSchema))
+        var recordSchema = recordSchemaContainer.TryFind(rawParameter.NamedTypeSymbol);
+        if (recordSchema is null)
         {
-            var innerException = new KeyNotFoundException($"{recordName.FullName} is not found in the record schema dictionary.");
+            var innerException = new KeyNotFoundException($"{rawParameter.NamedTypeSymbol.Name} is not found in the record schema dictionary.");
             throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported record type.", innerException);
         }
 
