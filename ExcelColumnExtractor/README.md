@@ -1,4 +1,3 @@
-// TODO
 [ ] DataBodyChecker 완성
 [ ] 유닛테스트 작성
 

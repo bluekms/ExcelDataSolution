@@ -47,15 +47,6 @@ public class ParameterNameTest(ITestOutputHelper testOutputHelper)
 
         var rawSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
 
-        // TODO
-        /*
-        var schema = RecordSchemaFactory.Create(
-            rawSchema,
-            recordSchemaContainer,
-            enumMemberContainer,
-            new Dictionary<string, int>());
-            */
-
         foreach (var parameter in rawSchema.RawParameterSchemaList)
         {
         }

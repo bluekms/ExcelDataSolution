@@ -15,7 +15,6 @@ public static class RecordSchemaFactory
     public static RecordSchema Create(
         RawRecordSchema schema,
         RecordSchemaContainer recordSchemaContainer,
-        EnumMemberContainer enumMemberContainer,
         IReadOnlyDictionary<string, int> headerLengths)
     {
         var parameterList = new List<ParameterSchemaBase>();

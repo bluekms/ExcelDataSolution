@@ -66,7 +66,6 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
-            enumMemberContainer,
             new Dictionary<string, int>());
 
         for (var i = 0; i < 10; ++i)
@@ -112,7 +111,6 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
-            enumMemberContainer,
             new Dictionary<string, int>());
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
@@ -188,7 +186,6 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
-            enumMemberContainer,
             new Dictionary<string, int>());
 
         var count = Random.Shared.Next(2, 10);
@@ -244,7 +241,6 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
             recordSchemaContainer,
-            enumMemberContainer,
             new Dictionary<string, int>());
 
         const string argument = "A, B, C";
