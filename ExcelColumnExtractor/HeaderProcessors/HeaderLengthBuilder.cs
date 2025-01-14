@@ -33,7 +33,6 @@ public static class HeaderLengthBuilder
             }
             catch (Exception e)
             {
-                // TODO 이거 불필요한지 확인되면 빼자
                 var msg = $"{rawRecordSchema.RecordName.FullName}: {e.Message}";
                 LogError(logger, rawRecordSchema, msg, e);
             }
