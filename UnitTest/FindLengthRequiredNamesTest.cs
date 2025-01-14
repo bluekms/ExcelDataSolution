@@ -32,7 +32,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
-            parseResult.RawRecordSchema,
+            parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaContainer,
             logger);
 
@@ -73,7 +73,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
-            parseResult.RawRecordSchema,
+            parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaContainer,
             logger);
 
@@ -114,7 +114,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
-            parseResult.RawRecordSchema,
+            parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaContainer,
             logger);
 
@@ -153,7 +153,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
-            parseResult.RawRecordSchema,
+            parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaContainer,
             logger);
 
@@ -201,7 +201,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
 
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
-            parseResult.RawRecordSchema,
+            parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaContainer,
             logger);
 

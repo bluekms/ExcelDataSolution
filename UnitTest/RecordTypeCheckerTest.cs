@@ -121,7 +121,7 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.ParseAll(code, logger));
+        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.Parse(code, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -149,7 +149,7 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.ParseAll(code, logger));
+        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.Parse(code, logger));
         Assert.Single(logger.Logs);
     }
 }
