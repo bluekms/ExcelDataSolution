@@ -24,15 +24,16 @@ public abstract record ParameterSchemaBase(
         }
         catch (Exception e)
         {
-            LogError(logger, GetType(), argument, e);
+            LogError(logger, GetType(), argument, e, e.InnerException);
+            throw;
         }
     }
 
     protected abstract void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger);
 
-    private static readonly Action<ILogger, Type, string, Exception?> LogError =
-        LoggerMessage.Define<Type, string>(
+    private static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =
+        LoggerMessage.Define<Type, string, Exception?>(
             LogLevel.Error,
             new EventId(0, nameof(ParameterSchemaBase)),
-            "Type: {Type}, Argument: {Argument} is not compatible");
+            "Type: {Type}, Argument: {Argument} is not compatible. InnerException: {InnerException}");
 }
