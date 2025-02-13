@@ -48,7 +48,7 @@ public sealed class RecordSchemaCollector
             var parameterSchema = new RawParameterSchema(
                 parameterName,
                 namedTypeSymbol,
-                attributes.ToImmutableList());
+                attributes);
 
             var recordName = parameterName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
