@@ -24,21 +24,37 @@ internal static class PrimitiveTypeChecker
         }
 
         CheckUnavailableAttribute(rawParameter);
+        CheckRequiredAttribute(rawParameter);
     }
 
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
     {
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+        var underlyingType = isNullable
+            ? symbol.TypeArguments[0]
+            : symbol;
 
-        var specialTypeCheck = isNullable
-            ? CheckSpecialType(symbol.TypeArguments.First().SpecialType)
-            : CheckSpecialType(symbol.SpecialType);
+        if (CheckSpecialType(underlyingType))
+        {
+            return true;
+        }
 
-        var typeKindCheck = isNullable
-            ? CheckEnumType(symbol.TypeArguments.First().TypeKind)
-            : CheckEnumType(symbol.TypeKind);
+        if (CheckEnumType(underlyingType))
+        {
+            return true;
+        }
 
-        return specialTypeCheck || typeKindCheck;
+        if (CheckDateTimeType(underlyingType))
+        {
+            return true;
+        }
+
+        if (CheckTimeSpanType(underlyingType))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
@@ -59,9 +75,34 @@ internal static class PrimitiveTypeChecker
         }
     }
 
-    public static bool CheckSpecialType(SpecialType specialType)
+    private static void CheckRequiredAttribute(RawParameterSchema rawParameter)
     {
-        return specialType switch
+        var symbol = rawParameter.NamedTypeSymbol;
+        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+        var underlyingType = isNullable
+            ? symbol.TypeArguments[0]
+            : symbol;
+
+        if (CheckDateTimeType(underlyingType))
+        {
+            if (!rawParameter.HasAttribute<DateTimeFormatAttribute>())
+            {
+                throw new AttributeNotFoundException<DateTimeFormatAttribute>(rawParameter.ParameterName.FullName);
+            }
+        }
+
+        if (CheckTimeSpanType(underlyingType))
+        {
+            if (!rawParameter.HasAttribute<TimeSpanFormatAttribute>())
+            {
+                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(rawParameter.ParameterName.FullName);
+            }
+        }
+    }
+
+    private static bool CheckSpecialType(ITypeSymbol symbol)
+    {
+        return symbol.SpecialType switch
         {
             SpecialType.System_Boolean => true,
             SpecialType.System_Char => true,
@@ -81,8 +122,18 @@ internal static class PrimitiveTypeChecker
         };
     }
 
-    public static bool CheckEnumType(TypeKind typeKind)
+    private static bool CheckEnumType(ITypeSymbol symbol)
     {
-        return typeKind is TypeKind.Enum;
+        return symbol.TypeKind is TypeKind.Enum;
+    }
+
+    private static bool CheckDateTimeType(ITypeSymbol symbol)
+    {
+        return symbol.Name is "DateTime";
+    }
+
+    private static bool CheckTimeSpanType(ITypeSymbol symbol)
+    {
+        return symbol.Name is "TimeSpan";
     }
 }
