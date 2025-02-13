@@ -52,6 +52,20 @@ public static class TypedParameterSchemaFactory
                 : new EnumParameterSchema(parameterName, namedTypeSymbol, attributeList);
         }
 
+        if (CheckDateTimeType(underlyingType))
+        {
+            return isNullable
+                ? new NullableDateTimeParameterSchema(parameterName, namedTypeSymbol, attributeList)
+                : new DateTimeParameterSchema(parameterName, namedTypeSymbol, attributeList);
+        }
+
+        if (CheckTimeSpanType(underlyingType))
+        {
+            return isNullable
+                ? new NullableTimeSpanParameterSchema(parameterName, namedTypeSymbol, attributeList)
+                : new TimeSpanParameterSchema(parameterName, namedTypeSymbol, attributeList);
+        }
+
         if (isNullable)
         {
             return underlyingType.SpecialType switch
@@ -94,5 +108,15 @@ public static class TypedParameterSchemaFactory
                 _ => throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported primitive type.")
             };
         }
+    }
+
+    private static bool CheckDateTimeType(ITypeSymbol symbol)
+    {
+        return symbol.Name is "DateTime";
+    }
+
+    private static bool CheckTimeSpanType(ITypeSymbol symbol)
+    {
+        return symbol.Name is "TimeSpan";
     }
 }
