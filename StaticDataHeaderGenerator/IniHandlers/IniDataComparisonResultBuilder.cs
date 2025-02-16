@@ -7,7 +7,10 @@ public class IniDataComparisonResultBuilder
         HashSet<string> RemovedKeys,
         Dictionary<string, ModifiedSectionKey> ModifiedKeys)
     {
-        public static RawModifiedSection CreateEmpty() => new(new(), new(), new());
+        public static RawModifiedSection CreateEmpty()
+        {
+            return new([], [], []);
+        }
     }
 
     private sealed record RawIniDataComparisonResult(
@@ -15,7 +18,10 @@ public class IniDataComparisonResultBuilder
         HashSet<string> RemovedSections,
         Dictionary<string, RawModifiedSection> ModifiedSections)
     {
-        public static RawIniDataComparisonResult CreateEmpty() => new(new(), new(), new());
+        public static RawIniDataComparisonResult CreateEmpty()
+        {
+            return new([], [], []);
+        }
     }
 
     private readonly RawIniDataComparisonResult rawResult = RawIniDataComparisonResult.CreateEmpty();

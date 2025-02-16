@@ -7,7 +7,6 @@ using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
 
 namespace ExcelColumnExtractor.Checkers;
@@ -50,12 +49,9 @@ public static class RequiredHeadersChecker
             }
         }
 
-        if (sb.Length > 0)
-        {
-            throw new AggregateException(sb.ToString());
-        }
-
-        return new(result);
+        return sb.Length > 0
+            ? throw new AggregateException(sb.ToString())
+            : new(result);
     }
 
     private static TargetColumnIndices CheckAndGetTargetColumns(

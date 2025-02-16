@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Data;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,7 +12,7 @@ public static class RecordSchemaLoader
     public sealed record Result(SemanticModel SemanticModel, List<RecordDeclarationSyntax> RecordDeclarationList, List<EnumDeclarationSyntax> EnumDeclarationList);
 
     private static readonly string[] SkipCompileErrorIds =
-    {
+    [
         "CS1031",
         "CS1001",
         "CS0518",
@@ -22,9 +22,9 @@ public static class RecordSchemaLoader
         "CS0103",
         "CS8019",
         "CS8632",
-    };
+    ];
 
-    public static ImmutableList<Result> Load(string csPath, ILogger logger)
+    public static IReadOnlyList<Result> Load(string csPath, ILogger logger)
     {
         var results = new List<Result>();
 
@@ -47,14 +47,14 @@ public static class RecordSchemaLoader
             throw new ArgumentException("The file or directory does not exist.", nameof(csPath));
         }
 
-        return results.ToImmutableList();
+        return results;
     }
 
     internal static Result OnLoad(string filePath, string code, ILogger logger)
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var root = syntaxTree.GetRoot();
-        var compilation = CSharpCompilation.Create("SchemaInfoScanner", new[] { syntaxTree });
+        var compilation = CSharpCompilation.Create("SchemaInfoScanner", [syntaxTree]);
 
         var result = compilation.GetDiagnostics();
         var compileErrors = result

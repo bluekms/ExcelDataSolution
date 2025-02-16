@@ -8,8 +8,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Actions Repository
-        uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.4
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
 
       - name: Formatting
         run: dotnet format style

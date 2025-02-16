@@ -1,12 +1,7 @@
-﻿namespace StaticDataAttribute;
+namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public class MaxCountAttribute : Attribute
+public class MaxCountAttribute(int maxCount) : Attribute
 {
-    public int MaxCount { get; }
-
-    public MaxCountAttribute(int maxCount)
-    {
-        MaxCount = maxCount;
-    }
+    public int MaxCount { get; } = maxCount;
 }

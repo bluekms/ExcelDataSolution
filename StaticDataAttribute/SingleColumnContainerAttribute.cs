@@ -1,4 +1,4 @@
-﻿namespace StaticDataAttribute;
+namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Parameter)]
 public class SingleColumnContainerAttribute(string separator = ",")

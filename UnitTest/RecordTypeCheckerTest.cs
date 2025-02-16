@@ -92,7 +92,7 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var recordParameterSchema in recordSchema.RawParameterSchemaList)
         {
-            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, new(), logger);
+            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Contains("MyRecord.Age is ignored.", logger.Logs.Select(x => x.Message));

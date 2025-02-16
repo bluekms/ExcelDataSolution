@@ -22,11 +22,9 @@ public static class RecordScanner
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var exceptionCount = RecordComplianceChecker.TryCheck(recordSchemaContainer, logger);
-        if (exceptionCount > 0)
-        {
-            throw new InvalidOperationException($"There are {exceptionCount} exceptions.");
-        }
 
-        return recordSchemaContainer;
+        return exceptionCount > 0
+            ? throw new InvalidOperationException($"There are {exceptionCount} exceptions.")
+            : recordSchemaContainer;
     }
 }

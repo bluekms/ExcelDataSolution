@@ -1,12 +1,7 @@
-﻿namespace StaticDataAttribute;
+namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public class NullStringAttribute : Attribute
+public class NullStringAttribute(string nullString) : Attribute
 {
-    public string NullString { get; }
-
-    public NullStringAttribute(string nullString)
-    {
-        NullString = nullString;
-    }
+    public string NullString { get; } = nullString;
 }

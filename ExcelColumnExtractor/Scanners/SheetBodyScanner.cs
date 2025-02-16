@@ -10,7 +10,7 @@ public class SheetBodyScanner
 
     public static BodyData Scan(ExcelSheetName excelSheetName, ILogger logger)
     {
-        List<RowData> rows = new();
+        List<RowData> rows = [];
         void ProcessBody(SheetBodyRow row)
         {
             rows.Add(new(row.Cells));

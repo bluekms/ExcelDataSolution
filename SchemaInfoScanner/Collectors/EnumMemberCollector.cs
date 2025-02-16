@@ -5,7 +5,7 @@ namespace SchemaInfoScanner.Collectors;
 
 public class EnumMemberCollector
 {
-    private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = new();
+    private readonly Dictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary = [];
 
     public EnumMemberCollector()
     {

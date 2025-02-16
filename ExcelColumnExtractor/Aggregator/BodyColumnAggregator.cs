@@ -45,12 +45,9 @@ public static class BodyColumnAggregator
             }
         }
 
-        if (sb.Length > 0)
-        {
-            throw new BodyColumnAggregatorException(sb.ToString());
-        }
-
-        return new(result);
+        return sb.Length > 0
+            ? throw new BodyColumnAggregatorException(sb.ToString())
+            : new(result);
     }
 
     private static readonly Action<ILogger, RawRecordSchema, string, Exception?> LogError =

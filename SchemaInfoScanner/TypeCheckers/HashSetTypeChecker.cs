@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
@@ -11,12 +11,12 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 internal static class HashSetTypeChecker
 {
-    private static readonly HashSet<string> SupportedTypeNames = new()
-    {
+    private static readonly HashSet<string> SupportedTypeNames =
+    [
         "HashSet<>",
         "ImmutableHashSet<>",
-        "ImmutableSortedSet<>",
-    };
+        "ImmutableSortedSet<>"
+    ];
 
     public static void Check(
         RawParameterSchema rawParameter,

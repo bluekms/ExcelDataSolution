@@ -2,18 +2,14 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner.NameObjects;
 
-public class ParameterName : IEquatable<ParameterName>
+public class ParameterName(
+    RecordName recordName,
+    ParameterSyntax parameterSyntax)
+    : IEquatable<ParameterName>
 {
-    public RecordName RecordName { get; }
-    public string Name { get; }
-
+    public RecordName RecordName { get; } = recordName;
+    public string Name { get; } = parameterSyntax.Identifier.ValueText;
     public string FullName => $"{RecordName.FullName}.{Name}";
-
-    public ParameterName(RecordName recordName, ParameterSyntax parameterSyntax)
-    {
-        Name = parameterSyntax.Identifier.ValueText;
-        RecordName = recordName;
-    }
 
     public override bool Equals(object? obj)
     {

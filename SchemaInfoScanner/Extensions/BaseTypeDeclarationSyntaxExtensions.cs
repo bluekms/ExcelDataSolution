@@ -9,7 +9,7 @@ public static class BaseTypeDeclarationSyntaxExtensions
         var namespaceList = new List<string>();
         var potentialNamespaceParent = syntax.Parent;
 
-        while (potentialNamespaceParent != null &&
+        while (potentialNamespaceParent is not null &&
                potentialNamespaceParent is not NamespaceDeclarationSyntax &&
                potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax)
         {

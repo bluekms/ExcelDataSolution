@@ -2,7 +2,6 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.Schemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 

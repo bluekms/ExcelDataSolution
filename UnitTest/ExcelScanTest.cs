@@ -104,7 +104,6 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             enumMemberCollector.Collect(loadResult);
         }
 
-        var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 

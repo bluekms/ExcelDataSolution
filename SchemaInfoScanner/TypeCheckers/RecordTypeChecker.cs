@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
@@ -105,7 +105,12 @@ internal static class RecordTypeChecker
         }
     }
 
-    private static readonly string[] RecordMethodNames = { "Equals", "GetHashCode", "ToString", "PrintMembers" };
+    private static readonly string[] RecordMethodNames = [
+        "Equals",
+        "GetHashCode",
+        "ToString",
+        "PrintMembers"
+    ];
 
     private static readonly Action<ILogger, string, Exception?> LogTrace =
         LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0), "{Message}");

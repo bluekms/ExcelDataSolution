@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -48,12 +47,10 @@ public sealed class RecordSchemaContainer
     public RawRecordSchema Find(INamedTypeSymbol namedTypeSymbol)
     {
         var name = new RecordName(namedTypeSymbol);
-        if (!recordSchemaDictionary.TryGetValue(name, out var recordSchema))
-        {
-            throw new InvalidOperationException($"Record schema not found: {name}");
-        }
 
-        return recordSchema;
+        return recordSchemaDictionary.TryGetValue(name, out var recordSchema)
+            ? recordSchema
+            : throw new InvalidOperationException($"Record schema not found: {name}");
     }
 
     public RawRecordSchema? TryFind(INamedTypeSymbol namedTypeSymbol)

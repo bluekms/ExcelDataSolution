@@ -39,7 +39,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -78,7 +78,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -340,7 +340,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.FindAll("MyRecord").Single();
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);

@@ -1,20 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
 namespace UnitTest.Utility;
 
-public class TestOutputLoggerFactory : ILoggerFactory
+public class TestOutputLoggerFactory(
+    ITestOutputHelper output,
+    LogLevel minLogLevel)
+    : ILoggerFactory
 {
-    private readonly ITestOutputHelper output;
-    private readonly LogLevel minLogLevel;
     private bool disposed;
-
-    public TestOutputLoggerFactory(ITestOutputHelper output, LogLevel minLogLevel)
-    {
-        this.output = output;
-        this.minLogLevel = minLogLevel;
-        this.disposed = false;
-    }
 
     public void Dispose()
     {

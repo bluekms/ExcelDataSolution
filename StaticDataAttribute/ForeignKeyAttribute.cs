@@ -1,15 +1,11 @@
-﻿namespace StaticDataAttribute;
+namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public class ForeignKeyAttribute : Attribute
+public class ForeignKeyAttribute(
+    string dbSetName,
+    string recordColumnName)
+    : Attribute
 {
-    public string DbSetName { get; }
-
-    public string RecordColumnName { get; }
-
-    public ForeignKeyAttribute(string dbSetName, string recordColumnName)
-    {
-        DbSetName = dbSetName;
-        RecordColumnName = recordColumnName;
-    }
+    public string DbSetName { get; } = dbSetName;
+    public string RecordColumnName { get; } = recordColumnName;
 }

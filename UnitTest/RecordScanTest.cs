@@ -39,7 +39,6 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
             semanticModelCollector.Collect(loadResult);
         }
 
-        var enumMemberContainer = new EnumMemberContainer(enumMemberCollector);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
