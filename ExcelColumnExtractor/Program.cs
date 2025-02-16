@@ -5,7 +5,6 @@ using CLICommonLibrary;
 using CommandLine;
 using ExcelColumnExtractor.Aggregator;
 using ExcelColumnExtractor.Checkers;
-using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.HeaderProcessors;
 using ExcelColumnExtractor.Scanners;
 using ExcelColumnExtractor.Writers;

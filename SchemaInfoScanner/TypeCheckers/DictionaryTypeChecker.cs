@@ -11,13 +11,13 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 internal static class DictionaryTypeChecker
 {
-    private static readonly HashSet<string> SupportedTypeNames = new()
-    {
+    private static readonly HashSet<string> SupportedTypeNames =
+    [
         "Dictionary<, >",
         "ImmutableDictionary<, >",
         "ImmutableSortedDictionary<, >",
-        "FrozenDictionary<, >",
-    };
+        "FrozenDictionary<, >"
+    ];
 
     public static void Check(
         RawParameterSchema rawParameter,

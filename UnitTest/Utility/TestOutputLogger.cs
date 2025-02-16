@@ -16,7 +16,7 @@ public class TestOutputLogger<T>(
         }
     }
 
-    public List<LogMessage> Logs { get; } = new();
+    public List<LogMessage> Logs { get; } = [];
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
@@ -31,7 +31,10 @@ public class TestOutputLogger<T>(
         }
     }
 
-    public bool IsEnabled(LogLevel logLevel) => logLevel >= minLogLevel;
+    public bool IsEnabled(LogLevel logLevel)
+    {
+        return logLevel >= minLogLevel;
+    }
 
     public IDisposable? BeginScope<TState>(TState state)
         where TState : notnull

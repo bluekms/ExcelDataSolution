@@ -5,7 +5,7 @@ namespace SchemaInfoScanner.Collectors;
 
 public class SemanticModelCollector
 {
-    private readonly Dictionary<RecordName, SemanticModel> semanticModelDictionary = new();
+    private readonly Dictionary<RecordName, SemanticModel> semanticModelDictionary = [];
 
     public void Collect(RecordSchemaLoader.Result loadResult)
     {

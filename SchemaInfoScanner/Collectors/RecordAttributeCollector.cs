@@ -6,7 +6,7 @@ namespace SchemaInfoScanner.Collectors;
 
 public class RecordAttributeCollector : IEnumerable<KeyValuePair<RecordName, IReadOnlyList<AttributeSyntax>>>
 {
-    private readonly Dictionary<RecordName, IReadOnlyList<AttributeSyntax>> attributesDictionary = new();
+    private readonly Dictionary<RecordName, IReadOnlyList<AttributeSyntax>> attributesDictionary = [];
 
     public int Count => attributesDictionary.Count;
 

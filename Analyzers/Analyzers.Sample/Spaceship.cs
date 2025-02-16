@@ -1,5 +1,3 @@
-using System;
-
 namespace Analyzers.Sample;
 
 public class Spaceship

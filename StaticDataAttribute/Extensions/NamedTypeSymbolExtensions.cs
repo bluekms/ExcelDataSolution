@@ -13,12 +13,9 @@ public static class NamedTypeSymbolExtensions
             return true;
         }
 
-        if (symbol.IsContainerType())
-        {
-            return symbol.IsSupportedContainerType(semanticModel, recordDeclarationList);
-        }
-
-        return symbol.IsSupportedObjectType(semanticModel, recordDeclarationList);
+        return symbol.IsContainerType()
+            ? symbol.IsSupportedContainerType(semanticModel, recordDeclarationList)
+            : symbol.IsSupportedObjectType(semanticModel, recordDeclarationList);
     }
 
     private static bool IsSupportedPrimitiveType(this INamedTypeSymbol symbol)
@@ -133,14 +130,9 @@ public static class NamedTypeSymbolExtensions
                     return false;
                 }
 
-                if (keySymbol.TypeKind is TypeKind.Enum)
-                {
-                    return keySymbol.Name == valueRecordParameter.Type.ToString();
-                }
-                else
-                {
-                    return keySymbol.SpecialType == valueNamedTypeSymbol.SpecialType;
-                }
+                return keySymbol.TypeKind is TypeKind.Enum
+                    ? keySymbol.Name == valueRecordParameter.Type.ToString()
+                    : keySymbol.SpecialType == valueNamedTypeSymbol.SpecialType;
             }
         }
         else

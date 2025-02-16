@@ -8,7 +8,7 @@ public static class FolderStateScanner
             .Where(x => extensions.Contains(Path.GetExtension(x), StringComparer.OrdinalIgnoreCase))
             .ToDictionary(
                 x => Path.GetFileName(x),
-                x => File.GetLastWriteTimeUtc(x));
+                File.GetLastWriteTimeUtc);
 
         return new FolderState(folderPath, fileStates);
     }

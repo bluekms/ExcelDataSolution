@@ -3,7 +3,6 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
-using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
@@ -52,7 +51,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -98,7 +97,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -155,7 +154,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -238,7 +237,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -298,7 +297,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, new(), logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
 
         Assert.Empty(logger.Logs);

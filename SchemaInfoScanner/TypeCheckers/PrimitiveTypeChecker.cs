@@ -49,12 +49,7 @@ internal static class PrimitiveTypeChecker
             return true;
         }
 
-        if (CheckTimeSpanType(underlyingType))
-        {
-            return true;
-        }
-
-        return false;
+        return CheckTimeSpanType(underlyingType);
     }
 
     private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)

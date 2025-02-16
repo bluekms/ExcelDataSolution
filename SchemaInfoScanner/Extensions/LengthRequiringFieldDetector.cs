@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;

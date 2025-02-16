@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
-using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 

@@ -11,13 +11,13 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 internal static class ListTypeChecker
 {
-    private static readonly HashSet<string> SupportedTypeNames = new()
-    {
+    private static readonly HashSet<string> SupportedTypeNames =
+    [
         "List<>",
         "ImmutableList<>",
         "ImmutableArray<>",
-        "SortedList<>",
-    };
+        "SortedList<>"
+    ];
 
     public static void Check(
         RawParameterSchema rawParameter,

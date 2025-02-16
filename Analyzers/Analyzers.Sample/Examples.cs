@@ -12,7 +12,6 @@ public class Examples
 
     public static void ToStars()
     {
-        var spaceship = new Spaceship();
         Spaceship.SetSpeed(300000000); // Invalid value, it should be highlighted.
         Spaceship.SetSpeed(42);
     }

@@ -40,14 +40,16 @@ public class LockedFileStreamOpener : IDisposable
     private static void ForceCopyAsync(string src, string dst)
     {
         var command = $"COPY /B /Y {src} {dst}";
-        var process = new Process();
-        process.StartInfo = new ProcessStartInfo
+        var process = new Process
         {
-            WindowStyle = ProcessWindowStyle.Hidden,
-            FileName = "cmd.exe",
-            Arguments = $"/C {command}",
+            StartInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                Arguments = $"/C {command}",
+            },
+            EnableRaisingEvents = true
         };
-        process.EnableRaisingEvents = true;
         process.Start();
         process.WaitForExit();
     }

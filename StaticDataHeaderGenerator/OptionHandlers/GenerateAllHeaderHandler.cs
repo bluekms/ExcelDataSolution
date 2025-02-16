@@ -3,7 +3,6 @@ using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Extensions;
-using StaticDataAttribute;
 using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 

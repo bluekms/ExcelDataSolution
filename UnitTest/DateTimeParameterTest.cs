@@ -7,7 +7,6 @@ using SchemaInfoScanner.Schemata;
 using StaticDataAttribute;
 using UnitTest.Utility;
 using Xunit.Abstractions;
-using Exception = System.Exception;
 
 namespace UnitTest;
 

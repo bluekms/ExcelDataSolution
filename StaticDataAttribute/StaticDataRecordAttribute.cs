@@ -1,14 +1,11 @@
 namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class StaticDataRecordAttribute : Attribute
+public sealed class StaticDataRecordAttribute(
+    string excelFileName,
+    string sheetName)
+    : Attribute
 {
-    public string ExcelFileName { get; }
-    public string SheetName { get; }
-
-    public StaticDataRecordAttribute(string excelFileName, string sheetName)
-    {
-        ExcelFileName = excelFileName;
-        SheetName = sheetName;
-    }
+    public string ExcelFileName { get; } = excelFileName;
+    public string SheetName { get; } = sheetName;
 }

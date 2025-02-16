@@ -1,5 +1,3 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 namespace UnitTest.Utility;
 
 public static class TypeConverter

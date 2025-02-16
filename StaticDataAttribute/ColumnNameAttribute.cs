@@ -1,14 +1,9 @@
 namespace StaticDataAttribute;
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public class ColumnNameAttribute : Attribute
+public class ColumnNameAttribute(string name) : Attribute
 {
-    public string Name { get; }
-
-    public ColumnNameAttribute(string name)
-    {
-        this.Name = name;
-    }
+    public string Name { get; } = name;
 
     public override bool Match(object? obj)
     {

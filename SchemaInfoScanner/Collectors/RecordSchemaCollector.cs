@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
@@ -9,9 +8,9 @@ namespace SchemaInfoScanner.Collectors;
 
 public sealed class RecordSchemaCollector
 {
-    private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = new();
-    private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = new();
-    private readonly Dictionary<RecordName, List<RawParameterSchema>> recordMemberSchemaDictionary = new();
+    private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = [];
+    private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = [];
+    private readonly Dictionary<RecordName, List<RawParameterSchema>> recordMemberSchemaDictionary = [];
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -57,24 +56,24 @@ public sealed class RecordSchemaCollector
             }
             else
             {
-                recordMemberSchemaDictionary.Add(recordName, new List<RawParameterSchema> { parameterSchema });
+                recordMemberSchemaDictionary.Add(recordName, [parameterSchema]);
             }
         }
     }
 
-    public ImmutableList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
+    public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
     {
-        return recordAttributeDictionary[recordName].ToImmutableList();
+        return recordAttributeDictionary[recordName];
     }
 
-    public ImmutableList<RawParameterSchema> GetRecordMemberSchemata(RecordName recordName)
+    public IReadOnlyList<RawParameterSchema> GetRecordMemberSchemata(RecordName recordName)
     {
         if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
         {
-            return recordMembers.ToImmutableList();
+            return recordMembers;
         }
 
-        return ImmutableList<RawParameterSchema>.Empty;
+        return [];
     }
 
     public INamedTypeSymbol GetNamedTypeSymbol(RecordName recordName)
@@ -92,8 +91,7 @@ public sealed class RecordSchemaCollector
         foreach (var recordDeclaration in loadResult.RecordDeclarationList)
         {
             var recordName = new RecordName(recordDeclaration);
-            var namedTypeSymbol = loadResult.SemanticModel.GetDeclaredSymbol(recordDeclaration) as INamedTypeSymbol;
-            if (namedTypeSymbol is null)
+            if (loadResult.SemanticModel.GetDeclaredSymbol(recordDeclaration) is not INamedTypeSymbol namedTypeSymbol)
             {
                 throw new TypeNotSupportedException($"{recordName.FullName} is not a named type symbol");
             }

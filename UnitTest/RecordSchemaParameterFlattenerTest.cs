@@ -1,7 +1,5 @@
-using System.Collections.Frozen;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Extensions;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
