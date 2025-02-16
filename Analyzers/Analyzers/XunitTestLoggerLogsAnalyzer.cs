@@ -6,9 +6,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Analyzers;
 
-#pragma warning disable RS1038
+#pragma warning disable RS1038, RS1041
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-#pragma warning restore RS1038
+#pragma warning restore RS1038, RS1041
 public class XunitTestLoggerLogsAnalyzer : DiagnosticAnalyzer
 {
     private const string DiagnosticId = "EDS1002";
@@ -21,7 +21,7 @@ public class XunitTestLoggerLogsAnalyzer : DiagnosticAnalyzer
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true);
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [Rule];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -44,7 +44,7 @@ public class XunitTestLoggerLogsAnalyzer : DiagnosticAnalyzer
 
         var loggerVariable = methodDeclaration.DescendantNodes()
             .OfType<DeclarationPatternSyntax>()
-            .FirstOrDefault(v => v.Type.ToString().StartsWith("TestOutputLogger"));
+            .FirstOrDefault(v => v.Type.ToString().StartsWith("TestOutputLogger", StringComparison.Ordinal));
         if (loggerVariable is null)
         {
             return;

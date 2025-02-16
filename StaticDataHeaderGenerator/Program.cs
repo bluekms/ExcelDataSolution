@@ -1,4 +1,4 @@
-﻿using CommandLine;
+using CommandLine;
 using StaticDataHeaderGenerator.OptionHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 

@@ -1,4 +1,4 @@
-﻿namespace ExcelColumnExtractor.NameObjects;
+namespace ExcelColumnExtractor.NameObjects;
 
 public record ExcelSheetName(string ExcelPath, string SheetName)
 {
