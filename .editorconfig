@@ -19,16 +19,20 @@ csharp_new_line_before_else = true
 csharp_indent_case_contents = true
 csharp_indent_switch_labels = true
 csharp_prefer_static_local_function = true
-csharp_style_expression_bodied_accessors = true:suggestion
 csharp_style_expression_bodied_indexers = true:suggestion
-csharp_style_expression_bodied_operators = true:suggestion
 csharp_style_expression_bodied_properties = true:suggestion
 csharp_style_inlined_variable_declaration = true:silent
-csharp_style_throw_expression = true:suggestion
 csharp_style_var_elsewhere = true:suggestion
 csharp_style_var_for_built_in_types = true:suggestion
 csharp_style_var_when_type_is_apparent = true:silent
 dotnet_sort_system_directives_first = true
+dotnet_diagnostic.IDE0046.severity = none   # if문 단순화
+dotnet_diagnostic.IDE0047.severity = none   # 불필요한 괄호 제거
+dotnet_diagnostic.IDE0060.severity = none   # 사용되지 않는 매개변수
+dotnet_diagnostic.IDE0078.severity = suggestion # 패턴 일치 사용
+dotnet_diagnostic.IDE0160.severity = none   # 블록 namespace 권장
+dotnet_diagnostic.IDE0270.severity = suggestion # null 검사 단순화
+dotnet_diagnostic.IDE0305.severity = none   # 컬렉션 초기화 단순화 (의미 체계 변경 가능성)
 
 # ASP.NET Core 및 Razor 설정
 [**/*.cshtml]
