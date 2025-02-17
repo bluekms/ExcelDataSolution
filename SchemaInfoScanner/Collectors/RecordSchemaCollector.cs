@@ -44,10 +44,16 @@ public sealed class RecordSchemaCollector
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
             var attributes = result.ParameterAttributeCollector[parameterName];
 
+            var location = new LocationInfo(
+                namedTypeSymbol.ContainingNamespace?.ToDisplayString() ?? string.Empty,
+                GetParentContainers(namedTypeSymbol.ContainingType),
+                namedTypeSymbol.ContainingType?.Name ?? string.Empty);
+
             var parameterSchema = new RawParameterSchema(
                 parameterName,
                 namedTypeSymbol,
-                attributes);
+                attributes,
+                location);
 
             var recordName = parameterName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
@@ -59,6 +65,20 @@ public sealed class RecordSchemaCollector
                 recordMemberSchemaDictionary.Add(recordName, [parameterSchema]);
             }
         }
+    }
+
+    private static IReadOnlyList<string> GetParentContainers(INamedTypeSymbol? containingType)
+    {
+        var containers = new List<string>();
+
+        while (containingType != null)
+        {
+            containers.Add(containingType.Name);
+            containingType = containingType.ContainingType; // 부모 클래스/컨테이너로 이동
+        }
+
+        containers.Reverse(); // 부모 클래스부터 자식 클래스까지 순서대로 저장되도록 역순으로 변경
+        return containers;
     }
 
     public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
