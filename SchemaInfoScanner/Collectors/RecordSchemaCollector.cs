@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
@@ -67,7 +68,7 @@ public sealed class RecordSchemaCollector
         }
     }
 
-    private static IReadOnlyList<string> GetParentContainers(INamedTypeSymbol? containingType)
+    private static ReadOnlyCollection<string> GetParentContainers(INamedTypeSymbol? containingType)
     {
         var containers = new List<string>();
 
@@ -78,7 +79,7 @@ public sealed class RecordSchemaCollector
         }
 
         containers.Reverse(); // 부모 클래스부터 자식 클래스까지 순서대로 저장되도록 역순으로 변경
-        return containers;
+        return containers.AsReadOnly();
     }
 
     public IReadOnlyList<AttributeSyntax> GetRecordAttributes(RecordName recordName)
