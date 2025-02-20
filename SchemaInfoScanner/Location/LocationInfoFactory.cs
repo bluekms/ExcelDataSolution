@@ -41,6 +41,7 @@ public class LocationInfoFactory
             }
         }
 
+        node.IncreaseLength();
         rawNodes.Add(RawLocationNode.CreateIndex(indexCount));
     }
 

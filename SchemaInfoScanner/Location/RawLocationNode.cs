@@ -16,6 +16,7 @@ public class RawLocationNode
     public string? DisplayType { get; private init; }
     public bool IsContainer { get; private init; }
     public bool IsClosed { get; private set; }
+    public int Length { get; private set; }
 
     public static RawLocationNode CreateNamespace(string namespaceName)
     {
@@ -26,6 +27,7 @@ public class RawLocationNode
             DisplayType = null,
             IsContainer = false,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -38,6 +40,7 @@ public class RawLocationNode
             DisplayType = displayType,
             IsContainer = false,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -50,6 +53,7 @@ public class RawLocationNode
             DisplayType = displayType,
             IsContainer = true,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -62,6 +66,7 @@ public class RawLocationNode
             DisplayType = enumName,
             IsContainer = false,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -74,6 +79,7 @@ public class RawLocationNode
             DisplayType = enumName,
             IsContainer = true,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -113,6 +119,7 @@ public class RawLocationNode
             DisplayType = displayType,
             IsContainer = false,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -130,6 +137,7 @@ public class RawLocationNode
             DisplayType = displayType,
             IsContainer = true,
             IsClosed = false,
+            Length = 0,
         };
     }
 
@@ -150,9 +158,45 @@ public class RawLocationNode
         IsClosed = true;
     }
 
+    public void IncreaseLength()
+    {
+        Length++;
+    }
+
     public ILocationNode ToLocationNode()
     {
+        if (Category is Category.Namespace)
+        {
+            return new NamespaceNode(Name);
+        }
 
+        if (Category is Category.Record)
+        {
+            return IsContainer
+                ? new RecordContainerNode(Name, DisplayType!, Length)
+                : new RecordNode(Name, DisplayType!);
+        }
+
+        if (Category is Category.Enum)
+        {
+            return IsContainer
+                ? new EnumContainerNode(Name, DisplayType!, Length)
+                : new EnumNode(Name, DisplayType!);
+        }
+
+        if (Category is Category.Parameter)
+        {
+            return IsContainer
+                ? new ParameterContainerNode(Name, DisplayType!, Length)
+                : new ParameterNode(Name, DisplayType!);
+        }
+
+        if (Category is Category.Index)
+        {
+            return new IndexNode(Name);
+        }
+
+        throw new InvalidOperationException("Unknown category.");
     }
 
     public override string ToString()
