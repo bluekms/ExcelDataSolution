@@ -7,8 +7,7 @@ namespace SchemaInfoScanner.Schemata;
 public sealed record RawParameterSchema(
     ParameterName ParameterName,
     INamedTypeSymbol NamedTypeSymbol,
-    IReadOnlyList<AttributeSyntax> AttributeList,
-    LocationInfo Location)
+    IReadOnlyList<AttributeSyntax> AttributeList)
 {
     public bool IsNullable()
     {

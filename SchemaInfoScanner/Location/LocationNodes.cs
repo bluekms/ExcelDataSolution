@@ -8,6 +8,10 @@ public interface ILocationNode
 public record NamespaceNode(string Name)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[ N] {Name}";
+    }
 }
 
 public record RecordNode(
@@ -15,6 +19,10 @@ public record RecordNode(
     string DisplayType)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[ R] {Name} ({DisplayType})";
+    }
 }
 
 public record RecordContainerNode(
@@ -23,6 +31,10 @@ public record RecordContainerNode(
     int Length)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[CR] {Name}[{Length}] ({DisplayType})";
+    }
 }
 
 public record EnumNode(
@@ -30,6 +42,10 @@ public record EnumNode(
     string DisplayType)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[ E] {Name} ({DisplayType})";
+    }
 }
 
 public record EnumContainerNode(
@@ -38,6 +54,10 @@ public record EnumContainerNode(
     int Length)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[CE] {Name}[{Length}] ({DisplayType})";
+    }
 }
 
 public record ParameterNode(
@@ -45,6 +65,10 @@ public record ParameterNode(
     string DisplayType)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[ P] {Name} ({DisplayType})";
+    }
 }
 
 public record ParameterContainerNode(
@@ -53,9 +77,17 @@ public record ParameterContainerNode(
     int Length)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[CP] {Name}[{Length}] ({DisplayType})";
+    }
 }
 
 public record IndexNode(string Name)
     : ILocationNode
 {
+    public override string ToString()
+    {
+        return $"[ N] {Name}";
+    }
 }

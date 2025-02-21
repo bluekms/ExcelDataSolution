@@ -47,102 +47,25 @@ public class LocationInfoFactory
 
     public void CloseNearestOpenContainer()
     {
-        var node = rawNodes.LastOrDefault(x => x is { IsContainer: true, IsClosed: false });
-        if (node is null)
-        {
-            throw new InvalidOperationException("There is no container to close.");
-        }
-
+        var node = rawNodes.Last(x => x is { IsContainer: true, IsClosed: false });
         node.Close();
     }
 
     public LocationInfo Build()
     {
+        var existsUnclosedContainerNode = this.rawNodes
+            .Any(x => x is { IsContainer: true, IsClosed: false });
+        if (existsUnclosedContainerNode)
+        {
+            throw new InvalidOperationException("There is an unclosed container.");
+        }
+
         var nodes = new List<ILocationNode>(rawNodes.Count);
-        foreach(var rawNode in rawNodes)
+        foreach (var rawNode in rawNodes)
         {
             nodes.Add(rawNode.ToLocationNode());
         }
 
         return new(nodes);
     }
-
-    /*
-    AddNamespace(LocationNode.CreateNamespace("Excel4"));
-    AddNode(LocationNode.CreateRecord("School", "StaticDataRecord"));
-    AddNode(LocationNode.CreateRecordContainer("ClassA", "Student"));
-
-    AddNearestOpenContainerIndex(); // ClassA[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateRecord("Grades", "SubjectGrade"));
-    AddNearestOpenContainerIndex(); // Grades[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[2]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    CloseNearestOpenContainer(); // Grades
-
-    AddNearestOpenContainerIndex(); // ClassA[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateRecord("Grades", "SubjectGrade"));
-    AddNearestOpenContainerIndex(); // Grades[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[2]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    CloseNearestOpenContainer(); // Grades
-
-    AddNearestOpenContainerIndex(); // ClassA[2]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateRecord("Grades", "SubjectGrade"));
-    AddNearestOpenContainerIndex(); // Grades[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[2]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    CloseNearestOpenContainer(); // Grades
-    CloseNearestOpenContainer(); // ClassA
-
-    AddNode(LocationNode.CreateRecordContainer("ClassB", "Student"));
-
-    AddNearestOpenContainerIndex(); // ClassB[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateRecord("Grades", "SubjectGrade"));
-    AddNearestOpenContainerIndex(); // Grades[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[2]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    CloseNearestOpenContainer(); // Grades
-
-    AddNearestOpenContainerIndex(); // ClassB[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateRecord("Grades", "SubjectGrade"));
-    AddNearestOpenContainerIndex(); // Grades[0]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[1]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    AddNearestOpenContainerIndex(); // Grades[2]
-    AddNode(LocationNode.CreateParameter("Name", "string"));
-    AddNode(LocationNode.CreateEnum("Grade", "Grades"));
-    CloseNearestOpenContainer(); // Grades
-    */
 }

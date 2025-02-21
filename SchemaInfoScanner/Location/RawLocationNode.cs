@@ -201,20 +201,13 @@ public class RawLocationNode
 
     public override string ToString()
     {
-        /*
-        [ N] Excel4
-        [ R] School (StaticDataRecord)
-        [CR] ClassA (Student)
-        [ I] [0]
-        [CR] Grades (SubjectGrade)
-        [ I] [0]
-        [ P] Name (string)
-        [ E] Grade (Grades)
-         */
-
         var containerName = IsContainer
             ? "C"
             : " ";
+
+        var length = Length > 0
+            ? $"[{Length.ToString()}]"
+            : string.Empty;
 
         var locationTypeName = Category switch
         {
@@ -230,6 +223,6 @@ public class RawLocationNode
             ? string.Empty
             : $" ({DisplayType})";
 
-        return $"[{containerName}{locationTypeName}] {Name}{displayName}";
+        return $"[{containerName}{locationTypeName}] {Name}{length}{displayName}";
     }
 }

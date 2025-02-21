@@ -45,16 +45,10 @@ public sealed class RecordSchemaCollector
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
             var attributes = result.ParameterAttributeCollector[parameterName];
 
-            var location = new LocationInfo(
-                namedTypeSymbol.ContainingNamespace?.ToDisplayString() ?? string.Empty,
-                GetParentContainers(namedTypeSymbol.ContainingType),
-                namedTypeSymbol.ContainingType?.Name ?? string.Empty);
-
             var parameterSchema = new RawParameterSchema(
                 parameterName,
                 namedTypeSymbol,
-                attributes,
-                location);
+                attributes);
 
             var recordName = parameterName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
