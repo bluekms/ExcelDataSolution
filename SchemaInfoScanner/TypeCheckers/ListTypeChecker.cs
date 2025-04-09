@@ -14,25 +14,23 @@ internal static class ListTypeChecker
     private static readonly HashSet<string> SupportedTypeNames =
     [
         "List<>",
-        "ImmutableList<>",
-        "ImmutableArray<>",
-        "SortedList<>"
+        "IReadOnlyList<>",
     ];
 
     public static void Check(
-        RawParameterSchema rawParameter,
+        ParameterSchemaBase parameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedListType(rawParameter.NamedTypeSymbol))
+        if (!IsSupportedListType(parameter.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {rawParameter.ParameterName.FullName} to be supported list type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be supported list type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(rawParameter);
+        CheckUnavailableAttribute(parameter);
 
-        var typeArgument = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments.Single();
+        var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
             return;
@@ -40,33 +38,33 @@ internal static class ListTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
         }
 
-        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
         }
 
-        var innerRecordSchema = rawParameter.FindInnerRecordSchema(recordSchemaContainer);
+        var innerRecordSchema = parameter.FindInnerRecordSchema(recordSchemaContainer);
         RecordTypeChecker.Check(innerRecordSchema, recordSchemaContainer, visited, logger);
     }
 
-    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
+    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
     {
-        if (rawParameter.HasAttribute<ForeignKeyAttribute>())
+        if (parameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {parameter.ParameterName.FullName}.");
         }
 
-        if (rawParameter.HasAttribute<KeyAttribute>())
+        if (parameter.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {parameter.ParameterName.FullName}.");
         }
 
-        if (rawParameter.HasAttribute<NullStringAttribute>())
+        if (parameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {parameter.ParameterName.FullName}.");
         }
     }
 

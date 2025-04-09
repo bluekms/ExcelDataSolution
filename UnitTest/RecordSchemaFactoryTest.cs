@@ -4,6 +4,8 @@ using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.Schemata.TypedParameterSchemata;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
@@ -72,9 +74,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         {
             var parameter = recordSchema.RecordParameterSchemaList[0];
             var value = RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type));
-            var valueStr = value?.ToString() ?? string.Empty;
 
-            parameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
+            var valueStr = value?.ToString() ?? string.Empty;
+            var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
+            parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -116,11 +119,13 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var parameter = recordSchema.RecordParameterSchemaList[0];
         if (parameter is EnumParameterSchema enumParameter)
         {
-            enumParameter.CheckCompatibility("A", enumMemberContainer, logger);
+            var enumerator = Enumerable.Repeat("A", 1).GetEnumerator();
+            enumParameter.CheckCompatibility(enumerator, enumMemberContainer, logger);
         }
         else if (parameter is NullableEnumParameterSchema nullableEnumParameter)
         {
-            nullableEnumParameter.CheckCompatibility(string.Empty, enumMemberContainer, logger);
+            var enumerator = Enumerable.Repeat(string.Empty, 1).GetEnumerator();
+            nullableEnumParameter.CheckCompatibility(enumerator, enumMemberContainer, logger);
         }
         else
         {
@@ -193,9 +198,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type))?.ToString() ?? string.Empty,
             count);
         var argument = string.Join(", ", list);
+        var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
-        parameter.CheckCompatibility(argument, enumMemberContainer, logger);
+        parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -244,9 +250,10 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             new Dictionary<string, int>());
 
         const string argument = "A, B, C";
+        var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
-        parameter.CheckCompatibility(argument, enumMemberContainer, logger);
+        parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
 
         Assert.Empty(logger.Logs);
     }

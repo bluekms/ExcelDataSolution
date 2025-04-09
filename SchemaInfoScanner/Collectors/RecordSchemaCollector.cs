@@ -10,7 +10,7 @@ public sealed class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = [];
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = [];
-    private readonly Dictionary<RecordName, List<RawParameterSchema>> recordMemberSchemaDictionary = [];
+    private readonly Dictionary<RecordName, List<ParameterSchemaBase>> recordMemberSchemaDictionary = [];
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -44,7 +44,7 @@ public sealed class RecordSchemaCollector
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
             var attributes = result.ParameterAttributeCollector[parameterName];
 
-            var parameterSchema = new RawParameterSchema(
+            var parameterSchema = TypedParameterSchemaFactory.Create(
                 parameterName,
                 namedTypeSymbol,
                 attributes);
@@ -66,7 +66,7 @@ public sealed class RecordSchemaCollector
         return recordAttributeDictionary[recordName];
     }
 
-    public IReadOnlyList<RawParameterSchema> GetRecordMemberSchemata(RecordName recordName)
+    public IReadOnlyList<ParameterSchemaBase> GetRecordMemberSchemata(RecordName recordName)
     {
         if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
         {

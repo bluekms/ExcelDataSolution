@@ -12,38 +12,38 @@ namespace SchemaInfoScanner.TypeCheckers;
 internal static class RecordTypeChecker
 {
     public static void Check(
-        RawRecordSchema rawRecordSchema,
+        RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (rawRecordSchema.HasAttribute<IgnoreAttribute>())
+        if (recordSchema.HasAttribute<IgnoreAttribute>())
         {
-            LogTrace(logger, $"{rawRecordSchema.RecordName.FullName} is ignored.", null);
+            LogTrace(logger, $"{recordSchema.RecordName.FullName} is ignored.", null);
             return;
         }
 
-        if (!IsSupportedRecordType(rawRecordSchema.NamedTypeSymbol))
+        if (!IsSupportedRecordType(recordSchema.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"{rawRecordSchema.RecordName.FullName} is not supported record type.");
+            throw new InvalidOperationException($"{recordSchema.RecordName.FullName} is not supported record type.");
         }
 
-        CheckUnavailableAttribute(rawRecordSchema);
+        CheckUnavailableAttribute(recordSchema);
 
-        if (!visited.Add(rawRecordSchema.RecordName))
+        if (!visited.Add(recordSchema.RecordName))
         {
-            LogTrace(logger, $"{rawRecordSchema.RecordName.FullName} is already visited.", null);
+            LogTrace(logger, $"{recordSchema.RecordName.FullName} is already visited.", null);
             return;
         }
 
-        LogTrace(logger, $"{rawRecordSchema.RecordName.FullName} Started.", null);
+        LogTrace(logger, $"{recordSchema.RecordName.FullName} Started.", null);
 
-        foreach (var recordParameterSchema in rawRecordSchema.RawParameterSchemaList)
+        foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, visited, logger);
         }
 
-        LogTrace(logger, $"{rawRecordSchema.RecordName.FullName} Finished.", null);
+        LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
     }
 
     public static bool IsSupportedRecordType(INamedTypeSymbol symbol)
@@ -55,7 +55,7 @@ internal static class RecordTypeChecker
         return !RecordMethodNames.Except(methodSymbols).Any();
     }
 
-    public static RawRecordSchema CheckAndGetSchema(
+    public static RecordSchema CheckAndGetSchema(
         INamedTypeSymbol symbol,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
@@ -72,36 +72,36 @@ internal static class RecordTypeChecker
         return recordSchema;
     }
 
-    private static void CheckUnavailableAttribute(RawRecordSchema rawRecordSchema)
+    private static void CheckUnavailableAttribute(RecordSchema recordSchema)
     {
-        if (rawRecordSchema.HasAttribute<StaticDataRecordAttribute>())
+        if (recordSchema.HasAttribute<StaticDataRecordAttribute>())
         {
-            throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}. use RecordComplianceChecker.");
+            throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. use RecordComplianceChecker.");
         }
 
-        if (rawRecordSchema.HasAttribute<MaxCountAttribute>())
+        if (recordSchema.HasAttribute<MaxCountAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}.");
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
 
-        if (rawRecordSchema.HasAttribute<NullStringAttribute>())
+        if (recordSchema.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
 
-        if (rawRecordSchema.HasAttribute<RangeAttribute>())
+        if (recordSchema.HasAttribute<RangeAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(RangeAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}.");
+            throw new InvalidUsageException($"{nameof(RangeAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
 
-        if (rawRecordSchema.HasAttribute<RegularExpressionAttribute>())
+        if (recordSchema.HasAttribute<RegularExpressionAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(RegularExpressionAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}.");
+            throw new InvalidUsageException($"{nameof(RegularExpressionAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
 
-        if (rawRecordSchema.HasAttribute<SingleColumnContainerAttribute>())
+        if (recordSchema.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {rawRecordSchema.RecordName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
     }
 

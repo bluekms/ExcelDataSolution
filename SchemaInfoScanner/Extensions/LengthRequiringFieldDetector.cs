@@ -10,14 +10,14 @@ namespace SchemaInfoScanner.Extensions;
 public static class LengthRequiringFieldDetector
 {
     public static HashSet<string> Detect(
-        RawRecordSchema rawRecordSchema,
+        RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         ILogger logger)
     {
         try
         {
             return OnDetectLengthRequiringFields(
-                rawRecordSchema,
+                recordSchema,
                 recordSchemaContainer,
                 string.Empty);
         }
@@ -29,13 +29,13 @@ public static class LengthRequiringFieldDetector
     }
 
     private static HashSet<string> OnDetectLengthRequiringFields(
-        RawRecordSchema rawRecordSchema,
+        RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         string parentPrefix)
     {
         var results = new HashSet<string>();
 
-        foreach (var parameter in rawRecordSchema.RawParameterSchemaList)
+        foreach (var parameter in recordSchema.RecordParameterSchemaList)
         {
             if (PrimitiveTypeChecker.IsSupportedPrimitiveType(parameter.NamedTypeSymbol))
             {

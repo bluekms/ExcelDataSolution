@@ -4,9 +4,9 @@ using SchemaInfoScanner.Schemata;
 namespace ExcelColumnExtractor.Containers;
 
 public sealed class ExtractedTableContainer(
-    IReadOnlyDictionary<RawRecordSchema, BodyColumnAggregator.ExtractedTable> extractedTables)
+    IReadOnlyDictionary<RecordSchema, BodyColumnAggregator.ExtractedTable> extractedTables)
 {
-    public IEnumerable<KeyValuePair<RawRecordSchema, BodyColumnAggregator.ExtractedTable>> SortedTables =>
+    public IEnumerable<KeyValuePair<RecordSchema, BodyColumnAggregator.ExtractedTable>> SortedTables =>
         extractedTables
             .OrderBy(kvp => kvp.Key.RecordName.FullName, StringComparer.Ordinal);
 }

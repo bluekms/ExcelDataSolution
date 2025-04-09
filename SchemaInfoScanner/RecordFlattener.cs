@@ -12,13 +12,13 @@ namespace SchemaInfoScanner;
 public static partial class RecordFlattener
 {
     public static IReadOnlyList<string> Flatten(
-        RawRecordSchema rawRecordSchema,
+        RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
         return OnFlatten(
-            rawRecordSchema,
+            recordSchema,
             recordSchemaContainer,
             headerLengths,
             string.Empty,
@@ -26,7 +26,7 @@ public static partial class RecordFlattener
     }
 
     public static IReadOnlyList<string> OnFlatten(
-        RawRecordSchema rawRecordSchema,
+        RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         IReadOnlyDictionary<string, int> headerLengths,
         string parentPrefix,
@@ -34,7 +34,7 @@ public static partial class RecordFlattener
     {
         var headers = new List<string>();
 
-        foreach (var parameter in rawRecordSchema.RawParameterSchemaList)
+        foreach (var parameter in recordSchema.RecordParameterSchemaList)
         {
             var name = parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName)
                 ? columnName

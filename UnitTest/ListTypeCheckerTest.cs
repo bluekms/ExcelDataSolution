@@ -49,7 +49,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -95,7 +95,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -152,7 +152,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -235,7 +235,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -295,7 +295,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }

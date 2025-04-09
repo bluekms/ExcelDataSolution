@@ -46,7 +46,7 @@ public class ParameterNameTest(ITestOutputHelper testOutputHelper)
 
         var rawSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
 
-        foreach (var parameter in rawSchema.RawParameterSchemaList)
+        foreach (var parameter in rawSchema.RecordParameterSchemaList)
         {
         }
 

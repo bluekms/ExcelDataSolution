@@ -10,7 +10,7 @@ public sealed class ExcelSheetNameContainer(IReadOnlyDictionary<string, ExcelShe
 {
     public int Count => sheetNames.Count;
 
-    public ExcelSheetName Get(RawRecordSchema rawRecordSchema)
+    public ExcelSheetName Get(RecordSchema rawRecordSchema)
     {
         var values = rawRecordSchema.GetAttributeValueList<StaticDataRecordAttribute>();
         var excelSheetNameString = $"{values[0]}.{values[1]}";

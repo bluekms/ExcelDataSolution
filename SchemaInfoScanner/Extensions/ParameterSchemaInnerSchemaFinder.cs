@@ -8,33 +8,33 @@ namespace SchemaInfoScanner.Extensions;
 
 public static class ParameterSchemaInnerSchemaFinder
 {
-    public static RawRecordSchema FindInnerRecordSchema(
-        this RawParameterSchema rawParameter,
+    public static RecordSchema FindInnerRecordSchema(
+        this ParameterSchemaBase parameter,
         RecordSchemaContainer recordSchemaContainer)
     {
-        var typeArgument = GetTypeArgument(rawParameter);
+        var typeArgument = GetTypeArgument(parameter);
         var typeArgumentSchema = recordSchemaContainer.TryFind(typeArgument);
         if (typeArgumentSchema is null)
         {
             var innerException = new KeyNotFoundException($"{typeArgument.Name} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported type.", innerException);
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported type.", innerException);
         }
 
         return typeArgumentSchema;
     }
 
-    private static INamedTypeSymbol GetTypeArgument(RawParameterSchema rawParameter)
+    private static INamedTypeSymbol GetTypeArgument(ParameterSchemaBase parameter)
     {
-        if (ListTypeChecker.IsSupportedListType(rawParameter.NamedTypeSymbol) ||
-            HashSetTypeChecker.IsSupportedHashSetType(rawParameter.NamedTypeSymbol))
+        if (ListTypeChecker.IsSupportedListType(parameter.NamedTypeSymbol) ||
+            HashSetTypeChecker.IsSupportedHashSetType(parameter.NamedTypeSymbol))
         {
-            return (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments.Single();
+            return (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(rawParameter.NamedTypeSymbol))
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
         {
-            return (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments.Last();
+            return (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
         }
 
-        throw new InvalidOperationException($"Expected {rawParameter.ParameterName.FullName} to be record container type.");
+        throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be record container type.");
     }
 }

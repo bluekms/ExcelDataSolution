@@ -14,12 +14,12 @@ public static class BodyColumnAggregator
     public sealed record ExtractedTable(IReadOnlyList<string> Headers, IReadOnlyList<ExtractedRow> Rows);
 
     public static ExtractedTableContainer Aggregate(
-        IReadOnlyList<RawRecordSchema> recordSchemaList,
+        IReadOnlyList<RecordSchema> recordSchemaList,
         ExcelSheetNameContainer sheetNameContainer,
         TargetColumnIndicesContainer targetColumnIndicesContainer,
         ILogger logger)
     {
-        var result = new Dictionary<RawRecordSchema, ExtractedTable>();
+        var result = new Dictionary<RecordSchema, ExtractedTable>();
 
         var sb = new StringBuilder();
         foreach (var recordSchema in recordSchemaList)
@@ -50,6 +50,6 @@ public static class BodyColumnAggregator
             : new(result);
     }
 
-    private static readonly Action<ILogger, RawRecordSchema, string, Exception?> LogError =
-        LoggerMessage.Define<RawRecordSchema, string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{RecordSchema}: {ErrorMessage}");
+    private static readonly Action<ILogger, RecordSchema, string, Exception?> LogError =
+        LoggerMessage.Define<RecordSchema, string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{RecordSchema}: {ErrorMessage}");
 }

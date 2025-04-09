@@ -11,15 +11,15 @@ namespace SchemaInfoScanner.Containers;
 
 public sealed class RecordSchemaContainer
 {
-    private readonly Dictionary<RecordName, RawRecordSchema> recordSchemaDictionary;
+    private readonly Dictionary<RecordName, RecordSchema> recordSchemaDictionary;
 
-    public IReadOnlyList<RawRecordSchema> StaticDataRecordSchemata { get; init; }
+    public IReadOnlyList<RecordSchema> StaticDataRecordSchemata { get; init; }
 
-    public IReadOnlyList<RawRecordSchema> WholeRecordSchemata { get; init; }
+    public IReadOnlyList<RecordSchema> WholeRecordSchemata { get; init; }
 
     public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
     {
-        var recordSchemata = new Dictionary<RecordName, RawRecordSchema>(recordSchemaCollector.Count);
+        var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaCollector.Count);
         foreach (var recordName in recordSchemaCollector.RecordNames)
         {
             var namedTypeSymbol = recordSchemaCollector.GetNamedTypeSymbol(recordName);
@@ -44,7 +44,7 @@ public sealed class RecordSchemaContainer
             .ToList();
     }
 
-    public RawRecordSchema Find(INamedTypeSymbol namedTypeSymbol)
+    public RecordSchema Find(INamedTypeSymbol namedTypeSymbol)
     {
         var name = new RecordName(namedTypeSymbol);
 
@@ -53,13 +53,13 @@ public sealed class RecordSchemaContainer
             : throw new InvalidOperationException($"Record schema not found: {name}");
     }
 
-    public RawRecordSchema? TryFind(INamedTypeSymbol namedTypeSymbol)
+    public RecordSchema? TryFind(INamedTypeSymbol namedTypeSymbol)
     {
         var name = new RecordName(namedTypeSymbol);
         return recordSchemaDictionary.GetValueOrDefault(name);
     }
 
-    public IReadOnlyList<RawRecordSchema> FindAll(string recordName)
+    public IReadOnlyList<RecordSchema> FindAll(string recordName)
     {
         return WholeRecordSchemata
             .Where(x => x.RecordName.FullName.Contains(recordName))
@@ -82,10 +82,10 @@ public sealed class RecordSchemaContainer
                 }
             }
 
-            if (recordSchema.RawParameterSchemaList.Count > 0)
+            if (recordSchema.RecordParameterSchemaList.Count > 0)
             {
                 sb.AppendLine("Parameters:");
-                foreach (var recordParameterSchema in recordSchema.RawParameterSchemaList)
+                foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
                 {
                     sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.ParameterName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");

@@ -50,7 +50,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -97,7 +97,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -155,7 +155,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -238,7 +238,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -297,7 +297,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             HashSetTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
