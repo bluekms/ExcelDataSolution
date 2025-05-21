@@ -8,7 +8,7 @@ public sealed record RecordSchema(
     RecordName RecordName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> RecordAttributeList,
-    IReadOnlyList<ParameterSchemaBase> RecordParameterSchemaList)
+    IReadOnlyList<PropertySchemaBase> RecordParameterSchemaList)
 {
     public override string ToString()
     {

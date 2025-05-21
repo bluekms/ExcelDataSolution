@@ -7,10 +7,10 @@ public static class NullStringAttributeChecker
 {
     public sealed record Result(bool IsNull);
 
-    public static Result Check(ParameterSchemaBase parameterSchema, string argument)
+    public static Result Check(PropertySchemaBase propertySchema, string argument)
     {
         var nullString = string.Empty;
-        if (parameterSchema.TryGetAttributeValue<NullStringAttribute, string>(0, out var attributeValue))
+        if (propertySchema.TryGetAttributeValue<NullStringAttribute, string>(0, out var attributeValue))
         {
             nullString = attributeValue;
         }

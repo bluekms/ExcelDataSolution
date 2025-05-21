@@ -18,19 +18,19 @@ internal static class ListTypeChecker
     ];
 
     public static void Check(
-        ParameterSchemaBase parameter,
+        PropertySchemaBase property,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedListType(parameter.NamedTypeSymbol))
+        if (!IsSupportedListType(property.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be supported list type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported list type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(parameter);
+        CheckUnavailableAttribute(property);
 
-        var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
+        var typeArgument = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Single();
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
             return;
@@ -38,33 +38,33 @@ internal static class ListTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. Nullable record item for list is not supported.");
         }
 
-        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
         }
 
-        var innerRecordSchema = parameter.FindInnerRecordSchema(recordSchemaContainer);
+        var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaContainer);
         RecordTypeChecker.Check(innerRecordSchema, recordSchemaContainer, visited, logger);
     }
 
-    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
+    private static void CheckUnavailableAttribute(PropertySchemaBase property)
     {
-        if (parameter.HasAttribute<ForeignKeyAttribute>())
+        if (property.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
 
-        if (parameter.HasAttribute<KeyAttribute>())
+        if (property.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
 
-        if (parameter.HasAttribute<NullStringAttribute>())
+        if (property.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
     }
 

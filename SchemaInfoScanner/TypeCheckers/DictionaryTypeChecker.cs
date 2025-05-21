@@ -21,25 +21,25 @@ internal static class DictionaryTypeChecker
     ];
 
     public static void Check(
-        ParameterSchemaBase parameter,
+        PropertySchemaBase property,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedDictionaryType(parameter.NamedTypeSymbol))
+        if (!IsSupportedDictionaryType(property.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported dictionary type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(parameter);
+        CheckUnavailableAttribute(property);
 
-        var keySymbol = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments[0];
+        var keySymbol = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
-        var valueSymbol = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments[1];
+        var valueSymbol = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments[1];
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
@@ -52,7 +52,7 @@ internal static class DictionaryTypeChecker
 
         if (valueRecordKeyParameterSchema is null)
         {
-            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {parameter.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
+            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.PropertyName.FullName}, KeyAttribute must be used in one of the parameters.");
         }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
@@ -109,26 +109,26 @@ internal static class DictionaryTypeChecker
                PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol);
     }
 
-    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
+    private static void CheckUnavailableAttribute(PropertySchemaBase property)
     {
-        if (parameter.HasAttribute<ForeignKeyAttribute>())
+        if (property.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
-        if (parameter.HasAttribute<KeyAttribute>())
+        if (property.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
-        if (parameter.HasAttribute<NullStringAttribute>())
+        if (property.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
-        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
     }
 

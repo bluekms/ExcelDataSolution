@@ -87,7 +87,7 @@ public sealed class RecordSchemaContainer
                 sb.AppendLine("Parameters:");
                 foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
                 {
-                    sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.ParameterName}");
+                    sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.PropertyName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");
 
                     if (recordParameterSchema.AttributeList.Count > 0)

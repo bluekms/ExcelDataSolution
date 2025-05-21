@@ -117,12 +117,12 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             new Dictionary<string, int>());
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
-        if (parameter is EnumParameterSchema enumParameter)
+        if (parameter is EnumPropertySchema enumParameter)
         {
             var enumerator = Enumerable.Repeat("A", 1).GetEnumerator();
             enumParameter.CheckCompatibility(enumerator, enumMemberContainer, logger);
         }
-        else if (parameter is NullableEnumParameterSchema nullableEnumParameter)
+        else if (parameter is NullableEnumPropertySchema nullableEnumParameter)
         {
             var enumerator = Enumerable.Repeat(string.Empty, 1).GetEnumerator();
             nullableEnumParameter.CheckCompatibility(enumerator, enumMemberContainer, logger);

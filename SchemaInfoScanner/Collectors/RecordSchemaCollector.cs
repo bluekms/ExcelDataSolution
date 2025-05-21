@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata;
 
 namespace SchemaInfoScanner.Collectors;
 
@@ -10,7 +11,7 @@ public sealed class RecordSchemaCollector
 {
     private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = [];
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = [];
-    private readonly Dictionary<RecordName, List<ParameterSchemaBase>> recordMemberSchemaDictionary = [];
+    private readonly Dictionary<RecordName, List<PropertySchemaBase>> recordMemberSchemaDictionary = [];
 
     public int Count => recordAttributeDictionary.Count;
 
@@ -44,7 +45,7 @@ public sealed class RecordSchemaCollector
             var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
             var attributes = result.ParameterAttributeCollector[parameterName];
 
-            var parameterSchema = TypedParameterSchemaFactory.Create(
+            var parameterSchema = TypedPropertySchemaFactory.Create(
                 parameterName,
                 namedTypeSymbol,
                 attributes);
@@ -66,7 +67,7 @@ public sealed class RecordSchemaCollector
         return recordAttributeDictionary[recordName];
     }
 
-    public IReadOnlyList<ParameterSchemaBase> GetRecordMemberSchemata(RecordName recordName)
+    public IReadOnlyList<PropertySchemaBase> GetRecordMemberSchemata(RecordName recordName)
     {
         if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
         {

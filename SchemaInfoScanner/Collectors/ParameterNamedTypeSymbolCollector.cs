@@ -7,13 +7,13 @@ namespace SchemaInfoScanner.Collectors;
 
 public sealed class ParameterNamedTypeSymbolCollector(SemanticModel semanticModel)
 {
-    private readonly Dictionary<ParameterName, INamedTypeSymbol> namedTypeSymbolDictionary = [];
+    private readonly Dictionary<PropertyName, INamedTypeSymbol> namedTypeSymbolDictionary = [];
 
     public int Count => namedTypeSymbolDictionary.Count;
 
-    public IEnumerable<ParameterName> ParameterNames => namedTypeSymbolDictionary.Keys;
+    public IEnumerable<PropertyName> ParameterNames => namedTypeSymbolDictionary.Keys;
 
-    public INamedTypeSymbol this[ParameterName parameterName] => namedTypeSymbolDictionary[parameterName];
+    public INamedTypeSymbol this[PropertyName propertyName] => namedTypeSymbolDictionary[propertyName];
 
     public void Collect(RecordDeclarationSyntax recordDeclaration, ParameterSyntax parameter)
     {
@@ -28,7 +28,7 @@ public sealed class ParameterNamedTypeSymbolCollector(SemanticModel semanticMode
             throw new TypeNotSupportedException();
         }
 
-        var recordPropertyName = new ParameterName(new RecordName(recordDeclaration), parameter);
+        var recordPropertyName = new PropertyName(new RecordName(recordDeclaration), parameter);
         namedTypeSymbolDictionary.Add(recordPropertyName, namedTypeSymbol);
     }
 }

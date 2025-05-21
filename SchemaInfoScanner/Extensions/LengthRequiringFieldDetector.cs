@@ -42,7 +42,7 @@ public static class LengthRequiringFieldDetector
                 continue;
             }
 
-            var name = parameter.ParameterName.Name;
+            var name = parameter.PropertyName.Name;
             if (parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName))
             {
                 name = columnName;

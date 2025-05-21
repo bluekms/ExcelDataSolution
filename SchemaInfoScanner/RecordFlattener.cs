@@ -38,7 +38,7 @@ public static partial class RecordFlattener
         {
             var name = parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName)
                 ? columnName
-                : parameter.ParameterName.Name;
+                : parameter.PropertyName.Name;
 
             var headerName = string.IsNullOrEmpty(parentPrefix)
                 ? name

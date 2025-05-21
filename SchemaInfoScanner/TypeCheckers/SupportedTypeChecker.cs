@@ -11,62 +11,62 @@ namespace SchemaInfoScanner.TypeCheckers;
 internal static class SupportedTypeChecker
 {
     public static void Check(
-        ParameterSchemaBase parameter,
+        PropertySchemaBase property,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (parameter.HasAttribute<IgnoreAttribute>())
+        if (property.HasAttribute<IgnoreAttribute>())
         {
-            LogTrace(logger, $"{parameter.ParameterName.FullName} is ignored.", null);
+            LogTrace(logger, $"{property.PropertyName.FullName} is ignored.", null);
             return;
         }
 
-        LogTrace(logger, parameter.ParameterName.FullName, null);
+        LogTrace(logger, property.PropertyName.FullName, null);
 
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(parameter.NamedTypeSymbol))
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(property.NamedTypeSymbol))
         {
-            PrimitiveTypeChecker.Check(parameter);
+            PrimitiveTypeChecker.Check(property);
             return;
         }
 
-        if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
+        if (ContainerTypeChecker.IsSupportedContainerType(property.NamedTypeSymbol))
         {
-            CheckSupportedContainerType(parameter, recordSchemaContainer, visited, logger);
+            CheckSupportedContainerType(property, recordSchemaContainer, visited, logger);
             return;
         }
 
-        var recordSchema = recordSchemaContainer.TryFind(parameter.NamedTypeSymbol);
+        var recordSchema = recordSchemaContainer.TryFind(property.NamedTypeSymbol);
         if (recordSchema is null)
         {
-            var innerException = new KeyNotFoundException($"{parameter.NamedTypeSymbol.Name} is not found in the record schema dictionary.");
-            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported record type.", innerException);
+            var innerException = new KeyNotFoundException($"{property.NamedTypeSymbol.Name} is not found in the record schema dictionary.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported record type.", innerException);
         }
 
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
     }
 
     private static void CheckSupportedContainerType(
-        ParameterSchemaBase parameter,
+        PropertySchemaBase property,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (HashSetTypeChecker.IsSupportedHashSetType(parameter.NamedTypeSymbol))
+        if (HashSetTypeChecker.IsSupportedHashSetType(property.NamedTypeSymbol))
         {
-            HashSetTypeChecker.Check(parameter, recordSchemaContainer, visited, logger);
+            HashSetTypeChecker.Check(property, recordSchemaContainer, visited, logger);
         }
-        else if (ListTypeChecker.IsSupportedListType(parameter.NamedTypeSymbol))
+        else if (ListTypeChecker.IsSupportedListType(property.NamedTypeSymbol))
         {
-            ListTypeChecker.Check(parameter, recordSchemaContainer, visited, logger);
+            ListTypeChecker.Check(property, recordSchemaContainer, visited, logger);
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(property.NamedTypeSymbol))
         {
-            DictionaryTypeChecker.Check(parameter, recordSchemaContainer, visited, logger);
+            DictionaryTypeChecker.Check(property, recordSchemaContainer, visited, logger);
         }
         else
         {
-            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported container type.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported container type.");
         }
     }
 
