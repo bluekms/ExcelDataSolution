@@ -29,8 +29,4 @@
       <ProjectReference Include="..\StaticDataAttribute\StaticDataAttribute.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Schemata\TypedParameterSchemata\RecordTypes\" />
-    </ItemGroup>
-
 </Project>
