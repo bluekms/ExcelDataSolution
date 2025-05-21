@@ -10,7 +10,7 @@ public sealed record SingleColumnPrimitiveListPropertySchema(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,
     string Separator)
-    : PropertySchemaBase(GenericArgumentSchema.ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,

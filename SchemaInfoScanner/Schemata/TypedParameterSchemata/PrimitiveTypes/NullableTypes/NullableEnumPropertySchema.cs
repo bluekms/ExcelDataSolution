@@ -8,10 +8,10 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
 
 public sealed record NullableEnumPropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
-    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
@@ -26,7 +26,7 @@ public sealed record NullableEnumPropertySchema(
         }
 
         var actualNamedTypeSymbol = (INamedTypeSymbol)NamedTypeSymbol.TypeArguments[0];
-        var schema = new EnumPropertySchema(ParameterName, actualNamedTypeSymbol, AttributeList);
+        var schema = new EnumPropertySchema(PropertyName, actualNamedTypeSymbol, AttributeList);
         schema.CheckCompatibility(arguments, enumMemberContainer, logger);
     }
 }

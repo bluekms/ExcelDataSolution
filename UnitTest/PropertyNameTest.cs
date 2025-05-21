@@ -7,13 +7,13 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
-public class ParameterNameTest(ITestOutputHelper testOutputHelper)
+public class PropertyNameTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void NestedFullNameTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ParameterNameTest>() is not TestOutputLogger<ParameterNameTest> logger)
+        if (factory.CreateLogger<PropertyNameTest>() is not TestOutputLogger<PropertyNameTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }

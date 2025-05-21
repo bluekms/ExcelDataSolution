@@ -17,7 +17,7 @@ public static class ParameterSchemaInnerSchemaFinder
         if (typeArgumentSchema is null)
         {
             var innerException = new KeyNotFoundException($"{typeArgument.Name} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported type.", innerException);
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported type.", innerException);
         }
 
         return typeArgumentSchema;
@@ -35,6 +35,6 @@ public static class ParameterSchemaInnerSchemaFinder
             return (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Last();
         }
 
-        throw new InvalidOperationException($"Expected {property.ParameterName.FullName} to be record container type.");
+        throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be record container type.");
     }
 }

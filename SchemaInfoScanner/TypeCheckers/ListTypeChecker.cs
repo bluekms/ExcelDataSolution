@@ -25,7 +25,7 @@ internal static class ListTypeChecker
     {
         if (!IsSupportedListType(property.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {property.ParameterName.FullName} to be supported list type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported list type, but actually not supported.");
         }
 
         CheckUnavailableAttribute(property);
@@ -38,12 +38,12 @@ internal static class ListTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported list type. Nullable record item for list is not supported.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. Nullable record item for list is not supported.");
         }
 
         if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaContainer);
@@ -54,17 +54,17 @@ internal static class ListTypeChecker
     {
         if (property.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
     }
 

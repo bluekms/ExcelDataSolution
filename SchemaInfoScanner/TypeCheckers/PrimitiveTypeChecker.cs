@@ -12,14 +12,14 @@ internal static class PrimitiveTypeChecker
     {
         if (!IsSupportedPrimitiveType(property.NamedTypeSymbol))
         {
-            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported primitive type.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported primitive type.");
         }
 
         if (!property.IsNullable())
         {
             if (property.HasAttribute<NullStringAttribute>())
             {
-                throw new InvalidUsageException($"{property.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+                throw new InvalidUsageException($"{property.PropertyName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
             }
         }
 
@@ -56,17 +56,17 @@ internal static class PrimitiveTypeChecker
     {
         if (!property.IsNullable() && property.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{property.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+            throw new InvalidUsageException($"{property.PropertyName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
         }
 
         if (property.HasAttribute<MaxCountAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
         }
     }
 
@@ -82,7 +82,7 @@ internal static class PrimitiveTypeChecker
         {
             if (!property.HasAttribute<DateTimeFormatAttribute>())
             {
-                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.ParameterName.FullName);
+                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
             }
         }
 
@@ -90,7 +90,7 @@ internal static class PrimitiveTypeChecker
         {
             if (!property.HasAttribute<TimeSpanFormatAttribute>())
             {
-                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.ParameterName.FullName);
+                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
             }
         }
     }

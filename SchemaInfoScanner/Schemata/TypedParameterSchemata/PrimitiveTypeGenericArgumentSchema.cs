@@ -17,8 +17,8 @@ public class PrimitiveTypeGenericArgumentSchema(
     }
 
     public ContainerKind ContainingType { get; } = containingType;
-    public ParameterName ParameterName { get; } = innerSchema.ParameterName;
+    public PropertyName PropertyName { get; } = innerSchema.PropertyName;
     public PropertySchemaBase InnerSchema { get; } = innerSchema;
-    public string Name { get; } = $"{innerSchema.ParameterName.Name}'s <{innerSchema.GetType().Name}>";
-    public string FullName { get; } = $"{innerSchema.ParameterName.FullName}'s <{innerSchema.GetType().Name}>";
+    public string Name { get; } = $"{innerSchema.PropertyName.Name}'s <{innerSchema.GetType().Name}>";
+    public string FullName { get; } = $"{innerSchema.PropertyName.FullName}'s <{innerSchema.GetType().Name}>";
 }

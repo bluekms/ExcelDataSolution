@@ -7,10 +7,10 @@ using SchemaInfoScanner.NameObjects;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
 
 public sealed record EnumPropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
-    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,

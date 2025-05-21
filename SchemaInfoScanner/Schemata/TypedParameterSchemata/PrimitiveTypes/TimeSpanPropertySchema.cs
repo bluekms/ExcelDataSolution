@@ -12,10 +12,10 @@ using StaticDataAttribute;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
 
 public sealed record TimeSpanPropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
-    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
@@ -24,7 +24,7 @@ public sealed record TimeSpanPropertySchema(
     {
         if (!this.TryGetAttributeValue<TimeSpanFormatAttribute, string>(0, out var format))
         {
-            throw new AttributeNotFoundException<TimeSpanFormatAttribute>(ParameterName.FullName);
+            throw new AttributeNotFoundException<TimeSpanFormatAttribute>(PropertyName.FullName);
         }
 
         var argument = GetNextArgument(arguments, GetType(), logger);

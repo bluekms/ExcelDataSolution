@@ -11,7 +11,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,
     string Separator)
-    : PropertySchemaBase(GenericArgumentSchema.ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
@@ -33,7 +33,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
         if (split.Count != hashSet.Count)
         {
             var ex = new InvalidOperationException(
-                $"Parameter {ParameterName} has duplicate values in the argument: {arguments}");
+                $"Parameter {PropertyName} has duplicate values in the argument: {arguments}");
             LogError(logger, GetType(), argument, ex, ex.InnerException);
             throw ex;
         }

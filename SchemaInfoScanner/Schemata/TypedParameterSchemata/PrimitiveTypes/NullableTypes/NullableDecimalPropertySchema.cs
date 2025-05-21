@@ -8,10 +8,10 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
 
 public sealed record NullableDecimalPropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
-    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
@@ -25,7 +25,7 @@ public sealed record NullableDecimalPropertySchema(
             return;
         }
 
-        var schema = new DecimalPropertySchema(ParameterName, NamedTypeSymbol, AttributeList);
+        var schema = new DecimalPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
         schema.CheckCompatibility(arguments, enumMemberContainer, logger);
     }
 }

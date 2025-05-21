@@ -2,10 +2,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SchemaInfoScanner.NameObjects;
 
-public class ParameterName(
+public class PropertyName(
     RecordName recordName,
     ParameterSyntax parameterSyntax)
-    : IEquatable<ParameterName>
+    : IEquatable<PropertyName>
 {
     public RecordName RecordName { get; } = recordName;
     public string Name { get; } = parameterSyntax.Identifier.ValueText;
@@ -28,7 +28,7 @@ public class ParameterName(
             return false;
         }
 
-        return Equals((ParameterName)obj);
+        return Equals((PropertyName)obj);
     }
 
     public override int GetHashCode()
@@ -36,7 +36,7 @@ public class ParameterName(
         return HashCode.Combine(this.Name, this.RecordName);
     }
 
-    public bool Equals(ParameterName? other)
+    public bool Equals(PropertyName? other)
     {
         if (ReferenceEquals(null, other))
         {

@@ -12,10 +12,10 @@ using StaticDataAttribute;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
 
 public sealed record DateTimePropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList) :
-    PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
@@ -24,7 +24,7 @@ public sealed record DateTimePropertySchema(
     {
         if (!this.TryGetAttributeValue<DateTimeFormatAttribute, string>(0, out var format))
         {
-            throw new AttributeNotFoundException<DateTimeFormatAttribute>(ParameterName.FullName);
+            throw new AttributeNotFoundException<DateTimeFormatAttribute>(PropertyName.FullName);
         }
 
         DateTime value;

@@ -7,12 +7,12 @@ using SchemaInfoScanner.NameObjects;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.ContainerTypes;
 
 public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,
     PrimitiveTypeGenericArgumentSchema KeySchema,
     PrimitiveTypeGenericArgumentSchema ValueSchema)
-    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,

@@ -34,7 +34,7 @@ public static class RecordComplianceChecker
                 }
                 catch (Exception e)
                 {
-                    LogException(logger, $"{recordParameter.ParameterName.FullName}: {e.Message}", e);
+                    LogException(logger, $"{recordParameter.PropertyName.FullName}: {e.Message}", e);
                     throw;
                 }
             }
@@ -67,7 +67,7 @@ public static class RecordComplianceChecker
                 catch (Exception e)
                 {
                     exceptionCount += 1;
-                    LogException(logger, $"{recordParameter.ParameterName.FullName}: {e.Message}", e);
+                    LogException(logger, $"{recordParameter.PropertyName.FullName}: {e.Message}", e);
                 }
             }
         }

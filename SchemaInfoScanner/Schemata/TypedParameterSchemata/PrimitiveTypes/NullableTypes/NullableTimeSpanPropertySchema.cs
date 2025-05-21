@@ -8,10 +8,10 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
 
 public sealed record NullableTimeSpanPropertySchema(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
-    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
@@ -25,7 +25,7 @@ public sealed record NullableTimeSpanPropertySchema(
             return;
         }
 
-        var schema = new TimeSpanPropertySchema(ParameterName, NamedTypeSymbol, AttributeList);
+        var schema = new TimeSpanPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
         schema.CheckCompatibility(arguments, enumMemberContainer, logger);
     }
 }

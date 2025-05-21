@@ -18,11 +18,11 @@ internal static class SupportedTypeChecker
     {
         if (property.HasAttribute<IgnoreAttribute>())
         {
-            LogTrace(logger, $"{property.ParameterName.FullName} is ignored.", null);
+            LogTrace(logger, $"{property.PropertyName.FullName} is ignored.", null);
             return;
         }
 
-        LogTrace(logger, property.ParameterName.FullName, null);
+        LogTrace(logger, property.PropertyName.FullName, null);
 
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(property.NamedTypeSymbol))
         {
@@ -40,7 +40,7 @@ internal static class SupportedTypeChecker
         if (recordSchema is null)
         {
             var innerException = new KeyNotFoundException($"{property.NamedTypeSymbol.Name} is not found in the record schema dictionary.");
-            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported record type.", innerException);
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported record type.", innerException);
         }
 
         RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
@@ -66,7 +66,7 @@ internal static class SupportedTypeChecker
         }
         else
         {
-            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported container type.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported container type.");
         }
     }
 

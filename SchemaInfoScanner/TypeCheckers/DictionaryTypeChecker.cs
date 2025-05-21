@@ -28,7 +28,7 @@ internal static class DictionaryTypeChecker
     {
         if (!IsSupportedDictionaryType(property.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {property.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported dictionary type, but actually not supported.");
         }
 
         CheckUnavailableAttribute(property);
@@ -52,7 +52,7 @@ internal static class DictionaryTypeChecker
 
         if (valueRecordKeyParameterSchema is null)
         {
-            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
+            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.PropertyName.FullName}, KeyAttribute must be used in one of the parameters.");
         }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
@@ -113,22 +113,22 @@ internal static class DictionaryTypeChecker
     {
         if (property.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
     }
 

@@ -30,7 +30,7 @@ public static class RangeAttributeChecker
 
         if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
         {
-            throw new ArgumentOutOfRangeException(propertySchema.ParameterName.FullName, value, $"Value({value}) must be between {min} and {max}.");
+            throw new ArgumentOutOfRangeException(propertySchema.PropertyName.FullName, value, $"Value({value}) must be between {min} and {max}.");
         }
     }
 }

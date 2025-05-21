@@ -5,20 +5,20 @@ namespace SchemaInfoScanner.Collectors;
 
 public sealed class ParameterAttributeCollector
 {
-    private readonly Dictionary<ParameterName, IReadOnlyList<AttributeSyntax>> attributesDictionary = [];
+    private readonly Dictionary<PropertyName, IReadOnlyList<AttributeSyntax>> attributesDictionary = [];
 
     public int Count => attributesDictionary.Count;
 
-    public bool ContainsRecord(ParameterName parameterName)
+    public bool ContainsRecord(PropertyName propertyName)
     {
-        return attributesDictionary.ContainsKey(parameterName);
+        return attributesDictionary.ContainsKey(propertyName);
     }
 
-    public IReadOnlyList<AttributeSyntax> this[ParameterName parameterName] => attributesDictionary[parameterName];
+    public IReadOnlyList<AttributeSyntax> this[PropertyName propertyName] => attributesDictionary[propertyName];
 
     public void Collect(RecordDeclarationSyntax recordDeclaration, ParameterSyntax parameter)
     {
-        var recordPropertyName = new ParameterName(new RecordName(recordDeclaration), parameter);
+        var recordPropertyName = new PropertyName(new RecordName(recordDeclaration), parameter);
         var attributeList = parameter.AttributeLists.SelectMany(x => x.Attributes).ToList().AsReadOnly();
 
         attributesDictionary.Add(recordPropertyName, attributeList);

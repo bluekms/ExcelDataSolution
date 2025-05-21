@@ -14,24 +14,24 @@ namespace SchemaInfoScanner.Schemata.TypedParameterSchemata;
 public static class TypedPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
-        ParameterName parameterName,
+        PropertyName propertyName,
         INamedTypeSymbol namedTypeSymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
         {
-            return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList);
+            return CreatePrimitiveParameterSchema(propertyName, namedTypeSymbol, attributeList);
         }
         else if (ContainerTypeChecker.IsPrimitiveContainer(namedTypeSymbol))
         {
             var isSingleColumnContainer = AttributeAccessors.HasAttribute<SingleColumnContainerAttribute>(attributeList);
             return isSingleColumnContainer
-                ? CreateSingleColumnContainerParameterSchema(parameterName, namedTypeSymbol, attributeList)
-                : CreatePrimitiveContainerParameterSchema(parameterName, namedTypeSymbol, attributeList);
+                ? CreateSingleColumnContainerParameterSchema(propertyName, namedTypeSymbol, attributeList)
+                : CreatePrimitiveContainerParameterSchema(propertyName, namedTypeSymbol, attributeList);
         }
         else if (DictionaryTypeChecker.IsPrimitiveKeyPrimitiveValueDictionaryType(namedTypeSymbol))
         {
-            return CreatePrimitiveKeyPrimitiveValueDictionarySchema(parameterName, namedTypeSymbol, attributeList);
+            return CreatePrimitiveKeyPrimitiveValueDictionarySchema(propertyName, namedTypeSymbol, attributeList);
         }
 
         // record key record value dictionary
@@ -42,26 +42,26 @@ public static class TypedPropertySchemaFactory
     }
 
     private static PrimitiveKeyPrimitiveValueDictionaryPropertySchema CreatePrimitiveKeyPrimitiveValueDictionarySchema(
-        ParameterName parameterName,
+        PropertyName propertyName,
         INamedTypeSymbol namedTypeSymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
         var keySchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.ContainerKind.DictionaryKey,
             CreatePrimitiveParameterSchema(
-                parameterName,
+                propertyName,
                 (INamedTypeSymbol)namedTypeSymbol.TypeArguments[0],
                 attributeList));
 
         var valueSchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.ContainerKind.DictionaryValue,
             CreatePrimitiveParameterSchema(
-                parameterName,
+                propertyName,
                 (INamedTypeSymbol)namedTypeSymbol.TypeArguments[1],
                 attributeList));
 
         return new PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
-            parameterName,
+            propertyName,
             namedTypeSymbol,
             attributeList,
             keySchema,
@@ -69,12 +69,12 @@ public static class TypedPropertySchemaFactory
     }
 
     private static PropertySchemaBase CreatePrimitiveContainerParameterSchema(
-        ParameterName parameterName,
+        PropertyName propertyName,
         INamedTypeSymbol namedTypeSymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
         var innerSymbol = (INamedTypeSymbol)namedTypeSymbol.TypeArguments.Single();
-        var innerSchema = CreatePrimitiveParameterSchema(parameterName, innerSymbol, []);
+        var innerSchema = CreatePrimitiveParameterSchema(propertyName, innerSymbol, []);
 
         if (ListTypeChecker.IsSupportedListType(namedTypeSymbol))
         {
@@ -105,12 +105,12 @@ public static class TypedPropertySchemaFactory
     }
 
     private static PropertySchemaBase CreateSingleColumnContainerParameterSchema(
-        ParameterName parameterName,
+        PropertyName propertyName,
         INamedTypeSymbol namedTypeSymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
         var innerSymbol = (INamedTypeSymbol)namedTypeSymbol.TypeArguments.Single();
-        var innerSchema = CreatePrimitiveParameterSchema(parameterName, innerSymbol, []);
+        var innerSchema = CreatePrimitiveParameterSchema(propertyName, innerSymbol, []);
         var separator = AttributeAccessors.GetAttributeValue<SingleColumnContainerAttribute, string>(attributeList);
 
         if (ListTypeChecker.IsSupportedListType(namedTypeSymbol))
@@ -144,7 +144,7 @@ public static class TypedPropertySchemaFactory
     }
 
     private static PropertySchemaBase CreatePrimitiveParameterSchema(
-        ParameterName parameterName,
+        PropertyName propertyName,
         INamedTypeSymbol namedTypeSymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
@@ -156,42 +156,42 @@ public static class TypedPropertySchemaFactory
         if (underlyingType.TypeKind is TypeKind.Enum)
         {
             return isNullable
-                ? new NullableEnumPropertySchema(parameterName, namedTypeSymbol, attributeList)
-                : new EnumPropertySchema(parameterName, namedTypeSymbol, attributeList);
+                ? new NullableEnumPropertySchema(propertyName, namedTypeSymbol, attributeList)
+                : new EnumPropertySchema(propertyName, namedTypeSymbol, attributeList);
         }
 
         if (CheckDateTimeType(underlyingType))
         {
             return isNullable
-                ? new NullableDateTimePropertySchema(parameterName, namedTypeSymbol, attributeList)
-                : new DateTimePropertySchema(parameterName, namedTypeSymbol, attributeList);
+                ? new NullableDateTimePropertySchema(propertyName, namedTypeSymbol, attributeList)
+                : new DateTimePropertySchema(propertyName, namedTypeSymbol, attributeList);
         }
 
         if (CheckTimeSpanType(underlyingType))
         {
             return isNullable
-                ? new NullableTimeSpanPropertySchema(parameterName, namedTypeSymbol, attributeList)
-                : new TimeSpanPropertySchema(parameterName, namedTypeSymbol, attributeList);
+                ? new NullableTimeSpanPropertySchema(propertyName, namedTypeSymbol, attributeList)
+                : new TimeSpanPropertySchema(propertyName, namedTypeSymbol, attributeList);
         }
 
         if (isNullable)
         {
             return underlyingType.SpecialType switch
             {
-                SpecialType.System_Boolean => new NullableBooleanPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Char => new NullableCharPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_SByte => new NullableSBytePropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Byte => new NullableBytePropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Int16 => new NullableInt16PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_UInt16 => new NullableUInt16PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Int32 => new NullableInt32PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_UInt32 => new NullableUInt32PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Int64 => new NullableInt64PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_UInt64 => new NullableUInt64PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Single => new NullableFloatPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Double => new NullableDoublePropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Decimal => new NullableDecimalPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_String => new NullableStringPropertySchema(parameterName, namedTypeSymbol, attributeList),
+                SpecialType.System_Boolean => new NullableBooleanPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Char => new NullableCharPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_SByte => new NullableSBytePropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Byte => new NullableBytePropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Int16 => new NullableInt16PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_UInt16 => new NullableUInt16PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Int32 => new NullableInt32PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_UInt32 => new NullableUInt32PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Int64 => new NullableInt64PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_UInt64 => new NullableUInt64PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Single => new NullableFloatPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Double => new NullableDoublePropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Decimal => new NullableDecimalPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_String => new NullableStringPropertySchema(propertyName, namedTypeSymbol, attributeList),
                 _ => throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported primitive type.")
             };
         }
@@ -199,20 +199,20 @@ public static class TypedPropertySchemaFactory
         {
             return underlyingType.SpecialType switch
             {
-                SpecialType.System_Boolean => new BooleanPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Char => new CharPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_SByte => new SBytePropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Byte => new BytePropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Int16 => new Int16PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_UInt16 => new UInt16PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Int32 => new Int32PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_UInt32 => new UInt32PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Int64 => new Int64PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_UInt64 => new UInt64PropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Single => new FloatPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Double => new DoublePropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_Decimal => new DecimalPropertySchema(parameterName, namedTypeSymbol, attributeList),
-                SpecialType.System_String => new StringPropertySchema(parameterName, namedTypeSymbol, attributeList),
+                SpecialType.System_Boolean => new BooleanPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Char => new CharPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_SByte => new SBytePropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Byte => new BytePropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Int16 => new Int16PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_UInt16 => new UInt16PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Int32 => new Int32PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_UInt32 => new UInt32PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Int64 => new Int64PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_UInt64 => new UInt64PropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Single => new FloatPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Double => new DoublePropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_Decimal => new DecimalPropertySchema(propertyName, namedTypeSymbol, attributeList),
+                SpecialType.System_String => new StringPropertySchema(propertyName, namedTypeSymbol, attributeList),
                 _ => throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported primitive type.")
             };
         }

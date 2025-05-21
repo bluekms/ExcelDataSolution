@@ -7,13 +7,13 @@ using SchemaInfoScanner.NameObjects;
 namespace SchemaInfoScanner.Schemata;
 
 public abstract record PropertySchemaBase(
-    ParameterName ParameterName,
+    PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
     public override string ToString()
     {
-        return ParameterName.FullName;
+        return PropertyName.FullName;
     }
 
     public bool IsNullable()
