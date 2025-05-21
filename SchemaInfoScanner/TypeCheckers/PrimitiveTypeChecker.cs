@@ -8,23 +8,23 @@ namespace SchemaInfoScanner.TypeCheckers;
 
 internal static class PrimitiveTypeChecker
 {
-    public static void Check(RawParameterSchema rawParameter)
+    public static void Check(ParameterSchemaBase parameter)
     {
-        if (!IsSupportedPrimitiveType(rawParameter.NamedTypeSymbol))
+        if (!IsSupportedPrimitiveType(parameter.NamedTypeSymbol))
         {
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported primitive type.");
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported primitive type.");
         }
 
-        if (!rawParameter.IsNullable())
+        if (!parameter.IsNullable())
         {
-            if (rawParameter.HasAttribute<NullStringAttribute>())
+            if (parameter.HasAttribute<NullStringAttribute>())
             {
-                throw new InvalidUsageException($"{rawParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+                throw new InvalidUsageException($"{parameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
             }
         }
 
-        CheckUnavailableAttribute(rawParameter);
-        CheckRequiredAttribute(rawParameter);
+        CheckUnavailableAttribute(parameter);
+        CheckRequiredAttribute(parameter);
     }
 
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
@@ -52,27 +52,27 @@ internal static class PrimitiveTypeChecker
         return CheckTimeSpanType(underlyingType);
     }
 
-    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
+    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
     {
-        if (!rawParameter.IsNullable() && rawParameter.HasAttribute<NullStringAttribute>())
+        if (!parameter.IsNullable() && parameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{rawParameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
+            throw new InvalidUsageException($"{parameter.ParameterName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
         }
 
-        if (rawParameter.HasAttribute<MaxCountAttribute>())
+        if (parameter.HasAttribute<MaxCountAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {parameter.ParameterName.FullName}.");
         }
 
-        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {parameter.ParameterName.FullName}.");
         }
     }
 
-    private static void CheckRequiredAttribute(RawParameterSchema rawParameter)
+    private static void CheckRequiredAttribute(ParameterSchemaBase parameter)
     {
-        var symbol = rawParameter.NamedTypeSymbol;
+        var symbol = parameter.NamedTypeSymbol;
         var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
         var underlyingType = isNullable
             ? symbol.TypeArguments[0]
@@ -80,17 +80,17 @@ internal static class PrimitiveTypeChecker
 
         if (CheckDateTimeType(underlyingType))
         {
-            if (!rawParameter.HasAttribute<DateTimeFormatAttribute>())
+            if (!parameter.HasAttribute<DateTimeFormatAttribute>())
             {
-                throw new AttributeNotFoundException<DateTimeFormatAttribute>(rawParameter.ParameterName.FullName);
+                throw new AttributeNotFoundException<DateTimeFormatAttribute>(parameter.ParameterName.FullName);
             }
         }
 
         if (CheckTimeSpanType(underlyingType))
         {
-            if (!rawParameter.HasAttribute<TimeSpanFormatAttribute>())
+            if (!parameter.HasAttribute<TimeSpanFormatAttribute>())
             {
-                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(rawParameter.ParameterName.FullName);
+                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(parameter.ParameterName.FullName);
             }
         }
     }

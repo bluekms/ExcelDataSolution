@@ -16,22 +16,48 @@ public abstract record ParameterSchemaBase(
         return ParameterName.FullName;
     }
 
+    public bool IsNullable()
+    {
+        return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+    }
+
     public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
+    {
+        var enumerator = Enumerable.Repeat(argument, 1).GetEnumerator();
+        CheckCompatibility(enumerator, enumMemberContainer, logger);
+    }
+
+    public void CheckCompatibility(IEnumerator<string> arguments, EnumMemberContainer enumMemberContainer, ILogger logger)
     {
         try
         {
-            OnCheckCompatibility(argument, enumMemberContainer, logger);
+            OnCheckCompatibility(arguments, enumMemberContainer, logger);
         }
         catch (Exception e)
         {
-            LogError(logger, GetType(), argument, e, e.InnerException);
+            LogError(logger, GetType(), arguments.Current, e, e.InnerException);
             throw;
         }
     }
 
-    protected abstract void OnCheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger);
+    protected static string GetNextArgument(IEnumerator<string> arguments, Type schemaType, ILogger logger)
+    {
+        if (!arguments.MoveNext())
+        {
+            var ex = new InvalidOperationException("Column count error.");
+            LogError(logger, schemaType, ex.Message, ex, ex.InnerException);
+            throw ex;
+        }
 
-    private static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =
+        return arguments.Current;
+    }
+
+    protected abstract void OnCheckCompatibility(
+        IEnumerator<string> arguments,
+        EnumMemberContainer enumMemberContainer,
+        ILogger logger);
+
+    protected static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =
         LoggerMessage.Define<Type, string, Exception?>(
             LogLevel.Error,
             new EventId(0, nameof(ParameterSchemaBase)),

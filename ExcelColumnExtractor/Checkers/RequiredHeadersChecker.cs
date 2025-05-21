@@ -16,13 +16,13 @@ public static class RequiredHeadersChecker
     public sealed record TargetColumnIndices(IReadOnlyList<string> Headers, IReadOnlySet<int> IndexSet);
 
     public static TargetColumnIndicesContainer Check(
-        IReadOnlyList<RawRecordSchema> staticDataRecordSchemaList,
+        IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
         RecordSchemaContainer recordSchemaContainer,
         ExcelSheetNameContainer sheetNameContainer,
         HeaderLengthContainer headerLengthContainer,
         ILogger logger)
     {
-        var result = new Dictionary<RawRecordSchema, TargetColumnIndices>(staticDataRecordSchemaList.Count);
+        var result = new Dictionary<RecordSchema, TargetColumnIndices>(staticDataRecordSchemaList.Count);
 
         var sb = new StringBuilder();
         foreach (var recordSchema in staticDataRecordSchemaList)
@@ -55,7 +55,7 @@ public static class RequiredHeadersChecker
     }
 
     private static TargetColumnIndices CheckAndGetTargetColumns(
-        RawRecordSchema recordSchema,
+        RecordSchema recordSchema,
         RecordSchemaContainer recordSchemaContainer,
         ExcelSheetName excelSheetName,
         IReadOnlyDictionary<string, int> headerLengths,
@@ -123,6 +123,6 @@ public static class RequiredHeadersChecker
         return -1;
     }
 
-    private static readonly Action<ILogger, RawRecordSchema, string, Exception?> LogError =
-        LoggerMessage.Define<RawRecordSchema, string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{RecordSchema}: {ErrorMessage}");
+    private static readonly Action<ILogger, RecordSchema, string, Exception?> LogError =
+        LoggerMessage.Define<RecordSchema, string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{RecordSchema}: {ErrorMessage}");
 }

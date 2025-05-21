@@ -43,7 +43,9 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
         var valueStr = "1986-05-26 03:17:00.000";
-        parameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
+
+        var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
+        parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -109,7 +111,9 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
         {
             var parameter = recordSchema.RecordParameterSchemaList[0];
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
-            parameter.CheckCompatibility(valueStr, enumMemberContainer, logger);
+
+            var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
+            parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
         });
         Assert.Single(logger.Logs);
     }

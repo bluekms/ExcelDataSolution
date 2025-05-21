@@ -14,24 +14,23 @@ internal static class HashSetTypeChecker
     private static readonly HashSet<string> SupportedTypeNames =
     [
         "HashSet<>",
-        "ImmutableHashSet<>",
-        "ImmutableSortedSet<>"
+        "IReadOnlyCollection<>",
     ];
 
     public static void Check(
-        RawParameterSchema rawParameter,
+        ParameterSchemaBase parameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedHashSetType(rawParameter.NamedTypeSymbol))
+        if (!IsSupportedHashSetType(parameter.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {rawParameter.ParameterName.FullName} to be supported hashset type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be supported hashset type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(rawParameter);
+        CheckUnavailableAttribute(parameter);
 
-        var typeArgument = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments.Single();
+        var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
             return;
@@ -39,33 +38,33 @@ internal static class HashSetTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
         }
 
-        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
+        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new TypeNotSupportedException($"{rawParameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
+            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
         }
 
-        var innerRecordSchema = rawParameter.FindInnerRecordSchema(recordSchemaContainer);
+        var innerRecordSchema = parameter.FindInnerRecordSchema(recordSchemaContainer);
         RecordTypeChecker.Check(innerRecordSchema, recordSchemaContainer, visited, logger);
     }
 
-    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
+    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
     {
-        if (rawParameter.HasAttribute<ForeignKeyAttribute>())
+        if (parameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for hashset type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for hashset type {parameter.ParameterName.FullName}.");
         }
 
-        if (rawParameter.HasAttribute<KeyAttribute>())
+        if (parameter.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for hashset type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for hashset type {parameter.ParameterName.FullName}.");
         }
 
-        if (rawParameter.HasAttribute<NullStringAttribute>())
+        if (parameter.HasAttribute<NullStringAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for hashset type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for hashset type {parameter.ParameterName.FullName}.");
         }
     }
 

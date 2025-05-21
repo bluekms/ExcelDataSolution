@@ -4,9 +4,9 @@ using SchemaInfoScanner.Schemata;
 namespace ExcelColumnExtractor.Containers;
 
 public class TargetColumnIndicesContainer(
-    IReadOnlyDictionary<RawRecordSchema, RequiredHeadersChecker.TargetColumnIndices> targetColumnIndices)
+    IReadOnlyDictionary<RecordSchema, RequiredHeadersChecker.TargetColumnIndices> targetColumnIndices)
 {
-    public RequiredHeadersChecker.TargetColumnIndices Get(RawRecordSchema rawRecordSchema)
+    public RequiredHeadersChecker.TargetColumnIndices Get(RecordSchema rawRecordSchema)
     {
         return targetColumnIndices[rawRecordSchema];
     }

@@ -1,38 +1,149 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedParameterSchemata;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata.ContainerTypes;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
+using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
 using SchemaInfoScanner.TypeCheckers;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata;
 
+// 이거 이름은 싱글컬럼 스키마 생성기여야 할것같다. Dictionary가 되니까 답이 없네
+// Record도
 public static class TypedParameterSchemaFactory
 {
-    public static ParameterSchemaBase Create(RawParameterSchema rawParameterSchema)
-    {
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(rawParameterSchema.NamedTypeSymbol))
-        {
-            throw new TypeNotSupportedException($"{rawParameterSchema.NamedTypeSymbol.Name} is not supported primitive type.");
-        }
-
-        return CreatePrimitiveParameterSchema(
-            rawParameterSchema.ParameterName,
-            rawParameterSchema.NamedTypeSymbol,
-            rawParameterSchema.AttributeList);
-    }
-
     public static ParameterSchemaBase Create(
         ParameterName parameterName,
         INamedTypeSymbol namedTypeSymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
         {
-            throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported primitive type.");
+            return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList);
+        }
+        else if (ContainerTypeChecker.IsPrimitiveContainer(namedTypeSymbol))
+        {
+            var isSingleColumnContainer = AttributeAccessors.HasAttribute<SingleColumnContainerAttribute>(attributeList);
+            return isSingleColumnContainer
+                ? CreateSingleColumnContainerParameterSchema(parameterName, namedTypeSymbol, attributeList)
+                : CreatePrimitiveContainerParameterSchema(parameterName, namedTypeSymbol, attributeList);
+        }
+        else if (DictionaryTypeChecker.IsPrimitiveKeyPrimitiveValueDictionaryType(namedTypeSymbol))
+        {
+            return CreatePrimitiveKeyPrimitiveValueDictionarySchema(parameterName, namedTypeSymbol, attributeList);
         }
 
-        return CreatePrimitiveParameterSchema(parameterName, namedTypeSymbol, attributeList);
+        // record key record value dictionary
+        // record list
+        // record hash set
+        // primitive key record value dictionary
+        throw new NotImplementedException();
+    }
+
+    private static PrimitiveKeyPrimitiveValueDictionarySchema CreatePrimitiveKeyPrimitiveValueDictionarySchema(
+        ParameterName parameterName,
+        INamedTypeSymbol namedTypeSymbol,
+        IReadOnlyList<AttributeSyntax> attributeList)
+    {
+        var keySchema = new PrimitiveTypeGenericArgumentSchema(
+            PrimitiveTypeGenericArgumentSchema.ContainerKind.DictionaryKey,
+            CreatePrimitiveParameterSchema(
+                parameterName,
+                (INamedTypeSymbol)namedTypeSymbol.TypeArguments[0],
+                attributeList));
+
+        var valueSchema = new PrimitiveTypeGenericArgumentSchema(
+            PrimitiveTypeGenericArgumentSchema.ContainerKind.DictionaryValue,
+            CreatePrimitiveParameterSchema(
+                parameterName,
+                (INamedTypeSymbol)namedTypeSymbol.TypeArguments[1],
+                attributeList));
+
+        return new PrimitiveKeyPrimitiveValueDictionarySchema(
+            parameterName,
+            namedTypeSymbol,
+            attributeList,
+            keySchema,
+            valueSchema);
+    }
+
+    private static ParameterSchemaBase CreatePrimitiveContainerParameterSchema(
+        ParameterName parameterName,
+        INamedTypeSymbol namedTypeSymbol,
+        IReadOnlyList<AttributeSyntax> attributeList)
+    {
+        var innerSymbol = (INamedTypeSymbol)namedTypeSymbol.TypeArguments.Single();
+        var innerSchema = CreatePrimitiveParameterSchema(parameterName, innerSymbol, []);
+
+        if (ListTypeChecker.IsSupportedListType(namedTypeSymbol))
+        {
+            var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
+                PrimitiveTypeGenericArgumentSchema.ContainerKind.List,
+                innerSchema);
+
+            return new PrimitiveListParameterSchema(
+                genericArgumentSchema,
+                namedTypeSymbol,
+                attributeList);
+        }
+        else if (HashSetTypeChecker.IsSupportedHashSetType(namedTypeSymbol))
+        {
+            var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
+                PrimitiveTypeGenericArgumentSchema.ContainerKind.HashSet,
+                innerSchema);
+
+            return new PrimitiveHashSetParameterSchema(
+                genericArgumentSchema,
+                namedTypeSymbol,
+                attributeList);
+        }
+        else
+        {
+            throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported container type.");
+        }
+    }
+
+    private static ParameterSchemaBase CreateSingleColumnContainerParameterSchema(
+        ParameterName parameterName,
+        INamedTypeSymbol namedTypeSymbol,
+        IReadOnlyList<AttributeSyntax> attributeList)
+    {
+        var innerSymbol = (INamedTypeSymbol)namedTypeSymbol.TypeArguments.Single();
+        var innerSchema = CreatePrimitiveParameterSchema(parameterName, innerSymbol, []);
+        var separator = AttributeAccessors.GetAttributeValue<SingleColumnContainerAttribute, string>(attributeList);
+
+        if (ListTypeChecker.IsSupportedListType(namedTypeSymbol))
+        {
+            var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
+                PrimitiveTypeGenericArgumentSchema.ContainerKind.SingleColumnList,
+                innerSchema);
+
+            return new SingleColumnPrimitiveListParameterSchema(
+                genericArgumentSchema,
+                namedTypeSymbol,
+                attributeList,
+                separator);
+        }
+        else if (HashSetTypeChecker.IsSupportedHashSetType(namedTypeSymbol))
+        {
+            var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
+                PrimitiveTypeGenericArgumentSchema.ContainerKind.SingleColumnHashSet,
+                innerSchema);
+
+            return new SingleColumnPrimitiveHashSetParameterSchema(
+                genericArgumentSchema,
+                namedTypeSymbol,
+                attributeList,
+                separator);
+        }
+        else
+        {
+            throw new TypeNotSupportedException($"{namedTypeSymbol.Name} is not supported single column container type.");
+        }
     }
 
     private static ParameterSchemaBase CreatePrimitiveParameterSchema(

@@ -12,6 +12,29 @@ namespace UnitTest;
 public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
+    public void PrimitiveKeyPrimitiveValueDictionaryTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = @"
+            [StaticDataRecord(""Test"", ""TestSheet"")]
+            public sealed record MyRecord(
+                Dictionary<int, string> Students,
+            );";
+
+        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
     public void PrimitiveKeyRecordValueDictionaryTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -37,7 +60,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -76,7 +99,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }
@@ -338,7 +361,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.FindAll("MyRecord").Single();
-        foreach (var parameterSchema in recordSchema.RawParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
         }

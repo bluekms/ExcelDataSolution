@@ -14,31 +14,32 @@ internal static class DictionaryTypeChecker
     private static readonly HashSet<string> SupportedTypeNames =
     [
         "Dictionary<, >",
+        "ReadOnlyDictionary<, >",
         "ImmutableDictionary<, >",
         "ImmutableSortedDictionary<, >",
         "FrozenDictionary<, >"
     ];
 
     public static void Check(
-        RawParameterSchema rawParameter,
+        ParameterSchemaBase parameter,
         RecordSchemaContainer recordSchemaContainer,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedDictionaryType(rawParameter.NamedTypeSymbol))
+        if (!IsSupportedDictionaryType(parameter.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {rawParameter.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be supported dictionary type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(rawParameter);
+        CheckUnavailableAttribute(parameter);
 
-        var keySymbol = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments[0];
+        var keySymbol = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
-        var valueSymbol = (INamedTypeSymbol)rawParameter.NamedTypeSymbol.TypeArguments[1];
+        var valueSymbol = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments[1];
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
@@ -46,12 +47,12 @@ internal static class DictionaryTypeChecker
 
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaContainer, visited, logger);
 
-        var valueRecordKeyParameterSchema = valueRecordSchema.RawParameterSchemaList
+        var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
 
         if (valueRecordKeyParameterSchema is null)
         {
-            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {rawParameter.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
+            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {parameter.ParameterName.FullName}, KeyAttribute must be used in one of the parameters.");
         }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
@@ -85,26 +86,49 @@ internal static class DictionaryTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    private static void CheckUnavailableAttribute(RawParameterSchema rawParameter)
+    public static bool IsPrimitiveKeyPrimitiveValueDictionaryType(INamedTypeSymbol symbol)
     {
-        if (rawParameter.HasAttribute<ForeignKeyAttribute>())
+        if (!IsSupportedDictionaryType(symbol))
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
+            return false;
         }
 
-        if (rawParameter.HasAttribute<KeyAttribute>())
+        var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
+        if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
+            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
-        if (rawParameter.HasAttribute<NullStringAttribute>())
+        var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
+        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
+            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
         }
 
-        if (rawParameter.HasAttribute<SingleColumnContainerAttribute>())
+        return PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol) &&
+               PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol);
+    }
+
+    private static void CheckUnavailableAttribute(ParameterSchemaBase parameter)
+    {
+        if (parameter.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {rawParameter.ParameterName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+        }
+
+        if (parameter.HasAttribute<KeyAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+        }
+
+        if (parameter.HasAttribute<NullStringAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
+        }
+
+        if (parameter.HasAttribute<SingleColumnContainerAttribute>())
+        {
+            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {parameter.ParameterName.FullName}.");
         }
     }
 
