@@ -1,0 +1,34 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Extensions;
+using SchemaInfoScanner.NameObjects;
+
+namespace SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
+
+public sealed record StringPropertySchema(
+    ParameterName ParameterName,
+    INamedTypeSymbol NamedTypeSymbol,
+    IReadOnlyList<AttributeSyntax> AttributeList)
+    : PropertySchemaBase(ParameterName, NamedTypeSymbol, AttributeList)
+{
+    protected override void OnCheckCompatibility(
+        IEnumerator<string> arguments,
+        EnumMemberContainer enumMemberContainer,
+        ILogger logger)
+    {
+        if (!this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
+        {
+            return;
+        }
+
+        var argument = GetNextArgument(arguments, GetType(), logger);
+        if (!Regex.IsMatch(argument, pattern))
+        {
+            throw new ArgumentException($"The argument '{arguments}' does not match the regular expression '{pattern}'.");
+        }
+    }
+}

@@ -8,20 +8,20 @@ namespace SchemaInfoScanner.Extensions;
 public static class ParameterSchemaBaseAttributeAccessors
 {
     public static bool HasAttribute<T>(
-        this ParameterSchemaBase parameterSchema)
+        this PropertySchemaBase propertySchema)
         where T : Attribute
     {
         var attributeName = typeof(T).Name.Replace("Attribute", string.Empty);
-        return parameterSchema.AttributeList.Any(x => x.Name.ToString() == attributeName);
+        return propertySchema.AttributeList.Any(x => x.Name.ToString() == attributeName);
     }
 
     public static TValue GetAttributeValue<TAttribute, TValue>(
-        this ParameterSchemaBase parameterSchema,
+        this PropertySchemaBase propertySchema,
         int attributeParameterIndex = 0)
         where TAttribute : Attribute
     {
         var attributeName = typeof(TAttribute).Name.Replace("Attribute", string.Empty);
-        var attribute = parameterSchema.AttributeList.Single(x => x.Name.ToString() == attributeName);
+        var attribute = propertySchema.AttributeList.Single(x => x.Name.ToString() == attributeName);
 
         if (attribute.ArgumentList is null)
         {
@@ -35,14 +35,14 @@ public static class ParameterSchemaBaseAttributeAccessors
     }
 
     public static bool TryGetAttributeValue<TAttribute, TValue>(
-        this ParameterSchemaBase parameterSchema,
+        this PropertySchemaBase propertySchema,
         int attributeParameterIndex,
         [NotNullWhen(true)] out TValue? value)
         where TAttribute : Attribute
     {
         try
         {
-            value = parameterSchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
+            value = propertySchema.GetAttributeValue<TAttribute, TValue>(attributeParameterIndex);
             return value is not null;
         }
         catch (Exception)
@@ -52,10 +52,10 @@ public static class ParameterSchemaBaseAttributeAccessors
         }
     }
 
-    public static IReadOnlyList<string> GetAttributeValueList<TAttribute>(this ParameterSchemaBase parameterSchema)
+    public static IReadOnlyList<string> GetAttributeValueList<TAttribute>(this PropertySchemaBase propertySchema)
     {
         var attributeName = typeof(TAttribute).Name.Replace("Attribute", string.Empty);
-        var attribute = parameterSchema.AttributeList.Single(x => x.Name.ToString() == attributeName);
+        var attribute = propertySchema.AttributeList.Single(x => x.Name.ToString() == attributeName);
 
         if (attribute.ArgumentList is null)
         {

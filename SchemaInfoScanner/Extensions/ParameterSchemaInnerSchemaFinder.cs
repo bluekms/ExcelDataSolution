@@ -9,32 +9,32 @@ namespace SchemaInfoScanner.Extensions;
 public static class ParameterSchemaInnerSchemaFinder
 {
     public static RecordSchema FindInnerRecordSchema(
-        this ParameterSchemaBase parameter,
+        this PropertySchemaBase property,
         RecordSchemaContainer recordSchemaContainer)
     {
-        var typeArgument = GetTypeArgument(parameter);
+        var typeArgument = GetTypeArgument(property);
         var typeArgumentSchema = recordSchemaContainer.TryFind(typeArgument);
         if (typeArgumentSchema is null)
         {
             var innerException = new KeyNotFoundException($"{typeArgument.Name} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{parameter.ParameterName.FullName} is not supported type.", innerException);
+            throw new TypeNotSupportedException($"{property.ParameterName.FullName} is not supported type.", innerException);
         }
 
         return typeArgumentSchema;
     }
 
-    private static INamedTypeSymbol GetTypeArgument(ParameterSchemaBase parameter)
+    private static INamedTypeSymbol GetTypeArgument(PropertySchemaBase property)
     {
-        if (ListTypeChecker.IsSupportedListType(parameter.NamedTypeSymbol) ||
-            HashSetTypeChecker.IsSupportedHashSetType(parameter.NamedTypeSymbol))
+        if (ListTypeChecker.IsSupportedListType(property.NamedTypeSymbol) ||
+            HashSetTypeChecker.IsSupportedHashSetType(property.NamedTypeSymbol))
         {
-            return (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
+            return (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Single();
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(property.NamedTypeSymbol))
         {
-            return (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
+            return (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Last();
         }
 
-        throw new InvalidOperationException($"Expected {parameter.ParameterName.FullName} to be record container type.");
+        throw new InvalidOperationException($"Expected {property.ParameterName.FullName} to be record container type.");
     }
 }

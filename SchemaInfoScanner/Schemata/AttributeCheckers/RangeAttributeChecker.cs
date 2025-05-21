@@ -6,7 +6,7 @@ namespace SchemaInfoScanner.Schemata.AttributeCheckers;
 
 public static class RangeAttributeChecker
 {
-    public static void Check<T>(ParameterSchemaBase parameterSchema, T value)
+    public static void Check<T>(PropertySchemaBase propertySchema, T value)
         where T : IComparable<T>
     {
         if (typeof(T).IsEnum)
@@ -14,7 +14,7 @@ public static class RangeAttributeChecker
             throw new InvalidOperationException("RangeAttribute cannot be used in enum.");
         }
 
-        var attributeValues = parameterSchema.GetAttributeValueList<RangeAttribute>();
+        var attributeValues = propertySchema.GetAttributeValueList<RangeAttribute>();
         if (!attributeValues.Any())
         {
             return;
@@ -30,7 +30,7 @@ public static class RangeAttributeChecker
 
         if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
         {
-            throw new ArgumentOutOfRangeException(parameterSchema.ParameterName.FullName, value, $"Value({value}) must be between {min} and {max}.");
+            throw new ArgumentOutOfRangeException(propertySchema.ParameterName.FullName, value, $"Value({value}) must be between {min} and {max}.");
         }
     }
 }
