@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace SchemaInfoScanner.Collectors;
 

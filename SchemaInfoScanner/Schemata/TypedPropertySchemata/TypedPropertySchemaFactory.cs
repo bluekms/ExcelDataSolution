@@ -3,9 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata.ContainerTypes;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
