@@ -39,10 +39,48 @@ internal static class DictionaryTypeChecker
             throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
+        if (PrimitiveTypeChecker.IsDateTimeType(keySymbol))
+        {
+            if (!property.HasAttribute<DateTimeFormatAttribute>())
+            {
+                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
+            }
+        }
+
+        if (PrimitiveTypeChecker.IsTimeSpanType(keySymbol))
+        {
+            if (!property.HasAttribute<TimeSpanFormatAttribute>())
+            {
+                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
+            }
+        }
+
         var valueSymbol = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments[1];
+
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
+        {
+            if (PrimitiveTypeChecker.IsDateTimeType(valueSymbol))
+            {
+                if (!property.HasAttribute<DateTimeFormatAttribute>())
+                {
+                    throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
+                }
+            }
+
+            if (PrimitiveTypeChecker.IsTimeSpanType(valueSymbol))
+            {
+                if (!property.HasAttribute<TimeSpanFormatAttribute>())
+                {
+                    throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
+                }
+            }
+
+            return;
+        }
+
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+            throw new TypeNotSupportedException("Value type of dictionary must be non-nullable.");
         }
 
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaContainer, visited, logger);
@@ -100,9 +138,12 @@ internal static class DictionaryTypeChecker
         }
 
         var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
-        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
-            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+            if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+            {
+                throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+            }
         }
 
         return PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol) &&
