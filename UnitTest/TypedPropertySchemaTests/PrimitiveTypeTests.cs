@@ -68,7 +68,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
     public void EnumTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }

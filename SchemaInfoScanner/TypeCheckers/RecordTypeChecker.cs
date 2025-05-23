@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
@@ -54,6 +55,30 @@ internal static class RecordTypeChecker
 
         return !RecordMethodNames.Except(methodSymbols).Any();
     }
+
+    public static bool TryResolveNestedTypeSymbol(
+        INamedTypeSymbol recordSymbol,
+        ITypeSymbol propertySymbol,
+        [NotNullWhen(true)] out INamedTypeSymbol? resolved)
+    {
+        resolved = null;
+
+        if (propertySymbol is not IErrorTypeSymbol errorType)
+            return false;
+
+        var candidate = recordSymbol
+            .GetTypeMembers()
+            .FirstOrDefault(x => x.Name == errorType.Name);
+
+        if (candidate is not null && IsSupportedRecordType(candidate))
+        {
+            resolved = candidate;
+            return resolved.IsRecord;
+        }
+
+        return false;
+    }
+
 
     public static RecordSchema CheckAndGetSchema(
         INamedTypeSymbol symbol,

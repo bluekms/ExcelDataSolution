@@ -28,7 +28,7 @@ public sealed class RecordSchemaCollector
 
     public void Collect(RecordSchemaLoader.Result loadResult)
     {
-        var result = Parse(loadResult);
+        var result= Parse(loadResult);
 
         foreach (var (recordName, namedTypeSymbol) in result.RecordNamedTypeSymbolCollector)
         {
@@ -40,17 +40,19 @@ public sealed class RecordSchemaCollector
             recordAttributeDictionary.Add(recordName, recordAttributes.ToList());
         }
 
-        foreach (var parameterName in result.ParameterNamedTypeSymbolCollector.ParameterNames)
+        foreach (var propertyName in result.ParameterNamedTypeSymbolCollector.ParameterNames)
         {
-            var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
-            var attributes = result.ParameterAttributeCollector[parameterName];
+            var recordSymbol = result.RecordNamedTypeSymbolCollector[propertyName.RecordName];
+            var propertySymbol = result.ParameterNamedTypeSymbolCollector[propertyName];
+            var attributes = result.ParameterAttributeCollector[propertyName];
 
             var parameterSchema = TypedPropertySchemaFactory.Create(
-                parameterName,
-                namedTypeSymbol,
+                recordSymbol,
+                propertyName,
+                propertySymbol,
                 attributes);
 
-            var recordName = parameterName.RecordName;
+            var recordName = propertyName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
             {
                 recordMembers.Add(parameterSchema);

@@ -1,6 +1,6 @@
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 
 public class PrimitiveTypeGenericArgumentSchema(
     PrimitiveTypeGenericArgumentSchema.ContainerKind containingType,

@@ -7,8 +7,6 @@ using Xunit.Abstractions;
 
 namespace UnitTest.TypedPropertySchemaTests.ContainerPropertySchemaTests;
 
-value에 list<T> 는 list<record> 를 사용하도록 유도한다
-
 public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Theory]
@@ -29,7 +27,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryKeyTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -55,7 +53,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryEnumKeyTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -83,7 +81,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryDateTimeKeyTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -110,7 +108,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryTimeSpanKeyTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -164,7 +162,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -191,7 +189,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryEnumValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -220,7 +218,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryDateTimeValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -248,7 +246,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryTimeSpanValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -276,7 +274,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryEnumKeyEnumValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -305,7 +303,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryDateTimeKeyAndValueTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -332,7 +330,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryDateTimeKeyDateTimeValueTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -360,7 +358,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryTimeSpanKeyAndValueTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -387,7 +385,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DictionaryTimeSpanKeyTimeSpanValueTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }

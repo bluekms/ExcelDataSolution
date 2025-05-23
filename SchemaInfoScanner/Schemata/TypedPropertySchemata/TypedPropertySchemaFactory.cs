@@ -6,6 +6,7 @@ using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
@@ -14,31 +15,74 @@ namespace SchemaInfoScanner.Schemata.TypedPropertySchemata;
 public static class TypedPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
+        INamedTypeSymbol recordSymbol,
         PropertyName propertyName,
-        INamedTypeSymbol namedTypeSymbol,
+        INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(namedTypeSymbol))
+        if (PrimitiveTypeChecker.IsSupportedPrimitiveType(propertySymbol))
         {
-            return CreatePrimitiveParameterSchema(propertyName, namedTypeSymbol, attributeList);
+            return CreatePrimitiveParameterSchema(propertyName, propertySymbol, attributeList);
         }
-        else if (ContainerTypeChecker.IsPrimitiveContainer(namedTypeSymbol))
+        else if (ContainerTypeChecker.IsSupportedContainerType(propertySymbol))
         {
-            var isSingleColumnContainer = AttributeAccessors.HasAttribute<SingleColumnContainerAttribute>(attributeList);
-            return isSingleColumnContainer
-                ? CreateSingleColumnContainerParameterSchema(propertyName, namedTypeSymbol, attributeList)
-                : CreatePrimitiveContainerParameterSchema(propertyName, namedTypeSymbol, attributeList);
+            if (ContainerTypeChecker.IsPrimitiveContainer(propertySymbol))
+            {
+                var isSingleColumnContainer = AttributeAccessors.HasAttribute<SingleColumnContainerAttribute>(attributeList);
+                return isSingleColumnContainer
+                    ? CreateSingleColumnContainerParameterSchema(propertyName, propertySymbol, attributeList)
+                    : CreatePrimitiveContainerParameterSchema(propertyName, propertySymbol, attributeList);
+            }
+            else
+            {
+                // 레코드 컨테이너
+                // 제너릭 타입심볼 찾아다가 스키마로 만들고
+                // 그걸 아규먼트로 넣는다
+            }
         }
-        else if (DictionaryTypeChecker.IsPrimitiveKeyPrimitiveValueDictionaryType(namedTypeSymbol))
+        else if (DictionaryTypeChecker.IsSupportedDictionaryType(propertySymbol))
         {
-            return CreatePrimitiveKeyPrimitiveValueDictionarySchema(propertyName, namedTypeSymbol, attributeList);
+            if (DictionaryTypeChecker.IsPrimitiveKeyPrimitiveValueDictionaryType(propertySymbol))
+            {
+                return CreatePrimitiveKeyPrimitiveValueDictionarySchema(propertyName, propertySymbol, attributeList);
+            }
+            else
+            {
+                // 레코드 딕셔너리
+            }
+        }
+        else if (RecordTypeChecker.IsSupportedRecordType(propertySymbol))
+        {
+            return CreateRecordSchema(recordSymbol, propertyName, propertySymbol, attributeList);
+        }
+        else if (RecordTypeChecker.TryResolveNestedTypeSymbol(recordSymbol, propertySymbol, out var nestedRecordSymbol))
+        {
+            return Create(recordSymbol, propertyName, nestedRecordSymbol, attributeList);
         }
 
-        // record key record value dictionary
-        // record list
-        // record hash set
-        // primitive key record value dictionary
-        throw new NotImplementedException();
+        throw new NotSupportedException();
+    }
+
+    private static PropertySchemaBase CreateRecordSchema(
+        INamedTypeSymbol recordSymbol,
+        PropertyName propertyName,
+        INamedTypeSymbol propertySymbol,
+        IReadOnlyList<AttributeSyntax> attributeList)
+    {
+        var memberSymbols = propertySymbol.GetMembers()
+            .OfType<IPropertySymbol>()
+            .Where(x => x.DeclaringSyntaxReferences.Length > 0)
+            .Where(x => x.Type is INamedTypeSymbol)
+            .Select(x => (INamedTypeSymbol)x.Type);
+
+        var memberSchemata = new List<PropertySchemaBase>();
+        foreach (var symbol in memberSymbols)
+        {
+            var innerSchema = Create(recordSymbol, propertyName, symbol, attributeList);
+            memberSchemata.Add(innerSchema);
+        }
+
+        return new RecordPropertySchema(propertyName, propertySymbol, attributeList, memberSchemata);
     }
 
     private static PrimitiveKeyPrimitiveValueDictionaryPropertySchema CreatePrimitiveKeyPrimitiveValueDictionarySchema(
