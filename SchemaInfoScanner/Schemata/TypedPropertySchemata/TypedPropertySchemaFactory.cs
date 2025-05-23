@@ -15,10 +15,10 @@ namespace SchemaInfoScanner.Schemata.TypedPropertySchemata;
 public static class TypedPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
-        INamedTypeSymbol recordSymbol,
         PropertyName propertyName,
         INamedTypeSymbol propertySymbol,
-        IReadOnlyList<AttributeSyntax> attributeList)
+        IReadOnlyList<AttributeSyntax> attributeList,
+        INamedTypeSymbol parentRecordSymbol)
     {
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(propertySymbol))
         {
@@ -35,9 +35,11 @@ public static class TypedPropertySchemaFactory
             }
             else
             {
+                // run
                 // 레코드 컨테이너
                 // 제너릭 타입심볼 찾아다가 스키마로 만들고
                 // 그걸 아규먼트로 넣는다
+                throw new NotImplementedException();
             }
         }
         else if (DictionaryTypeChecker.IsSupportedDictionaryType(propertySymbol))
@@ -49,25 +51,26 @@ public static class TypedPropertySchemaFactory
             else
             {
                 // 레코드 딕셔너리
+                throw new NotImplementedException();
             }
         }
         else if (RecordTypeChecker.IsSupportedRecordType(propertySymbol))
         {
-            return CreateRecordSchema(recordSymbol, propertyName, propertySymbol, attributeList);
+            return CreateRecordSchema(propertyName, propertySymbol, attributeList, parentRecordSymbol);
         }
-        else if (RecordTypeChecker.TryResolveNestedTypeSymbol(recordSymbol, propertySymbol, out var nestedRecordSymbol))
+        else if (RecordTypeChecker.TryFindNestedRecordTypeSymbol(parentRecordSymbol, propertySymbol, out var nestedRecordSymbol))
         {
-            return Create(recordSymbol, propertyName, nestedRecordSymbol, attributeList);
+            return Create(propertyName, nestedRecordSymbol, attributeList, parentRecordSymbol);
         }
 
         throw new NotSupportedException();
     }
 
-    private static PropertySchemaBase CreateRecordSchema(
-        INamedTypeSymbol recordSymbol,
+    private static RecordPropertySchema CreateRecordSchema(
         PropertyName propertyName,
         INamedTypeSymbol propertySymbol,
-        IReadOnlyList<AttributeSyntax> attributeList)
+        IReadOnlyList<AttributeSyntax> attributeList,
+        INamedTypeSymbol parentRecordSymbol)
     {
         var memberSymbols = propertySymbol.GetMembers()
             .OfType<IPropertySymbol>()
@@ -78,7 +81,7 @@ public static class TypedPropertySchemaFactory
         var memberSchemata = new List<PropertySchemaBase>();
         foreach (var symbol in memberSymbols)
         {
-            var innerSchema = Create(recordSymbol, propertyName, symbol, attributeList);
+            var innerSchema = Create(propertyName, symbol, attributeList, parentRecordSymbol);
             memberSchemata.Add(innerSchema);
         }
 

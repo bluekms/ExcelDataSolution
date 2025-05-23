@@ -56,15 +56,17 @@ internal static class RecordTypeChecker
         return !RecordMethodNames.Except(methodSymbols).Any();
     }
 
-    public static bool TryResolveNestedTypeSymbol(
+    public static bool TryFindNestedRecordTypeSymbol(
         INamedTypeSymbol recordSymbol,
         ITypeSymbol propertySymbol,
-        [NotNullWhen(true)] out INamedTypeSymbol? resolved)
+        [NotNullWhen(true)] out INamedTypeSymbol? nestedRecordSymbol)
     {
-        resolved = null;
+        nestedRecordSymbol = null;
 
         if (propertySymbol is not IErrorTypeSymbol errorType)
+        {
             return false;
+        }
 
         var candidate = recordSymbol
             .GetTypeMembers()
@@ -72,13 +74,12 @@ internal static class RecordTypeChecker
 
         if (candidate is not null && IsSupportedRecordType(candidate))
         {
-            resolved = candidate;
-            return resolved.IsRecord;
+            nestedRecordSymbol = candidate;
+            return nestedRecordSymbol.IsRecord;
         }
 
         return false;
     }
-
 
     public static RecordSchema CheckAndGetSchema(
         INamedTypeSymbol symbol,
