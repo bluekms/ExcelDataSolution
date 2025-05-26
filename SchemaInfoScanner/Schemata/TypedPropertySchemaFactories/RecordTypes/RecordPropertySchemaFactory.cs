@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 
 public static class RecordPropertySchemaFactory
 {
