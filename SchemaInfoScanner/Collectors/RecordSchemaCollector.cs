@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace SchemaInfoScanner.Collectors;
 
@@ -40,17 +40,19 @@ public sealed class RecordSchemaCollector
             recordAttributeDictionary.Add(recordName, recordAttributes.ToList());
         }
 
-        foreach (var parameterName in result.ParameterNamedTypeSymbolCollector.ParameterNames)
+        foreach (var propertyName in result.ParameterNamedTypeSymbolCollector.ParameterNames)
         {
-            var namedTypeSymbol = result.ParameterNamedTypeSymbolCollector[parameterName];
-            var attributes = result.ParameterAttributeCollector[parameterName];
+            var propertySymbol = result.ParameterNamedTypeSymbolCollector[propertyName];
+            var attributes = result.ParameterAttributeCollector[propertyName];
+            var parentRecordSymbol = result.RecordNamedTypeSymbolCollector[propertyName.RecordName];
 
             var parameterSchema = TypedPropertySchemaFactory.Create(
-                parameterName,
-                namedTypeSymbol,
-                attributes);
+                propertyName,
+                propertySymbol,
+                attributes,
+                parentRecordSymbol);
 
-            var recordName = parameterName.RecordName;
+            var recordName = propertyName.RecordName;
             if (recordMemberSchemaDictionary.TryGetValue(recordName, out var recordMembers))
             {
                 recordMembers.Add(parameterSchema);

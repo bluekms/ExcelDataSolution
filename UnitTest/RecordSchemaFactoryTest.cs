@@ -3,9 +3,8 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes;
-using SchemaInfoScanner.Schemata.TypedParameterSchemata.PrimitiveTypes.NullableTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
