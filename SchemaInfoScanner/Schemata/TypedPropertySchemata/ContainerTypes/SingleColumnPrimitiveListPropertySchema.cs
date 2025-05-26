@@ -24,7 +24,7 @@ public sealed record SingleColumnPrimitiveListPropertySchema(
 
         foreach (var item in split)
         {
-            GenericArgumentSchema.InnerSchema.CheckCompatibility(item, enumMemberContainer, logger);
+            GenericArgumentSchema.NestedSchema.CheckCompatibility(item, enumMemberContainer, logger);
         }
     }
 }

@@ -26,7 +26,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
 
         foreach (var item in split)
         {
-            GenericArgumentSchema.InnerSchema.CheckCompatibility(item, enumMemberContainer, logger);
+            GenericArgumentSchema.NestedSchema.CheckCompatibility(item, enumMemberContainer, logger);
         }
 
         var hashSet = split.ToHashSet();
