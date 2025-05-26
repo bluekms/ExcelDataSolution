@@ -31,4 +31,20 @@ public static class AttributeAccessors
             ? (TValue)Enum.Parse(typeof(TValue), valueString.Split('.')[^1])
             : (TValue)Convert.ChangeType(valueString, typeof(TValue), CultureInfo.InvariantCulture);
     }
+
+    public static bool TryGetAttributeValue<TAttribute, TValue>(
+        IReadOnlyList<AttributeSyntax> attributeSyntaxList,
+        out TValue value,
+        int attributeParameterIndex = 0)
+        where TAttribute : Attribute
+    {
+        if (!HasAttribute<TAttribute>(attributeSyntaxList))
+        {
+            value = default!;
+            return false;
+        }
+
+        value = GetAttributeValue<TAttribute, TValue>(attributeSyntaxList, attributeParameterIndex);
+        return true;
+    }
 }

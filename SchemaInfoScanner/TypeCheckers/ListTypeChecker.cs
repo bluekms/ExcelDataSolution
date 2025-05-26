@@ -99,4 +99,15 @@ internal static class ListTypeChecker
 
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
+
+    public static bool IsPrimitiveListType(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedListType(symbol))
+        {
+            return false;
+        }
+
+        var typeArgument = (INamedTypeSymbol)symbol.TypeArguments.Single();
+        return PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument);
+    }
 }
