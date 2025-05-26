@@ -90,7 +90,7 @@ internal static class DictionaryTypeChecker
 
         if (valueRecordKeyParameterSchema is null)
         {
-            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.PropertyName.FullName}, KeyAttribute must be used in one of the parameters.");
+            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.PropertyName.FullName}, {nameof(KeyAttribute)} must be used in one of the parameters.");
         }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
@@ -124,7 +124,7 @@ internal static class DictionaryTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    public static bool IsPrimitiveKeyPrimitiveValueDictionaryType(INamedTypeSymbol symbol)
+    public static bool IsPrimitiveKeyAndValueDictionaryType(INamedTypeSymbol symbol)
     {
         if (!IsSupportedDictionaryType(symbol))
         {
@@ -138,16 +138,55 @@ internal static class DictionaryTypeChecker
         }
 
         var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
-        {
-            if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
-            {
-                throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
-            }
-        }
 
         return PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol) &&
                PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol);
+    }
+
+    public static bool IsPrimitiveKeyRecordValueDictionaryType(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedDictionaryType(symbol))
+        {
+            return false;
+        }
+
+        var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
+        if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+        }
+
+        var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
+        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+        }
+
+        return PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol) &&
+               RecordTypeChecker.IsSupportedRecordType(valueSymbol);
+    }
+
+    public static bool IsRecordKeyAndValueDictionaryType(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedDictionaryType(symbol))
+        {
+            return false;
+        }
+
+        var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
+        if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+        }
+
+        var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
+        if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
+        {
+            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+        }
+
+        return RecordTypeChecker.IsSupportedRecordType(keySymbol) &&
+               RecordTypeChecker.IsSupportedRecordType(valueSymbol);
     }
 
     private static void CheckUnavailableAttribute(PropertySchemaBase property)
