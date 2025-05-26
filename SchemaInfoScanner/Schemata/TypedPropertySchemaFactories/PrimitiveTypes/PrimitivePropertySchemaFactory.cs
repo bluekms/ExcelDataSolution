@@ -6,7 +6,7 @@ using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
 using SchemaInfoScanner.TypeCheckers;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 
 public static class PrimitivePropertySchemaFactory
 {

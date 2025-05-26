@@ -2,12 +2,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
-public sealed record PrimitiveListPropertySchema(
-    PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,
+public sealed record RecordHashSetPropertySchema(
+    RecordTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)

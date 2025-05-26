@@ -1,0 +1,24 @@
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
+
+public sealed record PrimitiveKeyRecordValueDictionarySchema(
+    PrimitiveTypeGenericArgumentSchema KeyGenericArgumentSchema,
+    RecordTypeGenericArgumentSchema ValueGenericArgumentSchema,
+    INamedTypeSymbol NamedTypeSymbol,
+    IReadOnlyList<AttributeSyntax> AttributeList)
+    : PropertySchemaBase(KeyGenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
+{
+    protected override void OnCheckCompatibility(
+        IEnumerator<string> arguments,
+        EnumMemberContainer enumMemberContainer,
+        ILogger logger)
+    {
+        KeyGenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
+        ValueGenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
+    }
+}

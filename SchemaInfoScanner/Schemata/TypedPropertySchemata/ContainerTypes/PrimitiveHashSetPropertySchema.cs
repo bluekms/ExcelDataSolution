@@ -17,6 +17,6 @@ public sealed record PrimitiveHashSetPropertySchema(
         EnumMemberContainer enumMemberContainer,
         ILogger logger)
     {
-        GenericArgumentSchema.InnerSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
+        GenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
     }
 }

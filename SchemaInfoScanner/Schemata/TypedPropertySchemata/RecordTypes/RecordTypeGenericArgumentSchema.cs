@@ -1,16 +1,14 @@
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
-public class PrimitiveTypeGenericArgumentSchema(
-    PrimitiveTypeGenericArgumentSchema.ContainerKind containingType,
+public class RecordTypeGenericArgumentSchema(
+    RecordTypeGenericArgumentSchema.ContainerKind containingType,
     PropertySchemaBase nestedSchema)
 {
     public enum ContainerKind
     {
-        SingleColumnList,
         List,
-        SingleColumnHashSet,
         HashSet,
         DictionaryKey,
         DictionaryValue,

@@ -2,11 +2,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.ContainerTypes;
 
 public static class PrimitiveListPropertySchemaFactory
 {
@@ -20,10 +21,10 @@ public static class PrimitiveListPropertySchemaFactory
             throw new NotSupportedException($"{propertyName} is not a supported list type.");
         }
 
-        var innerSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
         var nestedSchema = PrimitivePropertySchemaFactory.Create(
             propertyName,
-            innerSymbol,
+            typeArgumentSymbol,
             attributeList);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
@@ -53,10 +54,10 @@ public static class PrimitiveListPropertySchemaFactory
             throw new InvalidOperationException($"{propertyName} is not a single column list.");
         }
 
-        var innerSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
         var nestedSchema = PrimitivePropertySchemaFactory.Create(
             propertyName,
-            innerSymbol,
+            typeArgumentSymbol,
             attributeList);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(

@@ -20,9 +20,9 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
         ILogger logger)
     {
         var keyArgument = GetNextArgument(arguments, GetType(), logger);
-        KeySchema.InnerSchema.CheckCompatibility(keyArgument, enumMemberContainer, logger);
+        KeySchema.NestedSchema.CheckCompatibility(keyArgument, enumMemberContainer, logger);
 
         var valueArgument = GetNextArgument(arguments, GetType(), logger);
-        ValueSchema.InnerSchema.CheckCompatibility(valueArgument, enumMemberContainer, logger);
+        ValueSchema.NestedSchema.CheckCompatibility(valueArgument, enumMemberContainer, logger);
     }
 }
