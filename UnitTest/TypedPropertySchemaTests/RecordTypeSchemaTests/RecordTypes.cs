@@ -133,7 +133,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
                          Dictionary<int, MyData> Data
                      );
 
-                     public record struct MyData(int Id, string Value);
+                     public record struct MyData([Key] int Id, string Value);
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -161,7 +161,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
                      );
 
                      public record struct KeyData(int Key1, string Key2);
-                     public record struct MyData(KeyData Key, string Value);
+                     public record struct MyData([Key] KeyData Key, string Value);
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
