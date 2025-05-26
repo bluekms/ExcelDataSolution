@@ -99,4 +99,15 @@ internal static class HashSetTypeChecker
 
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
+
+    public static bool IsPrimitiveHashSetType(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedHashSetType(symbol))
+        {
+            return false;
+        }
+
+        var typeArgument = (INamedTypeSymbol)symbol.TypeArguments.Single();
+        return PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument);
+    }
 }
