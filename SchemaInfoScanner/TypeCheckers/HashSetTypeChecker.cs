@@ -31,6 +31,23 @@ internal static class HashSetTypeChecker
         CheckUnavailableAttribute(property);
 
         var typeArgument = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Single();
+
+        if (PrimitiveTypeChecker.IsDateTimeType(typeArgument))
+        {
+            if (!property.HasAttribute<DateTimeFormatAttribute>())
+            {
+                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
+            }
+        }
+
+        if (PrimitiveTypeChecker.IsTimeSpanType(typeArgument))
+        {
+            if (!property.HasAttribute<TimeSpanFormatAttribute>())
+            {
+                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
+            }
+        }
+
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
             return;

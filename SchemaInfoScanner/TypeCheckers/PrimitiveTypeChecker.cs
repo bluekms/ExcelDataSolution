@@ -44,12 +44,22 @@ internal static class PrimitiveTypeChecker
             return true;
         }
 
-        if (CheckDateTimeType(underlyingType))
+        if (IsDateTimeType(underlyingType))
         {
             return true;
         }
 
-        return CheckTimeSpanType(underlyingType);
+        return IsTimeSpanType(underlyingType);
+    }
+
+    public static bool IsDateTimeType(ITypeSymbol symbol)
+    {
+        return symbol.Name is "DateTime";
+    }
+
+    public static bool IsTimeSpanType(ITypeSymbol symbol)
+    {
+        return symbol.Name is "TimeSpan";
     }
 
     private static void CheckUnavailableAttribute(PropertySchemaBase property)
@@ -78,7 +88,7 @@ internal static class PrimitiveTypeChecker
             ? symbol.TypeArguments[0]
             : symbol;
 
-        if (CheckDateTimeType(underlyingType))
+        if (IsDateTimeType(underlyingType))
         {
             if (!property.HasAttribute<DateTimeFormatAttribute>())
             {
@@ -86,7 +96,7 @@ internal static class PrimitiveTypeChecker
             }
         }
 
-        if (CheckTimeSpanType(underlyingType))
+        if (IsTimeSpanType(underlyingType))
         {
             if (!property.HasAttribute<TimeSpanFormatAttribute>())
             {
@@ -120,15 +130,5 @@ internal static class PrimitiveTypeChecker
     private static bool CheckEnumType(ITypeSymbol symbol)
     {
         return symbol.TypeKind is TypeKind.Enum;
-    }
-
-    private static bool CheckDateTimeType(ITypeSymbol symbol)
-    {
-        return symbol.Name is "DateTime";
-    }
-
-    private static bool CheckTimeSpanType(ITypeSymbol symbol)
-    {
-        return symbol.Name is "TimeSpan";
     }
 }
