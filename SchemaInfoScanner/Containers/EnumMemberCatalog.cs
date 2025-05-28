@@ -4,16 +4,16 @@ using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Containers;
 
-public sealed class EnumMemberContainer
+public sealed class EnumMemberCatalog
 {
     private readonly ReadOnlyDictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary;
 
-    public EnumMemberContainer(EnumDefinitionSet enumDefinitionSet)
+    public EnumMemberCatalog(EnumDefinitionSet enumDefinitionSet)
     {
         enumMemberDictionary = enumDefinitionSet.AsReadOnly();
     }
 
-    public EnumMemberContainer(RecordSchemaLoader.Result loadResult)
+    public EnumMemberCatalog(RecordSchemaLoader.Result loadResult)
     {
         var enumMemberCollector = new EnumDefinitionSet(loadResult);
         enumMemberDictionary = enumMemberCollector.AsReadOnly();

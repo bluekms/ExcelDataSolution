@@ -13,9 +13,9 @@ public sealed record RecordListPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
-        GenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
+        GenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberCatalog, logger);
     }
 }

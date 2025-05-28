@@ -121,7 +121,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
@@ -180,7 +180,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
@@ -206,7 +206,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
@@ -263,7 +263,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
         Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));

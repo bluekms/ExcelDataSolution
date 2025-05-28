@@ -15,12 +15,12 @@ public sealed record RecordPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         foreach (var schema in MemberSchemata)
         {
-            schema.CheckCompatibility(arguments, enumMemberContainer, logger);
+            schema.CheckCompatibility(arguments, enumMemberCatalog, logger);
         }
     }
 }

@@ -19,7 +19,7 @@ public sealed record DateTimePropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         if (!this.TryGetAttributeValue<DateTimeFormatAttribute, string>(0, out var format))

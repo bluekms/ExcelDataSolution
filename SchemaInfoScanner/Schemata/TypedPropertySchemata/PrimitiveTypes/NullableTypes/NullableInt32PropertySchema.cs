@@ -15,7 +15,7 @@ public sealed record NullableInt32PropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         var argument = GetNextArgument(arguments, GetType(), logger);
@@ -26,6 +26,6 @@ public sealed record NullableInt32PropertySchema(
         }
 
         var schema = new Int32PropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(arguments, enumMemberContainer, logger);
+        schema.CheckCompatibility(arguments, enumMemberCatalog, logger);
     }
 }

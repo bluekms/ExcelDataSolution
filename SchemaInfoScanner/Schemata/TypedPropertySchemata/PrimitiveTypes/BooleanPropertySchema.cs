@@ -14,7 +14,7 @@ public sealed record BooleanPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         var argument = GetNextArgument(arguments, GetType(), logger);

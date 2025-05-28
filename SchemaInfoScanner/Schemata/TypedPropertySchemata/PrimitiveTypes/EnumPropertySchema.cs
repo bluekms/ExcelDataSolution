@@ -14,11 +14,11 @@ public sealed record EnumPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         var enumName = new EnumName(NamedTypeSymbol.Name);
-        var enumMembers = enumMemberContainer.GetEnumMembers(enumName);
+        var enumMembers = enumMemberCatalog.GetEnumMembers(enumName);
 
         var argument = GetNextArgument(arguments, GetType(), logger);
         if (!enumMembers.Contains(argument))

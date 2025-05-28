@@ -21,17 +21,17 @@ public abstract record PropertySchemaBase(
         return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
     }
 
-    public void CheckCompatibility(string argument, EnumMemberContainer enumMemberContainer, ILogger logger)
+    public void CheckCompatibility(string argument, EnumMemberCatalog enumMemberCatalog, ILogger logger)
     {
         var enumerator = Enumerable.Repeat(argument, 1).GetEnumerator();
-        CheckCompatibility(enumerator, enumMemberContainer, logger);
+        CheckCompatibility(enumerator, enumMemberCatalog, logger);
     }
 
-    public void CheckCompatibility(IEnumerator<string> arguments, EnumMemberContainer enumMemberContainer, ILogger logger)
+    public void CheckCompatibility(IEnumerator<string> arguments, EnumMemberCatalog enumMemberCatalog, ILogger logger)
     {
         try
         {
-            OnCheckCompatibility(arguments, enumMemberContainer, logger);
+            OnCheckCompatibility(arguments, enumMemberCatalog, logger);
         }
         catch (Exception e)
         {
@@ -54,7 +54,7 @@ public abstract record PropertySchemaBase(
 
     protected abstract void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger);
 
     protected static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =

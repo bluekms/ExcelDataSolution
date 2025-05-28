@@ -59,7 +59,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
@@ -76,7 +76,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
             var valueStr = value?.ToString() ?? string.Empty;
             var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
-            parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
+            parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -105,7 +105,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
@@ -119,12 +119,12 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         if (parameter is EnumPropertySchema enumParameter)
         {
             var enumerator = Enumerable.Repeat("A", 1).GetEnumerator();
-            enumParameter.CheckCompatibility(enumerator, enumMemberContainer, logger);
+            enumParameter.CheckCompatibility(enumerator, enumMemberCatalog, logger);
         }
         else if (parameter is NullableEnumPropertySchema nullableEnumParameter)
         {
             var enumerator = Enumerable.Repeat(string.Empty, 1).GetEnumerator();
-            nullableEnumParameter.CheckCompatibility(enumerator, enumMemberContainer, logger);
+            nullableEnumParameter.CheckCompatibility(enumerator, enumMemberCatalog, logger);
         }
         else
         {
@@ -182,7 +182,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
@@ -200,7 +200,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
 
         var parameter = recordSchema.RecordPropertySchemata[0];
-        parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
+        parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -238,7 +238,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
@@ -252,7 +252,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
 
         var parameter = recordSchema.RecordPropertySchemata[0];
-        parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
+        parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
