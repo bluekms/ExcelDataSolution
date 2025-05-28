@@ -44,10 +44,10 @@ public class RecordNameTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawSchema = recordSchemaContainer.FindAll("Level2").Single();
+        var rawSchema = recordSchemaCatalog.FindAll("Level2").Single();
 
         Assert.Empty(logger.Logs);
         Assert.Equal("TestNamespace.Level1.Level2", rawSchema.NestedFullName);
@@ -78,13 +78,13 @@ public class RecordNameTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawSchema = recordSchemaContainer.FindAll("Level2").Single();
+        var rawSchema = recordSchemaCatalog.FindAll("Level2").Single();
         var schema = RecordSchemaFactory.Create(
             rawSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             new Dictionary<string, int>());
 
         Assert.Empty(logger.Logs);

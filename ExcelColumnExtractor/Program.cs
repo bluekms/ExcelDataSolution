@@ -33,8 +33,8 @@ public class Program
 
         var totalSw = Stopwatch.StartNew();
         var sw = Stopwatch.StartNew();
-        var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        if (recordSchemaContainer.StaticDataRecordSchemata.Count == 0)
+        var recordSchemaCatalog = RecordScanner.Scan(options.RecordCsPath, logger);
+        if (recordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"{nameof(StaticDataRecordAttribute)} is not found.");
             LogError(logger, exception.Message, exception);
@@ -49,8 +49,8 @@ public class Program
 
         sw.Restart();
         var headerLengthContainer = HeaderLengthBuilder.Build(
-            recordSchemaContainer.StaticDataRecordSchemata,
-            recordSchemaContainer,
+            recordSchemaCatalog.StaticDataRecordSchemata,
+            recordSchemaCatalog,
             sheetNameContainer,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(HeaderLengthBuilder), null);
@@ -58,8 +58,8 @@ public class Program
         sw.Restart();
 
         var targetColumnIndicesContainer = RequiredHeadersChecker.Check(
-            recordSchemaContainer.StaticDataRecordSchemata,
-            recordSchemaContainer,
+            recordSchemaCatalog.StaticDataRecordSchemata,
+            recordSchemaCatalog,
             sheetNameContainer,
             headerLengthContainer,
             logger);
@@ -67,7 +67,7 @@ public class Program
 
         sw.Restart();
         var extractedTableContainer = BodyColumnAggregator.Aggregate(
-            recordSchemaContainer.StaticDataRecordSchemata,
+            recordSchemaCatalog.StaticDataRecordSchemata,
             sheetNameContainer,
             targetColumnIndicesContainer,
             logger);
@@ -77,8 +77,8 @@ public class Program
 
         // use length
         DataBodyChecker.Check(
-            recordSchemaContainer.StaticDataRecordSchemata,
-            recordSchemaContainer,
+            recordSchemaCatalog.StaticDataRecordSchemata,
+            recordSchemaCatalog,
             extractedTableContainer,
             headerLengthContainer,
             logger);

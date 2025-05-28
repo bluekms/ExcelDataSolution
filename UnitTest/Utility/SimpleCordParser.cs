@@ -8,16 +8,16 @@ namespace UnitTest.Utility;
 
 public static class SimpleCordParser
 {
-    public sealed record Result(RecordSchemaContainer RecordSchemaContainer, IReadOnlyList<RecordSchema> RawRecordSchemata);
+    public sealed record Result(RecordSchemaCatalog RecordSchemaCatalog, IReadOnlyList<RecordSchema> RawRecordSchemata);
 
     public static Result Parse(string code, ILogger logger)
     {
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        return new(recordSchemaContainer, recordSchemaContainer.StaticDataRecordSchemata);
+        return new(recordSchemaCatalog, recordSchemaCatalog.StaticDataRecordSchemata);
     }
 }

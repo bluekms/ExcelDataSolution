@@ -9,16 +9,16 @@ namespace SchemaInfoScanner;
 
 public static class RecordComplianceChecker
 {
-    public static void Check(RecordSchemaContainer recordSchemaContainer, ILogger logger)
+    public static void Check(RecordSchemaCatalog recordSchemaCatalog, ILogger logger)
     {
         var visited = new HashSet<RecordName>();
 
-        if (recordSchemaContainer.StaticDataRecordSchemata.Count is 0)
+        if (recordSchemaCatalog.StaticDataRecordSchemata.Count is 0)
         {
             throw new InvalidOperationException("No static data record is found.");
         }
 
-        foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
+        foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
             if (!visited.Add(recordSchema.RecordName))
             {
@@ -30,7 +30,7 @@ public static class RecordComplianceChecker
             {
                 try
                 {
-                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+                    SupportedTypeChecker.Check(recordParameter, recordSchemaCatalog, visited, logger);
                 }
                 catch (Exception e)
                 {
@@ -41,11 +41,11 @@ public static class RecordComplianceChecker
         }
     }
 
-    public static int TryCheck(RecordSchemaContainer recordSchemaContainer, ILogger logger)
+    public static int TryCheck(RecordSchemaCatalog recordSchemaCatalog, ILogger logger)
     {
         var exceptionCount = 0;
         var visited = new HashSet<RecordName>();
-        foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
+        foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
             if (!recordSchema.HasAttribute<StaticDataRecordAttribute>())
             {
@@ -62,7 +62,7 @@ public static class RecordComplianceChecker
             {
                 try
                 {
-                    SupportedTypeChecker.Check(recordParameter, recordSchemaContainer, visited, logger);
+                    SupportedTypeChecker.Check(recordParameter, recordSchemaCatalog, visited, logger);
                 }
                 catch (Exception e)
                 {

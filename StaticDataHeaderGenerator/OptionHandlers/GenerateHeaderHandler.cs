@@ -17,17 +17,17 @@ public static class GenerateHeaderHandler
 
         LogInformation(logger, "Generate Header File", null);
 
-        var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        if (recordSchemaContainer.StaticDataRecordSchemata.Count == 0)
+        var recordSchemaCatalog = RecordScanner.Scan(options.RecordCsPath, logger);
+        if (recordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"RecordName {options.RecordName} is not found.");
             LogError(logger, exception.Message, exception);
             throw exception;
         }
-        else if (recordSchemaContainer.StaticDataRecordSchemata.Count > 1)
+        else if (recordSchemaCatalog.StaticDataRecordSchemata.Count > 1)
         {
             LogWarning(logger, "Multiple records found with the specified name. Please provide a more specific name from the following options:", null);
-            foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
+            foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
             {
                 LogWarning(logger, $"\t{recordSchema.RecordName.FullName}", null);
             }
@@ -35,10 +35,10 @@ public static class GenerateHeaderHandler
             return 0;
         }
 
-        var targetRecordSchema = recordSchemaContainer.StaticDataRecordSchemata.Single();
+        var targetRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata.Single();
         var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
             targetRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             logger);
 
         var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
@@ -47,7 +47,7 @@ public static class GenerateHeaderHandler
         var iniFileResult = results[targetRecordSchema.RecordName];
         var headers = RecordFlattener.Flatten(
             targetRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             iniFileResult.HeaderNameLengths,
             logger);
 

@@ -22,7 +22,7 @@ internal static class DictionaryTypeChecker
 
     public static void Check(
         PropertySchemaBase property,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -83,7 +83,7 @@ internal static class DictionaryTypeChecker
             throw new TypeNotSupportedException("Value type of dictionary must be non-nullable.");
         }
 
-        var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaContainer, visited, logger);
+        var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaCatalog, visited, logger);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
             .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
@@ -95,7 +95,7 @@ internal static class DictionaryTypeChecker
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
         {
-            var keyRecordSchema = RecordTypeChecker.CheckAndGetSchema(keySymbol, recordSchemaContainer, visited, logger);
+            var keyRecordSchema = RecordTypeChecker.CheckAndGetSchema(keySymbol, recordSchemaCatalog, visited, logger);
 
             var valueRecordKeyParameterRecordName = new RecordName(valueRecordKeyParameterSchema.NamedTypeSymbol);
             if (!keyRecordSchema.RecordName.Equals(valueRecordKeyParameterRecordName))

@@ -6,7 +6,7 @@ public static class RecordSchemaFactory
 {
     public static RecordSchema Create(
         RecordSchema schema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         IReadOnlyDictionary<string, int> headerLengths)
     {
         return new(

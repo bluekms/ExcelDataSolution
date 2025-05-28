@@ -19,7 +19,7 @@ internal static class HashSetTypeChecker
 
     public static void Check(
         PropertySchemaBase property,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -63,8 +63,8 @@ internal static class HashSetTypeChecker
             throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
         }
 
-        var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaContainer);
-        RecordTypeChecker.Check(innerRecordSchema, recordSchemaContainer, visited, logger);
+        var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);
+        RecordTypeChecker.Check(innerRecordSchema, recordSchemaCatalog, visited, logger);
     }
 
     private static void CheckUnavailableAttribute(PropertySchemaBase property)

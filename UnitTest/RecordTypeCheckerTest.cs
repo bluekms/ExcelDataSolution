@@ -30,8 +30,8 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -60,10 +60,10 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        Assert.Single(recordSchemaContainer.WholeRecordSchemata);
+        Assert.Single(recordSchemaCatalog.WholeRecordSchemata);
         Assert.Empty(logger.Logs);
     }
 
@@ -86,13 +86,13 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, [], logger);
+            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Contains("MyRecord.Age is ignored.", logger.Logs.Select(x => x.Message));

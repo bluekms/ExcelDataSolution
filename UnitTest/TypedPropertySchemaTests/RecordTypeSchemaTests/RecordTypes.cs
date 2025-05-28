@@ -31,8 +31,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -58,8 +58,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -85,8 +85,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -112,8 +112,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -139,8 +139,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -167,8 +167,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }

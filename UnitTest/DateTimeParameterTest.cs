@@ -32,13 +32,13 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var rawRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             new Dictionary<string, int>());
 
         var parameter = recordSchema.RecordParameterSchemaList[0];
@@ -68,11 +68,11 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
         Assert.Throws<AttributeNotFoundException<DateTimeFormatAttribute>>(() =>
         {
-            RecordComplianceChecker.Check(recordSchemaContainer, logger);
+            RecordComplianceChecker.Check(recordSchemaCatalog, logger);
         });
 
         Assert.Single(logger.Logs);
@@ -98,13 +98,13 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var rawRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             new Dictionary<string, int>());
 
         Assert.Throws<FormatException>(() =>

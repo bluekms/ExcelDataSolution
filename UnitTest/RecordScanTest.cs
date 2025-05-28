@@ -32,8 +32,8 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
         var enumDefinitionSet = new EnumDefinitionSet(loadResults);
         var semanticModelSet = new SemanticModelSet(loadResults);
 
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }

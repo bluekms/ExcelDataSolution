@@ -11,7 +11,7 @@ public static class HeaderLengthBuilder
 {
     public static HeaderLengthContainer Build(
         IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetNameContainer sheetNameContainer,
         ILogger logger)
     {
@@ -24,7 +24,7 @@ public static class HeaderLengthBuilder
                 var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
                 var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
                     recordSchema,
-                    recordSchemaContainer,
+                    recordSchemaCatalog,
                     logger);
 
                 var containerLengths = HeaderLengthParser.Parse(sheetHeaders, lengthRequiredNames);

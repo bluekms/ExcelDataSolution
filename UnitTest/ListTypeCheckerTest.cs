@@ -45,13 +45,13 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -91,13 +91,13 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -122,9 +122,9 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -148,13 +148,13 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -181,9 +181,9 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -207,9 +207,9 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -231,13 +231,13 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -264,9 +264,9 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -291,13 +291,13 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            ListTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            ListTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);

@@ -28,8 +28,8 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -56,13 +56,13 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -95,13 +95,13 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -129,9 +129,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -152,9 +152,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -180,9 +180,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -209,9 +209,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -238,9 +238,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -267,9 +267,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -296,9 +296,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -325,9 +325,9 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -357,13 +357,13 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.FindAll("MyRecord").Single();
+        var recordSchema = recordSchemaCatalog.FindAll("MyRecord").Single();
         foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
         {
-            DictionaryTypeChecker.Check(parameterSchema, recordSchemaContainer, [], logger);
+            DictionaryTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
 
         Assert.Empty(logger.Logs);

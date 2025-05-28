@@ -16,8 +16,8 @@ public static class GenerateLengthHandler
 
         LogInformation(logger, "Generate Length Ini File", null);
 
-        var recordSchemaContainer = RecordScanner.Scan(options.RecordCsPath, logger);
-        var recordSchemaList = recordSchemaContainer.FindAll(options.RecordName);
+        var recordSchemaCatalog = RecordScanner.Scan(options.RecordCsPath, logger);
+        var recordSchemaList = recordSchemaCatalog.FindAll(options.RecordName);
         if (recordSchemaList.Count == 0)
         {
             var exception = new ArgumentException($"RecordName {options.RecordName} is not found.");
@@ -38,7 +38,7 @@ public static class GenerateLengthHandler
         var targetRecordSchema = recordSchemaList.Single();
         var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
             targetRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             logger);
 
         var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);

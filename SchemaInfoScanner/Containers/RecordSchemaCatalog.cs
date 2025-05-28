@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Containers;
 
-public sealed class RecordSchemaContainer
+public sealed class RecordSchemaCatalog
 {
     private readonly Dictionary<RecordName, RecordSchema> recordSchemaDictionary;
 
@@ -17,7 +17,7 @@ public sealed class RecordSchemaContainer
 
     public IReadOnlyList<RecordSchema> WholeRecordSchemata { get; init; }
 
-    public RecordSchemaContainer(RecordSchemaSet recordSchemaSet)
+    public RecordSchemaCatalog(RecordSchemaSet recordSchemaSet)
     {
         var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaSet.Count);
         foreach (var recordName in recordSchemaSet.RecordNames)
