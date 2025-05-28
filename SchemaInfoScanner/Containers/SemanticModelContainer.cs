@@ -4,7 +4,7 @@ using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Containers;
 
-public sealed class SemanticModelContainer(SemanticModelCollector semanticModelCollector)
+public sealed class SemanticModelContainer(SemanticModelSet semanticModelSet)
 {
-    public IReadOnlyDictionary<RecordName, SemanticModel> SemanticModelDictionary { get; } = semanticModelCollector.GetSemanticModels();
+    public IReadOnlyDictionary<RecordName, SemanticModel> SemanticModelDictionary { get; } = semanticModelSet.GetSemanticModels();
 }

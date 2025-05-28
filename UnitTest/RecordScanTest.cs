@@ -31,11 +31,7 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
 
         var recordSchemaCollector = new RecordSchemaSet(loadResults);
         var enumMemberCollector = new EnumDefinitionSet(loadResults);
-        var semanticModelCollector = new SemanticModelCollector();
-        foreach (var loadResult in loadResults)
-        {
-            semanticModelCollector.Collect(loadResult);
-        }
+        var semanticModelCollector = new SemanticModelSet(loadResults);
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
