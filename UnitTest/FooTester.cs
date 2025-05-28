@@ -27,9 +27,9 @@ public class FooTester(ITestOutputHelper testOutputHelper)
                    """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];

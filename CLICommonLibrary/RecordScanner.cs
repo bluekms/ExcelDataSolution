@@ -10,9 +10,9 @@ public static class RecordScanner
     public static RecordSchemaContainer Scan(string csPath, ILogger logger)
     {
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
-        var recordSchemaCollector = new RecordSchemaSet(loadResults);
+        var recordSchemaSet = new RecordSchemaSet(loadResults);
 
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var exceptionCount = RecordComplianceChecker.TryCheck(recordSchemaContainer, logger);

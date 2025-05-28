@@ -29,8 +29,8 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         Assert.Empty(logger.Logs);
@@ -59,8 +59,8 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         Assert.Single(recordSchemaContainer.WholeRecordSchemata);
@@ -85,8 +85,8 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];

@@ -30,9 +30,9 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
@@ -66,8 +66,8 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
 
         Assert.Throws<AttributeNotFoundException<TimeSpanFormatAttribute>>(() =>
         {
@@ -95,9 +95,9 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaSet(loadResult);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
 
         var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
