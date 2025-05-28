@@ -28,19 +28,12 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
             "_TestRecord");
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResults);
+        var enumDefinitionSet = new EnumDefinitionSet(loadResults);
+        var semanticModelSet = new SemanticModelSet(loadResults);
 
-        var recordSchemaCollector = new RecordSchemaCollector();
-        var enumMemberCollector = new EnumMemberCollector();
-        var semanticModelCollector = new SemanticModelCollector();
-        foreach (var loadResult in loadResults)
-        {
-            recordSchemaCollector.Collect(loadResult);
-            enumMemberCollector.Collect(loadResult);
-            semanticModelCollector.Collect(loadResult);
-        }
-
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }

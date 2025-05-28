@@ -41,9 +41,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -80,9 +80,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -108,9 +108,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -136,9 +136,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -163,9 +163,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -190,9 +190,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -217,9 +217,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -244,9 +244,9 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }

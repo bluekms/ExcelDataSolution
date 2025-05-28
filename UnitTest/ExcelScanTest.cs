@@ -46,9 +46,9 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
         }
 
         var sheetNameContainer = ScanExcelFiles(logger);
-        var recordSchemaContainer = ScanRecordFiles(logger);
+        var recordSchemaCatalog = ScanRecordFiles(logger);
 
-        foreach (var recordSchema in recordSchemaContainer.StaticDataRecordSchemata)
+        foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
             if (!recordSchema.HasAttribute<StaticDataRecordAttribute>())
             {
@@ -84,7 +84,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
         return SheetNameScanner.Scan(excelPath, logger);
     }
 
-    private static RecordSchemaContainer ScanRecordFiles(ILogger logger)
+    private static RecordSchemaCatalog ScanRecordFiles(ILogger logger)
     {
         var csPath = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
@@ -95,18 +95,11 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             "TestRecord");
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResults);
 
-        var recordSchemaCollector = new RecordSchemaCollector();
-        var enumMemberCollector = new EnumMemberCollector();
-        foreach (var loadResult in loadResults)
-        {
-            recordSchemaCollector.Collect(loadResult);
-            enumMemberCollector.Collect(loadResult);
-        }
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
-
-        return recordSchemaContainer;
+        return recordSchemaCatalog;
     }
 }

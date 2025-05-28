@@ -17,7 +17,7 @@ public static class RequiredHeadersChecker
 
     public static TargetColumnIndicesContainer Check(
         IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetNameContainer sheetNameContainer,
         HeaderLengthContainer headerLengthContainer,
         ILogger logger)
@@ -34,7 +34,7 @@ public static class RequiredHeadersChecker
 
                 var targetColumnIndexSet = CheckAndGetTargetColumns(
                     recordSchema,
-                    recordSchemaContainer,
+                    recordSchemaCatalog,
                     excelSheetName,
                     headerLengths,
                     logger);
@@ -56,7 +56,7 @@ public static class RequiredHeadersChecker
 
     private static TargetColumnIndices CheckAndGetTargetColumns(
         RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetName excelSheetName,
         IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
@@ -64,7 +64,7 @@ public static class RequiredHeadersChecker
         var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
         var standardHeaders = RecordFlattener.Flatten(
             recordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             headerLengths,
             logger);
 

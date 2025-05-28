@@ -45,12 +45,12 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -92,12 +92,12 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -124,13 +124,13 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaContainer, logger));
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        var nullableParameter = recordSchema.RecordParameterSchemaList[0];
-        var notnullParameter = recordSchema.RecordParameterSchemaList[1];
+        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
+        var nullableParameter = recordSchema.RecordPropertySchemata[0];
+        var notnullParameter = recordSchema.RecordPropertySchemata[1];
 
         PrimitiveTypeChecker.Check(nullableParameter);
         Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(notnullParameter));

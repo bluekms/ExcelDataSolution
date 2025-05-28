@@ -42,7 +42,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 
@@ -90,7 +90,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 
@@ -138,7 +138,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 
@@ -186,7 +186,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 
@@ -226,7 +226,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 
@@ -266,7 +266,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 
@@ -326,7 +326,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             collectionLengths,
             logger);
 

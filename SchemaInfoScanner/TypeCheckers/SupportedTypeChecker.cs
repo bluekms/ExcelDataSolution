@@ -12,7 +12,7 @@ internal static class SupportedTypeChecker
 {
     public static void Check(
         PropertySchemaBase property,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -32,37 +32,37 @@ internal static class SupportedTypeChecker
 
         if (ContainerTypeChecker.IsSupportedContainerType(property.NamedTypeSymbol))
         {
-            CheckSupportedContainerType(property, recordSchemaContainer, visited, logger);
+            CheckSupportedContainerType(property, recordSchemaCatalog, visited, logger);
             return;
         }
 
-        var recordSchema = recordSchemaContainer.TryFind(property.NamedTypeSymbol);
+        var recordSchema = recordSchemaCatalog.TryFind(property.NamedTypeSymbol);
         if (recordSchema is null)
         {
             var innerException = new KeyNotFoundException($"{property.NamedTypeSymbol.Name} is not found in the record schema dictionary.");
             throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported record type.", innerException);
         }
 
-        RecordTypeChecker.Check(recordSchema, recordSchemaContainer, visited, logger);
+        RecordTypeChecker.Check(recordSchema, recordSchemaCatalog, visited, logger);
     }
 
     private static void CheckSupportedContainerType(
         PropertySchemaBase property,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
         ILogger logger)
     {
         if (HashSetTypeChecker.IsSupportedHashSetType(property.NamedTypeSymbol))
         {
-            HashSetTypeChecker.Check(property, recordSchemaContainer, visited, logger);
+            HashSetTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
         }
         else if (ListTypeChecker.IsSupportedListType(property.NamedTypeSymbol))
         {
-            ListTypeChecker.Check(property, recordSchemaContainer, visited, logger);
+            ListTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
         }
         else if (DictionaryTypeChecker.IsSupportedDictionaryType(property.NamedTypeSymbol))
         {
-            DictionaryTypeChecker.Check(property, recordSchemaContainer, visited, logger);
+            DictionaryTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
         }
         else
         {

@@ -33,7 +33,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             logger);
 
         var expected = new HashSet<string>
@@ -74,7 +74,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             logger);
 
         var expected = new HashSet<string>
@@ -115,7 +115,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             logger);
 
         var expected = new HashSet<string>
@@ -154,7 +154,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             logger);
 
         var expected = new HashSet<string>
@@ -202,7 +202,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var parseResult = SimpleCordParser.Parse(code, logger);
         var results = LengthRequiringFieldDetector.Detect(
             parseResult.RawRecordSchemata[0],
-            parseResult.RecordSchemaContainer,
+            parseResult.RecordSchemaCatalog,
             logger);
 
         var expected = new HashSet<string>

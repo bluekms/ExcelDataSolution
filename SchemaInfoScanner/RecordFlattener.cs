@@ -13,13 +13,13 @@ public static partial class RecordFlattener
 {
     public static IReadOnlyList<string> Flatten(
         RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
         return OnFlatten(
             recordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             headerLengths,
             string.Empty,
             logger);
@@ -27,14 +27,14 @@ public static partial class RecordFlattener
 
     public static IReadOnlyList<string> OnFlatten(
         RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         IReadOnlyDictionary<string, int> headerLengths,
         string parentPrefix,
         ILogger logger)
     {
         var headers = new List<string>();
 
-        foreach (var parameter in recordSchema.RecordParameterSchemaList)
+        foreach (var parameter in recordSchema.RecordPropertySchemata)
         {
             var name = parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName)
                 ? columnName
@@ -63,14 +63,14 @@ public static partial class RecordFlattener
             else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
-                var innerRecordSchema = recordSchemaContainer.Find(typeArgument);
+                var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
 
                 var length = ParseLength(headerLengths, headerName, logger);
                 for (var i = 0; i < length; ++i)
                 {
                     var innerFlattenResult = OnFlatten(
                         innerRecordSchema,
-                        recordSchemaContainer,
+                        recordSchemaCatalog,
                         headerLengths,
                         $"{headerName}[{i}]",
                         logger);
@@ -81,14 +81,14 @@ public static partial class RecordFlattener
             else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
-                var innerRecordSchema = recordSchemaContainer.Find(typeArgument);
+                var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
 
                 var length = ParseLength(headerLengths, headerName, logger);
                 for (var i = 0; i < length; ++i)
                 {
                     var innerFlattenResult = OnFlatten(
                         innerRecordSchema,
-                        recordSchemaContainer,
+                        recordSchemaCatalog,
                         headerLengths,
                         $"{headerName}[{i}]",
                         logger);
@@ -98,11 +98,11 @@ public static partial class RecordFlattener
             }
             else
             {
-                var innerRecordSchema = recordSchemaContainer.Find(parameter.NamedTypeSymbol);
+                var innerRecordSchema = recordSchemaCatalog.Find(parameter.NamedTypeSymbol);
 
                 var innerFlatten = OnFlatten(
                     innerRecordSchema,
-                    recordSchemaContainer,
+                    recordSchemaCatalog,
                     headerLengths,
                     headerName,
                     logger);

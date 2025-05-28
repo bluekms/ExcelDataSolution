@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Containers;
 
-public sealed class RecordSchemaContainer
+public sealed class RecordSchemaCatalog
 {
     private readonly Dictionary<RecordName, RecordSchema> recordSchemaDictionary;
 
@@ -17,14 +17,14 @@ public sealed class RecordSchemaContainer
 
     public IReadOnlyList<RecordSchema> WholeRecordSchemata { get; init; }
 
-    public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
+    public RecordSchemaCatalog(RecordSchemaSet recordSchemaSet)
     {
-        var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaCollector.Count);
-        foreach (var recordName in recordSchemaCollector.RecordNames)
+        var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaSet.Count);
+        foreach (var recordName in recordSchemaSet.RecordNames)
         {
-            var namedTypeSymbol = recordSchemaCollector.GetNamedTypeSymbol(recordName);
-            var recordAttributes = recordSchemaCollector.GetRecordAttributes(recordName);
-            var recordMemberSchemata = recordSchemaCollector.GetRecordMemberSchemata(recordName);
+            var namedTypeSymbol = recordSchemaSet.GetNamedTypeSymbol(recordName);
+            var recordAttributes = recordSchemaSet.GetRecordAttributes(recordName);
+            var recordMemberSchemata = recordSchemaSet.GetRecordMemberSchemata(recordName);
 
             recordSchemata.Add(recordName, new(recordName, namedTypeSymbol, recordAttributes, recordMemberSchemata));
         }
@@ -82,10 +82,10 @@ public sealed class RecordSchemaContainer
                 }
             }
 
-            if (recordSchema.RecordParameterSchemaList.Count > 0)
+            if (recordSchema.RecordPropertySchemata.Count > 0)
             {
                 sb.AppendLine("Parameters:");
-                foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+                foreach (var recordParameterSchema in recordSchema.RecordPropertySchemata)
                 {
                     sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.PropertyName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");

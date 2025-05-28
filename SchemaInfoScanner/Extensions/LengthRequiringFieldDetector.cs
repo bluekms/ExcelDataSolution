@@ -11,14 +11,14 @@ public static class LengthRequiringFieldDetector
 {
     public static HashSet<string> Detect(
         RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         ILogger logger)
     {
         try
         {
             return OnDetectLengthRequiringFields(
                 recordSchema,
-                recordSchemaContainer,
+                recordSchemaCatalog,
                 string.Empty);
         }
         catch (Exception exception)
@@ -30,12 +30,12 @@ public static class LengthRequiringFieldDetector
 
     private static HashSet<string> OnDetectLengthRequiringFields(
         RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         string parentPrefix)
     {
         var results = new HashSet<string>();
 
-        foreach (var parameter in recordSchema.RecordParameterSchemaList)
+        foreach (var parameter in recordSchema.RecordPropertySchemata)
         {
             if (PrimitiveTypeChecker.IsSupportedPrimitiveType(parameter.NamedTypeSymbol))
             {
@@ -64,11 +64,11 @@ public static class LengthRequiringFieldDetector
                 results.Add(headerName);
 
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
-                var innerRecordSchema = recordSchemaContainer.Find(typeArgument);
+                var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
 
                 var innerCollectionNames = OnDetectLengthRequiringFields(
                     innerRecordSchema,
-                    recordSchemaContainer,
+                    recordSchemaCatalog,
                     headerName);
 
                 foreach (var innerName in innerCollectionNames)
@@ -81,11 +81,11 @@ public static class LengthRequiringFieldDetector
                 results.Add(headerName);
 
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
-                var innerRecordSchema = recordSchemaContainer.Find(typeArgument);
+                var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
 
                 var innerCollectionNames = OnDetectLengthRequiringFields(
                     innerRecordSchema,
-                    recordSchemaContainer,
+                    recordSchemaCatalog,
                     headerName);
 
                 foreach (var innerName in innerCollectionNames)
@@ -95,11 +95,11 @@ public static class LengthRequiringFieldDetector
             }
             else
             {
-                var innerRecordSchema = recordSchemaContainer.Find(parameter.NamedTypeSymbol);
+                var innerRecordSchema = recordSchemaCatalog.Find(parameter.NamedTypeSymbol);
 
                 var innerCollectionNames = OnDetectLengthRequiringFields(
                     innerRecordSchema,
-                    recordSchemaContainer,
+                    recordSchemaCatalog,
                     headerName);
 
                 foreach (var innerName in innerCollectionNames)

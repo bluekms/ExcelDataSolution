@@ -14,7 +14,7 @@ internal static class RecordTypeChecker
 {
     public static void Check(
         RecordSchema recordSchema,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
         ILogger logger)
     {
@@ -39,9 +39,9 @@ internal static class RecordTypeChecker
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Started.", null);
 
-        foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var recordParameterSchema in recordSchema.RecordPropertySchemata)
         {
-            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaContainer, visited, logger);
+            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaCatalog, visited, logger);
         }
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Finished.", null);
@@ -83,18 +83,18 @@ internal static class RecordTypeChecker
 
     public static RecordSchema CheckAndGetSchema(
         INamedTypeSymbol symbol,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        var recordSchema = recordSchemaContainer.TryFind(symbol);
+        var recordSchema = recordSchemaCatalog.TryFind(symbol);
         if (recordSchema is null)
         {
             var innerException = new KeyNotFoundException($"{symbol.Name} is not found in the RecordSchemaDictionary");
             throw new TypeNotSupportedException($"{symbol.Name} is not supported type.", innerException);
         }
 
-        Check(recordSchema, recordSchemaContainer, visited, logger);
+        Check(recordSchema, recordSchemaCatalog, visited, logger);
         return recordSchema;
     }
 

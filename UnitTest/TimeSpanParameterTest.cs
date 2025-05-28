@@ -30,18 +30,18 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var rawRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             new Dictionary<string, int>());
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
+        var parameter = recordSchema.RecordPropertySchemata[0];
         var valueStr = "0.00:05";
         var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
         parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
@@ -66,12 +66,12 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
         Assert.Throws<AttributeNotFoundException<TimeSpanFormatAttribute>>(() =>
         {
-            RecordComplianceChecker.Check(recordSchemaContainer, logger);
+            RecordComplianceChecker.Check(recordSchemaCatalog, logger);
         });
 
         Assert.Single(logger.Logs);
@@ -95,20 +95,20 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
         var enumMemberContainer = new EnumMemberContainer(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawRecordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var rawRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
         var recordSchema = RecordSchemaFactory.Create(
             rawRecordSchema,
-            recordSchemaContainer,
+            recordSchemaCatalog,
             new Dictionary<string, int>());
 
         Assert.Throws<FormatException>(() =>
         {
-            var parameter = recordSchema.RecordParameterSchemaList[0];
+            var parameter = recordSchema.RecordPropertySchemata[0];
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
             var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
             parameter.CheckCompatibility(arguments, enumMemberContainer, logger);

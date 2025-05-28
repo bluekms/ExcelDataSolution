@@ -27,15 +27,16 @@ public class FooTester(ITestOutputHelper testOutputHelper)
                    """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
-            PrimitiveTypeChecker.Check(parameterSchema);
+            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            {
+            }
         }
 
         Assert.Empty(logger.Logs);

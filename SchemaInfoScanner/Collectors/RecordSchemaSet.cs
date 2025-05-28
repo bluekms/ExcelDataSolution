@@ -4,11 +4,10 @@ using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace SchemaInfoScanner.Collectors;
 
-public sealed class RecordSchemaCollector
+public sealed class RecordSchemaSet
 {
     private readonly Dictionary<RecordName, INamedTypeSymbol> recordNamedTypeSymbolDictionary = [];
     private readonly Dictionary<RecordName, List<AttributeSyntax>> recordAttributeDictionary = [];
@@ -18,16 +17,20 @@ public sealed class RecordSchemaCollector
 
     public IReadOnlyList<RecordName> RecordNames => recordAttributeDictionary.Keys.ToList();
 
-    public RecordSchemaCollector()
-    {
-    }
-
-    public RecordSchemaCollector(RecordSchemaLoader.Result loadResult)
+    public RecordSchemaSet(RecordSchemaLoader.Result loadResult)
     {
         Collect(loadResult);
     }
 
-    public void Collect(RecordSchemaLoader.Result loadResult)
+    public RecordSchemaSet(IReadOnlyList<RecordSchemaLoader.Result> loadResults)
+    {
+        foreach (var loadResult in loadResults)
+        {
+            Collect(loadResult);
+        }
+    }
+
+    private void Collect(RecordSchemaLoader.Result loadResult)
     {
         var result = Parse(loadResult);
 

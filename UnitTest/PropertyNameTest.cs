@@ -40,13 +40,13 @@ public class PropertyNameTest(ITestOutputHelper testOutputHelper)
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
-        var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
-        RecordComplianceChecker.Check(recordSchemaContainer, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var rawSchema = recordSchemaContainer.StaticDataRecordSchemata[0];
+        var rawSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
 
-        foreach (var parameter in rawSchema.RecordParameterSchemaList)
+        foreach (var parameter in rawSchema.RecordPropertySchemata)
         {
         }
 

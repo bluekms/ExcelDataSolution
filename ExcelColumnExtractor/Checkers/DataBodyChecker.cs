@@ -13,7 +13,7 @@ public static class DataBodyChecker
 {
     public static void Check(
         IReadOnlyList<RecordSchema> recordSchemaList,
-        RecordSchemaContainer recordSchemaContainer,
+        RecordSchemaCatalog recordSchemaCatalog,
         ExtractedTableContainer extractedTableContainer,
         HeaderLengthContainer headerLengthContainer,
         ILogger<Program> logger)

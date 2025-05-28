@@ -8,15 +8,14 @@ public sealed class EnumMemberContainer
 {
     private readonly ReadOnlyDictionary<EnumName, IReadOnlyList<string>> enumMemberDictionary;
 
-    public EnumMemberContainer(EnumMemberCollector enumMemberCollector)
+    public EnumMemberContainer(EnumDefinitionSet enumDefinitionSet)
     {
-        enumMemberDictionary = enumMemberCollector.AsReadOnly();
+        enumMemberDictionary = enumDefinitionSet.AsReadOnly();
     }
 
     public EnumMemberContainer(RecordSchemaLoader.Result loadResult)
     {
-        var enumMemberCollector = new EnumMemberCollector();
-        enumMemberCollector.Collect(loadResult);
+        var enumMemberCollector = new EnumDefinitionSet(loadResult);
         enumMemberDictionary = enumMemberCollector.AsReadOnly();
     }
 

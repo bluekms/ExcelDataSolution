@@ -10,10 +10,10 @@ public static class ParameterSchemaInnerSchemaFinder
 {
     public static RecordSchema FindInnerRecordSchema(
         this PropertySchemaBase property,
-        RecordSchemaContainer recordSchemaContainer)
+        RecordSchemaCatalog recordSchemaCatalog)
     {
         var typeArgument = GetTypeArgument(property);
-        var typeArgumentSchema = recordSchemaContainer.TryFind(typeArgument);
+        var typeArgumentSchema = recordSchemaCatalog.TryFind(typeArgument);
         if (typeArgumentSchema is null)
         {
             var innerException = new KeyNotFoundException($"{typeArgument.Name} is not found in the RecordSchemaDictionary");
