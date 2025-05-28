@@ -41,7 +41,7 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
             recordSchemaCatalog,
             new Dictionary<string, int>());
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
+        var parameter = recordSchema.RecordPropertySchemata[0];
         var valueStr = "0.00:05";
         var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
         parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
@@ -108,7 +108,7 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         Assert.Throws<FormatException>(() =>
         {
-            var parameter = recordSchema.RecordParameterSchemaList[0];
+            var parameter = recordSchema.RecordPropertySchemata[0];
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
             var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
             parameter.CheckCompatibility(arguments, enumMemberContainer, logger);

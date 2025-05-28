@@ -46,7 +46,7 @@ public class PropertyNameTest(ITestOutputHelper testOutputHelper)
 
         var rawSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
 
-        foreach (var parameter in rawSchema.RecordParameterSchemaList)
+        foreach (var parameter in rawSchema.RecordPropertySchemata)
         {
         }
 

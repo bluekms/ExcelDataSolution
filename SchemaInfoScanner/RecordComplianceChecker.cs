@@ -26,7 +26,7 @@ public static class RecordComplianceChecker
                 continue;
             }
 
-            foreach (var recordParameter in recordSchema.RecordParameterSchemaList)
+            foreach (var recordParameter in recordSchema.RecordPropertySchemata)
             {
                 try
                 {
@@ -58,7 +58,7 @@ public static class RecordComplianceChecker
                 continue;
             }
 
-            foreach (var recordParameter in recordSchema.RecordParameterSchemaList)
+            foreach (var recordParameter in recordSchema.RecordPropertySchemata)
             {
                 try
                 {

@@ -90,7 +90,7 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var recordParameterSchema in recordSchema.RecordPropertySchemata)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaCatalog, [], logger);
         }

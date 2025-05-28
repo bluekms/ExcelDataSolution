@@ -85,7 +85,7 @@ internal static class DictionaryTypeChecker
 
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaCatalog, visited, logger);
 
-        var valueRecordKeyParameterSchema = valueRecordSchema.RecordParameterSchemaList
+        var valueRecordKeyParameterSchema = valueRecordSchema.RecordPropertySchemata
             .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
 
         if (valueRecordKeyParameterSchema is null)

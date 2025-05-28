@@ -50,7 +50,7 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -97,7 +97,7 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             PrimitiveTypeChecker.Check(parameterSchema);
         }
@@ -129,8 +129,8 @@ public class PrimitiveTypeCheckerTest(ITestOutputHelper testOutputHelper)
         Assert.Throws<InvalidUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
 
         var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        var nullableParameter = recordSchema.RecordParameterSchemaList[0];
-        var notnullParameter = recordSchema.RecordParameterSchemaList[1];
+        var nullableParameter = recordSchema.RecordPropertySchemata[0];
+        var notnullParameter = recordSchema.RecordPropertySchemata[1];
 
         PrimitiveTypeChecker.Check(nullableParameter);
         Assert.Throws<InvalidUsageException>(() => PrimitiveTypeChecker.Check(notnullParameter));

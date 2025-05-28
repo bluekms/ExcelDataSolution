@@ -60,7 +60,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
@@ -99,7 +99,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }
@@ -361,7 +361,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var recordSchema = recordSchemaCatalog.FindAll("MyRecord").Single();
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var parameterSchema in recordSchema.RecordPropertySchemata)
         {
             DictionaryTypeChecker.Check(parameterSchema, recordSchemaCatalog, [], logger);
         }

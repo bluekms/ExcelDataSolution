@@ -41,7 +41,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
             recordSchemaCatalog,
             new Dictionary<string, int>());
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
+        var parameter = recordSchema.RecordPropertySchemata[0];
         var valueStr = "1986-05-26 03:17:00.000";
 
         var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
@@ -109,7 +109,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
 
         Assert.Throws<FormatException>(() =>
         {
-            var parameter = recordSchema.RecordParameterSchemaList[0];
+            var parameter = recordSchema.RecordPropertySchemata[0];
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
 
             var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();

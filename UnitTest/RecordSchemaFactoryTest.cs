@@ -71,7 +71,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         for (var i = 0; i < 10; ++i)
         {
-            var parameter = recordSchema.RecordParameterSchemaList[0];
+            var parameter = recordSchema.RecordPropertySchemata[0];
             var value = RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type));
 
             var valueStr = value?.ToString() ?? string.Empty;
@@ -115,7 +115,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             recordSchemaCatalog,
             new Dictionary<string, int>());
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
+        var parameter = recordSchema.RecordPropertySchemata[0];
         if (parameter is EnumPropertySchema enumParameter)
         {
             var enumerator = Enumerable.Repeat("A", 1).GetEnumerator();
@@ -199,7 +199,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var argument = string.Join(", ", list);
         var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
+        var parameter = recordSchema.RecordPropertySchemata[0];
         parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
 
         Assert.Empty(logger.Logs);
@@ -251,7 +251,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         const string argument = "A, B, C";
         var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
 
-        var parameter = recordSchema.RecordParameterSchemaList[0];
+        var parameter = recordSchema.RecordPropertySchemata[0];
         parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
 
         Assert.Empty(logger.Logs);

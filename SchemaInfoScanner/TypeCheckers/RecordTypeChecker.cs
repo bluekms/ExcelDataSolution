@@ -39,7 +39,7 @@ internal static class RecordTypeChecker
 
         LogTrace(logger, $"{recordSchema.RecordName.FullName} Started.", null);
 
-        foreach (var recordParameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var recordParameterSchema in recordSchema.RecordPropertySchemata)
         {
             SupportedTypeChecker.Check(recordParameterSchema, recordSchemaCatalog, visited, logger);
         }

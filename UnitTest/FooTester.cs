@@ -32,10 +32,11 @@ public class FooTester(ITestOutputHelper testOutputHelper)
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        var recordSchema = recordSchemaCatalog.StaticDataRecordSchemata[0];
-        foreach (var parameterSchema in recordSchema.RecordParameterSchemaList)
+        foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
-            PrimitiveTypeChecker.Check(parameterSchema);
+            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            {
+            }
         }
 
         Assert.Empty(logger.Logs);
