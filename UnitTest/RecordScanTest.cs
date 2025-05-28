@@ -29,12 +29,11 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
 
-        var recordSchemaCollector = new RecordSchemaCollector();
+        var recordSchemaCollector = new RecordSchemaSet(loadResults);
         var enumMemberCollector = new EnumMemberCollector();
         var semanticModelCollector = new SemanticModelCollector();
         foreach (var loadResult in loadResults)
         {
-            recordSchemaCollector.Collect(loadResult);
             enumMemberCollector.Collect(loadResult);
             semanticModelCollector.Collect(loadResult);
         }

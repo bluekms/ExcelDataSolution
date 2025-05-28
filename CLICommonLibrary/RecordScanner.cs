@@ -10,11 +10,10 @@ public static class RecordScanner
     public static RecordSchemaContainer Scan(string csPath, ILogger logger)
     {
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
-        var recordSchemaCollector = new RecordSchemaCollector();
+        var recordSchemaCollector = new RecordSchemaSet(loadResults);
         var enumMemberCollector = new EnumMemberCollector();
         foreach (var loadResult in loadResults)
         {
-            recordSchemaCollector.Collect(loadResult);
             enumMemberCollector.Collect(loadResult);
         }
 

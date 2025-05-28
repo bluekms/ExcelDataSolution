@@ -17,14 +17,14 @@ public sealed class RecordSchemaContainer
 
     public IReadOnlyList<RecordSchema> WholeRecordSchemata { get; init; }
 
-    public RecordSchemaContainer(RecordSchemaCollector recordSchemaCollector)
+    public RecordSchemaContainer(RecordSchemaSet recordSchemaSet)
     {
-        var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaCollector.Count);
-        foreach (var recordName in recordSchemaCollector.RecordNames)
+        var recordSchemata = new Dictionary<RecordName, RecordSchema>(recordSchemaSet.Count);
+        foreach (var recordName in recordSchemaSet.RecordNames)
         {
-            var namedTypeSymbol = recordSchemaCollector.GetNamedTypeSymbol(recordName);
-            var recordAttributes = recordSchemaCollector.GetRecordAttributes(recordName);
-            var recordMemberSchemata = recordSchemaCollector.GetRecordMemberSchemata(recordName);
+            var namedTypeSymbol = recordSchemaSet.GetNamedTypeSymbol(recordName);
+            var recordAttributes = recordSchemaSet.GetRecordAttributes(recordName);
+            var recordMemberSchemata = recordSchemaSet.GetRecordMemberSchemata(recordName);
 
             recordSchemata.Add(recordName, new(recordName, namedTypeSymbol, recordAttributes, recordMemberSchemata));
         }

@@ -13,7 +13,7 @@ public static class SimpleCordParser
     public static Result Parse(string code, ILogger logger)
     {
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-        var recordSchemaCollector = new RecordSchemaCollector(loadResult);
+        var recordSchemaCollector = new RecordSchemaSet(loadResult);
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
 
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
