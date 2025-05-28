@@ -11,11 +11,6 @@ public static class RecordScanner
     {
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
         var recordSchemaCollector = new RecordSchemaSet(loadResults);
-        var enumMemberCollector = new EnumMemberCollector();
-        foreach (var loadResult in loadResults)
-        {
-            enumMemberCollector.Collect(loadResult);
-        }
 
         var recordSchemaContainer = new RecordSchemaContainer(recordSchemaCollector);
         RecordComplianceChecker.Check(recordSchemaContainer, logger);
