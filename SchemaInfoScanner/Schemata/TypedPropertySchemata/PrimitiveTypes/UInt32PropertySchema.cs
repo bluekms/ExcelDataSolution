@@ -18,7 +18,7 @@ public sealed record UInt32PropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         var argument = GetNextArgument(arguments, GetType(), logger);

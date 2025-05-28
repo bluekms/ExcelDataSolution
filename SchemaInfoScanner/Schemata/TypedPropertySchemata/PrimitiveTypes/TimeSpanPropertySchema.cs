@@ -19,7 +19,7 @@ public sealed record TimeSpanPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         if (!this.TryGetAttributeValue<TimeSpanFormatAttribute, string>(0, out var format))

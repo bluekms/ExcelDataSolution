@@ -16,13 +16,13 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         var keyArgument = GetNextArgument(arguments, GetType(), logger);
-        KeySchema.NestedSchema.CheckCompatibility(keyArgument, enumMemberContainer, logger);
+        KeySchema.NestedSchema.CheckCompatibility(keyArgument, enumMemberCatalog, logger);
 
         var valueArgument = GetNextArgument(arguments, GetType(), logger);
-        ValueSchema.NestedSchema.CheckCompatibility(valueArgument, enumMemberContainer, logger);
+        ValueSchema.NestedSchema.CheckCompatibility(valueArgument, enumMemberCatalog, logger);
     }
 }

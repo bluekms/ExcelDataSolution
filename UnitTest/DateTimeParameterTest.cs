@@ -31,7 +31,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
@@ -45,7 +45,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
         var valueStr = "1986-05-26 03:17:00.000";
 
         var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
-        parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
+        parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -97,7 +97,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult);
-        var enumMemberContainer = new EnumMemberContainer(loadResult);
+        var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
@@ -113,7 +113,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
 
             var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
-            parameter.CheckCompatibility(arguments, enumMemberContainer, logger);
+            parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
         });
         Assert.Single(logger.Logs);
     }

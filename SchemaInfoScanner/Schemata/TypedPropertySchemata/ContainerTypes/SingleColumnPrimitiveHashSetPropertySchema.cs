@@ -15,7 +15,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
         var argument = GetNextArgument(arguments, GetType(), logger);
@@ -26,7 +26,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
 
         foreach (var item in split)
         {
-            GenericArgumentSchema.NestedSchema.CheckCompatibility(item, enumMemberContainer, logger);
+            GenericArgumentSchema.NestedSchema.CheckCompatibility(item, enumMemberCatalog, logger);
         }
 
         var hashSet = split.ToHashSet();

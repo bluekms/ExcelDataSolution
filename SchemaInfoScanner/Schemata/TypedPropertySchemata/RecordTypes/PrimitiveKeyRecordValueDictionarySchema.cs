@@ -15,10 +15,10 @@ public sealed record PrimitiveKeyRecordValueDictionarySchema(
 {
     protected override void OnCheckCompatibility(
         IEnumerator<string> arguments,
-        EnumMemberContainer enumMemberContainer,
+        EnumMemberCatalog enumMemberCatalog,
         ILogger logger)
     {
-        KeyGenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
-        ValueGenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberContainer, logger);
+        KeyGenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberCatalog, logger);
+        ValueGenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberCatalog, logger);
     }
 }
