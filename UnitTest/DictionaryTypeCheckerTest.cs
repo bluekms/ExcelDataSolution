@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
@@ -274,7 +274,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NestedContainerKeyDictionaryNotSupportedTest()
+    public void NestedCollectionKeyDictionaryNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)
@@ -303,7 +303,7 @@ public class DictionaryTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NestedContainerValueDictionaryNotSupportedTest()
+    public void NestedCollectionValueDictionaryNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<DictionaryTypeCheckerTest>() is not TestOutputLogger<DictionaryTypeCheckerTest> logger)

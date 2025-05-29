@@ -3,10 +3,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 using SchemaInfoScanner.TypeCheckers;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.ContainerTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 
 public static class PrimitiveKeyAndValueDictionarySchemaFactory
 {
@@ -28,11 +28,11 @@ public static class PrimitiveKeyAndValueDictionarySchemaFactory
         }
 
         var keySchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.ContainerKind.DictionaryKey,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.DictionaryKey,
             PrimitivePropertySchemaFactory.Create(propertyName, keySymbol, attributeList));
 
         var valueSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.ContainerKind.DictionaryValue,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.DictionaryValue,
             PrimitivePropertySchemaFactory.Create(propertyName, valueSymbol, attributeList));
 
         return new PrimitiveKeyPrimitiveValueDictionaryPropertySchema(

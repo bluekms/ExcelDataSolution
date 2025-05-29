@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.ContainerTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 using SchemaInfoScanner.TypeCheckers;
@@ -24,15 +24,15 @@ public static class TypedPropertySchemaFactory
         }
         else if (ListTypeChecker.IsPrimitiveListType(propertySymbol))
         {
-            var isSingleColumnContainer = AttributeAccessors.HasAttribute<SingleColumnContainerAttribute>(attributeList);
-            return isSingleColumnContainer
+            var isSingleColumnCollection = AttributeAccessors.HasAttribute<SingleColumnCollectionAttribute>(attributeList);
+            return isSingleColumnCollection
                 ? PrimitiveListPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
                 : PrimitiveListPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }
         else if (HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
         {
-            var isSingleColumnContainer = AttributeAccessors.HasAttribute<SingleColumnContainerAttribute>(attributeList);
-            return isSingleColumnContainer
+            var isSingleColumnCollection = AttributeAccessors.HasAttribute<SingleColumnCollectionAttribute>(attributeList);
+            return isSingleColumnCollection
                 ? PrimitiveHashSetPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
                 : PrimitiveHashSetPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }

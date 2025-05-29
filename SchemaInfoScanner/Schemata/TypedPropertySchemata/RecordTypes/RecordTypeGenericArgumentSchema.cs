@@ -3,10 +3,10 @@ using SchemaInfoScanner.NameObjects;
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
 public class RecordTypeGenericArgumentSchema(
-    RecordTypeGenericArgumentSchema.ContainerKind containingType,
+    RecordTypeGenericArgumentSchema.CollectionKind containingType,
     PropertySchemaBase nestedSchema)
 {
-    public enum ContainerKind
+    public enum CollectionKind
     {
         List,
         HashSet,
@@ -14,7 +14,7 @@ public class RecordTypeGenericArgumentSchema(
         DictionaryValue,
     }
 
-    public ContainerKind ContainingType { get; } = containingType;
+    public CollectionKind ContainingType { get; } = containingType;
     public PropertyName PropertyName { get; } = nestedSchema.PropertyName;
     public PropertySchemaBase NestedSchema { get; } = nestedSchema;
     public string Name { get; } = $"{nestedSchema.PropertyName.Name}'s <{nestedSchema.GetType().Name}>";
