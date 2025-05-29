@@ -2,7 +2,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 
