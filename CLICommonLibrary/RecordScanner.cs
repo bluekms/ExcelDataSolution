@@ -10,7 +10,7 @@ public static class RecordScanner
     public static RecordSchemaCatalog Scan(string csPath, ILogger logger)
     {
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
-        var recordSchemaSet = new RecordSchemaSet(loadResults);
+        var recordSchemaSet = new RecordSchemaSet(loadResults, logger);
 
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);

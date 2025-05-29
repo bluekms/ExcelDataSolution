@@ -1,5 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
@@ -17,16 +18,48 @@ public sealed class RecordSchemaSet
 
     public IReadOnlyList<RecordName> RecordNames => recordAttributeDictionary.Keys.ToList();
 
-    public RecordSchemaSet(RecordSchemaLoader.Result loadResult)
+    public RecordSchemaSet(RecordSchemaLoader.Result loadResult, ILogger logger)
     {
-        Collect(loadResult);
-    }
-
-    public RecordSchemaSet(IReadOnlyList<RecordSchemaLoader.Result> loadResults)
-    {
-        foreach (var loadResult in loadResults)
+        try
         {
             Collect(loadResult);
+        }
+        catch (NotSupportedException e)
+        {
+            logger.LogWarning(e, e.Message);
+            throw;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, e.Message);
+            throw;
+        }
+    }
+
+    public RecordSchemaSet(IReadOnlyList<RecordSchemaLoader.Result> loadResults, ILogger logger)
+    {
+        var errorCount = 0;
+        foreach (var loadResult in loadResults)
+        {
+            try
+            {
+                Collect(loadResult);
+            }
+            catch (NotSupportedException e)
+            {
+                ++errorCount;
+                logger.LogWarning(e, e.Message);
+            }
+            catch (Exception e)
+            {
+                ++errorCount;
+                logger.LogError(e, e.Message);
+            }
+        }
+
+        if (errorCount > 0)
+        {
+            throw new AggregateException($"There are {errorCount} exceptions while collecting record schema set.");
         }
     }
 

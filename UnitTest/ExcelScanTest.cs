@@ -95,7 +95,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             "TestRecord");
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
-        var recordSchemaSet = new RecordSchemaSet(loadResults);
+        var recordSchemaSet = new RecordSchemaSet(loadResults, logger);
 
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
