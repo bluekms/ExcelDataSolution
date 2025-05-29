@@ -4,8 +4,8 @@ using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Extensions;
 using StaticDataAttribute;
 using UnitTest.Utility;
@@ -45,7 +45,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var sheetNameCatalog = ScanExcelFiles(logger);
+        var sheetNameContainer = ScanExcelFiles(logger);
         var recordSchemaCatalog = ScanRecordFiles(logger);
 
         foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
@@ -58,7 +58,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             var values = recordSchema.GetAttributeValueList<StaticDataRecordAttribute>();
             var sheetNameString = $"{values[0]}.{values[1]}";
 
-            if (sheetNameCatalog.TryGet(values[0], values[1], out _))
+            if (sheetNameContainer.TryGet(values[0], values[1], out _))
             {
                 LogTrace(logger, $"Match! {sheetNameString} : {recordSchema.RecordName.FullName}", null);
             }

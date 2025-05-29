@@ -7,7 +7,7 @@ using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Catalogs;
+namespace SchemaInfoScanner.Containers;
 
 public sealed class RecordSchemaCatalog
 {

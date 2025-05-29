@@ -6,7 +6,7 @@
 3. Record: Foo
 4. NullableRecord: Foo?
 
-# Catalog
+# Container
 ## List
 ### PrimitiveList
 5. PrimitiveList: List<int>

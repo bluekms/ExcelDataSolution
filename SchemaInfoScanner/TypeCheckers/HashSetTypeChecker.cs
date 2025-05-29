@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -58,9 +58,9 @@ internal static class HashSetTypeChecker
             throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
         }
 
-        if (property.HasAttribute<SingleColumnCatalogAttribute>())
+        if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. {nameof(SingleColumnCatalogAttribute)} can only be used in primitive type hashset.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type hashset.");
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);

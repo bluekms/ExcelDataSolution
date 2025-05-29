@@ -32,7 +32,7 @@ public class RecordHashSetPropertySchemaFactory
             parentRecordSymbol);
 
         var genericArgumentSchema = new RecordTypeGenericArgumentSchema(
-            RecordTypeGenericArgumentSchema.CatalogKind.HashSet,
+            RecordTypeGenericArgumentSchema.ContainerKind.HashSet,
             nestedSchema);
 
         return new RecordHashSetPropertySchema(
