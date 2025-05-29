@@ -28,7 +28,7 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
             "_TestRecord");
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
-        var recordSchemaSet = new RecordSchemaSet(loadResults);
+        var recordSchemaSet = new RecordSchemaSet(loadResults, logger);
         var enumDefinitionSet = new EnumDefinitionSet(loadResults);
         var semanticModelSet = new SemanticModelSet(loadResults);
 
