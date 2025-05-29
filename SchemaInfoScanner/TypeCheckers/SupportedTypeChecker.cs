@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -30,9 +30,9 @@ internal static class SupportedTypeChecker
             return;
         }
 
-        if (CatalogTypeChecker.IsSupportedCatalogType(property.NamedTypeSymbol))
+        if (ContainerTypeChecker.IsSupportedContainerType(property.NamedTypeSymbol))
         {
-            CheckSupportedCatalogType(property, recordSchemaCatalog, visited, logger);
+            CheckSupportedContainerType(property, recordSchemaCatalog, visited, logger);
             return;
         }
 
@@ -46,7 +46,7 @@ internal static class SupportedTypeChecker
         RecordTypeChecker.Check(recordSchema, recordSchemaCatalog, visited, logger);
     }
 
-    private static void CheckSupportedCatalogType(
+    private static void CheckSupportedContainerType(
         PropertySchemaBase property,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
@@ -66,7 +66,7 @@ internal static class SupportedTypeChecker
         }
         else
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported catalog type.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported container type.");
         }
     }
 

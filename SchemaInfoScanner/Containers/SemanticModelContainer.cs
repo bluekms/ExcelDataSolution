@@ -2,9 +2,9 @@ using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Catalogs;
+namespace SchemaInfoScanner.Containers;
 
-public sealed class SemanticModelCatalog(SemanticModelSet semanticModelSet)
+public sealed class SemanticModelContainer(SemanticModelSet semanticModelSet)
 {
     public IReadOnlyDictionary<RecordName, SemanticModel> SemanticModelDictionary { get; } = semanticModelSet.GetSemanticModels();
 }

@@ -1,10 +1,10 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CatalogTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 
 public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
     PropertyName PropertyName,

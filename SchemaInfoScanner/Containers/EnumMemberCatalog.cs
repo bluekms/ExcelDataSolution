@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Catalogs;
+namespace SchemaInfoScanner.Containers;
 
 public sealed class EnumMemberCatalog
 {

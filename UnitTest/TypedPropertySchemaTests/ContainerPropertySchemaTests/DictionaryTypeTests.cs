@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.Containers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.TypedPropertySchemaTests.CollectionPropertySchemaTests;
+namespace UnitTest.TypedPropertySchemaTests.ContainerPropertySchemaTests;
 
 public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 {

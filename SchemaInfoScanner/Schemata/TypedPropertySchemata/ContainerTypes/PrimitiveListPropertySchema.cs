@@ -1,9 +1,9 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CatalogTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 
 public sealed record PrimitiveListPropertySchema(
     PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,

@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
@@ -48,15 +48,15 @@ public static partial class RecordFlattener
             {
                 headers.Add(headerName);
             }
-            else if (CatalogTypeChecker.IsPrimitiveCatalog(parameter.NamedTypeSymbol))
+            else if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
             {
-                if (parameter.HasAttribute<SingleColumnCatalogAttribute>())
+                if (parameter.HasAttribute<SingleColumnContainerAttribute>())
                 {
                     headers.Add(headerName);
                 }
                 else
                 {
-                    var result = FlattenPrimitiveCatalog(headerName, headerLengths, logger);
+                    var result = FlattenPrimitiveContainer(headerName, headerLengths, logger);
                     headers.AddRange(result);
                 }
             }
@@ -78,7 +78,7 @@ public static partial class RecordFlattener
                     headers.AddRange(innerFlattenResult);
                 }
             }
-            else if (CatalogTypeChecker.IsSupportedCatalogType(parameter.NamedTypeSymbol))
+            else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
                 var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
@@ -114,14 +114,14 @@ public static partial class RecordFlattener
         return headers;
     }
 
-    private static List<string> FlattenPrimitiveCatalog(
+    private static List<string> FlattenPrimitiveContainer(
         string headerName,
-        IReadOnlyDictionary<string, int> catalogLengths,
+        IReadOnlyDictionary<string, int> containerLengths,
         ILogger logger)
     {
         var headers = new List<string>();
 
-        var length = ParseLength(catalogLengths, headerName, logger);
+        var length = ParseLength(containerLengths, headerName, logger);
         for (var i = 0; i < length; ++i)
         {
             headers.Add($"{headerName}[{i}]");
@@ -134,12 +134,12 @@ public static partial class RecordFlattener
     private static partial Regex IndexRegex();
 
     private static int ParseLength(
-        IReadOnlyDictionary<string, int> catalogLengths,
+        IReadOnlyDictionary<string, int> containerLengths,
         string headerName,
         ILogger logger)
     {
         var headerNameWithoutIndex = IndexRegex().Replace(headerName, string.Empty);
-        if (!catalogLengths.TryGetValue(headerNameWithoutIndex, out var length))
+        if (!containerLengths.TryGetValue(headerNameWithoutIndex, out var length))
         {
             LogInformation(logger, "Cannot find length for", headerNameWithoutIndex, null);
         }

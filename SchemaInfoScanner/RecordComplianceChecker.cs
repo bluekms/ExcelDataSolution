@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.TypeCheckers;

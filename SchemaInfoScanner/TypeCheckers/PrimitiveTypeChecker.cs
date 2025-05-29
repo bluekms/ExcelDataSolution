@@ -74,9 +74,9 @@ internal static class PrimitiveTypeChecker
             throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
         }
 
-        if (property.HasAttribute<SingleColumnCatalogAttribute>())
+        if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnCatalogAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
         }
     }
 

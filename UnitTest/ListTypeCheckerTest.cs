@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
@@ -188,7 +188,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NestedCatalogListNotSupportedTest()
+    public void NestedContainerListNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
@@ -214,7 +214,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnPrimitiveCatalogTest()
+    public void SingleColumnPrimitiveContainerTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
@@ -225,7 +225,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
-                [SingleColumnCatalog("", "")] List<int> Values
+                [SingleColumnContainer("", "")] List<int> Values
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -244,7 +244,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnRecordCatalogNotSupportedTest()
+    public void SingleColumnRecordContainerNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<ListTypeCheckerTest>() is not TestOutputLogger<ListTypeCheckerTest> logger)
@@ -257,7 +257,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
-                [SingleColumnCatalog("", "")] List<Student> Students
+                [SingleColumnContainer("", "")] List<Student> Students
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);

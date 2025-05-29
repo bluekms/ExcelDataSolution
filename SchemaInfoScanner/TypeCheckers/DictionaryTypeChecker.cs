@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -206,7 +206,7 @@ internal static class DictionaryTypeChecker
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
-        if (property.HasAttribute<SingleColumnCatalogAttribute>())
+        if (property.HasAttribute<SingleColumnContainerAttribute>())
         {
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
