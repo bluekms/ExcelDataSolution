@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
@@ -40,7 +39,7 @@ internal static class SupportedTypeChecker
         if (recordSchema is null)
         {
             var innerException = new KeyNotFoundException($"{property.NamedTypeSymbol.Name} is not found in the record schema dictionary.");
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported record type.", innerException);
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported record type.", innerException);
         }
 
         RecordTypeChecker.Check(recordSchema, recordSchemaCatalog, visited, logger);
@@ -66,7 +65,7 @@ internal static class SupportedTypeChecker
         }
         else
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported collection type.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported collection type.");
         }
     }
 

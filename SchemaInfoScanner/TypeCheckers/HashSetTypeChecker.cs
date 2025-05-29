@@ -55,12 +55,12 @@ internal static class HashSetTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. Nullable record item for hashset is not supported.");
         }
 
         if (property.HasAttribute<SingleColumnCollectionAttribute>())
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type hashset.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported hashset type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type hashset.");
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);

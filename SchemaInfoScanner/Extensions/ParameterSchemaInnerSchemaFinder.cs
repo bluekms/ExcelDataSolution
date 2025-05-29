@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Catalogs;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 
@@ -17,7 +16,7 @@ public static class ParameterSchemaInnerSchemaFinder
         if (typeArgumentSchema is null)
         {
             var innerException = new KeyNotFoundException($"{typeArgument.Name} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported type.", innerException);
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported type.", innerException);
         }
 
         return typeArgumentSchema;

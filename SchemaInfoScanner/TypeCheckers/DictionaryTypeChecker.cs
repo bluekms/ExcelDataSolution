@@ -36,7 +36,7 @@ internal static class DictionaryTypeChecker
         var keySymbol = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+            throw new NotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
         if (PrimitiveTypeChecker.IsDateTimeType(keySymbol))
@@ -80,7 +80,7 @@ internal static class DictionaryTypeChecker
 
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException("Value type of dictionary must be non-nullable.");
+            throw new NotSupportedException("Value type of dictionary must be non-nullable.");
         }
 
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaCatalog, visited, logger);
@@ -100,7 +100,7 @@ internal static class DictionaryTypeChecker
             var valueRecordKeyParameterRecordName = new RecordName(valueRecordKeyParameterSchema.NamedTypeSymbol);
             if (!keyRecordSchema.RecordName.Equals(valueRecordKeyParameterRecordName))
             {
-                throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
+                throw new NotSupportedException($"Key and value type of dictionary must be same type.");
             }
 
             return;
@@ -134,7 +134,7 @@ internal static class DictionaryTypeChecker
         var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+            throw new NotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
         var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
@@ -153,13 +153,13 @@ internal static class DictionaryTypeChecker
         var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+            throw new NotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
         var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+            throw new NotSupportedException($"Value type of dictionary must be non-nullable.");
         }
 
         return PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol) &&
@@ -176,13 +176,13 @@ internal static class DictionaryTypeChecker
         var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Key type of dictionary must be non-nullable.");
+            throw new NotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
         var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
         if (valueSymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"Value type of dictionary must be non-nullable.");
+            throw new NotSupportedException($"Value type of dictionary must be non-nullable.");
         }
 
         return RecordTypeChecker.IsSupportedRecordType(keySymbol) &&
@@ -222,12 +222,12 @@ internal static class DictionaryTypeChecker
 
         if (keySymbol.TypeKind is not TypeKind.Enum || valueSymbol.TypeKind is not TypeKind.Enum)
         {
-            throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
+            throw new NotSupportedException($"Key and value type of dictionary must be same type.");
         }
 
         if (keySymbol.Name != valueSymbol.Name)
         {
-            throw new TypeNotSupportedException($"Key and value type of dictionary must be same type.");
+            throw new NotSupportedException($"Key and value type of dictionary must be same type.");
         }
     }
 }

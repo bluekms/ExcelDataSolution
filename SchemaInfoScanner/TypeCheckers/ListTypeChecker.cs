@@ -55,12 +55,12 @@ internal static class ListTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. Nullable record item for list is not supported.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported list type. Nullable record item for list is not supported.");
         }
 
         if (property.HasAttribute<SingleColumnCollectionAttribute>())
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type list.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type list.");
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);

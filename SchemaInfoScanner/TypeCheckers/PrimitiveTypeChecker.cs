@@ -12,7 +12,7 @@ internal static class PrimitiveTypeChecker
     {
         if (!IsSupportedPrimitiveType(property.NamedTypeSymbol))
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported primitive type.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported primitive type.");
         }
 
         if (!property.IsNullable())

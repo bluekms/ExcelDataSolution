@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Collectors;
@@ -19,13 +18,13 @@ public sealed class ParameterNamedTypeSymbolCollector(SemanticModel semanticMode
     {
         if (parameter.Type is null)
         {
-            throw new TypeNotSupportedException();
+            throw new NotSupportedException();
         }
 
         var typeSymbol = semanticModel.GetTypeInfo(parameter.Type).Type;
         if (typeSymbol is not INamedTypeSymbol namedTypeSymbol)
         {
-            throw new TypeNotSupportedException();
+            throw new NotSupportedException();
         }
 
         var recordPropertyName = new PropertyName(new RecordName(recordDeclaration), parameter);

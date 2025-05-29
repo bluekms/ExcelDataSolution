@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
@@ -18,13 +17,13 @@ public static class PrimitiveKeyAndValueDictionarySchemaFactory
         var keySymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[0];
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol))
         {
-            throw new TypeNotSupportedException($"{propertyName} Key type of dictionary must be a supported primitive type.");
+            throw new NotSupportedException($"{propertyName} Key type of dictionary must be a supported primitive type.");
         }
 
         var valueSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[1];
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
-            throw new TypeNotSupportedException($"{propertyName} Value type of dictionary must be a supported primitive type.");
+            throw new NotSupportedException($"{propertyName} Value type of dictionary must be a supported primitive type.");
         }
 
         var keySchema = new PrimitiveTypeGenericArgumentSchema(
