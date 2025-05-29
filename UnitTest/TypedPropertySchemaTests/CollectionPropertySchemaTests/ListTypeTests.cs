@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Containers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.TypedPropertySchemaTests.ContainerPropertySchemaTests;
+namespace UnitTest.TypedPropertySchemaTests.CollectionPropertySchemaTests;
 
 public class ListTypeTests(ITestOutputHelper testOutputHelper)
 {

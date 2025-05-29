@@ -1,5 +1,5 @@
 using Microsoft.CodeAnalysis;
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
@@ -35,6 +35,6 @@ public static class ParameterSchemaInnerSchemaFinder
             return (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Last();
         }
 
-        throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be record container type.");
+        throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be record catalog type.");
     }
 }

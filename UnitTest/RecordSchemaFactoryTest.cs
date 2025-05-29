@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
@@ -174,7 +174,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("TestExcel", "TestSheet")]
                      public sealed record MyRecord(
-                        [SingleColumnContainer(",")]
+                        [SingleColumnCatalog(",")]
                         List<{{type}}> Parameter
                      );
                      """;
@@ -217,7 +217,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
     [InlineData("List", "MyEnumForTest?")]
     [InlineData("HashSet", "MyEnumForTest")]
     [InlineData("HashSet", "MyEnumForTest?")]
-    public void SingleColumnEnumListTest(string container, string type)
+    public void SingleColumnEnumListTest(string catalog, string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordSchemaFactoryTest>() is not TestOutputLogger<RecordSchemaFactoryTest> logger)
@@ -230,8 +230,8 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("TestExcel", "TestSheet")]
                      public sealed record MyRecord(
-                        [SingleColumnContainer(",")]
-                        {{container}}<{{type}}> Parameter
+                        [SingleColumnCatalog(",")]
+                        {{catalog}}<{{type}}> Parameter
                      );
                      """;
 

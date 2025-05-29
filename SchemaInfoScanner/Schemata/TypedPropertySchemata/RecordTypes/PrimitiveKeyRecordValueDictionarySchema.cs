@@ -1,8 +1,8 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Containers;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.CatalogTypes;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
