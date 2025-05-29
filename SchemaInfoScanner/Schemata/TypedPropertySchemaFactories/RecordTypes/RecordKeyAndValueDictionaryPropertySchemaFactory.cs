@@ -27,11 +27,11 @@ public static class RecordKeyAndValueDictionaryPropertySchemaFactory
         }
 
         var keySchema = new RecordTypeGenericArgumentSchema(
-            RecordTypeGenericArgumentSchema.ContainerKind.DictionaryKey,
+            RecordTypeGenericArgumentSchema.CatalogKind.DictionaryKey,
             RecordPropertySchemaFactory.Create(propertyName, keySymbol, attributeList, parentRecordSymbol));
 
         var valueSchema = new RecordTypeGenericArgumentSchema(
-            RecordTypeGenericArgumentSchema.ContainerKind.DictionaryValue,
+            RecordTypeGenericArgumentSchema.CatalogKind.DictionaryValue,
             RecordPropertySchemaFactory.Create(propertyName, valueSymbol, attributeList, parentRecordSymbol));
 
         return new RecordKeyRecordValueDictionarySchema(keySchema, valueSchema, propertySymbol, attributeList);

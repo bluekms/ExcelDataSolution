@@ -32,7 +32,7 @@ public static class RecordListPropertySchemaFactory
             parentRecordSymbol);
 
         var genericArgumentSchema = new RecordTypeGenericArgumentSchema(
-            RecordTypeGenericArgumentSchema.ContainerKind.List,
+            RecordTypeGenericArgumentSchema.CatalogKind.List,
             nestedSchema);
 
         return new RecordListPropertySchema(

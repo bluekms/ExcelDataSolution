@@ -95,7 +95,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var code = @"
             public sealed record Subject(
                 string Name,
-                [SingleColumnContainer("", "")] List<int> QuarterScore
+                [SingleColumnCatalog("", "")] List<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -134,7 +134,7 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var code = @"
             public sealed record Subject(
                 string Name,
-                [SingleColumnContainer("", "")][ColumnName(""QuarterScores"")] List<int> QuarterScore
+                [SingleColumnCatalog("", "")][ColumnName(""QuarterScores"")] List<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]

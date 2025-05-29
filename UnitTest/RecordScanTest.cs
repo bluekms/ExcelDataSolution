@@ -1,8 +1,8 @@
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Containers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 

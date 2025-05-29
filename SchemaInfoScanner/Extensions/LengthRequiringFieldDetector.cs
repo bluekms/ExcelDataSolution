@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
@@ -52,9 +52,9 @@ public static class LengthRequiringFieldDetector
                 ? name
                 : $"{parentPrefix}.{name}";
 
-            if (ContainerTypeChecker.IsPrimitiveContainer(parameter.NamedTypeSymbol))
+            if (CatalogTypeChecker.IsPrimitiveCatalog(parameter.NamedTypeSymbol))
             {
-                if (!parameter.HasAttribute<SingleColumnContainerAttribute>())
+                if (!parameter.HasAttribute<SingleColumnCatalogAttribute>())
                 {
                     results.Add(headerName);
                 }
@@ -76,7 +76,7 @@ public static class LengthRequiringFieldDetector
                     results.Add(innerName);
                 }
             }
-            else if (ContainerTypeChecker.IsSupportedContainerType(parameter.NamedTypeSymbol))
+            else if (CatalogTypeChecker.IsSupportedCatalogType(parameter.NamedTypeSymbol))
             {
                 results.Add(headerName);
 

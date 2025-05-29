@@ -1,4 +1,4 @@
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 
 namespace SchemaInfoScanner.Schemata;
 
