@@ -15,7 +15,9 @@
         <!-- CA1852 : 암시적인 class Program 에서 경고가 발생하지 않도록 허용 -->
         <!-- SA1202 : protected 생성자를 public 메서드보다 위에 작성할수 있도록 허용 -->
         <!-- SA1204 : public 메서드를 private static 메서드보다 위에 작성할수 있도록 허용 -->
-        <NoWarn>CA1707,CA1725,CA1852,SA1202,SA1204</NoWarn>
+        <!-- CA1848 : LoggerMessage 대리자 사용. 개발 완료시까지 억제 -->
+        <!-- CA2254 : 로깅 메시지 템플릿 상이. 개발 완료시까지 억제 -->
+        <NoWarn>CA1707,CA1725,CA1852,SA1202,SA1204,CA1848,CA2254</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
