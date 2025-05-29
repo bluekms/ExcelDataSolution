@@ -4,7 +4,7 @@ using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.Exceptions;
 using ExcelColumnExtractor.HeaderProcessors;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Schemata;
 
 namespace ExcelColumnExtractor.Checkers;

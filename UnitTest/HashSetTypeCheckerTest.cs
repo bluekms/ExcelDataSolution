@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Containers;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
@@ -191,7 +191,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NestedContainerHashSetNotSupportedTest()
+    public void NestedCollectionHashSetNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
@@ -217,7 +217,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnPrimitiveContainerNotSupportedTest()
+    public void SingleColumnPrimitiveCollectionNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
@@ -228,7 +228,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var code = @"
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
-                [SingleColumnContainer("", "")] HashSet<int> Values
+                [SingleColumnCollection("", "")] HashSet<int> Values
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -247,7 +247,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnRecordContainerNotSupportedTest()
+    public void SingleColumnRecordCollectionNotSupportedTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeCheckerTest>() is not TestOutputLogger<HashSetTypeCheckerTest> logger)
@@ -260,7 +260,7 @@ public class HashSetTypeCheckerTest(ITestOutputHelper testOutputHelper)
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyRecord(
-                [SingleColumnContainer("", "")] HashSet<Student> Students
+                [SingleColumnCollection("", "")] HashSet<Student> Students
             );";
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);

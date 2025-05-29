@@ -1,7 +1,7 @@
 using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
 

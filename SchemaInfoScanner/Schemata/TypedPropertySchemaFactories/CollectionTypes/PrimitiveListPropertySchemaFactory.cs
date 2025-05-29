@@ -3,11 +3,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.ContainerTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 
 public static class PrimitiveListPropertySchemaFactory
 {
@@ -28,7 +28,7 @@ public static class PrimitiveListPropertySchemaFactory
             attributeList);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.ContainerKind.List,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.List,
             nestedSchema);
 
         return new PrimitiveListPropertySchema(
@@ -47,7 +47,7 @@ public static class PrimitiveListPropertySchemaFactory
             throw new NotSupportedException($"{propertyName} is not a supported list type.");
         }
 
-        if (AttributeAccessors.TryGetAttributeValue<SingleColumnContainerAttribute, string>(
+        if (AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
                 attributeList,
                 out var separator))
         {
@@ -61,7 +61,7 @@ public static class PrimitiveListPropertySchemaFactory
             attributeList);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.ContainerKind.List,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.List,
             nestedSchema);
 
         return new SingleColumnPrimitiveListPropertySchema(

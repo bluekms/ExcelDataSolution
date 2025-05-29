@@ -13,8 +13,8 @@ public static class NamedTypeSymbolExtensions
             return true;
         }
 
-        return symbol.IsContainerType()
-            ? symbol.IsSupportedContainerType(semanticModel, recordDeclarationList)
+        return symbol.IsCollectionType()
+            ? symbol.IsSupportedCollectionType(semanticModel, recordDeclarationList)
             : symbol.IsSupportedObjectType(semanticModel, recordDeclarationList);
     }
 
@@ -42,12 +42,12 @@ public static class NamedTypeSymbolExtensions
         return specialTypeCheck || symbol.TypeKind == TypeKind.Enum;
     }
 
-    private static bool IsContainerType(this INamedTypeSymbol symbol)
+    private static bool IsCollectionType(this INamedTypeSymbol symbol)
     {
         return symbol.IsHashSet() || symbol.IsList() || symbol.IsDictionary();
     }
 
-    private static bool IsSupportedContainerType(this INamedTypeSymbol symbol, SemanticModel semanticModel, ImmutableList<RecordDeclarationSyntax> recordDeclarationList)
+    private static bool IsSupportedCollectionType(this INamedTypeSymbol symbol, SemanticModel semanticModel, ImmutableList<RecordDeclarationSyntax> recordDeclarationList)
     {
         if (symbol.IsHashSet())
         {

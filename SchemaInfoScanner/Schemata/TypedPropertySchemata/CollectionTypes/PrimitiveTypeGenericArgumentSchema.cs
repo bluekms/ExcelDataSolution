@@ -1,12 +1,12 @@
 using SchemaInfoScanner.NameObjects;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
 public class PrimitiveTypeGenericArgumentSchema(
-    PrimitiveTypeGenericArgumentSchema.ContainerKind containingType,
+    PrimitiveTypeGenericArgumentSchema.CollectionKind containingType,
     PropertySchemaBase nestedSchema)
 {
-    public enum ContainerKind
+    public enum CollectionKind
     {
         SingleColumnList,
         List,
@@ -16,7 +16,7 @@ public class PrimitiveTypeGenericArgumentSchema(
         DictionaryValue,
     }
 
-    public ContainerKind ContainingType { get; } = containingType;
+    public CollectionKind ContainingType { get; } = containingType;
     public PropertyName PropertyName { get; } = nestedSchema.PropertyName;
     public PropertySchemaBase NestedSchema { get; } = nestedSchema;
     public string Name { get; } = $"{nestedSchema.PropertyName.Name}'s <{nestedSchema.GetType().Name}>";

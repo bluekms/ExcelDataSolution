@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -125,9 +125,9 @@ internal static class RecordTypeChecker
             throw new InvalidUsageException($"{nameof(RegularExpressionAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
 
-        if (recordSchema.HasAttribute<SingleColumnContainerAttribute>())
+        if (recordSchema.HasAttribute<SingleColumnCollectionAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(SingleColumnContainerAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
+            throw new InvalidUsageException($"{nameof(SingleColumnCollectionAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
         }
     }
 

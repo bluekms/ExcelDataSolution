@@ -3,11 +3,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.ContainerTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 
 public static class PrimitiveHashSetPropertySchemaFactory
 {
@@ -28,7 +28,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
             attributeList);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.ContainerKind.HashSet,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.HashSet,
             nestedSchema);
 
         return new PrimitiveHashSetPropertySchema(
@@ -47,7 +47,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
             throw new NotSupportedException($"{propertyName} is not a supported hash set type.");
         }
 
-        if (AttributeAccessors.TryGetAttributeValue<SingleColumnContainerAttribute, string>(
+        if (AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
                 attributeList,
                 out var separator))
         {
@@ -61,7 +61,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
             attributeList);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.ContainerKind.HashSet,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.HashSet,
             nestedSchema);
 
         return new PrimitiveHashSetPropertySchema(

@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Containers;
+using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -58,9 +58,9 @@ internal static class ListTypeChecker
             throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. Nullable record item for list is not supported.");
         }
 
-        if (property.HasAttribute<SingleColumnContainerAttribute>())
+        if (property.HasAttribute<SingleColumnCollectionAttribute>())
         {
-            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnContainerAttribute)} can only be used in primitive type list.");
+            throw new TypeNotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type list.");
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);
