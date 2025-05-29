@@ -34,5 +34,8 @@ dotnet_diagnostic.SA1413.severity = silent
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1516.md
 dotnet_diagnostic.SA1516.severity = silent
 
-## 필드 전방 선언 선언 관련
+# 필드 전방 선언 선언 관련
 dotnet_diagnostic.SA1201.severity = silent
+
+# 불필요한 using에 대해 경고
+dotnet_diagnostic.IDE0005.severity = warning

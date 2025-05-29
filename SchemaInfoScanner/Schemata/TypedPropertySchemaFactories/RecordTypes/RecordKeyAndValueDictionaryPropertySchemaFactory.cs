@@ -1,8 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata.ContainerTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 using SchemaInfoScanner.TypeCheckers;
 
