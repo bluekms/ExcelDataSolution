@@ -2,7 +2,6 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
@@ -124,7 +123,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Throws<NotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -183,7 +182,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Throws<NotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -209,7 +208,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Throws<NotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -266,7 +265,7 @@ public class ListTypeCheckerTest(ITestOutputHelper testOutputHelper)
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<TypeNotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Throws<NotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
 

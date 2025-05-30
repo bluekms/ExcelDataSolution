@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
@@ -64,7 +63,7 @@ public static class PrimitivePropertySchemaFactory
                 SpecialType.System_Double => new NullableDoublePropertySchema(propertyName, propertySymbol, attributeList),
                 SpecialType.System_Decimal => new NullableDecimalPropertySchema(propertyName, propertySymbol, attributeList),
                 SpecialType.System_String => new NullableStringPropertySchema(propertyName, propertySymbol, attributeList),
-                _ => throw new TypeNotSupportedException($"{propertySymbol.Name} is not supported primitive type.")
+                _ => throw new NotSupportedException($"{propertySymbol.Name} is not supported primitive type.")
             };
         }
         else
@@ -85,7 +84,7 @@ public static class PrimitivePropertySchemaFactory
                 SpecialType.System_Double => new DoublePropertySchema(propertyName, propertySymbol, attributeList),
                 SpecialType.System_Decimal => new DecimalPropertySchema(propertyName, propertySymbol, attributeList),
                 SpecialType.System_String => new StringPropertySchema(propertyName, propertySymbol, attributeList),
-                _ => throw new TypeNotSupportedException($"{propertySymbol.Name} is not supported primitive type.")
+                _ => throw new NotSupportedException($"{propertySymbol.Name} is not supported primitive type.")
             };
         }
     }

@@ -2,7 +2,6 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.TypeCheckers;
 using UnitTest.Utility;
 using Xunit.Abstractions;
@@ -121,7 +120,7 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.Parse(code, logger));
+        Assert.Throws<NotSupportedException>(() => SimpleCordParser.Parse(code, logger));
         Assert.Single(logger.Logs);
     }
 
@@ -149,7 +148,7 @@ public class RecordTypeCheckerTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        Assert.Throws<TypeNotSupportedException>(() => SimpleCordParser.Parse(code, logger));
+        Assert.Throws<NotSupportedException>(() => SimpleCordParser.Parse(code, logger));
         Assert.Single(logger.Logs);
     }
 }

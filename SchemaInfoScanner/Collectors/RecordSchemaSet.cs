@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories;
@@ -133,7 +132,7 @@ public sealed class RecordSchemaSet
             var recordName = new RecordName(recordDeclaration);
             if (loadResult.SemanticModel.GetDeclaredSymbol(recordDeclaration) is not INamedTypeSymbol namedTypeSymbol)
             {
-                throw new TypeNotSupportedException($"{recordName.FullName} is not a named type symbol");
+                throw new NotSupportedException($"{recordName.FullName} is not a named type symbol");
             }
 
             recordNamedTypeSymbolCollector.Add(recordName, namedTypeSymbol);

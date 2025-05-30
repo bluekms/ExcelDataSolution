@@ -91,7 +91,7 @@ internal static class RecordTypeChecker
         if (recordSchema is null)
         {
             var innerException = new KeyNotFoundException($"{symbol.Name} is not found in the RecordSchemaDictionary");
-            throw new TypeNotSupportedException($"{symbol.Name} is not supported type.", innerException);
+            throw new NotSupportedException($"{symbol.Name} is not supported type.", innerException);
         }
 
         Check(recordSchema, recordSchemaCatalog, visited, logger);
@@ -102,7 +102,7 @@ internal static class RecordTypeChecker
     {
         if (recordSchema.HasAttribute<StaticDataRecordAttribute>())
         {
-            throw new TypeNotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. use RecordComplianceChecker.");
+            throw new NotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. use RecordComplianceChecker.");
         }
 
         if (recordSchema.HasAttribute<MaxCountAttribute>())
