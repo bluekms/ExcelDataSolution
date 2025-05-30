@@ -18,7 +18,7 @@ public static class PrimitiveListPropertySchemaFactory
     {
         if (!ListTypeChecker.IsPrimitiveListType(propertySymbol))
         {
-            throw new NotSupportedException($"{propertyName} is not a supported list type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
@@ -44,14 +44,14 @@ public static class PrimitiveListPropertySchemaFactory
     {
         if (!ListTypeChecker.IsPrimitiveListType(propertySymbol))
         {
-            throw new NotSupportedException($"{propertyName} is not a supported list type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
         }
 
         if (AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
                 attributeList,
                 out var separator))
         {
-            throw new InvalidOperationException($"{propertyName} is not a single column list.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a single column list.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();

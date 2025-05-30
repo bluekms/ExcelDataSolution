@@ -16,15 +16,20 @@ public class RecordHashSetPropertySchemaFactory
     {
         if (!HashSetTypeChecker.IsSupportedHashSetType(propertySymbol))
         {
-            throw new InvalidOperationException($"{propertyName} is not a supported hash set type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }
 
         if (HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
         {
-            throw new InvalidOperationException($"{propertyName} is record hash set type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is record hash set type.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        if (CollectionTypeChecker.IsSupportedCollectionType(typeArgumentSymbol))
+        {
+            throw new NotSupportedException($"{propertyName}({typeArgumentSymbol.Name}) is not a supported nested collection type.");
+        }
+
         var nestedSchema = RecordPropertySchemaFactory.Create(
             propertyName,
             typeArgumentSymbol,

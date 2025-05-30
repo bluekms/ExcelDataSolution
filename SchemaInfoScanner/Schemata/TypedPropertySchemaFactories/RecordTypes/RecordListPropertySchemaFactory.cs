@@ -16,15 +16,20 @@ public static class RecordListPropertySchemaFactory
     {
         if (!ListTypeChecker.IsSupportedListType(propertySymbol))
         {
-            throw new InvalidOperationException($"{propertyName} is not a supported list type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
         }
 
         if (ListTypeChecker.IsPrimitiveListType(propertySymbol))
         {
-            throw new InvalidOperationException($"{propertyName} is record list type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is record list type.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        if (CollectionTypeChecker.IsSupportedCollectionType(typeArgumentSymbol))
+        {
+            throw new NotSupportedException($"{propertyName}({typeArgumentSymbol.Name}) is not a supported nested collection type.");
+        }
+
         var nestedSchema = RecordPropertySchemaFactory.Create(
             propertyName,
             typeArgumentSymbol,

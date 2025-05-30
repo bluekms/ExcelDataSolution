@@ -17,13 +17,13 @@ public static class RecordKeyAndValueDictionaryPropertySchemaFactory
         var keySymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[0];
         if (!RecordTypeChecker.IsSupportedRecordType(keySymbol))
         {
-            throw new InvalidOperationException($"{propertyName} Key type of dictionary must be a supported record type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) Key type of dictionary must be a supported record type.");
         }
 
         var valueSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[1];
         if (!RecordTypeChecker.IsSupportedRecordType(valueSymbol))
         {
-            throw new NotSupportedException($"{propertyName} Value type of dictionary must be a supported record type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Value type of dictionary must be a supported record type.");
         }
 
         var keySchema = new RecordTypeGenericArgumentSchema(

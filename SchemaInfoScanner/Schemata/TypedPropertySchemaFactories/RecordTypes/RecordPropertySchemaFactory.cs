@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
+using SchemaInfoScanner.TypeCheckers;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 
@@ -13,6 +14,11 @@ public static class RecordPropertySchemaFactory
         IReadOnlyList<AttributeSyntax> attributeList,
         INamedTypeSymbol parentRecordSymbol)
     {
+        if (!RecordTypeChecker.IsSupportedRecordType(propertySymbol))
+        {
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported record type.");
+        }
+
         var memberSymbols = propertySymbol.GetMembers()
             .OfType<IPropertySymbol>()
             .Where(x => x.DeclaringSyntaxReferences.Length > 0)

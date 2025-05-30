@@ -14,16 +14,21 @@ public static class PrimitiveKeyAndValueDictionarySchemaFactory
         INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
+        if (!DictionaryTypeChecker.IsSupportedDictionaryType(propertySymbol))
+        {
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported dictionary type.");
+        }
+
         var keySymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[0];
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol))
         {
-            throw new NotSupportedException($"{propertyName} Key type of dictionary must be a supported primitive type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Key type of dictionary must be a supported primitive type.");
         }
 
         var valueSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[1];
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
-            throw new NotSupportedException($"{propertyName} Value type of dictionary must be a supported primitive type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Value type of dictionary must be a supported primitive type.");
         }
 
         var keySchema = new PrimitiveTypeGenericArgumentSchema(
