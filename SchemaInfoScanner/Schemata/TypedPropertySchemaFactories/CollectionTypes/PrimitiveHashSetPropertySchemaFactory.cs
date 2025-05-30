@@ -18,7 +18,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
     {
         if (!HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
         {
-            throw new NotSupportedException($"{propertyName} is not a supported hash set type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
@@ -44,14 +44,14 @@ public static class PrimitiveHashSetPropertySchemaFactory
     {
         if (!HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
         {
-            throw new NotSupportedException($"{propertyName} is not a supported hash set type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }
 
         if (AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
                 attributeList,
                 out var separator))
         {
-            throw new InvalidOperationException($"{propertyName} is not a single column hash set.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a single column hash set.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();

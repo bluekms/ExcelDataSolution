@@ -19,13 +19,13 @@ public static class PrimitiveKeyRecordValueDictionaryPropertySchemaFactory
         var keySymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[0];
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol))
         {
-            throw new NotSupportedException($"{propertyName} Key type of dictionary must be a supported primitive type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Key type of dictionary must be a supported primitive type.");
         }
 
         var valueSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[1];
         if (!RecordTypeChecker.IsSupportedRecordType(valueSymbol))
         {
-            throw new NotSupportedException($"{propertyName} Value type of dictionary must be a supported record type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Value type of dictionary must be a supported record type.");
         }
 
         var keySchema = new PrimitiveTypeGenericArgumentSchema(

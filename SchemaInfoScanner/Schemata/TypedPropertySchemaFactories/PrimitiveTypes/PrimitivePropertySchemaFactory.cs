@@ -16,7 +16,7 @@ public static class PrimitivePropertySchemaFactory
     {
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(propertySymbol))
         {
-            throw new NotSupportedException($"{propertyName} is not a supported primitive type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported primitive type.");
         }
 
         var isNullable = propertySymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;

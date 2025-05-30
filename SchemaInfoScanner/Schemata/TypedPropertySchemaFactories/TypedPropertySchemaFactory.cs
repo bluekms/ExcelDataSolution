@@ -88,6 +88,6 @@ public static class TypedPropertySchemaFactory
                 parentRecordSymbol);
         }
 
-        throw new NotSupportedException($"{propertyName}: {propertySymbol}");
+        throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported property type.");
     }
 }
