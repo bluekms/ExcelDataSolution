@@ -1,19 +1,20 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.NotSupportedPropertyTypeTests.ContainerPropertySchemaTests;
+namespace UnitTest.NotSupportedPropertyTypeTests;
 
-public class ListTypeTests(ITestOutputHelper testOutputHelper)
+public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 {
-    [Fact]
-    public void RejectsNestedCollectionTypes()
+    [Theory]
+    [InlineData("nint")]
+    [InlineData("nuint")]
+    public void RejectsPrimitiveTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -21,16 +22,12 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         List<List<int>> Property,
+                         {{type}} Property,
                      );
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
-
-        Assert.Empty(logger.Logs);
+        Assert.Throws<NotSupportedException>(() => new RecordSchemaSet(loadResult, logger));
+        Assert.Single(logger.Logs);
     }
 }
