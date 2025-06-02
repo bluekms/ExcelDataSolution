@@ -45,6 +45,53 @@ public static class PrimitivePropertySchemaFactory
                 : new TimeSpanPropertySchema(propertyName, propertySymbol, attributeList);
         }
 
+        if (PrimitiveTypeChecker.IsClrPrimitiveType(underlyingType))
+        {
+            var clrName = PrimitiveTypeChecker.GetLastName(underlyingType);
+            if (isNullable)
+            {
+                return clrName switch
+                {
+                    "Boolean" => new NullableBooleanPropertySchema(propertyName, propertySymbol, attributeList),
+                    "Char" => new NullableCharPropertySchema(propertyName, propertySymbol, attributeList),
+                    "SByte" => new NullableSBytePropertySchema(propertyName, propertySymbol, attributeList),
+                    "Byte" => new NullableBytePropertySchema(propertyName, propertySymbol, attributeList),
+                    "Int16" => new NullableInt16PropertySchema(propertyName, propertySymbol, attributeList),
+                    "UInt16" => new NullableUInt16PropertySchema(propertyName, propertySymbol, attributeList),
+                    "Int32" => new NullableInt32PropertySchema(propertyName, propertySymbol, attributeList),
+                    "UInt32" => new NullableUInt32PropertySchema(propertyName, propertySymbol, attributeList),
+                    "Int64" => new NullableInt64PropertySchema(propertyName, propertySymbol, attributeList),
+                    "UInt64" => new NullableUInt64PropertySchema(propertyName, propertySymbol, attributeList),
+                    "Single" => new NullableFloatPropertySchema(propertyName, propertySymbol, attributeList),
+                    "Double" => new NullableDoublePropertySchema(propertyName, propertySymbol, attributeList),
+                    "Decimal" => new NullableDecimalPropertySchema(propertyName, propertySymbol, attributeList),
+                    "String" => new NullableStringPropertySchema(propertyName, propertySymbol, attributeList),
+                    _ => throw new NotSupportedException($"{propertySymbol.Name} is not supported primitive type.")
+                };
+            }
+            else
+            {
+                return clrName switch
+                {
+                    "Boolean" => new BooleanPropertySchema(propertyName, propertySymbol, attributeList),
+                    "Char" => new CharPropertySchema(propertyName, propertySymbol, attributeList),
+                    "SByte" => new SBytePropertySchema(propertyName, propertySymbol, attributeList),
+                    "Byte" => new BytePropertySchema(propertyName, propertySymbol, attributeList),
+                    "Int16" => new Int16PropertySchema(propertyName, propertySymbol, attributeList),
+                    "UInt16" => new UInt16PropertySchema(propertyName, propertySymbol, attributeList),
+                    "Int32" => new Int32PropertySchema(propertyName, propertySymbol, attributeList),
+                    "UInt32" => new UInt32PropertySchema(propertyName, propertySymbol, attributeList),
+                    "Int64" => new Int64PropertySchema(propertyName, propertySymbol, attributeList),
+                    "UInt64" => new UInt64PropertySchema(propertyName, propertySymbol, attributeList),
+                    "Single" => new FloatPropertySchema(propertyName, propertySymbol, attributeList),
+                    "Double" => new DoublePropertySchema(propertyName, propertySymbol, attributeList),
+                    "Decimal" => new DecimalPropertySchema(propertyName, propertySymbol, attributeList),
+                    "String" => new StringPropertySchema(propertyName, propertySymbol, attributeList),
+                    _ => throw new NotSupportedException($"{propertySymbol.Name} is not supported primitive type.")
+                };
+            }
+        }
+
         if (isNullable)
         {
             return underlyingType.SpecialType switch

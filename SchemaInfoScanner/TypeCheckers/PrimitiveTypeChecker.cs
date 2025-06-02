@@ -49,17 +49,35 @@ internal static class PrimitiveTypeChecker
             return true;
         }
 
-        return IsTimeSpanType(underlyingType);
+        if (IsTimeSpanType(underlyingType))
+        {
+            return true;
+        }
+
+        return IsClrPrimitiveType(underlyingType);
     }
 
     public static bool IsDateTimeType(ITypeSymbol symbol)
     {
-        return symbol.Name is "DateTime";
+        return GetLastName(symbol) is "DateTime";
     }
 
     public static bool IsTimeSpanType(ITypeSymbol symbol)
     {
-        return symbol.Name is "TimeSpan";
+        return GetLastName(symbol) is "TimeSpan";
+    }
+
+    public static bool IsClrPrimitiveType(ITypeSymbol symbol)
+    {
+        var name = GetLastName(symbol);
+        return ClrPrimitiveTypes.Contains(name);
+    }
+
+    public static string GetLastName(ITypeSymbol symbol)
+    {
+        var fullName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        var lastDot = fullName.LastIndexOf('.');
+        return lastDot >= 0 ? fullName[(lastDot + 1)..] : fullName;
     }
 
     private static void CheckUnavailableAttribute(PropertySchemaBase property)
@@ -126,6 +144,39 @@ internal static class PrimitiveTypeChecker
             _ => false
         };
     }
+
+    private static readonly HashSet<string> ClrPrimitiveTypes = new(
+        [
+            "Boolean",
+            "Byte",
+            "SByte",
+            "Char",
+            "Decimal",
+            "Double",
+            "Single",
+            "Int16",
+            "Int32",
+            "Int64",
+            "UInt16",
+            "UInt32",
+            "UInt64",
+            "String",
+            "Boolean?",
+            "Byte?",
+            "SByte?",
+            "Char?",
+            "Decimal?",
+            "Double?",
+            "Single?",
+            "Int16?",
+            "Int32?",
+            "Int64?",
+            "UInt16?",
+            "UInt32?",
+            "UInt64?",
+            "String?",
+        ],
+        StringComparer.Ordinal);
 
     private static bool CheckEnumType(ITypeSymbol symbol)
     {
