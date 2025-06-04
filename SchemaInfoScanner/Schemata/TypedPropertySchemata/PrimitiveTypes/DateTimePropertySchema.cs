@@ -2,7 +2,6 @@ using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
@@ -17,10 +16,7 @@ public sealed record DateTimePropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList) :
     PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
         if (!this.TryGetAttributeValue<DateTimeFormatAttribute, string>(0, out var format))
         {
@@ -30,12 +26,12 @@ public sealed record DateTimePropertySchema(
         DateTime value;
         try
         {
-            var argument = GetNextArgument(arguments, GetType(), logger);
+            var argument = context.CurrentArgument;
             value = DateTime.ParseExact(argument, format, CultureInfo.InvariantCulture);
         }
         catch (Exception e)
         {
-            var ex = new FormatException($"Failed to parse {arguments} with {format} format.", e);
+            var ex = new FormatException($"Failed to parse {context} with {format} format.", e);
             throw ex;
         }
 
@@ -43,5 +39,7 @@ public sealed record DateTimePropertySchema(
         {
             RangeAttributeChecker.Check(this, value);
         }
+
+        return 1;
     }
 }

@@ -43,8 +43,9 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
 
         var parameter = recordSchema.RecordPropertySchemata[0];
         var valueStr = "0.00:05";
-        var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
-        parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
+        var arguments = Enumerable.Repeat(valueStr, 1).ToList();
+        var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
+        parameter.CheckCompatibility(context, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -110,8 +111,9 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
         {
             var parameter = recordSchema.RecordPropertySchemata[0];
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
-            var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
-            parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
+            var arguments = Enumerable.Repeat(valueStr, 1).ToList();
+            var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
+            parameter.CheckCompatibility(context, logger);
         });
         Assert.Single(logger.Logs);
     }

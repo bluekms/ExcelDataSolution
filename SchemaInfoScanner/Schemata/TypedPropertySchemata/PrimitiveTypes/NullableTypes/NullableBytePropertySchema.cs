@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
 
@@ -13,19 +12,16 @@ public sealed record NullableBytePropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
-        var argument = GetNextArgument(arguments, GetType(), logger);
+        var argument = context.CurrentArgument;
         var result = NullStringAttributeChecker.Check(this, argument);
         if (result.IsNull)
         {
-            return;
+            return 1;
         }
 
         var schema = new BytePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(arguments, enumMemberCatalog, logger);
+        return schema.CheckCompatibility(context, logger);
     }
 }

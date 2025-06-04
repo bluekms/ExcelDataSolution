@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 
@@ -15,20 +14,19 @@ public sealed record StringPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
         if (!this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {
-            return;
+            return 1;
         }
 
-        var argument = GetNextArgument(arguments, GetType(), logger);
+        var argument = context.CurrentArgument;
         if (!Regex.IsMatch(argument, pattern))
         {
-            throw new ArgumentException($"The argument '{arguments}' does not match the regular expression '{pattern}'.");
+            throw new ArgumentException($"The argument '{context}' does not match the regular expression '{pattern}'.");
         }
+
+        return 1;
     }
 }

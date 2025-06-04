@@ -75,8 +75,9 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             var value = RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type));
 
             var valueStr = value?.ToString() ?? string.Empty;
-            var arguments = Enumerable.Repeat(valueStr, 1).GetEnumerator();
-            parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
+            var arguments = Enumerable.Repeat(valueStr, 1).ToList();
+            var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
+            parameter.CheckCompatibility(context, logger);
         }
 
         Assert.Empty(logger.Logs);
@@ -118,13 +119,15 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var parameter = recordSchema.RecordPropertySchemata[0];
         if (parameter is EnumPropertySchema enumParameter)
         {
-            var enumerator = Enumerable.Repeat("A", 1).GetEnumerator();
-            enumParameter.CheckCompatibility(enumerator, enumMemberCatalog, logger);
+            var enumerator = Enumerable.Repeat("A", 1).ToList();
+            var context = CompatibilityContext.CreateContext(enumerator, 0, enumMemberCatalog);
+            enumParameter.CheckCompatibility(context, logger);
         }
         else if (parameter is NullableEnumPropertySchema nullableEnumParameter)
         {
-            var enumerator = Enumerable.Repeat(string.Empty, 1).GetEnumerator();
-            nullableEnumParameter.CheckCompatibility(enumerator, enumMemberCatalog, logger);
+            var enumerator = Enumerable.Repeat(string.Empty, 1).ToList();
+            var context = CompatibilityContext.CreateContext(enumerator, 0, enumMemberCatalog);
+            nullableEnumParameter.CheckCompatibility(context, logger);
         }
         else
         {
@@ -197,10 +200,11 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             RandomValueGenerator.Generate(TypeConverter.GetSystemTypeName(type))?.ToString() ?? string.Empty,
             count);
         var argument = string.Join(", ", list);
-        var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
+        var arguments = Enumerable.Repeat(argument, 1).ToList();
+        var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
 
         var parameter = recordSchema.RecordPropertySchemata[0];
-        parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
+        parameter.CheckCompatibility(context, logger);
 
         Assert.Empty(logger.Logs);
     }
@@ -249,10 +253,11 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             new Dictionary<string, int>());
 
         const string argument = "A, B, C";
-        var arguments = Enumerable.Repeat(argument, 1).GetEnumerator();
+        var arguments = Enumerable.Repeat(argument, 1).ToList();
+        var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
 
         var parameter = recordSchema.RecordPropertySchemata[0];
-        parameter.CheckCompatibility(arguments, enumMemberCatalog, logger);
+        parameter.CheckCompatibility(context, logger);
 
         Assert.Empty(logger.Logs);
     }

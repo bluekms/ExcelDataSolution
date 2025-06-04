@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
@@ -12,18 +11,17 @@ public sealed record EnumPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
         var enumName = new EnumName(NamedTypeSymbol.Name);
-        var enumMembers = enumMemberCatalog.GetEnumMembers(enumName);
+        var enumMembers = context.EnumMemberCatalog.GetEnumMembers(enumName);
 
-        var argument = GetNextArgument(arguments, GetType(), logger);
+        var argument = context.CurrentArgument;
         if (!enumMembers.Contains(argument))
         {
-            throw new InvalidOperationException($"{arguments} is not a member of {enumName.FullName}");
+            throw new InvalidOperationException($"{context} is not a member of {enumName.FullName}");
         }
+
+        return 1;
     }
 }

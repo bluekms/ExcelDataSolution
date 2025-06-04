@@ -1,10 +1,11 @@
+using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
-public class PrimitiveTypeGenericArgumentSchema(
-    PrimitiveTypeGenericArgumentSchema.CollectionKind containingType,
-    PropertySchemaBase nestedSchema)
+public sealed record PrimitiveTypeGenericArgumentSchema(
+    PrimitiveTypeGenericArgumentSchema.CollectionKind ContainingType,
+    PropertySchemaBase NestedSchema)
 {
     public enum CollectionKind
     {
@@ -16,9 +17,12 @@ public class PrimitiveTypeGenericArgumentSchema(
         DictionaryValue,
     }
 
-    public CollectionKind ContainingType { get; } = containingType;
-    public PropertyName PropertyName { get; } = nestedSchema.PropertyName;
-    public PropertySchemaBase NestedSchema { get; } = nestedSchema;
-    public string Name { get; } = $"{nestedSchema.PropertyName.Name}'s <{nestedSchema.GetType().Name}>";
-    public string FullName { get; } = $"{nestedSchema.PropertyName.FullName}'s <{nestedSchema.GetType().Name}>";
+    public PropertyName PropertyName { get; } = NestedSchema.PropertyName;
+    public string Name { get; } = $"{NestedSchema.PropertyName.Name}'s <{NestedSchema.GetType().Name}>";
+    public string FullName { get; } = $"{NestedSchema.PropertyName.FullName}'s <{NestedSchema.GetType().Name}>";
+
+    public int CheckCompatibility(CompatibilityContext context, ILogger logger)
+    {
+        return NestedSchema.CheckCompatibility(context, logger);
+    }
 }

@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -11,11 +10,20 @@ public sealed record PrimitiveListPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
-        GenericArgumentSchema.NestedSchema.CheckCompatibility(arguments, enumMemberCatalog, logger);
+        if (!context.IsCollection)
+        {
+            throw new InvalidOperationException($"Invalid context: {context}");
+        }
+
+        var totalConsumed = 0;
+        for (var i = 0; i < context.CollectionLength; i++)
+        {
+            var nestedContext = context with { StartIndex = context.StartIndex + totalConsumed };
+            totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
+        }
+
+        return totalConsumed;
     }
 }
