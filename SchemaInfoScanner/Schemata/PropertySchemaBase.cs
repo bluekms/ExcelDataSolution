@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata;
@@ -11,6 +10,21 @@ public abstract record PropertySchemaBase(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
+    protected abstract int OnCheckCompatibility(CompatibilityContext context, ILogger logger);
+
+    public int CheckCompatibility(CompatibilityContext context, ILogger logger)
+    {
+        try
+        {
+            return OnCheckCompatibility(context, logger);
+        }
+        catch (Exception e)
+        {
+            LogError(logger, GetType(), context.ToString(), e, e.InnerException);
+            throw;
+        }
+    }
+
     public override string ToString()
     {
         return PropertyName.FullName;
@@ -20,42 +34,6 @@ public abstract record PropertySchemaBase(
     {
         return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
     }
-
-    public void CheckCompatibility(string argument, EnumMemberCatalog enumMemberCatalog, ILogger logger)
-    {
-        var enumerator = Enumerable.Repeat(argument, 1).GetEnumerator();
-        CheckCompatibility(enumerator, enumMemberCatalog, logger);
-    }
-
-    public void CheckCompatibility(IEnumerator<string> arguments, EnumMemberCatalog enumMemberCatalog, ILogger logger)
-    {
-        try
-        {
-            OnCheckCompatibility(arguments, enumMemberCatalog, logger);
-        }
-        catch (Exception e)
-        {
-            LogError(logger, GetType(), arguments.Current, e, e.InnerException);
-            throw;
-        }
-    }
-
-    protected static string GetNextArgument(IEnumerator<string> arguments, Type schemaType, ILogger logger)
-    {
-        if (!arguments.MoveNext())
-        {
-            var ex = new InvalidOperationException("Column count error.");
-            LogError(logger, schemaType, ex.Message, ex, ex.InnerException);
-            throw ex;
-        }
-
-        return arguments.Current;
-    }
-
-    protected abstract void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger);
 
     protected static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =
         LoggerMessage.Define<Type, string, Exception?>(

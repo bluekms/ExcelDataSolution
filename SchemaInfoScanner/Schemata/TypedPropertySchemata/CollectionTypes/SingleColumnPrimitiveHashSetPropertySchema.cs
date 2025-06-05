@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -12,29 +11,26 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
     string Separator)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
-        var argument = GetNextArgument(arguments, GetType(), logger);
-        var split = argument
-            .Split(Separator)
-            .Select(x => x.Trim())
-            .ToList();
+        var subContext = CompatibilityContext.CreateSingleColumnCollectionContext(context, Separator);
 
-        foreach (var item in split)
+        var consumed = 0;
+        while (subContext.StartIndex + consumed < subContext.Arguments.Count)
         {
-            GenericArgumentSchema.NestedSchema.CheckCompatibility(item, enumMemberCatalog, logger);
+            var nestedContext = subContext with { StartIndex = subContext.StartIndex + consumed };
+            consumed += GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
         }
 
-        var hashSet = split.ToHashSet();
-        if (split.Count != hashSet.Count)
+        var hashSet = subContext.Arguments.ToHashSet();
+        if (hashSet.Count != subContext.Arguments.Count)
         {
             var ex = new InvalidOperationException(
-                $"Parameter {PropertyName} has duplicate values in the argument: {arguments}");
-            LogError(logger, GetType(), argument, ex, ex.InnerException);
+                $"Parameter {PropertyName} has duplicate values in the argument: {context}");
+            LogError(logger, GetType(), context.ToString(), ex, ex.InnerException);
             throw ex;
         }
+
+        return 1;
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
@@ -14,15 +13,31 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
     PrimitiveTypeGenericArgumentSchema ValueSchema)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
-        var keyArgument = GetNextArgument(arguments, GetType(), logger);
-        KeySchema.NestedSchema.CheckCompatibility(keyArgument, enumMemberCatalog, logger);
+        if (!context.IsCollection)
+        {
+            throw new InvalidOperationException($"Invalid context: {context}");
+        }
 
-        var valueArgument = GetNextArgument(arguments, GetType(), logger);
-        ValueSchema.NestedSchema.CheckCompatibility(valueArgument, enumMemberCatalog, logger);
+        var consumedCount = 0;
+        for (var i = 0; i < context.CollectionLength; i++)
+        {
+            var keyContext = CompatibilityContext.CreateContext(
+                context.Arguments,
+                context.StartIndex + consumedCount,
+                context.EnumMemberCatalog);
+
+            consumedCount += KeySchema.CheckCompatibility(keyContext, logger);
+
+            var valueContext = CompatibilityContext.CreateContext(
+                context.Arguments,
+                context.StartIndex + consumedCount,
+                context.EnumMemberCatalog);
+
+            consumedCount += ValueSchema.CheckCompatibility(valueContext, logger);
+        }
+
+        return consumedCount;
     }
 }

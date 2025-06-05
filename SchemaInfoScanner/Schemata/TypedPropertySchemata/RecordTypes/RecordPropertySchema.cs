@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.NameObjects;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
@@ -13,14 +12,14 @@ public sealed record RecordPropertySchema(
     IReadOnlyList<PropertySchemaBase> MemberSchemata)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override void OnCheckCompatibility(
-        IEnumerator<string> arguments,
-        EnumMemberCatalog enumMemberCatalog,
-        ILogger logger)
+    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
     {
+        var consumedCount = 0;
         foreach (var schema in MemberSchemata)
         {
-            schema.CheckCompatibility(arguments, enumMemberCatalog, logger);
+            consumedCount += schema.CheckCompatibility(context, logger);
         }
+
+        return consumedCount;
     }
 }
