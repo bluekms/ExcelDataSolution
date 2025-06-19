@@ -3,6 +3,7 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.CompatibilityContexts;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
 using UnitTest.Utility;
@@ -76,7 +77,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
             var valueStr = value?.ToString() ?? string.Empty;
             var arguments = Enumerable.Repeat(valueStr, 1).ToList();
-            var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
+            var context = new CompatibilityContext(enumMemberCatalog, arguments);
             parameter.CheckCompatibility(context, logger);
         }
 
@@ -120,13 +121,13 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         if (parameter is EnumPropertySchema enumParameter)
         {
             var enumerator = Enumerable.Repeat("A", 1).ToList();
-            var context = CompatibilityContext.CreateContext(enumerator, 0, enumMemberCatalog);
+            var context = new CompatibilityContext(enumMemberCatalog, enumerator);
             enumParameter.CheckCompatibility(context, logger);
         }
         else if (parameter is NullableEnumPropertySchema nullableEnumParameter)
         {
             var enumerator = Enumerable.Repeat(string.Empty, 1).ToList();
-            var context = CompatibilityContext.CreateContext(enumerator, 0, enumMemberCatalog);
+            var context = new CompatibilityContext(enumMemberCatalog, enumerator);
             nullableEnumParameter.CheckCompatibility(context, logger);
         }
         else
@@ -201,7 +202,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             count);
         var argument = string.Join(", ", list);
         var arguments = Enumerable.Repeat(argument, 1).ToList();
-        var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
+        var context = new CompatibilityContext(enumMemberCatalog, arguments);
 
         var parameter = recordSchema.RecordPropertySchemata[0];
         parameter.CheckCompatibility(context, logger);
@@ -254,7 +255,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
 
         const string argument = "A, B, C";
         var arguments = Enumerable.Repeat(argument, 1).ToList();
-        var context = CompatibilityContext.CreateContext(arguments, 0, enumMemberCatalog);
+        var context = new CompatibilityContext(enumMemberCatalog, arguments);
 
         var parameter = recordSchema.RecordPropertySchemata[0];
         parameter.CheckCompatibility(context, logger);

@@ -4,15 +4,17 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.NotSupportedPropertyTypeSchemaTests;
+namespace UnitTest.NotSupportedPropertySchemaTests.CollectionPropertySchemaTests;
 
-public class ObjectTypeTests(ITestOutputHelper testOutputHelper)
+public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 {
-    [Fact]
-    public void RejectsObjectTest()
+    [Theory]
+    [InlineData("List")]
+    [InlineData("HashSet")]
+    public void RejectsNestedCollectionTypes(string collection)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ObjectTypeTests>() is not TestOutputLogger<ObjectTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -20,7 +22,7 @@ public class ObjectTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         object Property,
+                         Dictionary<int, {{collection}}<int>> Property,
                      );
                      """;
 
@@ -30,10 +32,10 @@ public class ObjectTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RejectsClassTest()
+    public void RejectsNestedDictionaryTypes()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ObjectTypeTests>() is not TestOutputLogger<ObjectTypeTests> logger)
+        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -41,13 +43,8 @@ public class ObjectTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         MyData Property,
+                         Dictionary<int, Dictionary<int, string>> Property,
                      );
-
-                     public sealed class MyData
-                     {
-                         public int Value { get; set; }
-                     }
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);

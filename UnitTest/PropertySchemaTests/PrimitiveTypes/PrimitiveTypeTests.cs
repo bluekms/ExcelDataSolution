@@ -5,7 +5,7 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.TypedPropertySchemaTests;
+namespace UnitTest.PropertySchemaTests.PrimitiveTypes;
 
 public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 {
@@ -24,20 +24,6 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint")]
     [InlineData("ulong")]
     [InlineData("ushort")]
-    [InlineData("bool?")]
-    [InlineData("byte?")]
-    [InlineData("char?")]
-    [InlineData("decimal?")]
-    [InlineData("double?")]
-    [InlineData("float?")]
-    [InlineData("int?")]
-    [InlineData("long?")]
-    [InlineData("sbyte?")]
-    [InlineData("short?")]
-    [InlineData("string?")]
-    [InlineData("uint?")]
-    [InlineData("ulong?")]
-    [InlineData("ushort?")]
     public void PrimitiveTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -77,20 +63,6 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("System.UInt32")]
     [InlineData("System.UInt64")]
     [InlineData("System.UInt16")]
-    [InlineData("System.Boolean?")]
-    [InlineData("System.Byte?")]
-    [InlineData("System.Char?")]
-    [InlineData("System.Decimal?")]
-    [InlineData("System.Double?")]
-    [InlineData("System.Single?")]
-    [InlineData("System.Int32?")]
-    [InlineData("System.Int64?")]
-    [InlineData("System.SByte?")]
-    [InlineData("System.Int16?")]
-    [InlineData("System.String?")]
-    [InlineData("System.UInt32?")]
-    [InlineData("System.UInt64?")]
-    [InlineData("System.UInt16?")]
     public void ClrPrimitiveTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -117,7 +89,6 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("MyEnum")]
-    [InlineData("MyEnum?")]
     public void EnumTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -146,7 +117,6 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    [InlineData("DateTime?")]
     public void DateTimeTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -174,7 +144,6 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("TimeSpan")]
-    [InlineData("TimeSpan?")]
     public void TimeSpanTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);

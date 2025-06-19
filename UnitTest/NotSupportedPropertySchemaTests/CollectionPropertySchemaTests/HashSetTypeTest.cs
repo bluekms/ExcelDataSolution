@@ -4,7 +4,7 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.NotSupportedPropertyTypeSchemaTests.CollectionPropertySchemaTests;
+namespace UnitTest.NotSupportedPropertySchemaTests.CollectionPropertySchemaTests;
 
 public class HashSetTypeTest(ITestOutputHelper testOutputHelper)
 {

@@ -4,7 +4,7 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.NotSupportedPropertyTypeTests;
+namespace UnitTest.NotSupportedPropertySchemaTests;
 
 public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 {
