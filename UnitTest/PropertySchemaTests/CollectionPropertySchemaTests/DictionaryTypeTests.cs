@@ -5,7 +5,7 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.TypedPropertySchemaTests.CollectionPropertySchemaTests;
+namespace UnitTest.PropertySchemaTests.CollectionPropertySchemaTests;
 
 public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 {
@@ -145,20 +145,6 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint")]
     [InlineData("ulong")]
     [InlineData("ushort")]
-    [InlineData("bool?")]
-    [InlineData("byte?")]
-    [InlineData("char?")]
-    [InlineData("decimal?")]
-    [InlineData("double?")]
-    [InlineData("float?")]
-    [InlineData("int?")]
-    [InlineData("long?")]
-    [InlineData("sbyte?")]
-    [InlineData("short?")]
-    [InlineData("string?")]
-    [InlineData("uint?")]
-    [InlineData("ulong?")]
-    [InlineData("ushort?")]
     public void DictionaryValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -185,7 +171,6 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("MyEnum")]
-    [InlineData("MyEnum?")]
     public void DictionaryEnumValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -214,7 +199,6 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    [InlineData("DateTime?")]
     public void DictionaryDateTimeValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -242,7 +226,6 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("TimeSpan")]
-    [InlineData("TimeSpan?")]
     public void DictionaryTimeSpanValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -270,7 +253,6 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("ValueEnum")]
-    [InlineData("ValueEnum?")]
     public void DictionaryEnumKeyEnumValueTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);

@@ -4,6 +4,7 @@ using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
@@ -22,19 +23,28 @@ public static class PrimitiveListPropertySchemaFactory
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        var isNullable = typeArgumentSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
         var nestedSchema = PrimitivePropertySchemaFactory.Create(
             propertyName,
             typeArgumentSymbol,
             attributeList);
 
+        PrimitiveTypeChecker.Check(nestedSchema);
+
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.CollectionKind.List,
             nestedSchema);
 
-        return new PrimitiveListPropertySchema(
-            genericArgumentSchema,
-            propertySymbol,
-            attributeList);
+        return isNullable
+            ? new NullablePrimitiveListPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList)
+            : new PrimitiveListPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList);
     }
 
     public static PropertySchemaBase CreateForSingleColumn(
@@ -47,27 +57,37 @@ public static class PrimitiveListPropertySchemaFactory
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
         }
 
-        if (AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
-                attributeList,
-                out var separator))
+        if (!AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
+            attributeList,
+            out var separator))
         {
             throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a single column list.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        var isNullable = typeArgumentSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
         var nestedSchema = PrimitivePropertySchemaFactory.Create(
             propertyName,
             typeArgumentSymbol,
             attributeList);
 
+        PrimitiveTypeChecker.Check(nestedSchema);
+
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.CollectionKind.List,
             nestedSchema);
 
-        return new SingleColumnPrimitiveListPropertySchema(
-            genericArgumentSchema,
-            propertySymbol,
-            attributeList,
-            separator);
+        return isNullable
+            ? new SingleColumnNullablePrimitiveListPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList,
+                separator)
+            : new SingleColumnPrimitiveListPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList,
+                separator);
     }
 }

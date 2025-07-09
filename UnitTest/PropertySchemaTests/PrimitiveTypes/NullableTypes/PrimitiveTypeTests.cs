@@ -5,15 +5,29 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.TypedPropertySchemaTests.RecordTypeSchemaTests;
+namespace UnitTest.PropertySchemaTests.PrimitiveTypes.NullableTypes;
 
-public class RecordTypes(ITestOutputHelper testOutputHelper)
+public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 {
-    [Fact]
-    public void InnerRecordTest()
+    [Theory]
+    [InlineData("bool")]
+    [InlineData("byte")]
+    [InlineData("char")]
+    [InlineData("decimal")]
+    [InlineData("double")]
+    [InlineData("float")]
+    [InlineData("int")]
+    [InlineData("long")]
+    [InlineData("sbyte")]
+    [InlineData("short")]
+    [InlineData("string")]
+    [InlineData("uint")]
+    [InlineData("ulong")]
+    [InlineData("ushort")]
+    public void PrimitiveTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -21,11 +35,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Identifier Id
-                     )
-                     {
-                        public record struct Identifier(int Value);
-                     }
+                         [NullString("")] {{type}}? Property,
+                     );
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -37,11 +48,25 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    [Fact]
-    public void AnotherRecordTest()
+    [Theory]
+    [InlineData("System.Boolean")]
+    [InlineData("System.Byte")]
+    [InlineData("System.Char")]
+    [InlineData("System.Decimal")]
+    [InlineData("System.Double")]
+    [InlineData("System.Single")]
+    [InlineData("System.Int32")]
+    [InlineData("System.Int64")]
+    [InlineData("System.SByte")]
+    [InlineData("System.Int16")]
+    [InlineData("System.String")]
+    [InlineData("System.UInt32")]
+    [InlineData("System.UInt64")]
+    [InlineData("System.UInt16")]
+    public void ClrPrimitiveTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -49,10 +74,8 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         MyData Data
+                         [NullString("")] {{type}}? Property,
                      );
-
-                     public record struct MyData(int Value);
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -64,22 +87,23 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    [Fact]
-    public void RecordListTest()
+    [Theory]
+    [InlineData("MyEnum")]
+    public void EnumTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
 
         var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         List<MyData> Data
-                     );
+                     public enum MyEnum { A, B, C }
 
-                     public record struct MyData(int Value);
+                     [StaticDataRecord("TestExcel", "TestSheet")]
+                     public sealed record MyRecord(
+                        [NullString("")] {{type}}? Property
+                     );
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -91,11 +115,12 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    [Fact]
-    public void RecordHashSetTest()
+    [Theory]
+    [InlineData("DateTime")]
+    public void DateTimeTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -103,10 +128,10 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         HashSet<MyData> Data
+                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [NullString("")]
+                         {{type}}? Property,
                      );
-
-                     public record struct MyData(int Value);
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
@@ -118,11 +143,12 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    [Fact]
-    public void RecordDictionaryTest()
+    [Theory]
+    [InlineData("TimeSpan")]
+    public void TimeSpanTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<PrimitiveTypeTests>() is not TestOutputLogger<PrimitiveTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -130,38 +156,10 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<int, MyData> Data
+                         [TimeSpanFormat("c")]
+                         [NullString("")]
+                         {{type}}? Property,
                      );
-
-                     public record struct MyData([Key] int Id, string Value);
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
-
-        Assert.Empty(logger.Logs);
-    }
-
-    [Fact]
-    public void RecordRecordDictionaryTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         Dictionary<KeyData, MyData> Data
-                     );
-
-                     public record struct KeyData(int Key1, string Key2);
-                     public record struct MyData([Key] KeyData Key, string Value);
                      """;
 
         var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);

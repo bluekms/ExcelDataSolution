@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -13,29 +14,33 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
     PrimitiveTypeGenericArgumentSchema ValueSchema)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
+        if (context.CollectionLength % 2 != 0)
+        {
+            throw new InvalidOperationException($"Invalid data length: {context}");
+        }
+
+        var isKey = true;
         var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var keyContext = CompatibilityContext.CreateContext(
-                context.Arguments,
-                context.StartIndex + consumedCount,
-                context.EnumMemberCatalog);
-
-            consumedCount += KeySchema.CheckCompatibility(keyContext, logger);
-
-            var valueContext = CompatibilityContext.CreateContext(
-                context.Arguments,
-                context.StartIndex + consumedCount,
-                context.EnumMemberCatalog);
-
-            consumedCount += ValueSchema.CheckCompatibility(valueContext, logger);
+            var contextAtIndex = context.WithStartIndex(context.StartIndex + i);
+            if (isKey)
+            {
+                consumedCount += KeySchema.CheckCompatibility(contextAtIndex, logger);
+                isKey = false;
+            }
+            else
+            {
+                consumedCount += ValueSchema.CheckCompatibility(contextAtIndex, logger);
+                isKey = true;
+            }
         }
 
         return consumedCount;

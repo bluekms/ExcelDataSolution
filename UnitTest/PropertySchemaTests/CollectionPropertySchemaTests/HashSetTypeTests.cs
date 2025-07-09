@@ -5,7 +5,7 @@ using SchemaInfoScanner.Collectors;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.TypedPropertySchemaTests.CollectionPropertySchemaTests;
+namespace UnitTest.PropertySchemaTests.CollectionPropertySchemaTests;
 
 public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 {
@@ -63,7 +63,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint")]
     [InlineData("ulong")]
     [InlineData("ushort")]
-    public void IReadOnlyCollectionTest(string type)
+    public void IReadOnlySetTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
@@ -74,7 +74,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlyCollection<{{type}}> Property,
+                         IReadOnlySet<{{type}}> Property,
                      );
                      """;
 
@@ -117,7 +117,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("MyEnum")]
-    public void IReadOnlyCollectionEnumTest(string type)
+    public void IReadOnlySetEnumTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
@@ -130,7 +130,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlyCollection<{{type}}> Property,
+                         IReadOnlySet<{{type}}> Property,
                      );
                      """;
 
@@ -172,7 +172,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    public void IReadOnlyCollectionDateTimeTest(string type)
+    public void IReadOnlySetDateTimeTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
@@ -184,7 +184,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         IReadOnlyCollection<{{type}}> Property,
+                         IReadOnlySet<{{type}}> Property,
                      );
                      """;
 
@@ -226,7 +226,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("TimeSpan")]
-    public void IReadOnlyCollectionTimeSpanTest(string type)
+    public void IReadOnlySetTimeSpanTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
@@ -238,7 +238,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         IReadOnlyCollection<{{type}}> Property,
+                         IReadOnlySet<{{type}}> Property,
                      );
                      """;
 

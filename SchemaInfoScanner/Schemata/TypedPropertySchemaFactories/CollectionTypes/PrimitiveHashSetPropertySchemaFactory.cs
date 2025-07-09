@@ -4,6 +4,7 @@ using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
@@ -22,19 +23,28 @@ public static class PrimitiveHashSetPropertySchemaFactory
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        var isNullable = typeArgumentSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
         var nestedSchema = PrimitivePropertySchemaFactory.Create(
             propertyName,
             typeArgumentSymbol,
             attributeList);
 
+        PrimitiveTypeChecker.Check(nestedSchema);
+
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.CollectionKind.HashSet,
             nestedSchema);
 
-        return new PrimitiveHashSetPropertySchema(
-            genericArgumentSchema,
-            propertySymbol,
-            attributeList);
+        return isNullable
+            ? new NullablePrimitiveHashSetPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList)
+            : new PrimitiveHashSetPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList);
     }
 
     public static PropertySchemaBase CreateForSingleColumn(
@@ -47,7 +57,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }
 
-        if (AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
+        if (!AttributeAccessors.TryGetAttributeValue<SingleColumnCollectionAttribute, string>(
                 attributeList,
                 out var separator))
         {
@@ -55,18 +65,29 @@ public static class PrimitiveHashSetPropertySchemaFactory
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
+        var isNullable = typeArgumentSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
+
         var nestedSchema = PrimitivePropertySchemaFactory.Create(
             propertyName,
             typeArgumentSymbol,
             attributeList);
 
+        PrimitiveTypeChecker.Check(nestedSchema);
+
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.CollectionKind.HashSet,
             nestedSchema);
 
-        return new PrimitiveHashSetPropertySchema(
-            genericArgumentSchema,
-            propertySymbol,
-            attributeList);
+        return isNullable
+            ? new SingleColumnNullablePrimitiveHashSetPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList,
+                separator)
+            : new SingleColumnPrimitiveHashSetPropertySchema(
+                genericArgumentSchema,
+                propertySymbol,
+                attributeList,
+                separator);
     }
 }

@@ -78,11 +78,6 @@ internal static class ListTypeChecker
         {
             throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
         }
-
-        if (property.HasAttribute<NullStringAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for list type {property.PropertyName.FullName}.");
-        }
     }
 
     public static bool IsSupportedListType(INamedTypeSymbol symbol)
