@@ -2,11 +2,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
+using SchemaInfoScanner.Schemata.AttributeCheckers;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
-public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
+public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
     PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,
@@ -21,25 +22,17 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        if (context.CollectionLength % 2 != 0)
-        {
-            throw new InvalidOperationException($"Invalid data length: {context}");
-        }
-
-        var isKey = true;
         var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var contextAtIndex = context.WithStartIndex(context.StartIndex + i);
-            if (isKey)
+            var keyContext = context.WithStartIndex(context.StartIndex + consumedCount);
+            consumedCount += KeySchema.CheckCompatibility(keyContext, logger);
+
+            var valueContext = context.WithStartIndex(context.StartIndex + consumedCount);
+            var result = NullStringAttributeChecker.Check(this, valueContext.CurrentArgument);
+            if (!result.IsNull)
             {
-                consumedCount += KeySchema.CheckCompatibility(contextAtIndex, logger);
-                isKey = false;
-            }
-            else
-            {
-                consumedCount += ValueSchema.CheckCompatibility(contextAtIndex, logger);
-                isKey = true;
+                consumedCount += ValueSchema.CheckCompatibility(valueContext, logger);
             }
         }
 

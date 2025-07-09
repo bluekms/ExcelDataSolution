@@ -1,11 +1,12 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Schemata.AttributeCheckers;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
-public sealed record SingleColumnPrimitiveListPropertySchema(
+public sealed record SingleColumnNullablePrimitiveListPropertySchema(
     PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,
@@ -18,16 +19,12 @@ public sealed record SingleColumnPrimitiveListPropertySchema(
 
         foreach (var argument in arguments)
         {
-            if (string.IsNullOrWhiteSpace(argument))
+            var result = NullStringAttributeChecker.Check(this, argument);
+            if (!result.IsNull)
             {
-                var ex = new InvalidOperationException(
-                    $"Parameter {PropertyName} has empty value in the argument: {context}");
-                LogError(logger, GetType(), context.ToString(), ex, ex.InnerException);
-                throw ex;
+                var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
+                GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
             }
-
-            var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
-            GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
         }
 
         return 1;
