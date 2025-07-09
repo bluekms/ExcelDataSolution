@@ -14,7 +14,7 @@ internal static class HashSetTypeChecker
     private static readonly HashSet<string> SupportedTypeNames =
     [
         "HashSet<>",
-        "IReadOnlyCollection<>",
+        "IReadOnlySet<>",
     ];
 
     public static void Check(
@@ -77,11 +77,6 @@ internal static class HashSetTypeChecker
         if (property.HasAttribute<KeyAttribute>())
         {
             throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for hashset type {property.PropertyName.FullName}.");
-        }
-
-        if (property.HasAttribute<NullStringAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for hashset type {property.PropertyName.FullName}.");
         }
     }
 

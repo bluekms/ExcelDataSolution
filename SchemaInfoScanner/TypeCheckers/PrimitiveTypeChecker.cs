@@ -15,12 +15,9 @@ internal static class PrimitiveTypeChecker
             throw new NotSupportedException($"{property.PropertyName.FullName} is not supported primitive type.");
         }
 
-        if (!property.IsNullable())
+        if (property.IsNullable() && !property.HasAttribute<NullStringAttribute>())
         {
-            if (property.HasAttribute<NullStringAttribute>())
-            {
-                throw new InvalidUsageException($"{property.PropertyName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
-            }
+            throw new InvalidUsageException($"{property.PropertyName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
         }
 
         CheckUnavailableAttribute(property);
@@ -90,11 +87,6 @@ internal static class PrimitiveTypeChecker
         if (property.HasAttribute<MaxCountAttribute>())
         {
             throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
-        }
-
-        if (property.HasAttribute<SingleColumnCollectionAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(SingleColumnCollectionAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
         }
     }
 
