@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 

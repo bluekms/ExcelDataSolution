@@ -21,6 +21,7 @@ public sealed record SingleColumnNullablePrimitiveHashSetPropertySchema(
             throw new InvalidOperationException($"Parameter {PropertyName} has duplicate values in the argument: {context}");
         }
 
+        var values = new List<object?>();
         foreach (var argument in arguments)
         {
             var result = NullStringAttributeChecker.Check(this, argument);
@@ -28,6 +29,16 @@ public sealed record SingleColumnNullablePrimitiveHashSetPropertySchema(
             {
                 var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
+                values.Add(nestedContext.GetCollectedValues()[^1]);
+            }
+        }
+
+        var hs = new HashSet<object?>();
+        foreach (var value in values)
+        {
+            if (!hs.Add(value))
+            {
+                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
             }
         }
 

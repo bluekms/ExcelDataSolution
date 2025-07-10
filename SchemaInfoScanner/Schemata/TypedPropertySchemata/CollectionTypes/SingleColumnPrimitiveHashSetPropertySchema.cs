@@ -14,12 +14,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
     {
         var arguments = context.CurrentArgument.Split(Separator);
 
-        var hashSet = arguments.ToHashSet();
-        if (hashSet.Count != arguments.Length)
-        {
-            throw new InvalidOperationException($"Parameter {PropertyName} has duplicate values in the argument: {context}");
-        }
-
+        var values = new List<object?>(arguments.Length);
         foreach (var argument in arguments)
         {
             if (string.IsNullOrWhiteSpace(argument))
@@ -29,6 +24,17 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
 
             var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
             GenericArgumentSchema.CheckCompatibility(nestedContext);
+
+            values.Add(nestedContext.GetCollectedValues()[^1]);
+        }
+
+        var hs = new HashSet<object?>();
+        foreach (var value in values)
+        {
+            if (!hs.Add(value))
+            {
+                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
+            }
         }
 
         return 1;

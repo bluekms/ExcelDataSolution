@@ -43,7 +43,74 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
+    public void PrimitiveHashSetDuplicationFailTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         IReadOnlySet<int> Property,
+                     );
+                     """;
+
+        var catalogs = CreateCatalogs(code, logger);
+
+        var data = new[] { "1", "0", "-7", "-7" };
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+
+        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
+        {
+            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            {
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
+            }
+        }
+
+        Assert.Single(logger.Logs);
+    }
+
+    [Fact]
     public void EnumHashSetTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     public enum MyEnum { A, a, C }
+
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         IReadOnlySet<MyEnum> Property,
+                     );
+                     """;
+
+        var catalogs = CreateCatalogs(code, logger);
+
+        var data = new[] { "a", "A" };
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+
+        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
+        {
+            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            {
+                propertySchema.CheckCompatibility(context);
+            }
+        }
+
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public void EnumHashSetDuplicationFailTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
@@ -62,18 +129,19 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "C", "A" };
+        var data = new[] { "C", "A", "A" };
         var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context);
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
             }
         }
 
-        Assert.Empty(logger.Logs);
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
@@ -173,6 +241,37 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
+    public void SingleColumnHashSetDuplicationFailTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [SingleColumnCollection(", ")] IReadOnlySet<int> Property,
+                     );
+                     """;
+
+        var catalogs = CreateCatalogs(code, logger);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, ["-7, 42, 0, -7"]);
+
+        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
+        {
+            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            {
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
+            }
+        }
+
+        Assert.Single(logger.Logs);
+    }
+
+    [Fact]
     public void NullablePrimitiveHashSetTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -202,6 +301,39 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         }
 
         Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public void NullablePrimitiveHashSetDuplicationFailTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<HashSetTypeTests>() is not TestOutputLogger<HashSetTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [NullString("-")] IReadOnlySet<int?> Property,
+                     );
+                     """;
+
+        var catalogs = CreateCatalogs(code, logger);
+
+        var data = new[] { "1", "-", "42", "-", "-7" };
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+
+        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
+        {
+            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            {
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
+            }
+        }
+
+        Assert.Single(logger.Logs);
     }
 
     [Fact]
