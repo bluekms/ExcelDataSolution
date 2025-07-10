@@ -39,6 +39,8 @@ public sealed record DateTimePropertySchema(
             RangeAttributeChecker.Check(this, value);
         }
 
+        context.Collect(value);
+
         return 1;
     }
 }

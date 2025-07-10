@@ -36,15 +36,15 @@ public sealed record CompatibilityContext(
         return this with { StartIndex = newStartIndex };
     }
 
-    public void Collect(object value)
+    public void Collect(object? value)
     {
         collectedValues.Add(value);
     }
 
-    public IReadOnlyList<object> GetCollectedValues()
+    public IReadOnlyList<object?> GetCollectedValues()
     {
         return collectedValues;
     }
 
-    private readonly List<object> collectedValues = new();
+    private readonly List<object?> collectedValues = new();
 }

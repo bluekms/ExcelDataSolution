@@ -17,6 +17,7 @@ public sealed record NullableInt32PropertySchema(
         var result = NullStringAttributeChecker.Check(this, argument);
         if (result.IsNull)
         {
+            context.Collect(null);
             return 1;
         }
 

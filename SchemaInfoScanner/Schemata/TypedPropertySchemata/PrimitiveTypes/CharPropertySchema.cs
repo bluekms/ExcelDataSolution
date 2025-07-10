@@ -23,11 +23,8 @@ public sealed record CharPropertySchema(
             RangeAttributeChecker.Check(this, value);
         }
 
-        return 1;
-    }
+        context.Collect(value);
 
-    private static bool IsInvisibleWhitespace(char c)
-    {
-        return char.IsWhiteSpace(c) && c != ' ';
+        return 1;
     }
 }

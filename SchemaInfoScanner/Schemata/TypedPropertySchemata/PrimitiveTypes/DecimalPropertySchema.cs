@@ -24,6 +24,8 @@ public sealed record DecimalPropertySchema(
             RangeAttributeChecker.Check(this, value);
         }
 
+        context.Collect(value);
+
         return 1;
     }
 }

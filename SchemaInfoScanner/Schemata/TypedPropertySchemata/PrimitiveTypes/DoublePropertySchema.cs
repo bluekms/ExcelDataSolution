@@ -27,6 +27,8 @@ public sealed record DoublePropertySchema(
             RangeAttributeChecker.Check(this, value);
         }
 
+        context.Collect(value);
+
         return 1;
     }
 }

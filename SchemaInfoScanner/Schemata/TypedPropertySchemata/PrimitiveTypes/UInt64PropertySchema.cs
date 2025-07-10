@@ -24,6 +24,8 @@ public sealed record UInt64PropertySchema(
             RangeAttributeChecker.Check(this, value);
         }
 
+        context.Collect(value);
+
         return 1;
     }
 }

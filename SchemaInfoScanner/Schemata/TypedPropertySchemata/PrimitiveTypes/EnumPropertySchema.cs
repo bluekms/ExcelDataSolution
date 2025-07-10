@@ -20,6 +20,8 @@ public sealed record EnumPropertySchema(
             throw new InvalidOperationException($"{context} is not a member of {enumName.FullName}");
         }
 
+        context.Collect(argument);
+
         return 1;
     }
 }

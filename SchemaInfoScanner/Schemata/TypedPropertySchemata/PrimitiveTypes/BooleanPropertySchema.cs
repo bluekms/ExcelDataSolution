@@ -14,7 +14,8 @@ public sealed record BooleanPropertySchema(
     {
         var argument = context.CurrentArgument;
 
-        _ = bool.Parse(argument);
+        var value = bool.Parse(argument);
+        context.Collect(value);
 
         return 1;
     }

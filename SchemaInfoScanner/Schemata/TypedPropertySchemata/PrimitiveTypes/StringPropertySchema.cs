@@ -23,8 +23,10 @@ public sealed record StringPropertySchema(
         var argument = context.CurrentArgument;
         if (!Regex.IsMatch(argument, pattern))
         {
-            throw new ArgumentException($"The argument '{context}' does not match the regular expression '{pattern}'.");
+            throw new ArgumentException($"The argument '{argument}' does not match the regular expression '{pattern}'.");
         }
+
+        context.Collect(argument);
 
         return 1;
     }

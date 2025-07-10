@@ -27,10 +27,4 @@ public abstract record PropertySchemaBase(
     {
         return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
     }
-
-    protected static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =
-        LoggerMessage.Define<Type, string, Exception?>(
-            LogLevel.Error,
-            new EventId(0, nameof(PropertySchemaBase)),
-            "Type: {Type}, Argument: {Argument} is not compatible. InnerException: {InnerException}");
 }
