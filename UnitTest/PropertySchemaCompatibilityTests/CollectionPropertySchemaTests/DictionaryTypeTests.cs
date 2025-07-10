@@ -11,7 +11,7 @@ namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTest
 public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Theory]
-    [InlineData("bool", new[]{"true", "FALSE", "TRUE"})]
+    [InlineData("bool", new[] { "true", "FALSE", "TRUE" })]
     public void DictionaryKeyTest(string keyType, string[] keys)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -36,7 +36,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -90,6 +90,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     }
 }
 
+/*
+ * Dictionary에서 key중복을 해결하려면 값을 스키마 레이어에서 검토할 수 있어야 한다.
+ * logger를 받는데 그냥 throw만 하고 있다. logger를 떼도 괜찮지 않을까 (외부에서 throw를 모아서 리포팅하는지 확인)
+*/
 /*
     [InlineData("bool", new[]{"true", "FALSE", "TRUE"})]
     [InlineData("byte", new[]{"0", "39", "255"})]

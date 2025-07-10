@@ -78,7 +78,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
             var valueStr = value?.ToString() ?? string.Empty;
             var arguments = Enumerable.Repeat(valueStr, 1).ToList();
             var context = new CompatibilityContext(enumMemberCatalog, arguments);
-            parameter.CheckCompatibility(context, logger);
+            parameter.CheckCompatibility(context);
         }
 
         Assert.Empty(logger.Logs);
@@ -122,13 +122,13 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         {
             var enumerator = Enumerable.Repeat("A", 1).ToList();
             var context = new CompatibilityContext(enumMemberCatalog, enumerator);
-            enumParameter.CheckCompatibility(context, logger);
+            enumParameter.CheckCompatibility(context);
         }
         else if (parameter is NullableEnumPropertySchema nullableEnumParameter)
         {
             var enumerator = Enumerable.Repeat(string.Empty, 1).ToList();
             var context = new CompatibilityContext(enumMemberCatalog, enumerator);
-            nullableEnumParameter.CheckCompatibility(context, logger);
+            nullableEnumParameter.CheckCompatibility(context);
         }
         else
         {
@@ -205,7 +205,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var context = new CompatibilityContext(enumMemberCatalog, arguments);
 
         var parameter = recordSchema.RecordPropertySchemata[0];
-        parameter.CheckCompatibility(context, logger);
+        parameter.CheckCompatibility(context);
 
         Assert.Empty(logger.Logs);
     }
@@ -258,7 +258,7 @@ public class RecordSchemaFactoryTest(ITestOutputHelper testOutputHelper)
         var context = new CompatibilityContext(enumMemberCatalog, arguments);
 
         var parameter = recordSchema.RecordPropertySchemata[0];
-        parameter.CheckCompatibility(context, logger);
+        parameter.CheckCompatibility(context);
 
         Assert.Empty(logger.Logs);
     }

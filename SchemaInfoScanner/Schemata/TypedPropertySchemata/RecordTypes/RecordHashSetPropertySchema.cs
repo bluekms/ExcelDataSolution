@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
@@ -11,7 +10,7 @@ public sealed record RecordHashSetPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         if (!context.IsCollection)
         {
@@ -22,7 +21,7 @@ public sealed record RecordHashSetPropertySchema(
         for (var i = 0; i < context.CollectionLength; i++)
         {
             var nestedContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            consumedCount += GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
+            consumedCount += GenericArgumentSchema.CheckCompatibility(nestedContext);
         }
 
         return consumedCount;

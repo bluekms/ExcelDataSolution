@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
@@ -15,7 +14,7 @@ public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
     PrimitiveTypeGenericArgumentSchema ValueSchema)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         if (!context.IsCollection)
         {
@@ -26,13 +25,13 @@ public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
         for (var i = 0; i < context.CollectionLength; i++)
         {
             var keyContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            consumedCount += KeySchema.CheckCompatibility(keyContext, logger);
+            consumedCount += KeySchema.CheckCompatibility(keyContext);
 
             var valueContext = context.WithStartIndex(context.StartIndex + consumedCount);
             var result = NullStringAttributeChecker.Check(this, valueContext.CurrentArgument);
             if (!result.IsNull)
             {
-                consumedCount += ValueSchema.CheckCompatibility(valueContext, logger);
+                consumedCount += ValueSchema.CheckCompatibility(valueContext);
             }
         }
 

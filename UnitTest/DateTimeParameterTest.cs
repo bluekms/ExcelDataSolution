@@ -47,7 +47,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
 
         var arguments = Enumerable.Repeat(valueStr, 1).ToList();
         var context = new CompatibilityContext(enumMemberCatalog, arguments);
-        parameter.CheckCompatibility(context, logger);
+        parameter.CheckCompatibility(context);
 
         Assert.Empty(logger.Logs);
     }
@@ -116,7 +116,7 @@ public class DateTimeParameterTest(ITestOutputHelper testOutputHelper)
 
             var arguments = Enumerable.Repeat(valueStr, 1).ToList();
             var context = new CompatibilityContext(enumMemberCatalog, arguments);
-            parameter.CheckCompatibility(context, logger);
+            parameter.CheckCompatibility(context);
         });
         Assert.Single(logger.Logs);
     }

@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
@@ -12,7 +11,7 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         if (!context.IsCollection)
         {
@@ -33,7 +32,7 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
             }
             else
             {
-                totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
+                totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }
 
@@ -43,10 +42,7 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
 
         if (hasDuplicates)
         {
-            var ex = new InvalidOperationException(
-                $"Parameter {PropertyName} has duplicate values in the argument: {context}");
-            LogError(logger, GetType(), context.ToString(), ex, ex.InnerException);
-            throw ex;
+            throw new InvalidOperationException($"Parameter {PropertyName} has duplicate values in the argument: {context}");
         }
 
         return totalConsumed;

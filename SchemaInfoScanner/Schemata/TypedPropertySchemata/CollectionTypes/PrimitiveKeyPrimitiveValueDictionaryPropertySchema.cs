@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
@@ -14,7 +13,7 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
     PrimitiveTypeGenericArgumentSchema ValueSchema)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         if (!context.IsCollection)
         {
@@ -33,12 +32,12 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
             var contextAtIndex = context.WithStartIndex(context.StartIndex + i);
             if (isKey)
             {
-                consumedCount += KeySchema.CheckCompatibility(contextAtIndex, logger);
+                consumedCount += KeySchema.CheckCompatibility(contextAtIndex);
                 isKey = false;
             }
             else
             {
-                consumedCount += ValueSchema.CheckCompatibility(contextAtIndex, logger);
+                consumedCount += ValueSchema.CheckCompatibility(contextAtIndex);
                 isKey = true;
             }
         }

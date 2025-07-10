@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
@@ -15,7 +14,7 @@ public sealed record CharPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         var argument = context.CurrentArgument;
         var value = char.Parse(argument);

@@ -11,19 +11,11 @@ public abstract record PropertySchemaBase(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
-    protected abstract int OnCheckCompatibility(ICompatibilityContext context, ILogger logger);
+    protected abstract int OnCheckCompatibility(ICompatibilityContext context);
 
-    public int CheckCompatibility(ICompatibilityContext context, ILogger logger)
+    public int CheckCompatibility(ICompatibilityContext context)
     {
-        try
-        {
-            return OnCheckCompatibility(context, logger);
-        }
-        catch (Exception e)
-        {
-            LogError(logger, GetType(), context.ToString(), e, e.InnerException);
-            throw;
-        }
+        return OnCheckCompatibility(context);
     }
 
     public override string ToString()
