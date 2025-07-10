@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 
@@ -11,11 +10,12 @@ public sealed record BooleanPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         var argument = context.CurrentArgument;
 
-        _ = bool.Parse(argument);
+        var value = bool.Parse(argument);
+        context.Collect(value);
 
         return 1;
     }

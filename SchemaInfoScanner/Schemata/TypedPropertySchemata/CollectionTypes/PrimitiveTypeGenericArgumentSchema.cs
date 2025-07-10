@@ -1,5 +1,4 @@
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -21,7 +20,7 @@ public sealed record PrimitiveTypeGenericArgumentSchema(
     public string Name { get; } = $"{NestedSchema.PropertyName.Name}'s <{NestedSchema.GetType().Name}>";
     public string FullName { get; } = $"{NestedSchema.PropertyName.FullName}'s <{NestedSchema.GetType().Name}>";
 
-    public int CheckCompatibility(ICompatibilityContext context)
+    public int CheckCompatibility(CompatibilityContext context)
     {
         return NestedSchema.CheckCompatibility(context);
     }

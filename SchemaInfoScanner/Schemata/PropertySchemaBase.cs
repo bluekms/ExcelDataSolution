@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace SchemaInfoScanner.Schemata;
 
@@ -11,9 +11,9 @@ public abstract record PropertySchemaBase(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
-    protected abstract int OnCheckCompatibility(ICompatibilityContext context);
+    protected abstract int OnCheckCompatibility(CompatibilityContext context);
 
-    public int CheckCompatibility(ICompatibilityContext context)
+    public int CheckCompatibility(CompatibilityContext context)
     {
         return OnCheckCompatibility(context);
     }
@@ -27,10 +27,4 @@ public abstract record PropertySchemaBase(
     {
         return NamedTypeSymbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
     }
-
-    protected static readonly Action<ILogger, Type, string, Exception?, Exception?> LogError =
-        LoggerMessage.Define<Type, string, Exception?>(
-            LogLevel.Error,
-            new EventId(0, nameof(PropertySchemaBase)),
-            "Type: {Type}, Argument: {Argument} is not compatible. InnerException: {InnerException}");
 }

@@ -5,7 +5,6 @@ using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
@@ -16,7 +15,7 @@ public sealed record TimeSpanPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         if (!this.TryGetAttributeValue<TimeSpanFormatAttribute, string>(0, out var format))
         {
@@ -30,6 +29,8 @@ public sealed record TimeSpanPropertySchema(
         {
             RangeAttributeChecker.Check(this, value);
         }
+
+        context.Collect(value);
 
         return 1;
     }

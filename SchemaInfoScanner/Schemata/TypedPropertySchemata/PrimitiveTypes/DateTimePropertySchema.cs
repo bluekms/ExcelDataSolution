@@ -5,7 +5,6 @@ using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
@@ -16,7 +15,7 @@ public sealed record DateTimePropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList) :
     PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         if (!this.TryGetAttributeValue<DateTimeFormatAttribute, string>(0, out var format))
         {
@@ -39,6 +38,8 @@ public sealed record DateTimePropertySchema(
         {
             RangeAttributeChecker.Check(this, value);
         }
+
+        context.Collect(value);
 
         return 1;
     }

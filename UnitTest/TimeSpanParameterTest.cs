@@ -4,7 +4,7 @@ using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 using StaticDataAttribute;
 using UnitTest.Utility;
 using Xunit.Abstractions;
