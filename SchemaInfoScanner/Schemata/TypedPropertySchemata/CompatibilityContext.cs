@@ -46,5 +46,10 @@ public sealed record CompatibilityContext(
         return collectedValues;
     }
 
+    public override string ToString()
+    {
+        return $"CompatibilityContext[{string.Join(", ", Arguments)}]";
+    }
+
     private readonly List<object?> collectedValues = new();
 }
