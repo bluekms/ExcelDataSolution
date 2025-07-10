@@ -39,7 +39,8 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                     catalogs.EnumMemberCatalog,
                     Enumerable.Repeat(argument, 1).ToList());
 
-                Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                var ex = Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
             }
         }
 
@@ -75,7 +76,8 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                     catalogs.EnumMemberCatalog,
                     Enumerable.Repeat(argument, 1).ToList());
 
-                Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                var ex = Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
             }
         }
 
