@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
@@ -22,8 +21,8 @@ public sealed record PrimitiveTypeGenericArgumentSchema(
     public string Name { get; } = $"{NestedSchema.PropertyName.Name}'s <{NestedSchema.GetType().Name}>";
     public string FullName { get; } = $"{NestedSchema.PropertyName.FullName}'s <{NestedSchema.GetType().Name}>";
 
-    public int CheckCompatibility(ICompatibilityContext context, ILogger logger)
+    public int CheckCompatibility(ICompatibilityContext context)
     {
-        return NestedSchema.CheckCompatibility(context, logger);
+        return NestedSchema.CheckCompatibility(context);
     }
 }

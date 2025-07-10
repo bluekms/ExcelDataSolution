@@ -46,7 +46,7 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
         var valueStr = "0.00:05";
         var arguments = Enumerable.Repeat(valueStr, 1).ToList();
         var context = new CompatibilityContext(enumMemberCatalog, arguments);
-        parameter.CheckCompatibility(context, logger);
+        parameter.CheckCompatibility(context);
 
         Assert.Empty(logger.Logs);
     }
@@ -114,7 +114,7 @@ public class TimeSpanParameterTest(ITestOutputHelper testOutputHelper)
             var valueStr = "01.03.2025 13:10:20,123";   // 독일
             var arguments = Enumerable.Repeat(valueStr, 1).ToList();
             var context = new CompatibilityContext(enumMemberCatalog, arguments);
-            parameter.CheckCompatibility(context, logger);
+            parameter.CheckCompatibility(context);
         });
         Assert.Single(logger.Logs);
     }

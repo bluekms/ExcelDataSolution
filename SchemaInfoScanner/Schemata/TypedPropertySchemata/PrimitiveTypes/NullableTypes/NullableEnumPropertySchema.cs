@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
@@ -13,7 +12,7 @@ public sealed record NullableEnumPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         var argument = context.CurrentArgument;
         var result = NullStringAttributeChecker.Check(this, argument);
@@ -24,6 +23,6 @@ public sealed record NullableEnumPropertySchema(
 
         var actualNamedTypeSymbol = (INamedTypeSymbol)NamedTypeSymbol.TypeArguments[0];
         var schema = new EnumPropertySchema(PropertyName, actualNamedTypeSymbol, AttributeList);
-        return schema.CheckCompatibility(context, logger);
+        return schema.CheckCompatibility(context);
     }
 }

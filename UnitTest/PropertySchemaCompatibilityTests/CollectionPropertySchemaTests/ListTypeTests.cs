@@ -35,7 +35,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -69,7 +69,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -102,7 +102,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -135,7 +135,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -165,7 +165,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -197,7 +197,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -231,7 +231,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -265,7 +265,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -299,7 +299,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -331,7 +331,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -365,7 +365,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -398,7 +398,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
@@ -431,7 +431,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.RecordPropertySchemata)
             {
-                propertySchema.CheckCompatibility(context, logger);
+                propertySchema.CheckCompatibility(context);
             }
         }
 

@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
@@ -13,7 +12,7 @@ public sealed record SingleColumnNullablePrimitiveListPropertySchema(
     string Separator)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         var arguments = context.CurrentArgument.Split(Separator);
 
@@ -23,7 +22,7 @@ public sealed record SingleColumnNullablePrimitiveListPropertySchema(
             if (!result.IsNull)
             {
                 var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
-                GenericArgumentSchema.CheckCompatibility(nestedContext, logger);
+                GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }
 

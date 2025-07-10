@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata.CompatibilityContexts;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -13,7 +12,7 @@ public sealed record PrimitiveKeyRecordValueDictionarySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(KeySchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context, ILogger logger)
+    protected override int OnCheckCompatibility(ICompatibilityContext context)
     {
         if (!context.IsCollection)
         {
@@ -28,14 +27,14 @@ public sealed record PrimitiveKeyRecordValueDictionarySchema(
                 context.Arguments,
                 context.StartIndex + consumedCount);
 
-            consumedCount += KeySchema.CheckCompatibility(keyContext, logger);
+            consumedCount += KeySchema.CheckCompatibility(keyContext);
 
             var valueContext = new CompatibilityContext(
                 context.EnumMemberCatalog,
                 context.Arguments,
                 context.StartIndex + consumedCount);
 
-            consumedCount += ValueSchema.CheckCompatibility(valueContext, logger);
+            consumedCount += ValueSchema.CheckCompatibility(valueContext);
         }
 
         return consumedCount;
