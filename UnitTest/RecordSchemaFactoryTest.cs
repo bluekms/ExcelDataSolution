@@ -3,7 +3,7 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
 using UnitTest.Utility;

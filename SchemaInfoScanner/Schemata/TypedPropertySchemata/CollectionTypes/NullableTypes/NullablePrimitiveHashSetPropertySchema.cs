@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
@@ -11,7 +10,7 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {

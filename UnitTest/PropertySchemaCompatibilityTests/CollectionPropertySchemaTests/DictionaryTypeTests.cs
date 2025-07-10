@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 

@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace SchemaInfoScanner.Schemata;
 
@@ -11,9 +11,9 @@ public abstract record PropertySchemaBase(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
-    protected abstract int OnCheckCompatibility(ICompatibilityContext context);
+    protected abstract int OnCheckCompatibility(CompatibilityContext context);
 
-    public int CheckCompatibility(ICompatibilityContext context)
+    public int CheckCompatibility(CompatibilityContext context)
     {
         return OnCheckCompatibility(context);
     }

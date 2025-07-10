@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 
@@ -14,7 +13,7 @@ public sealed record StringPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         if (!this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {

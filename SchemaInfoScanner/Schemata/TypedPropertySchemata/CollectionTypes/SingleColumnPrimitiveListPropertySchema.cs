@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -11,7 +10,7 @@ public sealed record SingleColumnPrimitiveListPropertySchema(
     string Separator)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         var arguments = context.CurrentArgument.Split(Separator);
 

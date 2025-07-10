@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Schemata.CompatibilityContexts;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
@@ -12,7 +11,7 @@ public sealed record PrimitiveKeyRecordValueDictionarySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(KeySchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(ICompatibilityContext context)
+    protected override int OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
