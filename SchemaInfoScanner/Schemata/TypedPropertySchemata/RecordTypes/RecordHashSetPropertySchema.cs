@@ -19,8 +19,8 @@ public sealed record RecordHashSetPropertySchema(
         var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var nestedContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            consumedCount += GenericArgumentSchema.CheckCompatibility(nestedContext);
+            context.StartIndex += consumedCount;
+            consumedCount += GenericArgumentSchema.CheckCompatibility(context);
         }
 
         return consumedCount;

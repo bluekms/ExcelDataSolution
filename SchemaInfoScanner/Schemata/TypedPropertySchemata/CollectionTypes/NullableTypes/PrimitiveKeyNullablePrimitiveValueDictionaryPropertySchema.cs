@@ -23,14 +23,16 @@ public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
         var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var keyContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            consumedCount += KeySchema.CheckCompatibility(keyContext);
+            var keyConsumed = KeySchema.CheckCompatibility(context);
+            context.StartIndex += keyConsumed;
+            consumedCount += keyConsumed;
 
-            var valueContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            var result = NullStringAttributeChecker.Check(this, valueContext.CurrentArgument);
+            var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
             if (!result.IsNull)
             {
-                consumedCount += ValueSchema.CheckCompatibility(valueContext);
+                var valueConsumed = ValueSchema.CheckCompatibility(context);
+                context.StartIndex += valueConsumed;
+                consumedCount += valueConsumed;
             }
         }
 

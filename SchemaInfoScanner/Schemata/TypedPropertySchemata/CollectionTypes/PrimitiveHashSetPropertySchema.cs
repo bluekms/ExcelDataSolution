@@ -20,10 +20,11 @@ public sealed record PrimitiveHashSetPropertySchema(
         var values = new List<object?>();
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var nestedContext = context.WithStartIndex(context.StartIndex + totalConsumed);
-            totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext);
+            var consumed = GenericArgumentSchema.CheckCompatibility(context);
+            context.StartIndex += consumed;
+            totalConsumed += consumed;
 
-            values.Add(nestedContext.GetCollectedValues()[^1]);
+            values.Add(context.GetCollectedValues()[^1]);
         }
 
         var hs = new HashSet<object?>();

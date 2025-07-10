@@ -19,8 +19,9 @@ public sealed record PrimitiveListPropertySchema(
         var totalConsumed = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var nestedContext = context.WithStartIndex(context.StartIndex + totalConsumed);
-            totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext);
+            var consumed = GenericArgumentSchema.CheckCompatibility(context);
+            context.StartIndex += consumed;
+            totalConsumed += consumed;
         }
 
         return totalConsumed;

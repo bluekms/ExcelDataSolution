@@ -28,15 +28,18 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
         var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var contextAtIndex = context.WithStartIndex(context.StartIndex + i);
             if (isKey)
             {
-                consumedCount += KeySchema.CheckCompatibility(contextAtIndex);
+                var keyConsumed = KeySchema.CheckCompatibility(context);
+                context.StartIndex += keyConsumed;
+                consumedCount += keyConsumed;
                 isKey = false;
             }
             else
             {
-                consumedCount += ValueSchema.CheckCompatibility(contextAtIndex);
+                var valueConsumed = ValueSchema.CheckCompatibility(context);
+                context.StartIndex += valueConsumed;
+                consumedCount += valueConsumed;
                 isKey = true;
             }
         }

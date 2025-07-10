@@ -20,16 +20,17 @@ public sealed record NullablePrimitiveListPropertySchema(
         var totalConsumed = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var nestedContext = context.WithStartIndex(context.StartIndex + totalConsumed);
-
-            var result = NullStringAttributeChecker.Check(this, nestedContext.CurrentArgument);
+            var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
             if (result.IsNull)
             {
+                context.StartIndex += 1;
                 totalConsumed += 1;
             }
             else
             {
-                totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext);
+                var consumed = GenericArgumentSchema.CheckCompatibility(context);
+                context.StartIndex += consumed;
+                totalConsumed += consumed;
             }
         }
 
