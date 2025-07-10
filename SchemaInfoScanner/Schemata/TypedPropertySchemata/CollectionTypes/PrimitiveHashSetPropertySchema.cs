@@ -17,10 +17,22 @@ public sealed record PrimitiveHashSetPropertySchema(
         }
 
         var totalConsumed = 0;
+        var values = new List<object?>();
         for (var i = 0; i < context.CollectionLength; i++)
         {
             var nestedContext = context.WithStartIndex(context.StartIndex + totalConsumed);
             totalConsumed += GenericArgumentSchema.CheckCompatibility(nestedContext);
+
+            values.Add(nestedContext.GetCollectedValues()[^1]);
+        }
+
+        var hs = new HashSet<object?>();
+        foreach (var value in values)
+        {
+            if (!hs.Add(value))
+            {
+                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
+            }
         }
 
         return totalConsumed;
