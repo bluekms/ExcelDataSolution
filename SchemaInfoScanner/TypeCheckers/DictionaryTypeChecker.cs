@@ -201,11 +201,6 @@ internal static class DictionaryTypeChecker
             throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
         }
 
-        if (property.HasAttribute<NullStringAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
-        }
-
         if (property.HasAttribute<SingleColumnCollectionAttribute>())
         {
             throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");

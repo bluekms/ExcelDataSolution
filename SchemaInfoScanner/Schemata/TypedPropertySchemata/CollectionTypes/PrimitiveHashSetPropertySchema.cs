@@ -28,7 +28,7 @@ public sealed record PrimitiveHashSetPropertySchema(
         {
             if (!hs.Add(value))
             {
-                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
+                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value: {value} in context {context}.");
             }
         }
     }
