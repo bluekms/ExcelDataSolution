@@ -15,15 +15,14 @@ public sealed record StringPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
-        {
-            return;
-        }
-
         var argument = context.CurrentArgument;
-        if (!Regex.IsMatch(argument, pattern))
+
+        if (this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {
-            throw new ArgumentException($"The argument '{argument}' does not match the regular expression '{pattern}'.");
+            if (!Regex.IsMatch(argument, pattern))
+            {
+                throw new ArgumentException($"The argument '{argument}' does not match the regular expression '{pattern}'.");
+            }
         }
 
         context.Collect(argument);
