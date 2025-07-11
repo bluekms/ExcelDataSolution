@@ -15,7 +15,7 @@ public sealed record DateTimePropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList) :
     PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!this.TryGetAttributeValue<DateTimeFormatAttribute, string>(0, out var format))
         {
@@ -40,7 +40,5 @@ public sealed record DateTimePropertySchema(
         }
 
         context.Collect(value);
-
-        return 1;
     }
 }

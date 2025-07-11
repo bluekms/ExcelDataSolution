@@ -9,21 +9,17 @@ public sealed record PrimitiveHashSetPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        var totalConsumed = 0;
         var values = new List<object?>();
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var consumed = GenericArgumentSchema.CheckCompatibility(context);
-            context.StartIndex += consumed;
-            totalConsumed += consumed;
-
+            GenericArgumentSchema.CheckCompatibility(context);
             values.Add(context.GetCollectedValues()[^1]);
         }
 
@@ -35,7 +31,5 @@ public sealed record PrimitiveHashSetPropertySchema(
                 throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
             }
         }
-
-        return totalConsumed;
     }
 }

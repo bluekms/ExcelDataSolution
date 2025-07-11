@@ -10,7 +10,7 @@ public sealed record SingleColumnPrimitiveListPropertySchema(
     string Separator)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var arguments = context.CurrentArgument.Split(Separator);
 
@@ -24,7 +24,5 @@ public sealed record SingleColumnPrimitiveListPropertySchema(
             var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
             GenericArgumentSchema.CheckCompatibility(nestedContext);
         }
-
-        return 1;
     }
 }

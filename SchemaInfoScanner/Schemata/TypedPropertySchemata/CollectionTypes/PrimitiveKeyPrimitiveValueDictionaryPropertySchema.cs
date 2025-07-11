@@ -12,7 +12,7 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
     PrimitiveTypeGenericArgumentSchema ValueSchema)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
@@ -25,25 +25,18 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
         }
 
         var isKey = true;
-        var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
             if (isKey)
             {
-                var keyConsumed = KeySchema.CheckCompatibility(context);
-                context.StartIndex += keyConsumed;
-                consumedCount += keyConsumed;
+                KeySchema.CheckCompatibility(context);
                 isKey = false;
             }
             else
             {
-                var valueConsumed = ValueSchema.CheckCompatibility(context);
-                context.StartIndex += valueConsumed;
-                consumedCount += valueConsumed;
+                ValueSchema.CheckCompatibility(context);
                 isKey = true;
             }
         }
-
-        return consumedCount;
     }
 }

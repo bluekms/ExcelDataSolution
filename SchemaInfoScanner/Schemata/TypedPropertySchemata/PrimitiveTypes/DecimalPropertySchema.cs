@@ -14,7 +14,7 @@ public sealed record DecimalPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var argument = context.CurrentArgument;
         var value = decimal.Parse(argument, NumberStyles.Number, CultureInfo.InvariantCulture);
@@ -25,7 +25,5 @@ public sealed record DecimalPropertySchema(
         }
 
         context.Collect(value);
-
-        return 1;
     }
 }

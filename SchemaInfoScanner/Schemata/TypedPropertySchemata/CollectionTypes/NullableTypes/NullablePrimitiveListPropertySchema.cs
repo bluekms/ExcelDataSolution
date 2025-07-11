@@ -10,30 +10,20 @@ public sealed record NullablePrimitiveListPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        var totalConsumed = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
             var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
-            if (result.IsNull)
+            if (!result.IsNull)
             {
-                context.StartIndex += 1;
-                totalConsumed += 1;
-            }
-            else
-            {
-                var consumed = GenericArgumentSchema.CheckCompatibility(context);
-                context.StartIndex += consumed;
-                totalConsumed += consumed;
+                GenericArgumentSchema.CheckCompatibility(context);
             }
         }
-
-        return totalConsumed;
     }
 }

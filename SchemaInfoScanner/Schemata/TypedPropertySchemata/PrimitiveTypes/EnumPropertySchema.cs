@@ -9,7 +9,7 @@ public sealed record EnumPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var enumName = new EnumName(NamedTypeSymbol.Name);
         var enumMembers = context.EnumMemberCatalog.GetEnumMembers(enumName);
@@ -21,7 +21,5 @@ public sealed record EnumPropertySchema(
         }
 
         context.Collect(argument);
-
-        return 1;
     }
 }

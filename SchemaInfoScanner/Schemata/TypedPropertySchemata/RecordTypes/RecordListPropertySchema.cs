@@ -9,25 +9,16 @@ public sealed record RecordListPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var nestedContext = new CompatibilityContext(
-                context.EnumMemberCatalog,
-                context.Arguments,
-                context.StartIndex + consumedCount,
-                context.CollectionLength);
-
-            consumedCount += GenericArgumentSchema.CheckCompatibility(nestedContext);
+            GenericArgumentSchema.CheckCompatibility(context);
         }
-
-        return consumedCount;
     }
 }

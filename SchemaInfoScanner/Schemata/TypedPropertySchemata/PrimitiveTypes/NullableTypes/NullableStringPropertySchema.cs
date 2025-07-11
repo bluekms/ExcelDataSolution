@@ -11,17 +11,16 @@ public sealed record NullableStringPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var argument = context.CurrentArgument;
         var result = NullStringAttributeChecker.Check(this, argument);
         if (result.IsNull)
         {
             context.Collect(null);
-            return 1;
         }
 
         var schema = new StringPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        return schema.CheckCompatibility(context);
+        schema.CheckCompatibility(context);
     }
 }

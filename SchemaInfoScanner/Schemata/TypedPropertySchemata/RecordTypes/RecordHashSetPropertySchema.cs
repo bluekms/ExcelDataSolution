@@ -9,20 +9,16 @@ public sealed record RecordHashSetPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            context.StartIndex += consumedCount;
-            consumedCount += GenericArgumentSchema.CheckCompatibility(context);
+            GenericArgumentSchema.CheckCompatibility(context);
         }
-
-        return consumedCount;
     }
 }

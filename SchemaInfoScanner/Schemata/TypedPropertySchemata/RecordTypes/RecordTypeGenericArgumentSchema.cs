@@ -18,8 +18,8 @@ public sealed record RecordTypeGenericArgumentSchema(
     public string Name { get; } = $"{NestedSchema.PropertyName.Name}'s <{NestedSchema.GetType().Name}>";
     public string FullName { get; } = $"{NestedSchema.PropertyName.FullName}'s <{NestedSchema.GetType().Name}>";
 
-    public int CheckCompatibility(CompatibilityContext context)
+    public void CheckCompatibility(CompatibilityContext context)
     {
-        return NestedSchema.CheckCompatibility(context);
+        NestedSchema.CheckCompatibility(context);
     }
 }

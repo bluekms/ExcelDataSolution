@@ -11,31 +11,17 @@ public sealed record PrimitiveKeyRecordValueDictionarySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(KeySchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var keyContext = new CompatibilityContext(
-                context.EnumMemberCatalog,
-                context.Arguments,
-                context.StartIndex + consumedCount);
-
-            consumedCount += KeySchema.CheckCompatibility(keyContext);
-
-            var valueContext = new CompatibilityContext(
-                context.EnumMemberCatalog,
-                context.Arguments,
-                context.StartIndex + consumedCount);
-
-            consumedCount += ValueSchema.CheckCompatibility(valueContext);
+            KeySchema.CheckCompatibility(context);
+            ValueSchema.CheckCompatibility(context);
         }
-
-        return consumedCount;
     }
 }

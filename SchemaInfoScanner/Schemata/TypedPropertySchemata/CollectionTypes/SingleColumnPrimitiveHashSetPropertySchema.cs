@@ -10,7 +10,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
     string Separator)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var arguments = context.CurrentArgument.Split(Separator);
 
@@ -36,7 +36,5 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
                 throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
             }
         }
-
-        return 1;
     }
 }
