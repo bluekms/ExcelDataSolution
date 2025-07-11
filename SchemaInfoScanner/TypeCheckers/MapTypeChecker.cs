@@ -9,14 +9,10 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class DictionaryTypeChecker
+internal static class MapTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames =
     [
-        "Dictionary<, >",
-        "ReadOnlyDictionary<, >",
-        "ImmutableDictionary<, >",
-        "ImmutableSortedDictionary<, >",
         "FrozenDictionary<, >"
     ];
 
@@ -26,7 +22,7 @@ internal static class DictionaryTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedDictionaryType(property.NamedTypeSymbol))
+        if (!IsSupportedMapType(property.NamedTypeSymbol))
         {
             throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported dictionary type, but actually not supported.");
         }
@@ -109,7 +105,7 @@ internal static class DictionaryTypeChecker
         CheckSamePrimitiveType(keySymbol, valueRecordKeyParameterSchema.NamedTypeSymbol);
     }
 
-    public static bool IsSupportedDictionaryType(INamedTypeSymbol symbol)
+    public static bool IsSupportedMapType(INamedTypeSymbol symbol)
     {
         if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
             symbol.TypeArguments is not [INamedTypeSymbol, INamedTypeSymbol])
@@ -124,9 +120,9 @@ internal static class DictionaryTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    public static bool IsPrimitiveKeyAndValueDictionaryType(INamedTypeSymbol symbol)
+    public static bool IsPrimitiveKeyAndValueMapType(INamedTypeSymbol symbol)
     {
-        if (!IsSupportedDictionaryType(symbol))
+        if (!IsSupportedMapType(symbol))
         {
             return false;
         }
@@ -143,9 +139,9 @@ internal static class DictionaryTypeChecker
                PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol);
     }
 
-    public static bool IsPrimitiveKeyRecordValueDictionaryType(INamedTypeSymbol symbol)
+    public static bool IsPrimitiveKeyRecordValueMapType(INamedTypeSymbol symbol)
     {
-        if (!IsSupportedDictionaryType(symbol))
+        if (!IsSupportedMapType(symbol))
         {
             return false;
         }
@@ -166,9 +162,9 @@ internal static class DictionaryTypeChecker
                RecordTypeChecker.IsSupportedRecordType(valueSymbol);
     }
 
-    public static bool IsRecordKeyAndValueDictionaryType(INamedTypeSymbol symbol)
+    public static bool IsRecordKeyAndValueMapType(INamedTypeSymbol symbol)
     {
-        if (!IsSupportedDictionaryType(symbol))
+        if (!IsSupportedMapType(symbol))
         {
             return false;
         }
