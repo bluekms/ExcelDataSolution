@@ -6,7 +6,7 @@ public sealed class CompatibilityContext
 {
     public EnumMemberCatalog EnumMemberCatalog { get; }
     public IReadOnlyList<string> Arguments { get; }
-    public int StartIndex { get; set; }
+    public int StartIndex { get; private set; }
     public int? CollectionLength { get; }
 
     public CompatibilityContext(
@@ -38,6 +38,7 @@ public sealed class CompatibilityContext
 
     public void Collect(object? value)
     {
+        ++StartIndex;
         collectedValues.Add(value);
     }
 
