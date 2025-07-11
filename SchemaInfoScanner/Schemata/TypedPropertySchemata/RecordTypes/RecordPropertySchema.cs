@@ -11,14 +11,11 @@ public sealed record RecordPropertySchema(
     IReadOnlyList<PropertySchemaBase> MemberSchemata)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var consumedCount = 0;
         foreach (var schema in MemberSchemata)
         {
-            consumedCount += schema.CheckCompatibility(context);
+            schema.CheckCompatibility(context);
         }
-
-        return consumedCount;
     }
 }

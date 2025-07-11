@@ -13,27 +13,22 @@ public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
     PrimitiveTypeGenericArgumentSchema ValueSchema)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!context.IsCollection)
         {
             throw new InvalidOperationException($"Invalid context: {context}");
         }
 
-        var consumedCount = 0;
         for (var i = 0; i < context.CollectionLength; i++)
         {
-            var keyContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            consumedCount += KeySchema.CheckCompatibility(keyContext);
+            KeySchema.CheckCompatibility(context);
 
-            var valueContext = context.WithStartIndex(context.StartIndex + consumedCount);
-            var result = NullStringAttributeChecker.Check(this, valueContext.CurrentArgument);
+            var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
             if (!result.IsNull)
             {
-                consumedCount += ValueSchema.CheckCompatibility(valueContext);
+                ValueSchema.CheckCompatibility(context);
             }
         }
-
-        return consumedCount;
     }
 }

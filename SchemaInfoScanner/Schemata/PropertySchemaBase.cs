@@ -10,11 +10,11 @@ public abstract record PropertySchemaBase(
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
 {
-    protected abstract int OnCheckCompatibility(CompatibilityContext context);
+    protected abstract void OnCheckCompatibility(CompatibilityContext context);
 
-    public int CheckCompatibility(CompatibilityContext context)
+    public void CheckCompatibility(CompatibilityContext context)
     {
-        return OnCheckCompatibility(context);
+        OnCheckCompatibility(context);
     }
 
     public override string ToString()

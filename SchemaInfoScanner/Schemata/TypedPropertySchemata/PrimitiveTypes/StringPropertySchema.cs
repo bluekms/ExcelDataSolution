@@ -13,11 +13,11 @@ public sealed record StringPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {
-            return 1;
+            return;
         }
 
         var argument = context.CurrentArgument;
@@ -27,7 +27,5 @@ public sealed record StringPropertySchema(
         }
 
         context.Collect(argument);
-
-        return 1;
     }
 }

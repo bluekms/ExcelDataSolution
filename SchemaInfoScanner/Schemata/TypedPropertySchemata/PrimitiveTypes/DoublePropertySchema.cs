@@ -14,7 +14,7 @@ public sealed record DoublePropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var argument = context.CurrentArgument;
         var value = double.Parse(
@@ -28,7 +28,5 @@ public sealed record DoublePropertySchema(
         }
 
         context.Collect(value);
-
-        return 1;
     }
 }

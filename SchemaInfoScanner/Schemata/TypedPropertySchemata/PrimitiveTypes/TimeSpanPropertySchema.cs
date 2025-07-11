@@ -15,7 +15,7 @@ public sealed record TimeSpanPropertySchema(
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(PropertyName, NamedTypeSymbol, AttributeList)
 {
-    protected override int OnCheckCompatibility(CompatibilityContext context)
+    protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         if (!this.TryGetAttributeValue<TimeSpanFormatAttribute, string>(0, out var format))
         {
@@ -31,7 +31,5 @@ public sealed record TimeSpanPropertySchema(
         }
 
         context.Collect(value);
-
-        return 1;
     }
 }

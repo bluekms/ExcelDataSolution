@@ -2,12 +2,25 @@ using SchemaInfoScanner.Catalogs;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
-public sealed record CompatibilityContext(
-    EnumMemberCatalog EnumMemberCatalog,
-    IReadOnlyList<string> Arguments,
-    int StartIndex = 0,
-    int? CollectionLength = null)
+public sealed class CompatibilityContext
 {
+    public EnumMemberCatalog EnumMemberCatalog { get; }
+    public IReadOnlyList<string> Arguments { get; }
+    public int StartIndex { get; private set; }
+    public int? CollectionLength { get; }
+
+    public CompatibilityContext(
+        EnumMemberCatalog enumMemberCatalog,
+        IReadOnlyList<string> arguments,
+        int startIndex = 0,
+        int? collectionLength = null)
+    {
+        EnumMemberCatalog = enumMemberCatalog;
+        Arguments = arguments;
+        StartIndex = startIndex;
+        CollectionLength = collectionLength;
+    }
+
     public bool IsCollection => CollectionLength.HasValue;
 
     public string CurrentArgument
@@ -23,21 +36,9 @@ public sealed record CompatibilityContext(
         }
     }
 
-    public CompatibilityContext WithStartIndex(int newStartIndex)
-    {
-        if (newStartIndex < 0 || newStartIndex >= Arguments.Count)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(newStartIndex),
-                "Start index is out of range for the provided arguments.",
-                null);
-        }
-
-        return this with { StartIndex = newStartIndex };
-    }
-
     public void Collect(object? value)
     {
+        ++StartIndex;
         collectedValues.Add(value);
     }
 
