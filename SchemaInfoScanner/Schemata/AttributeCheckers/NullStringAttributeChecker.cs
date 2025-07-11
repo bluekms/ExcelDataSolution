@@ -9,12 +9,11 @@ public static class NullStringAttributeChecker
 
     public static Result Check(PropertySchemaBase propertySchema, string argument)
     {
-        var nullString = string.Empty;
-        if (propertySchema.TryGetAttributeValue<NullStringAttribute, string>(0, out var attributeValue))
+        if (!propertySchema.TryGetAttributeValue<NullStringAttribute, string>(0, out var attributeValue))
         {
-            nullString = attributeValue;
+            throw new InvalidOperationException($"Property {propertySchema.PropertyName.FullName} does not have a NullStringAttribute.");
         }
 
-        return new(argument == nullString);
+        return new(argument == attributeValue);
     }
 }
