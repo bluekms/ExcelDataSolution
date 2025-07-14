@@ -1,10 +1,10 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
-public sealed record RecordListPropertySchema(
-    RecordTypeGenericArgumentSchema GenericArgumentSchema,
+public sealed record PrimitiveArrayPropertySchema(
+    PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
     : PropertySchemaBase(GenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)

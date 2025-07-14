@@ -51,17 +51,17 @@ internal static class SupportedTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (HashSetTypeChecker.IsSupportedHashSetType(property.NamedTypeSymbol))
+        if (SetTypeChecker.IsSupportedSetType(property.NamedTypeSymbol))
         {
-            HashSetTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
+            SetTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
         }
-        else if (ListTypeChecker.IsSupportedListType(property.NamedTypeSymbol))
+        else if (ArrayTypeChecker.IsSupportedArrayType(property.NamedTypeSymbol))
         {
-            ListTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
+            ArrayTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(property.NamedTypeSymbol))
+        else if (MapTypeChecker.IsSupportedMapType(property.NamedTypeSymbol))
         {
-            DictionaryTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
+            MapTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
         }
         else
         {

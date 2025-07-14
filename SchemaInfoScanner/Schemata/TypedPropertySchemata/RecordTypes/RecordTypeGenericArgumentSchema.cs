@@ -8,7 +8,7 @@ public sealed record RecordTypeGenericArgumentSchema(
 {
     public enum CollectionKind
     {
-        List,
+        Array,
         HashSet,
         DictionaryKey,
         DictionaryValue,

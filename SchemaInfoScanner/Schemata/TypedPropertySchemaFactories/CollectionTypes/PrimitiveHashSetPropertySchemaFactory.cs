@@ -17,7 +17,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
         INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (!HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
+        if (!SetTypeChecker.IsPrimitiveSetType(propertySymbol))
         {
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }
@@ -52,7 +52,7 @@ public static class PrimitiveHashSetPropertySchemaFactory
         INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (!HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
+        if (!SetTypeChecker.IsPrimitiveSetType(propertySymbol))
         {
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }

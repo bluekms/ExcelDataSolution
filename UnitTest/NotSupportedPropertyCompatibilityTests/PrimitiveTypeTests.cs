@@ -90,7 +90,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
     private static Catalogs CreateCatalogs(string code, ILogger logger)
     {
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);

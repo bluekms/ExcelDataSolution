@@ -19,8 +19,10 @@ public sealed record NullableSBytePropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new SBytePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new SBytePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

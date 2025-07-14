@@ -19,8 +19,10 @@ public sealed record NullableDateTimePropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new DateTimePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new DateTimePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

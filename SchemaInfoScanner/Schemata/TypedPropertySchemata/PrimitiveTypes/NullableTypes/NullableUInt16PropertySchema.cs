@@ -19,8 +19,10 @@ public sealed record NullableUInt16PropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new UInt16PropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new UInt16PropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

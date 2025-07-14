@@ -22,11 +22,11 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         List<{{collection}}<int>> Property,
+                         ImmutableArray<{{collection}}<int>> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         Assert.Throws<NotSupportedException>(() => new RecordSchemaSet(loadResult, logger));
         Assert.Single(logger.Logs);
     }
@@ -47,7 +47,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         Assert.Throws<NotSupportedException>(() => new RecordSchemaSet(loadResult, logger));
         Assert.Single(logger.Logs);
     }

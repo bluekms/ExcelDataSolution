@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest.PropertySchemaTests.CollectionPropertySchemaTests;
 
-public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
+public class MapTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Theory]
     [InlineData("bool")]
@@ -24,10 +24,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint")]
     [InlineData("ulong")]
     [InlineData("ushort")]
-    public void DictionaryKeyTest(string key)
+    public void PrimitiveKeyMapTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -35,11 +35,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<{{key}}, string> Property,
+                         FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -50,10 +50,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("MyEnum")]
-    public void DictionaryEnumKeyTest(string key)
+    public void EnumKeyMapTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -63,11 +63,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<{{key}}, string> Property,
+                         FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -78,10 +78,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    public void DictionaryDateTimeKeyTest(string key)
+    public void DateTimeKeyMapTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -90,11 +90,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         Dictionary<{{key}}, string> Property,
+                         FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -105,10 +105,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("TimeSpan")]
-    public void DictionaryTimeSpanKeyTest(string key)
+    public void TimeSpanKeyMapTest(string key)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -117,11 +117,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         Dictionary<{{key}}, string> Property,
+                         FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -145,10 +145,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint")]
     [InlineData("ulong")]
     [InlineData("ushort")]
-    public void DictionaryValueTest(string value)
+    public void PrimitiveValueMapTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -156,11 +156,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<int, {{value}}> Property,
+                         FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -171,10 +171,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("MyEnum")]
-    public void DictionaryEnumValueTest(string value)
+    public void EnumValueMapTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -184,11 +184,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<int, {{value}}> Property,
+                         FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -199,10 +199,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    public void DictionaryDateTimeValueTest(string value)
+    public void DateTimeValueMapTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -211,11 +211,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         Dictionary<int, {{value}}> Property,
+                         FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -226,10 +226,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("TimeSpan")]
-    public void DictionaryTimeSpanValueTest(string value)
+    public void TimeSpanValueMapTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -238,11 +238,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         Dictionary<int, {{value}}> Property,
+                         FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -253,10 +253,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("ValueEnum")]
-    public void DictionaryEnumKeyEnumValueTest(string value)
+    public void EnumKeyEnumValueMapTest(string value)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -267,11 +267,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<KeyEnum, {{value}}> Property,
+                         FrozenDictionary<KeyEnum, {{value}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -282,10 +282,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    public void DictionaryDateTimeKeyAndValueTest(string type)
+    public void DateTimeKeyAndValueMapTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -294,39 +294,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         Dictionary<{{type}}, {{type}}> Property,
+                         FrozenDictionary<{{type}}, {{type}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
-
-        Assert.Empty(logger.Logs);
-    }
-
-    [Theory]
-    [InlineData("DateTime")]
-    public void DictionaryDateTimeKeyDateTimeValueTest(string type)
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [DateTimeFormat("yyyy-MM-dd")]
-                         [DateTimeFormat("HH:mm:ss.fff")]
-                         Dictionary<{{type}}, {{type}}> Property,
-                     );
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -337,10 +309,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("TimeSpan")]
-    public void DictionaryTimeSpanKeyAndValueTest(string type)
+    public void TimeSpanKeyAndValueMapTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -349,39 +321,11 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         Dictionary<{{type}}, {{type}}> Property,
+                         FrozenDictionary<{{type}}, {{type}}> Property,
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
-
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
-
-        Assert.Empty(logger.Logs);
-    }
-
-    [Theory]
-    [InlineData("TimeSpan")]
-    public void DictionaryTimeSpanKeyTimeSpanValueTest(string type)
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [TimeSpanFormat("c")]
-                         [TimeSpanFormat("G")]
-                         Dictionary<{{type}}, {{type}}> Property,
-                     );
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);

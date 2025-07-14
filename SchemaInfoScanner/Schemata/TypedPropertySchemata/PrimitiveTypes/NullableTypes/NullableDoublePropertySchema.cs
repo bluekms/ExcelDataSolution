@@ -19,8 +19,10 @@ public sealed record NullableDoublePropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new DoublePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new DoublePropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

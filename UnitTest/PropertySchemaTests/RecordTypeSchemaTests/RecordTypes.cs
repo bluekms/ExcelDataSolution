@@ -28,7 +28,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
                      }
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -55,7 +55,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
                      public record struct MyData(int Value);
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -65,7 +65,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RecordListTest()
+    public void RecordArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
@@ -76,13 +76,13 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         List<MyData> Data
+                         ImmutableArray<MyData> Data
                      );
 
                      public record struct MyData(int Value);
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -92,7 +92,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RecordHashSetTest()
+    public void RecordSetTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
@@ -103,13 +103,13 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         HashSet<MyData> Data
+                         FrozenSet<MyData> Data
                      );
 
                      public record struct MyData(int Value);
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -119,7 +119,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RecordDictionaryTest()
+    public void RecordMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
@@ -130,13 +130,13 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<int, MyData> Data
+                         FrozenDictionary<int, MyData> Data
                      );
 
                      public record struct MyData([Key] int Id, string Value);
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
@@ -146,7 +146,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RecordRecordDictionaryTest()
+    public void RecordKeyAndRecordValueMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
@@ -157,14 +157,14 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<KeyData, MyData> Data
+                         FrozenDictionary<KeyData, MyData> Data
                      );
 
                      public record struct KeyData(int Key1, string Key2);
                      public record struct MyData([Key] KeyData Key, string Value);
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);

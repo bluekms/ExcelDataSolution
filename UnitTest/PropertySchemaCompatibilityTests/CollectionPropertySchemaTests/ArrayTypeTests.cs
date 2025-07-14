@@ -8,13 +8,13 @@ using Xunit.Abstractions;
 
 namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTests;
 
-public class ListTypeTests(ITestOutputHelper testOutputHelper)
+public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void PrimitiveListTest()
+    public void PrimitiveArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,7 +22,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlyList<int> Property,
+                         ImmutableArray<int> Property,
                      );
                      """;
 
@@ -43,10 +43,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void EnumListTest()
+    public void EnumArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -56,7 +56,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlyList<MyEnum> Property,
+                         ImmutableArray<MyEnum> Property,
                      );
                      """;
 
@@ -77,10 +77,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DateTimeListTest()
+    public void DateTimeArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -89,7 +89,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         IReadOnlyList<DateTime> Property,
+                         ImmutableArray<DateTime> Property,
                      );
                      """;
 
@@ -110,10 +110,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void TimeSpanListTest()
+    public void TimeSpanArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -122,7 +122,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         IReadOnlyList<TimeSpan> Property,
+                         ImmutableArray<TimeSpan> Property,
                      );
                      """;
 
@@ -143,10 +143,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnListTest()
+    public void SingleColumnArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -154,7 +154,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [SingleColumnCollection(", ")] IReadOnlyList<int> Property,
+                         [SingleColumnCollection(", ")] ImmutableArray<int> Property,
                      );
                      """;
 
@@ -173,10 +173,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullablePrimitiveListTest()
+    public void NullablePrimitiveArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -184,7 +184,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] IReadOnlyList<int?> Property,
+                         [NullString("-")] ImmutableArray<int?> Property,
                      );
                      """;
 
@@ -205,10 +205,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableEnumListTest()
+    public void NullableEnumArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -218,7 +218,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] IReadOnlyList<MyEnum?> Property,
+                         [NullString("-")] ImmutableArray<MyEnum?> Property,
                      );
                      """;
 
@@ -239,10 +239,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableDateTimeListTest()
+    public void NullableDateTimeArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -252,7 +252,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
                          [NullString("-")]
-                         IReadOnlyList<DateTime?> Property,
+                         ImmutableArray<DateTime?> Property,
                      );
                      """;
 
@@ -273,10 +273,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableTimeSpanListTest()
+    public void NullableTimeSpanArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -286,7 +286,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
                          [NullString("-")]
-                         IReadOnlyList<TimeSpan?> Property,
+                         ImmutableArray<TimeSpan?> Property,
                      );
                      """;
 
@@ -307,10 +307,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableSingleColumnListTest()
+    public void NullableSingleColumnArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -320,7 +320,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [NullString("")]
                          [SingleColumnCollection(", ")]
-                         IReadOnlyList<int?> Property,
+                         ImmutableArray<int?> Property,
                      );
                      """;
 
@@ -339,10 +339,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableSingleColumnEnumListTest()
+    public void NullableSingleColumnEnumArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -354,7 +354,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [SingleColumnCollection(", ")]
                          [NullString("")]
-                         IReadOnlyList<MyEnum?> Property,
+                         ImmutableArray<MyEnum?> Property,
                      );
                      """;
 
@@ -373,10 +373,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableSingleColumnDateTimeListTest()
+    public void NullableSingleColumnDateTimeArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -387,7 +387,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                          [SingleColumnCollection(", ")]
                          [NullString("")]
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         IReadOnlyList<DateTime?> Property,
+                         ImmutableArray<DateTime?> Property,
                      );
                      """;
 
@@ -406,10 +406,10 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void NullableSingleColumnTimeSpanListTest()
+    public void NullableSingleColumnTimeSpanArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<ListTypeTests>() is not TestOutputLogger<ListTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -420,7 +420,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
                          [SingleColumnCollection(", ")]
                          [TimeSpanFormat("c")]
                          [NullString("")]
-                         IReadOnlyList<TimeSpan?> Property,
+                         ImmutableArray<TimeSpan?> Property,
                      );
                      """;
 
@@ -444,7 +444,7 @@ public class ListTypeTests(ITestOutputHelper testOutputHelper)
 
     private static Catalogs CreateCatalogs(string code, ILogger logger)
     {
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);

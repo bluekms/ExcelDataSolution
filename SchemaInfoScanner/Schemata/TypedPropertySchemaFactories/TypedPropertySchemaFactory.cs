@@ -22,21 +22,21 @@ public static class TypedPropertySchemaFactory
         {
             return PrimitivePropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }
-        else if (ListTypeChecker.IsPrimitiveListType(propertySymbol))
+        else if (ArrayTypeChecker.IsPrimitiveArrayType(propertySymbol))
         {
             var isSingleColumnCollection = AttributeAccessors.HasAttribute<SingleColumnCollectionAttribute>(attributeList);
             return isSingleColumnCollection
-                ? PrimitiveListPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
-                : PrimitiveListPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
+                ? PrimitiveArrayPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
+                : PrimitiveArrayPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }
-        else if (HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
+        else if (SetTypeChecker.IsPrimitiveSetType(propertySymbol))
         {
             var isSingleColumnCollection = AttributeAccessors.HasAttribute<SingleColumnCollectionAttribute>(attributeList);
             return isSingleColumnCollection
                 ? PrimitiveHashSetPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
                 : PrimitiveHashSetPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }
-        else if (DictionaryTypeChecker.IsPrimitiveKeyAndValueDictionaryType(propertySymbol))
+        else if (MapTypeChecker.IsPrimitiveKeyAndValueMapType(propertySymbol))
         {
             return PrimitiveKeyAndValueDictionarySchemaFactory.Create(
                 propertyName,
@@ -59,15 +59,15 @@ public static class TypedPropertySchemaFactory
                 attributeList,
                 parentRecordSymbol);
         }
-        else if (ListTypeChecker.IsSupportedListType(propertySymbol))
+        else if (ArrayTypeChecker.IsSupportedArrayType(propertySymbol))
         {
-            return RecordListPropertySchemaFactory.Create(
+            return RecordArrayPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList,
                 parentRecordSymbol);
         }
-        else if (HashSetTypeChecker.IsSupportedHashSetType(propertySymbol))
+        else if (SetTypeChecker.IsSupportedSetType(propertySymbol))
         {
             return RecordHashSetPropertySchemaFactory.Create(
                 propertyName,
@@ -75,7 +75,7 @@ public static class TypedPropertySchemaFactory
                 attributeList,
                 parentRecordSymbol);
         }
-        else if (DictionaryTypeChecker.IsPrimitiveKeyRecordValueDictionaryType(propertySymbol))
+        else if (MapTypeChecker.IsPrimitiveKeyRecordValueMapType(propertySymbol))
         {
             return PrimitiveKeyRecordValueDictionaryPropertySchemaFactory.Create(
                 propertyName,
@@ -83,7 +83,7 @@ public static class TypedPropertySchemaFactory
                 attributeList,
                 parentRecordSymbol);
         }
-        else if (DictionaryTypeChecker.IsRecordKeyAndValueDictionaryType(propertySymbol))
+        else if (MapTypeChecker.IsRecordKeyAndValueMapType(propertySymbol))
         {
             return RecordKeyAndValueDictionaryPropertySchemaFactory.Create(
                 propertyName,

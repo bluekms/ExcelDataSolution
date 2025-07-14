@@ -19,9 +19,11 @@ public sealed record NullableEnumPropertySchema(
         {
             context.Collect(null);
         }
-
-        var actualNamedTypeSymbol = (INamedTypeSymbol)NamedTypeSymbol.TypeArguments[0];
-        var schema = new EnumPropertySchema(PropertyName, actualNamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var actualNamedTypeSymbol = (INamedTypeSymbol)NamedTypeSymbol.TypeArguments[0];
+            var schema = new EnumPropertySchema(PropertyName, actualNamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

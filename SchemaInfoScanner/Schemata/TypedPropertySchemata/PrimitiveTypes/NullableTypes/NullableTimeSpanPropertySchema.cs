@@ -19,8 +19,10 @@ public sealed record NullableTimeSpanPropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new TimeSpanPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new TimeSpanPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

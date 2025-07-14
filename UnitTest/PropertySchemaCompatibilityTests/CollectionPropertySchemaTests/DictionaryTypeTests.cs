@@ -36,7 +36,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<{{keyType}}, string> Property,
+                         FrozenDictionary<{{keyType}}, string> Property,
                      );
                      """;
 
@@ -69,7 +69,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<{{keyType}}, string> Property,
+                         FrozenDictionary<{{keyType}}, string> Property,
                      );
                      """;
 
@@ -104,7 +104,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<MyEnum, string> Property,
+                         FrozenDictionary<MyEnum, string> Property,
                      );
                      """;
 
@@ -138,7 +138,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<MyEnum, string> Property,
+                         FrozenDictionary<MyEnum, string> Property,
                      );
                      """;
 
@@ -172,7 +172,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         Dictionary<DateTime, string> Property,
+                         FrozenDictionary<DateTime, string> Property,
                      );
                      """;
 
@@ -205,7 +205,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         Dictionary<TimeSpan, string> Property,
+                         FrozenDictionary<TimeSpan, string> Property,
                      );
                      """;
 
@@ -239,7 +239,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("")]
-                         ReadOnlyDictionary<{{keyType}}, string> Property,
+                         FrozenDictionary<{{keyType}}, string> Property,
                      );
                      """;
 
@@ -265,7 +265,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     private static Catalogs CreateCatalogs(string code, ILogger logger)
     {
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);

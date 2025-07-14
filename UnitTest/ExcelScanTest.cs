@@ -92,7 +92,8 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             "..",
             "..",
             "..",
-            "TestRecord");
+            "TestRecord",
+            "Excel3Records.cs");
 
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResults, logger);

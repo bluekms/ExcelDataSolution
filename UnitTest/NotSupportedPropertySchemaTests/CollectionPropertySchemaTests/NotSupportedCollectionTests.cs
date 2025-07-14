@@ -39,7 +39,7 @@ public class NotSupportedCollectionTests(ITestOutputHelper testOutputHelper)
                      );
                      """;
 
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         Assert.Throws<NotSupportedException>(() => new RecordSchemaSet(loadResult, logger));
         Assert.Single(logger.Logs);
     }

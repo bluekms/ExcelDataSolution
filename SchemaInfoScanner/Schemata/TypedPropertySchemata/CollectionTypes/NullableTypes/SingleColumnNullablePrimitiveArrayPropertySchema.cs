@@ -4,7 +4,7 @@ using SchemaInfoScanner.Schemata.AttributeCheckers;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
-public sealed record SingleColumnNullablePrimitiveListPropertySchema(
+public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
     PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,

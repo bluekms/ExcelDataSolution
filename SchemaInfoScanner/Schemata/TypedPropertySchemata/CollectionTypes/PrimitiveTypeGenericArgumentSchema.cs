@@ -8,8 +8,8 @@ public sealed record PrimitiveTypeGenericArgumentSchema(
 {
     public enum CollectionKind
     {
-        SingleColumnList,
-        List,
+        SingleColumnArray,
+        Array,
         SingleColumnHashSet,
         HashSet,
         DictionaryKey,
