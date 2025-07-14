@@ -19,8 +19,10 @@ public sealed record NullableDecimalPropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new DecimalPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new DecimalPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

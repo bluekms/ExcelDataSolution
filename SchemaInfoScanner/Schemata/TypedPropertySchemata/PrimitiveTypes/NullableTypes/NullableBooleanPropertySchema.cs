@@ -19,8 +19,10 @@ public sealed record NullableBooleanPropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new BooleanPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new BooleanPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

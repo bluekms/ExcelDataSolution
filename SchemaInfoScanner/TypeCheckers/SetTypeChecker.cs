@@ -9,12 +9,11 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class HashSetTypeChecker
+internal static class SetTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames =
     [
-        "HashSet<>",
-        "IReadOnlySet<>",
+        "FrozenSet<>",
     ];
 
     public static void Check(
@@ -23,7 +22,7 @@ internal static class HashSetTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedHashSetType(property.NamedTypeSymbol))
+        if (!IsSupportedSetType(property.NamedTypeSymbol))
         {
             throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported hashset type, but actually not supported.");
         }
@@ -80,7 +79,7 @@ internal static class HashSetTypeChecker
         }
     }
 
-    public static bool IsSupportedHashSetType(INamedTypeSymbol symbol)
+    public static bool IsSupportedSetType(INamedTypeSymbol symbol)
     {
         if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
             symbol.TypeArguments is not [INamedTypeSymbol])
@@ -95,9 +94,9 @@ internal static class HashSetTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    public static bool IsPrimitiveHashSetType(INamedTypeSymbol symbol)
+    public static bool IsPrimitiveSetType(INamedTypeSymbol symbol)
     {
-        if (!IsSupportedHashSetType(symbol))
+        if (!IsSupportedSetType(symbol))
         {
             return false;
         }

@@ -60,7 +60,7 @@ public static partial class RecordFlattener
                     headers.AddRange(result);
                 }
             }
-            else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
+            else if (MapTypeChecker.IsSupportedMapType(parameter.NamedTypeSymbol))
             {
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
                 var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);

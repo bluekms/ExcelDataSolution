@@ -9,12 +9,11 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class ListTypeChecker
+internal static class ArrayTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames =
     [
-        "List<>",
-        "IReadOnlyList<>",
+        "ImmutableArray<>",
     ];
 
     public static void Check(
@@ -23,9 +22,9 @@ internal static class ListTypeChecker
         HashSet<RecordName> visited,
         ILogger logger)
     {
-        if (!IsSupportedListType(property.NamedTypeSymbol))
+        if (!IsSupportedArrayType(property.NamedTypeSymbol))
         {
-            throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported list type, but actually not supported.");
+            throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported array type, but actually not supported.");
         }
 
         CheckUnavailableAttribute(property);
@@ -55,12 +54,12 @@ internal static class ListTypeChecker
 
         if (typeArgument.NullableAnnotation is NullableAnnotation.Annotated)
         {
-            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported list type. Nullable record item for list is not supported.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported array type. Nullable record item for array is not supported.");
         }
 
         if (property.HasAttribute<SingleColumnCollectionAttribute>())
         {
-            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported list type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type list.");
+            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported array type. {nameof(SingleColumnCollectionAttribute)} can only be used in primitive type array.");
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);
@@ -71,16 +70,16 @@ internal static class ListTypeChecker
     {
         if (property.HasAttribute<ForeignKeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
+            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for array type {property.PropertyName.FullName}.");
         }
 
         if (property.HasAttribute<KeyAttribute>())
         {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for list type {property.PropertyName.FullName}.");
+            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for array type {property.PropertyName.FullName}.");
         }
     }
 
-    public static bool IsSupportedListType(INamedTypeSymbol symbol)
+    public static bool IsSupportedArrayType(INamedTypeSymbol symbol)
     {
         if (symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T ||
             symbol.TypeArguments is not [INamedTypeSymbol])
@@ -95,9 +94,9 @@ internal static class ListTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    public static bool IsPrimitiveListType(INamedTypeSymbol symbol)
+    public static bool IsPrimitiveArrayType(INamedTypeSymbol symbol)
     {
-        if (!IsSupportedListType(symbol))
+        if (!IsSupportedArrayType(symbol))
         {
             return false;
         }

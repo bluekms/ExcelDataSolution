@@ -28,6 +28,8 @@ public static class RecordPropertySchemaFactory
         var memberSchemata = new List<PropertySchemaBase>();
         foreach (var symbol in memberSymbols)
         {
+            // Excel3.School.Students에는 Attribute가 없다
+            // Excel3.School.Student에는 NullString Attribute가 있는데 제대로 전달되지 않는 버그가 있다
             var innerSchema = TypedPropertySchemaFactory.Create(
                 propertyName,
                 symbol,

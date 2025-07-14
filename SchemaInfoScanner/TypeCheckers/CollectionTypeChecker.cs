@@ -6,15 +6,15 @@ public static class CollectionTypeChecker
 {
     public static bool IsSupportedCollectionType(INamedTypeSymbol symbol)
     {
-        return HashSetTypeChecker.IsSupportedHashSetType(symbol) ||
-               ListTypeChecker.IsSupportedListType(symbol) ||
-               DictionaryTypeChecker.IsSupportedDictionaryType(symbol);
+        return SetTypeChecker.IsSupportedSetType(symbol) ||
+               ArrayTypeChecker.IsSupportedArrayType(symbol) ||
+               MapTypeChecker.IsSupportedMapType(symbol);
     }
 
     public static bool IsPrimitiveCollection(INamedTypeSymbol symbol)
     {
-        if (!ListTypeChecker.IsSupportedListType(symbol) &&
-            !HashSetTypeChecker.IsSupportedHashSetType(symbol))
+        if (!ArrayTypeChecker.IsSupportedArrayType(symbol) &&
+            !SetTypeChecker.IsSupportedSetType(symbol))
         {
             return false;
         }

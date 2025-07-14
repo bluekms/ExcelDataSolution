@@ -14,12 +14,12 @@ public class RecordHashSetPropertySchemaFactory
         IReadOnlyList<AttributeSyntax> attributeList,
         INamedTypeSymbol parentRecordSymbol)
     {
-        if (!HashSetTypeChecker.IsSupportedHashSetType(propertySymbol))
+        if (!SetTypeChecker.IsSupportedSetType(propertySymbol))
         {
             throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a supported hash set type.");
         }
 
-        if (HashSetTypeChecker.IsPrimitiveHashSetType(propertySymbol))
+        if (SetTypeChecker.IsPrimitiveSetType(propertySymbol))
         {
             throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is record hash set type.");
         }

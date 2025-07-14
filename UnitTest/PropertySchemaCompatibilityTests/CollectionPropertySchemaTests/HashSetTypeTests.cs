@@ -22,7 +22,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlySet<int> Property,
+                         FrozenSet<int> Property,
                      );
                      """;
 
@@ -54,7 +54,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlySet<int> Property,
+                         FrozenSet<int> Property,
                      );
                      """;
 
@@ -89,7 +89,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlySet<MyEnum> Property,
+                         FrozenSet<MyEnum> Property,
                      );
                      """;
 
@@ -123,7 +123,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         IReadOnlySet<MyEnum> Property,
+                         FrozenSet<MyEnum> Property,
                      );
                      """;
 
@@ -157,7 +157,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         IReadOnlySet<DateTime> Property,
+                         FrozenSet<DateTime> Property,
                      );
                      """;
 
@@ -190,7 +190,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         IReadOnlySet<TimeSpan> Property,
+                         FrozenSet<TimeSpan> Property,
                      );
                      """;
 
@@ -222,7 +222,8 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [SingleColumnCollection(", ")] IReadOnlySet<int> Property,
+                         [SingleColumnCollection(", ")]
+                         FrozenSet<int> Property,
                      );
                      """;
 
@@ -252,7 +253,8 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [SingleColumnCollection(", ")] IReadOnlySet<int> Property,
+                         [SingleColumnCollection(", ")]
+                         FrozenSet<int> Property,
                      );
                      """;
 
@@ -283,7 +285,8 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] IReadOnlySet<int?> Property,
+                         [NullString("-")]
+                         FrozenSet<int?> Property,
                      );
                      """;
 
@@ -315,7 +318,8 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] IReadOnlySet<int?> Property,
+                         [NullString("-")]
+                         FrozenSet<int?> Property,
                      );
                      """;
 
@@ -350,7 +354,8 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] IReadOnlySet<MyEnum?> Property,
+                         [NullString("-")]
+                         FrozenSet<MyEnum?> Property,
                      );
                      """;
 
@@ -384,7 +389,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
                          [NullString("-")]
-                         IReadOnlySet<DateTime?> Property,
+                         FrozenSet<DateTime?> Property,
                      );
                      """;
 
@@ -418,7 +423,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
                          [NullString("-")]
-                         IReadOnlySet<TimeSpan?> Property,
+                         FrozenSet<TimeSpan?> Property,
                      );
                      """;
 
@@ -452,7 +457,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [NullString("")]
                          [SingleColumnCollection(", ")]
-                         IReadOnlySet<int?> Property,
+                         FrozenSet<int?> Property,
                      );
                      """;
 
@@ -486,7 +491,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [SingleColumnCollection(", ")]
                          [NullString("")]
-                         IReadOnlySet<MyEnum?> Property,
+                         FrozenSet<MyEnum?> Property,
                      );
                      """;
 
@@ -519,7 +524,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                          [SingleColumnCollection(", ")]
                          [NullString("")]
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         IReadOnlySet<DateTime?> Property,
+                         FrozenSet<DateTime?> Property,
                      );
                      """;
 
@@ -552,7 +557,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                          [SingleColumnCollection(", ")]
                          [TimeSpanFormat("c")]
                          [NullString("")]
-                         IReadOnlySet<TimeSpan?> Property,
+                         FrozenSet<TimeSpan?> Property,
                      );
                      """;
 
@@ -576,7 +581,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
     private static Catalogs CreateCatalogs(string code, ILogger logger)
     {
-        var loadResult = RecordSchemaLoader.OnLoad(nameof(RecordTypeCheckerTest), code, logger);
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);

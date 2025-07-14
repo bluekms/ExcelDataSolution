@@ -10,14 +10,14 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 
-public static class PrimitiveListPropertySchemaFactory
+public static class PrimitiveArrayPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
         PropertyName propertyName,
         INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (!ListTypeChecker.IsPrimitiveListType(propertySymbol))
+        if (!ArrayTypeChecker.IsPrimitiveArrayType(propertySymbol))
         {
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
         }
@@ -33,15 +33,15 @@ public static class PrimitiveListPropertySchemaFactory
         PrimitiveTypeChecker.Check(nestedSchema);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.CollectionKind.List,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.Array,
             nestedSchema);
 
         return isNullable
-            ? new NullablePrimitiveListPropertySchema(
+            ? new NullablePrimitiveArrayPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList)
-            : new PrimitiveListPropertySchema(
+            : new PrimitiveArrayPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList);
@@ -52,7 +52,7 @@ public static class PrimitiveListPropertySchemaFactory
         INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (!ListTypeChecker.IsPrimitiveListType(propertySymbol))
+        if (!ArrayTypeChecker.IsPrimitiveArrayType(propertySymbol))
         {
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
         }
@@ -75,16 +75,16 @@ public static class PrimitiveListPropertySchemaFactory
         PrimitiveTypeChecker.Check(nestedSchema);
 
         var genericArgumentSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.CollectionKind.List,
+            PrimitiveTypeGenericArgumentSchema.CollectionKind.Array,
             nestedSchema);
 
         return isNullable
-            ? new SingleColumnNullablePrimitiveListPropertySchema(
+            ? new SingleColumnNullablePrimitiveArrayPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList,
                 separator)
-            : new SingleColumnPrimitiveListPropertySchema(
+            : new SingleColumnPrimitiveArrayPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList,

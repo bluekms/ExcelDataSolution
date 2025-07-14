@@ -14,7 +14,7 @@ public static class PrimitiveKeyAndValueDictionarySchemaFactory
         INamedTypeSymbol propertySymbol,
         IReadOnlyList<AttributeSyntax> attributeList)
     {
-        if (!DictionaryTypeChecker.IsSupportedDictionaryType(propertySymbol))
+        if (!MapTypeChecker.IsSupportedMapType(propertySymbol))
         {
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported dictionary type.");
         }

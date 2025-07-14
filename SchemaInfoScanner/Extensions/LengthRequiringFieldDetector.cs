@@ -59,7 +59,7 @@ public static class LengthRequiringFieldDetector
                     results.Add(headerName);
                 }
             }
-            else if (DictionaryTypeChecker.IsSupportedDictionaryType(parameter.NamedTypeSymbol))
+            else if (MapTypeChecker.IsSupportedMapType(parameter.NamedTypeSymbol))
             {
                 results.Add(headerName);
 

@@ -31,7 +31,7 @@ public static class RecordSchemaLoader
         if (File.Exists(csPath))
         {
             var code = File.ReadAllText(csPath);
-            results.Add(OnLoad(csPath, code, logger));
+            results.Add(OnLoad(code, logger));
         }
         else if (Directory.Exists(csPath))
         {
@@ -39,7 +39,7 @@ public static class RecordSchemaLoader
             foreach (var file in files)
             {
                 var code = File.ReadAllText(file);
-                results.Add(OnLoad(file, code, logger));
+                results.Add(OnLoad(code, logger));
             }
         }
         else
@@ -50,7 +50,7 @@ public static class RecordSchemaLoader
         return results;
     }
 
-    internal static Result OnLoad(string filePath, string code, ILogger logger)
+    internal static Result OnLoad(string code, ILogger logger)
     {
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var root = syntaxTree.GetRoot();
@@ -63,7 +63,7 @@ public static class RecordSchemaLoader
 
         if (compileErrors.Count is not 0)
         {
-            LogException(logger, $"{Path.GetFileName(filePath)}'s code is not compilable.", null);
+            LogException(logger, $"Code is not compilable. '{code}'", null);
             foreach (var error in compileErrors)
             {
                 LogException(logger, error.ToString(), null);

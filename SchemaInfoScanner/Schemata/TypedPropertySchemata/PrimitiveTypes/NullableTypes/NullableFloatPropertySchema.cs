@@ -19,8 +19,10 @@ public sealed record NullableFloatPropertySchema(
         {
             context.Collect(null);
         }
-
-        var schema = new FloatPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
-        schema.CheckCompatibility(context);
+        else
+        {
+            var schema = new FloatPropertySchema(PropertyName, NamedTypeSymbol, AttributeList);
+            schema.CheckCompatibility(context);
+        }
     }
 }

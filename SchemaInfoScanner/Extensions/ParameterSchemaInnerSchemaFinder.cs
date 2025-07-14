@@ -24,12 +24,12 @@ public static class ParameterSchemaInnerSchemaFinder
 
     private static INamedTypeSymbol GetTypeArgument(PropertySchemaBase property)
     {
-        if (ListTypeChecker.IsSupportedListType(property.NamedTypeSymbol) ||
-            HashSetTypeChecker.IsSupportedHashSetType(property.NamedTypeSymbol))
+        if (ArrayTypeChecker.IsSupportedArrayType(property.NamedTypeSymbol) ||
+            SetTypeChecker.IsSupportedSetType(property.NamedTypeSymbol))
         {
             return (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Single();
         }
-        else if (DictionaryTypeChecker.IsSupportedDictionaryType(property.NamedTypeSymbol))
+        else if (MapTypeChecker.IsSupportedMapType(property.NamedTypeSymbol))
         {
             return (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Last();
         }

@@ -6,7 +6,7 @@ using SchemaInfoScanner.TypeCheckers;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 
-public static class RecordListPropertySchemaFactory
+public static class RecordArrayPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
         PropertyName propertyName,
@@ -14,14 +14,14 @@ public static class RecordListPropertySchemaFactory
         IReadOnlyList<AttributeSyntax> attributeList,
         INamedTypeSymbol parentRecordSymbol)
     {
-        if (!ListTypeChecker.IsSupportedListType(propertySymbol))
+        if (!ArrayTypeChecker.IsSupportedArrayType(propertySymbol))
         {
-            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a supported list type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is not a supported array type.");
         }
 
-        if (ListTypeChecker.IsPrimitiveListType(propertySymbol))
+        if (ArrayTypeChecker.IsPrimitiveArrayType(propertySymbol))
         {
-            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is record list type.");
+            throw new InvalidOperationException($"{propertyName}({propertySymbol.Name}) is record array type.");
         }
 
         var typeArgumentSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments.Single();
@@ -37,10 +37,10 @@ public static class RecordListPropertySchemaFactory
             parentRecordSymbol);
 
         var genericArgumentSchema = new RecordTypeGenericArgumentSchema(
-            RecordTypeGenericArgumentSchema.CollectionKind.List,
+            RecordTypeGenericArgumentSchema.CollectionKind.Array,
             nestedSchema);
 
-        return new RecordListPropertySchema(
+        return new RecordArrayPropertySchema(
             genericArgumentSchema,
             propertySymbol,
             attributeList);
