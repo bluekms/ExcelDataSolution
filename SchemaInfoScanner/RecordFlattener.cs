@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner;
 
-public static partial class RecordFlattener
+public static class RecordFlattener
 {
     public static IReadOnlyList<string> Flatten(
         RecordSchema recordSchema,
@@ -25,7 +25,7 @@ public static partial class RecordFlattener
             logger);
     }
 
-    public static IReadOnlyList<string> OnFlatten(
+    private static List<string> OnFlatten(
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
         IReadOnlyDictionary<string, int> headerLengths,
@@ -130,15 +130,14 @@ public static partial class RecordFlattener
         return headers;
     }
 
-    [GeneratedRegex("\\[.*?\\]")]
-    private static partial Regex IndexRegex();
+    private static readonly Regex IndexRegex = new(@"\[.*?\]");
 
     private static int ParseLength(
         IReadOnlyDictionary<string, int> collectionLengths,
         string headerName,
         ILogger logger)
     {
-        var headerNameWithoutIndex = IndexRegex().Replace(headerName, string.Empty);
+        var headerNameWithoutIndex = IndexRegex.Replace(headerName, string.Empty);
         if (!collectionLengths.TryGetValue(headerNameWithoutIndex, out var length))
         {
             LogInformation(logger, "Cannot find length for", headerNameWithoutIndex, null);

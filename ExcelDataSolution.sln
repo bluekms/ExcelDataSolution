@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelColumnExtractor", "ExcelColumnExtractor\ExcelColumnExtractor.csproj", "{117C3167-99C1-4FF2-909D-F24311B3D046}"
 EndProject
