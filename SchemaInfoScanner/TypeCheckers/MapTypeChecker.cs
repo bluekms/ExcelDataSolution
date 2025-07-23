@@ -81,7 +81,7 @@ internal static class MapTypeChecker
 
         var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaCatalog, visited, logger);
 
-        var valueRecordKeyParameterSchema = valueRecordSchema.RecordPropertySchemata
+        var valueRecordKeyParameterSchema = valueRecordSchema.PropertySchemata
             .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
 
         if (valueRecordKeyParameterSchema is null)

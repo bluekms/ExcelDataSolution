@@ -13,6 +13,6 @@ public static class RecordSchemaFactory
             schema.RecordName,
             schema.NamedTypeSymbol,
             schema.RecordAttributeList,
-            schema.RecordPropertySchemata);
+            schema.PropertySchemata);
     }
 }

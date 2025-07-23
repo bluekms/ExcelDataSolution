@@ -26,15 +26,15 @@ public static class RecordComplianceChecker
                 continue;
             }
 
-            foreach (var recordParameter in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 try
                 {
-                    SupportedTypeChecker.Check(recordParameter, recordSchemaCatalog, visited, logger);
+                    SupportedTypeChecker.Check(propertySchema, recordSchemaCatalog, visited, logger);
                 }
                 catch (Exception e)
                 {
-                    LogException(logger, $"{recordParameter.PropertyName.FullName}: {e.Message}", e);
+                    LogException(logger, $"{propertySchema.PropertyName.FullName}: {e.Message}", e);
                     throw;
                 }
             }
@@ -58,7 +58,7 @@ public static class RecordComplianceChecker
                 continue;
             }
 
-            foreach (var recordParameter in recordSchema.RecordPropertySchemata)
+            foreach (var recordParameter in recordSchema.PropertySchemata)
             {
                 try
                 {

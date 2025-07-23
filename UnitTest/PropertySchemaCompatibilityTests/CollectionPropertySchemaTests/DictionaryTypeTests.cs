@@ -47,7 +47,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -80,7 +80,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex.Message, ex);
@@ -115,7 +115,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -149,7 +149,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex.Message, ex);
@@ -183,7 +183,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -216,7 +216,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -250,7 +250,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
