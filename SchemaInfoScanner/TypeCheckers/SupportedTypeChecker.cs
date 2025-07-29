@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
+using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using SchemaInfoScanner.Schemata.AttributeValidators;
+using SchemaInfoScanner.Schemata.SchemaValidators;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
@@ -24,12 +25,12 @@ internal static class SupportedTypeChecker
 
         LogTrace(logger, property.PropertyName.FullName, null);
 
-        var validator = new AttributeValidator();
+        var validator = new SchemaRuleValidator();
         var validateResult = validator.Validate(property);
         if (!validateResult.IsValid)
         {
             var errorMessage = string.Join(", ", validateResult.Errors.Select(e => e.ErrorMessage));
-            throw new NotSupportedException($"{property.PropertyName.FullName} is not supported record type. {errorMessage}");
+            throw new InvalidAttributeUsageException($"{property.PropertyName.FullName} is not supported record type. {errorMessage}");
         }
 
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(property.NamedTypeSymbol))

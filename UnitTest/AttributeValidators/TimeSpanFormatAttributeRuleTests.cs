@@ -8,13 +8,13 @@ using Xunit.Abstractions;
 
 namespace UnitTest.AttributeValidators;
 
-public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper)
+public class TimeSpanFormatAttributeRuleTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void RequireTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DateTimeFormatAttributeRuleTests>() is not TestOutputLogger<DateTimeFormatAttributeRuleTests> logger)
+        if (factory.CreateLogger<TimeSpanFormatAttributeRuleTests>() is not TestOutputLogger<TimeSpanFormatAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,8 +22,8 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         DateTime Property,
+                         [TimeSpanFormat("c")]
+                         TimeSpan Property,
                      );
                      """;
 
@@ -39,7 +39,7 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
     public void MissingTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DateTimeFormatAttributeRuleTests>() is not TestOutputLogger<DateTimeFormatAttributeRuleTests> logger)
+        if (factory.CreateLogger<TimeSpanFormatAttributeRuleTests>() is not TestOutputLogger<TimeSpanFormatAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -47,7 +47,7 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         DateTime Property,
+                         TimeSpan Property,
                      );
                      """;
 
@@ -63,7 +63,7 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
     public void DisallowTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DateTimeFormatAttributeRuleTests>() is not TestOutputLogger<DateTimeFormatAttributeRuleTests> logger)
+        if (factory.CreateLogger<TimeSpanFormatAttributeRuleTests>() is not TestOutputLogger<TimeSpanFormatAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -71,7 +71,7 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [TimeSpanFormat("c")]
                          int Property,
                      );
                      """;

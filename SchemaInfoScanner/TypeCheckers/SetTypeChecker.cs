@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
@@ -27,25 +26,7 @@ internal static class SetTypeChecker
             throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported hashset type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(property);
-
         var typeArgument = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments.Single();
-
-        if (PrimitiveTypeChecker.IsDateTimeType(typeArgument))
-        {
-            if (!property.HasAttribute<DateTimeFormatAttribute>())
-            {
-                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
-            }
-        }
-
-        if (PrimitiveTypeChecker.IsTimeSpanType(typeArgument))
-        {
-            if (!property.HasAttribute<TimeSpanFormatAttribute>())
-            {
-                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
-            }
-        }
 
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(typeArgument))
         {
@@ -64,19 +45,6 @@ internal static class SetTypeChecker
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);
         RecordTypeChecker.Check(innerRecordSchema, recordSchemaCatalog, visited, logger);
-    }
-
-    private static void CheckUnavailableAttribute(PropertySchemaBase property)
-    {
-        if (property.HasAttribute<ForeignKeyAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for hashset type {property.PropertyName.FullName}.");
-        }
-
-        if (property.HasAttribute<KeyAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for hashset type {property.PropertyName.FullName}.");
-        }
     }
 
     public static bool IsSupportedSetType(INamedTypeSymbol symbol)

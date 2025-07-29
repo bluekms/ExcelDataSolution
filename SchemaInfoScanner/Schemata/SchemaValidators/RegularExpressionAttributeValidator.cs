@@ -3,9 +3,9 @@ using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata.AttributeValidators;
+namespace SchemaInfoScanner.Schemata.SchemaValidators;
 
-internal partial class AttributeValidator
+internal partial class SchemaRuleValidator
 {
     private void RegisterRegularExpressionAttributeRule()
     {
@@ -14,7 +14,7 @@ internal partial class AttributeValidator
             RuleFor(x => x)
                 .Must(x => x is StringPropertySchema)
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}: string 이 아니므로 {nameof(RegularExpressionAttribute)} 를 사용할 수 없습니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): string 이 아니므로 {nameof(RegularExpressionAttribute)} 를 사용할 수 없습니다.");
         });
     }
 }

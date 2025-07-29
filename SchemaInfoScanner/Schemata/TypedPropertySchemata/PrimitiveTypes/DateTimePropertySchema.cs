@@ -1,7 +1,6 @@
 using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
@@ -17,22 +16,10 @@ public sealed record DateTimePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!this.TryGetAttributeValue<DateTimeFormatAttribute, string>(0, out var format))
-        {
-            throw new AttributeNotFoundException<DateTimeFormatAttribute>(PropertyName.FullName);
-        }
+        var argument = context.CurrentArgument;
 
-        DateTime value;
-        try
-        {
-            var argument = context.CurrentArgument;
-            value = DateTime.ParseExact(argument, format, CultureInfo.InvariantCulture);
-        }
-        catch (Exception e)
-        {
-            var ex = new FormatException($"Failed to parse {context} with {format} format.", e);
-            throw ex;
-        }
+        var format = this.GetAttributeValue<DateTimeFormatAttribute, string>();
+        var value = DateTime.ParseExact(argument, format, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {

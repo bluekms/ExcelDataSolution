@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
@@ -28,8 +27,6 @@ internal static class RecordTypeChecker
         {
             throw new InvalidOperationException($"{recordSchema.RecordName.FullName} is not supported record type.");
         }
-
-        CheckUnavailableAttribute(recordSchema);
 
         if (!visited.Add(recordSchema.RecordName))
         {
@@ -96,39 +93,6 @@ internal static class RecordTypeChecker
 
         Check(recordSchema, recordSchemaCatalog, visited, logger);
         return recordSchema;
-    }
-
-    private static void CheckUnavailableAttribute(RecordSchema recordSchema)
-    {
-        if (recordSchema.HasAttribute<StaticDataRecordAttribute>())
-        {
-            throw new NotSupportedException($"{nameof(StaticDataRecordAttribute)} is not available for record type {recordSchema.RecordName.FullName}. use RecordComplianceChecker.");
-        }
-
-        if (recordSchema.HasAttribute<MaxCountAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
-
-        if (recordSchema.HasAttribute<NullStringAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
-
-        if (recordSchema.HasAttribute<RangeAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(RangeAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
-
-        if (recordSchema.HasAttribute<RegularExpressionAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(RegularExpressionAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
-
-        if (recordSchema.HasAttribute<SingleColumnCollectionAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(SingleColumnCollectionAttribute)} is not available for record type {recordSchema.RecordName.FullName}.");
-        }
     }
 
     private static readonly string[] RecordMethodNames = [

@@ -3,9 +3,9 @@ using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.TypeCheckers;
 using StaticDataAttribute;
 
-namespace SchemaInfoScanner.Schemata.AttributeValidators;
+namespace SchemaInfoScanner.Schemata.SchemaValidators;
 
-internal partial class AttributeValidator : AbstractValidator<PropertySchemaBase>
+internal partial class SchemaRuleValidator : AbstractValidator<PropertySchemaBase>
 {
     private void RegisterMaxCountAttributeRule()
     {
@@ -14,7 +14,7 @@ internal partial class AttributeValidator : AbstractValidator<PropertySchemaBase
             RuleFor(x => x)
                 .Must(x => CollectionTypeChecker.IsSupportedCollectionType(x.NamedTypeSymbol))
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}: 지원되는 컬랙션이 아니기 때문에 {nameof(MaxCountAttribute)} 를 사용할 수 없습니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): 지원되는 컬랙션이 아니기 때문에 {nameof(MaxCountAttribute)} 를 사용할 수 없습니다.");
         });
     }
 }

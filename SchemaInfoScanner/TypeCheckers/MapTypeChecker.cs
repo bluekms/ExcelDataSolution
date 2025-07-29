@@ -27,50 +27,16 @@ internal static class MapTypeChecker
             throw new InvalidOperationException($"Expected {property.PropertyName.FullName} to be supported dictionary type, but actually not supported.");
         }
 
-        CheckUnavailableAttribute(property);
-
         var keySymbol = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments[0];
         if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
         {
             throw new NotSupportedException($"Key type of dictionary must be non-nullable.");
         }
 
-        if (PrimitiveTypeChecker.IsDateTimeType(keySymbol))
-        {
-            if (!property.HasAttribute<DateTimeFormatAttribute>())
-            {
-                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
-            }
-        }
-
-        if (PrimitiveTypeChecker.IsTimeSpanType(keySymbol))
-        {
-            if (!property.HasAttribute<TimeSpanFormatAttribute>())
-            {
-                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
-            }
-        }
-
         var valueSymbol = (INamedTypeSymbol)property.NamedTypeSymbol.TypeArguments[1];
 
         if (PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
         {
-            if (PrimitiveTypeChecker.IsDateTimeType(valueSymbol))
-            {
-                if (!property.HasAttribute<DateTimeFormatAttribute>())
-                {
-                    throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
-                }
-            }
-
-            if (PrimitiveTypeChecker.IsTimeSpanType(valueSymbol))
-            {
-                if (!property.HasAttribute<TimeSpanFormatAttribute>())
-                {
-                    throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
-                }
-            }
-
             return;
         }
 
@@ -86,7 +52,7 @@ internal static class MapTypeChecker
 
         if (valueRecordKeyParameterSchema is null)
         {
-            throw new InvalidUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.PropertyName.FullName}, {nameof(KeyAttribute)} must be used in one of the parameters.");
+            throw new InvalidAttributeUsageException($"{valueRecordSchema.RecordName.FullName} is used as a value in dictionary {property.PropertyName.FullName}, {nameof(KeyAttribute)} must be used in one of the parameters.");
         }
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
@@ -183,24 +149,6 @@ internal static class MapTypeChecker
 
         return RecordTypeChecker.IsSupportedRecordType(keySymbol) &&
                RecordTypeChecker.IsSupportedRecordType(valueSymbol);
-    }
-
-    private static void CheckUnavailableAttribute(PropertySchemaBase property)
-    {
-        if (property.HasAttribute<ForeignKeyAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(ForeignKeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
-        }
-
-        if (property.HasAttribute<KeyAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(KeyAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
-        }
-
-        if (property.HasAttribute<SingleColumnCollectionAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(NullStringAttribute)} is not available for dictionary type {property.PropertyName.FullName}.");
-        }
     }
 
     private static void CheckSamePrimitiveType(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol)

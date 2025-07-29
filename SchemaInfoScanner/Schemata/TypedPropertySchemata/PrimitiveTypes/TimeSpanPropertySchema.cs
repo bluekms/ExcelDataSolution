@@ -1,7 +1,6 @@
 using System.Globalization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
@@ -17,12 +16,9 @@ public sealed record TimeSpanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!this.TryGetAttributeValue<TimeSpanFormatAttribute, string>(0, out var format))
-        {
-            throw new AttributeNotFoundException<TimeSpanFormatAttribute>(PropertyName.FullName);
-        }
-
         var argument = context.CurrentArgument;
+
+        var format = this.GetAttributeValue<TimeSpanFormatAttribute, string>();
         var value = TimeSpan.ParseExact(argument, format, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
