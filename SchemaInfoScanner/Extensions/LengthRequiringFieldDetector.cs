@@ -35,7 +35,7 @@ public static class LengthRequiringFieldDetector
     {
         var results = new HashSet<string>();
 
-        foreach (var parameter in recordSchema.RecordPropertySchemata)
+        foreach (var parameter in recordSchema.PropertySchemata)
         {
             if (PrimitiveTypeChecker.IsSupportedPrimitiveType(parameter.NamedTypeSymbol))
             {

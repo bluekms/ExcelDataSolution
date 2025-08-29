@@ -84,7 +84,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -167,7 +167,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -202,7 +202,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -236,7 +236,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -270,7 +270,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }

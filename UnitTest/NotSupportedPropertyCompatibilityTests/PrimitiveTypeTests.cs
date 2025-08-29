@@ -33,7 +33,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var context = new CompatibilityContext(
                     catalogs.EnumMemberCatalog,
@@ -70,7 +70,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var context = new CompatibilityContext(
                     catalogs.EnumMemberCatalog,

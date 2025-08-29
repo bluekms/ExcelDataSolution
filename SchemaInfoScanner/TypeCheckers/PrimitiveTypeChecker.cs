@@ -1,8 +1,5 @@
 using Microsoft.CodeAnalysis;
-using SchemaInfoScanner.Exceptions;
-using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
@@ -14,14 +11,6 @@ internal static class PrimitiveTypeChecker
         {
             throw new NotSupportedException($"{property.PropertyName.FullName} is not supported primitive type.");
         }
-
-        if (property.IsNullable() && !property.HasAttribute<NullStringAttribute>())
-        {
-            throw new InvalidUsageException($"{property.PropertyName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
-        }
-
-        CheckUnavailableAttribute(property);
-        CheckRequiredAttribute(property);
     }
 
     public static bool IsSupportedPrimitiveType(INamedTypeSymbol symbol)
@@ -56,12 +45,12 @@ internal static class PrimitiveTypeChecker
 
     public static bool IsDateTimeType(ITypeSymbol symbol)
     {
-        return GetLastName(symbol) is "DateTime";
+        return GetLastName(symbol) is "DateTime" or "DateTime?";
     }
 
     public static bool IsTimeSpanType(ITypeSymbol symbol)
     {
-        return GetLastName(symbol) is "TimeSpan";
+        return GetLastName(symbol) is "TimeSpan" or "TimeSpan?";
     }
 
     public static bool IsClrPrimitiveType(ITypeSymbol symbol)
@@ -75,44 +64,6 @@ internal static class PrimitiveTypeChecker
         var fullName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         var lastDot = fullName.LastIndexOf('.');
         return lastDot >= 0 ? fullName[(lastDot + 1)..] : fullName;
-    }
-
-    private static void CheckUnavailableAttribute(PropertySchemaBase property)
-    {
-        if (!property.IsNullable() && property.HasAttribute<NullStringAttribute>())
-        {
-            throw new InvalidUsageException($"{property.PropertyName.FullName} is not nullable, so you can't use {nameof(NullStringAttribute)}.");
-        }
-
-        if (property.HasAttribute<MaxCountAttribute>())
-        {
-            throw new InvalidUsageException($"{nameof(MaxCountAttribute)} is not available for primitive type {property.PropertyName.FullName}.");
-        }
-    }
-
-    private static void CheckRequiredAttribute(PropertySchemaBase property)
-    {
-        var symbol = property.NamedTypeSymbol;
-        var isNullable = symbol.OriginalDefinition.SpecialType is SpecialType.System_Nullable_T;
-        var underlyingType = isNullable
-            ? symbol.TypeArguments[0]
-            : symbol;
-
-        if (IsDateTimeType(underlyingType))
-        {
-            if (!property.HasAttribute<DateTimeFormatAttribute>())
-            {
-                throw new AttributeNotFoundException<DateTimeFormatAttribute>(property.PropertyName.FullName);
-            }
-        }
-
-        if (IsTimeSpanType(underlyingType))
-        {
-            if (!property.HasAttribute<TimeSpanFormatAttribute>())
-            {
-                throw new AttributeNotFoundException<TimeSpanFormatAttribute>(property.PropertyName.FullName);
-            }
-        }
     }
 
     private static bool CheckSpecialType(ITypeSymbol symbol)

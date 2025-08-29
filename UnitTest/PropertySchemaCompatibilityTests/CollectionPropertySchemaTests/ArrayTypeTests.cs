@@ -33,7 +33,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -67,7 +67,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -100,7 +100,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -133,7 +133,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -163,7 +163,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -195,7 +195,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -229,7 +229,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -263,7 +263,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -297,7 +297,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -329,7 +329,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -363,7 +363,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -396,7 +396,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }
@@ -429,7 +429,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
-            foreach (var propertySchema in recordSchema.RecordPropertySchemata)
+            foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 propertySchema.CheckCompatibility(context);
             }

@@ -34,7 +34,7 @@ public static class RecordFlattener
     {
         var headers = new List<string>();
 
-        foreach (var parameter in recordSchema.RecordPropertySchemata)
+        foreach (var parameter in recordSchema.PropertySchemata)
         {
             var name = parameter.TryGetAttributeValue<ColumnNameAttribute, string>(0, out var columnName)
                 ? columnName

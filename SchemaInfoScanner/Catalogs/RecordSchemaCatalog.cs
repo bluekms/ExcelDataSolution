@@ -82,10 +82,10 @@ public sealed class RecordSchemaCatalog
                 }
             }
 
-            if (recordSchema.RecordPropertySchemata.Count > 0)
+            if (recordSchema.PropertySchemata.Count > 0)
             {
                 sb.AppendLine("Parameters:");
-                foreach (var recordParameterSchema in recordSchema.RecordPropertySchemata)
+                foreach (var recordParameterSchema in recordSchema.PropertySchemata)
                 {
                     sb.AppendLine(CultureInfo.InvariantCulture, $"  {recordParameterSchema.PropertyName}");
                     sb.AppendLine(CultureInfo.InvariantCulture, $"    Type: {recordParameterSchema.NamedTypeSymbol}");
