@@ -49,7 +49,7 @@ internal partial class SchemaRuleValidator
         When(IsDisallowType, () =>
         {
             RuleFor(x => x)
-                .Must(x => false)
+                .Must(x => !x.HasAttribute<NullStringAttribute>())
                 .WithMessage(x =>
                     $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable이거나 nullable이 있는 컬랙션이 아니므로 {nameof(NullStringAttribute)} 를 사용할 수 없습니다.");
         });

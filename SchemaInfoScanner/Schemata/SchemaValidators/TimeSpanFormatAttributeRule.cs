@@ -32,6 +32,11 @@ internal partial class SchemaRuleValidator
 
     private static bool IsTimeSpanCollection(PropertySchemaBase property)
     {
+        if (MapTypeChecker.HasTimeSpanProperty(property.NamedTypeSymbol))
+        {
+            return true;
+        }
+
         if (!CollectionTypeChecker.IsPrimitiveCollection(property.NamedTypeSymbol))
         {
             return false;

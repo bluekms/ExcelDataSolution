@@ -151,6 +151,62 @@ internal static class MapTypeChecker
                RecordTypeChecker.IsSupportedRecordType(valueSymbol);
     }
 
+    public static bool HasDateTimeProperty(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedMapType(symbol))
+        {
+            return false;
+        }
+
+        var keyTypeArgument = symbol.TypeArguments.First();
+        if (PrimitiveTypeChecker.IsDateTimeType(keyTypeArgument))
+        {
+            return true;
+        }
+
+        var valueTypeArgument = symbol.TypeArguments.Last();
+        if (PrimitiveTypeChecker.IsDateTimeType(valueTypeArgument))
+        {
+            return true;
+        }
+
+        return valueTypeArgument
+            .GetMembers()
+            .OfType<IPropertySymbol>()
+            .Where(x => x.IsStatic)
+            .Where(x => symbol.DeclaredAccessibility == Accessibility.Public)
+            .Select(x => x.Type)
+            .Any(PrimitiveTypeChecker.IsDateTimeType);
+    }
+
+    public static bool HasTimeSpanProperty(INamedTypeSymbol symbol)
+    {
+        if (!IsSupportedMapType(symbol))
+        {
+            return false;
+        }
+
+        var keyTypeArgument = symbol.TypeArguments.First();
+        if (PrimitiveTypeChecker.IsTimeSpanType(keyTypeArgument))
+        {
+            return true;
+        }
+
+        var valueTypeArgument = symbol.TypeArguments.Last();
+        if (PrimitiveTypeChecker.IsTimeSpanType(valueTypeArgument))
+        {
+            return true;
+        }
+
+        return valueTypeArgument
+            .GetMembers()
+            .OfType<IPropertySymbol>()
+            .Where(x => x.IsStatic)
+            .Where(x => symbol.DeclaredAccessibility == Accessibility.Public)
+            .Select(x => x.Type)
+            .Any(PrimitiveTypeChecker.IsTimeSpanType);
+    }
+
     private static void CheckSamePrimitiveType(INamedTypeSymbol keySymbol, INamedTypeSymbol valueSymbol)
     {
         if (keySymbol.SpecialType is not SpecialType.None &&

@@ -23,7 +23,13 @@ public record School(
     FrozenDictionary<int, Teacher> Teachers,
     FrozenDictionary<Student, Enrollment> StudentEnrollments);
 
-public record Enrollment([Key] Student Student, string? Course, GradeLevel? GradeLevel);
+public record Enrollment(
+    [Key]
+    Student Student,
+    [NullString("미수강")]
+    string? Course,
+    [NullString("")]
+    GradeLevel? GradeLevel);
 
 public record Student(
     [NullString("")] int? StudentId,
@@ -33,4 +39,10 @@ public record Student(
     [NullString("")] ImmutableArray<float?> Grades,
     [NullString("")] FrozenSet<string?> Extracurriculars);
 
-public record Teacher([Key] int TeacherId, string? Name, string? Subject);
+public record Teacher(
+    [Key]
+    int TeacherId,
+    [NullString("-")]
+    string? Name,
+    [NullString("미정")]
+    string? Subject);
