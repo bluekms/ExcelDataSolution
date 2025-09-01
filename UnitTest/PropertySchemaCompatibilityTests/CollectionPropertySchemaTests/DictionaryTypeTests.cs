@@ -239,7 +239,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("")]
-                         FrozenDictionary<{{keyType}}, string> Property,
+                         FrozenDictionary<{{keyType}}, string?> Property,
                      );
                      """;
 

@@ -35,6 +35,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [NullString("")]
                          FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
@@ -63,6 +64,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [NullString("")]
                          FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
@@ -90,6 +92,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [NullString("")]
                          FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
@@ -117,6 +120,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [NullString("")]
                          FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
@@ -146,6 +150,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [NullString("")]
                          FrozenDictionary<KeyEnum, {{value}}> Property,
                      );
                      """;

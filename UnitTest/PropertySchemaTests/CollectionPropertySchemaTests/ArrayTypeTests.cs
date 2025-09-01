@@ -74,6 +74,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [NullString("")]
                          ImmutableArray<{{type}}> Property,
                      );
                      """;
@@ -117,7 +118,6 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("DateTime")]
-    [InlineData("DateTime?")] // 이건 실패해야 함
     public void DateTimeArrayTest(string type)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -133,6 +133,34 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                        ImmutableArray<{{type}}> Property,
                    );
                    """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
+
+    [Theory]
+    [InlineData("DateTime?")]
+    public void NullableDateTimeArrayTest(string type)
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [NullString("")]
+                         ImmutableArray<{{type}}> Property,
+                     );
+                     """;
 
         var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 
@@ -160,6 +188,34 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                        ImmutableArray<{{type}}> Property,
                    );
                    """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
+
+    [Theory]
+    [InlineData("TimeSpan?")]
+    public void NullableTimeSpanArrayTest(string type)
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [TimeSpanFormat("c")]
+                         [NullString("")]
+                         ImmutableArray<{{type}}> Property,
+                     );
+                     """;
 
         var loadResult = RecordSchemaLoader.OnLoad(code, logger);
 

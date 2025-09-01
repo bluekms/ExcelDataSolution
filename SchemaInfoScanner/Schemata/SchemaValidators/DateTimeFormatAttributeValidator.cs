@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes.NullableTypes;
@@ -32,6 +33,11 @@ internal partial class SchemaRuleValidator
 
     private static bool IsDateTimeCollection(PropertySchemaBase property)
     {
+        if (MapTypeChecker.HasDateTimeProperty(property.NamedTypeSymbol))
+        {
+            return true;
+        }
+
         if (!CollectionTypeChecker.IsPrimitiveCollection(property.NamedTypeSymbol))
         {
             return false;
