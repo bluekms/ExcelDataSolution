@@ -13,15 +13,15 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var code = @"
             public sealed record Subject(
                 string Name,
-                ImmutableArray<int> QuarterScore
+                [Length(3)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyClass(
                 string Name,
-                ImmutableArray<Subject> SubjectA,
+                [Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                ImmutableArray<Subject> SubjectB,
+                [Length(3)] ImmutableArray<Subject> SubjectB,
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -54,15 +54,15 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var code = @"
             public sealed record Subject(
                 [ColumnName(""Bar"")] string Name,
-                [ColumnName(""Scores"")] ImmutableArray<int> QuarterScore
+                [ColumnName(""Scores"")][Length(3)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyClass(
                 string Name,
-                [ColumnName(""SubjectF"")] ImmutableArray<Subject> SubjectA,
+                [ColumnName(""SubjectF"")][Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                ImmutableArray<Subject> SubjectB,
+                [Length(3)] ImmutableArray<Subject> SubjectB,
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -101,9 +101,9 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyClass(
                 string Name,
-                ImmutableArray<Subject> SubjectA,
+                [Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                ImmutableArray<Subject> SubjectB,
+                [Length(3)] ImmutableArray<Subject> SubjectB,
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -134,15 +134,15 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var code = @"
             public sealed record Subject(
                 string Name,
-                [SingleColumnCollection("", "")][ColumnName(""QuarterScores"")] ImmutableArray<int> QuarterScore
+                [SingleColumnCollection("", "")][ColumnName(""QuarterScores"")][Length(3)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record MyClass(
                 string Name,
-                ImmutableArray<Subject> SubjectA,
+                [Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                ImmutableArray<Subject> SubjectB,
+                [Length(3)] ImmutableArray<Subject> SubjectB,
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -173,8 +173,8 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
         var code = @"
             public sealed record Address(string Street, string City);
             public sealed record ContactInfo(string PhoneNumber, string Email);
-            public sealed record Project(string ProjectName, ImmutableArray<string> TeamMembers, double Budget);
-            public sealed record Department(string DepartmentName, ImmutableArray<Project> Projects);
+            public sealed record Project(string ProjectName, [Length(3)] ImmutableArray<string> TeamMembers, double Budget);
+            public sealed record Department(string DepartmentName, [Length(3)] ImmutableArray<Project> Projects);
 
             public sealed record Employee(
                 string FullName,
@@ -182,15 +182,15 @@ public class FindLengthRequiredNamesTest(ITestOutputHelper testOutputHelper)
                 Address HomeAddress,
                 ContactInfo Contact,
                 string Position,
-                ImmutableArray<Department> Departments
+                [Length(3)] ImmutableArray<Department> Departments
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
             public sealed record Company(
                 string CompanyName,
                 Address HeadquartersAddress,
-                FrozenSet<Employee> Employees,
-                ImmutableArray<Department> CoreDepartments
+                [Length(3)] FrozenSet<Employee> Employees,
+                [Length(3)] ImmutableArray<Department> CoreDepartments
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);

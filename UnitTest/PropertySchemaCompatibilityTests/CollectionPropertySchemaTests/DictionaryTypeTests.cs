@@ -36,6 +36,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenDictionary<{{keyType}}, string> Property,
                      );
                      """;
@@ -69,6 +70,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenDictionary<{{keyType}}, string> Property,
                      );
                      """;
@@ -104,6 +106,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenDictionary<MyEnum, string> Property,
                      );
                      """;
@@ -138,6 +141,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenDictionary<MyEnum, string> Property,
                      );
                      """;
@@ -172,6 +176,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(3)]
                          FrozenDictionary<DateTime, string> Property,
                      );
                      """;
@@ -205,6 +210,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(3)]
                          FrozenDictionary<TimeSpan, string> Property,
                      );
                      """;
@@ -239,6 +245,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("")]
+                         [Length(3)]
                          FrozenDictionary<{{keyType}}, string?> Property,
                      );
                      """;

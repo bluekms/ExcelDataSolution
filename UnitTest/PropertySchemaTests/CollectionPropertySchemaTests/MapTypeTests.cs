@@ -35,7 +35,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<{{key}}, string> Property,
+                         [Length(3)] FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
 
@@ -63,7 +63,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<{{key}}, string> Property,
+                         [Length(3)] FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
 
@@ -90,6 +90,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(3)]
                          FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
@@ -117,6 +118,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(3)]
                          FrozenDictionary<{{key}}, string> Property,
                      );
                      """;
@@ -156,7 +158,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<int, {{value}}> Property,
+                         [Length(3)] FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
 
@@ -184,7 +186,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<int, {{value}}> Property,
+                         [Length(3)] FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
 
@@ -211,6 +213,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(3)]
                          FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
@@ -238,6 +241,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(3)]
                          FrozenDictionary<int, {{value}}> Property,
                      );
                      """;
@@ -267,7 +271,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<KeyEnum, {{value}}> Property,
+                         [Length(3)] FrozenDictionary<KeyEnum, {{value}}> Property,
                      );
                      """;
 
@@ -294,6 +298,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(3)]
                          FrozenDictionary<{{type}}, {{type}}> Property,
                      );
                      """;
@@ -321,6 +326,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(3)]
                          FrozenDictionary<{{type}}, {{type}}> Property,
                      );
                      """;

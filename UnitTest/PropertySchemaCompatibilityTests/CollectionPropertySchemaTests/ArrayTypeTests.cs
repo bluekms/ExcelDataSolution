@@ -22,6 +22,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          ImmutableArray<int> Property,
                      );
                      """;
@@ -56,6 +57,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          ImmutableArray<MyEnum> Property,
                      );
                      """;
@@ -89,6 +91,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(3)]
                          ImmutableArray<DateTime> Property,
                      );
                      """;
@@ -122,6 +125,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(3)]
                          ImmutableArray<TimeSpan> Property,
                      );
                      """;
@@ -184,7 +188,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] ImmutableArray<int?> Property,
+                         [Length(3)][NullString("-")] ImmutableArray<int?> Property,
                      );
                      """;
 
@@ -218,7 +222,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("-")] ImmutableArray<MyEnum?> Property,
+                         [Length(3)][NullString("-")] ImmutableArray<MyEnum?> Property,
                      );
                      """;
 
@@ -252,6 +256,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
                          [NullString("-")]
+                         [Length(3)]
                          ImmutableArray<DateTime?> Property,
                      );
                      """;
@@ -286,6 +291,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
                          [NullString("-")]
+                         [Length(3)]
                          ImmutableArray<TimeSpan?> Property,
                      );
                      """;

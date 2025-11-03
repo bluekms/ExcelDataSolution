@@ -7,7 +7,7 @@ public sealed record SameNameSheet(string Name, float Score);
 public sealed record SubjectData([Key][ColumnName("Subject")] string Name, int Score);
 
 [StaticDataRecord("Excel2", "DictionarySheet")]
-public sealed record DictionarySheet(string Name, [ColumnName("SubjectAndScore")] FrozenDictionary<string, SubjectData> Subjects);
+public sealed record DictionarySheet(string Name, [ColumnName("SubjectAndScore")][Length(3)] FrozenDictionary<string, SubjectData> Subjects);
 
 [StaticDataRecord("Excel2", "DifferentColumnsSheet")]
 public sealed record StudentInfoForServer(string StudentId, string PhoneNumber, [ColumnName("Nickname[1]")] string Alias);
@@ -20,4 +20,5 @@ public sealed record StudentInfoForClient(
 
     [ColumnName("Nickname")]
     [NullString("")]
+    [Length(3)]
     FrozenSet<string?> Nicknames);

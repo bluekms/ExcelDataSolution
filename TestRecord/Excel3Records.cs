@@ -18,10 +18,10 @@ public enum GradeLevel
 [StaticDataRecord("Excel3", "SchoolSheet")]
 public record School(
     [NullString("")] string? SchoolName,
-    ImmutableArray<Student> Students,
-    FrozenSet<string> AvailableCourses,
-    FrozenDictionary<int, Teacher> Teachers,
-    FrozenDictionary<Student, Enrollment> StudentEnrollments);
+    [Length(3)] ImmutableArray<Student> Students,
+    [Length(5)] FrozenSet<string> AvailableCourses,
+    [Length(3)] FrozenDictionary<int, Teacher> Teachers,
+    [Length(3)] FrozenDictionary<Student, Enrollment> StudentEnrollments);
 
 public record Enrollment(
     [Key]
@@ -36,8 +36,8 @@ public record Student(
     [NullString("")] string? FirstName,
     [NullString("")] string? LastName,
     [NullString("")] Gender? Gender,
-    [NullString("")] ImmutableArray<float?> Grades,
-    [NullString("")] FrozenSet<string?> Extracurriculars);
+    [NullString("")][Length(4)] ImmutableArray<float?> Grades,
+    [NullString("")][Length(3)] FrozenSet<string?> Extracurriculars);
 
 public record Teacher(
     [Key]

@@ -22,6 +22,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenSet<int> Property,
                      );
                      """;
@@ -54,6 +55,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenSet<int> Property,
                      );
                      """;
@@ -89,6 +91,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenSet<MyEnum> Property,
                      );
                      """;
@@ -123,6 +126,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenSet<MyEnum> Property,
                      );
                      """;
@@ -157,6 +161,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(3)]
                          FrozenSet<DateTime> Property,
                      );
                      """;
@@ -190,6 +195,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(3)]
                          FrozenSet<TimeSpan> Property,
                      );
                      """;
@@ -286,6 +292,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<int?> Property,
                      );
                      """;
@@ -319,6 +326,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<int?> Property,
                      );
                      """;
@@ -355,6 +363,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<MyEnum?> Property,
                      );
                      """;
@@ -389,6 +398,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<DateTime?> Property,
                      );
                      """;
@@ -423,6 +433,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<TimeSpan?> Property,
                      );
                      """;

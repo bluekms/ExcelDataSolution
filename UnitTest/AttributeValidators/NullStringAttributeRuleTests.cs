@@ -48,6 +48,7 @@ public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          ImmutableArray<int?> Property
                      );
                      """;
@@ -73,6 +74,7 @@ public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<int?> Property
                      );
                      """;
@@ -98,6 +100,7 @@ public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenDictionary<int, int?> Property
                      );
                      """;

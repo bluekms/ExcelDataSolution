@@ -12,7 +12,6 @@ internal partial class SchemaRuleValidator : AbstractValidator<PropertySchemaBas
         // Attribute Validators
         RegisterDateTimeFormatAttributeRule();
         RegisterLengthAttributeRule();
-        RegisterMaxCountAttributeRule();
         RegisterNullStringAttributeRule();
         RegisterRegularExpressionAttributeRule();
         RegisterSingleColumnCollectionAttributeRule();
