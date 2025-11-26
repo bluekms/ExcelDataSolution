@@ -1,5 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
@@ -12,15 +13,27 @@ public sealed record RecordKeyRecordValueDictionarySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!context.IsCollection)
+        if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            throw new InvalidOperationException($"Invalid context: {context}");
+            throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        for (var i = 0; i < context.CollectionLength; i++)
+        var keys = new List<object?>();
+        for (var i = 0; i < length; i++)
         {
             KeyGenericArgumentSchema.CheckCompatibility(context);
+            keys.Add(context.GetCollectedValues()[^1]);
+
             ValueGenericArgumentSchema.CheckCompatibility(context);
+        }
+
+        var hs = new HashSet<object?>();
+        foreach (var key in keys)
+        {
+            if (!hs.Add(key))
+            {
+                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate key: {key} in context {context}.");
+            }
         }
     }
 }

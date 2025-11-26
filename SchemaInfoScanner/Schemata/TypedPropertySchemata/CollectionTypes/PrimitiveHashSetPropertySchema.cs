@@ -1,5 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -11,25 +12,19 @@ public sealed record PrimitiveHashSetPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!context.IsCollection)
+        if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            throw new InvalidOperationException($"Invalid context: {context}");
+            throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        var values = new List<object?>();
-        for (var i = 0; i < context.CollectionLength; i++)
+        for (var i = 0; i < length; i++)
         {
             GenericArgumentSchema.CheckCompatibility(context);
-            values.Add(context.GetCollectedValues()[^1]);
         }
 
-        var hs = new HashSet<object?>();
-        foreach (var value in values)
+        if (context.Arguments.Count != context.GetCollectedValues().Distinct().Count())
         {
-            if (!hs.Add(value))
-            {
-                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value: {value} in context {context}.");
-            }
+            throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value.");
         }
     }
 }

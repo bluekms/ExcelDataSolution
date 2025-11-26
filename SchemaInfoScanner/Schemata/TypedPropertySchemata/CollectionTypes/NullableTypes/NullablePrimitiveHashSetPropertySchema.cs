@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Schemata.AttributeCheckers;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
@@ -12,13 +13,12 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!context.IsCollection)
+        if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            throw new InvalidOperationException($"Invalid context: {context}");
+            throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        var values = new List<object?>();
-        for (var i = 0; i < context.CollectionLength; i++)
+        for (var i = 0; i < length; i++)
         {
             var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
             if (result.IsNull)
@@ -29,17 +29,11 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
             {
                 GenericArgumentSchema.CheckCompatibility(context);
             }
-
-            values.Add(context.GetCollectedValues()[^1]);
         }
 
-        var hs = new HashSet<object?>();
-        foreach (var value in values)
+        if (context.Arguments.Count != context.GetCollectedValues().Distinct().Count())
         {
-            if (!hs.Add(value))
-            {
-                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value in the argument: {context}");
-            }
+            throw new InvalidOperationException($"Parameter {PropertyName} has incompatible argument count: {context}");
         }
     }
 }

@@ -10,7 +10,7 @@ public sealed record NameAndScoreAndAge(
 [StaticDataRecord]
 public sealed record MyClass(
     [ColumnPrefix("NameAndScore")]
-    FrozenDictionary<NameAndScore, NameAndScoreAndAge> NameAndScores,
+    [Length(3)] FrozenDictionary<NameAndScore, NameAndScoreAndAge> NameAndScores,
 
     int ClassValue,
 );

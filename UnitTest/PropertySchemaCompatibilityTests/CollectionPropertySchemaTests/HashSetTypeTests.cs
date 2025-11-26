@@ -22,6 +22,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(4)]
                          FrozenSet<int> Property,
                      );
                      """;
@@ -29,7 +30,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1", "42", "0", "-7" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -54,6 +55,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenSet<int> Property,
                      );
                      """;
@@ -61,7 +63,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1", "0", "-7", "-7" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -89,6 +91,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(2)]
                          FrozenSet<MyEnum> Property,
                      );
                      """;
@@ -96,7 +99,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "a", "A" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -123,6 +126,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [Length(3)]
                          FrozenSet<MyEnum> Property,
                      );
                      """;
@@ -130,7 +134,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "C", "A", "A" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -157,6 +161,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [Length(2)]
                          FrozenSet<DateTime> Property,
                      );
                      """;
@@ -164,7 +169,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -190,6 +195,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [Length(2)]
                          FrozenSet<TimeSpan> Property,
                      );
                      """;
@@ -197,7 +203,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -286,6 +292,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(4)]
                          FrozenSet<int?> Property,
                      );
                      """;
@@ -293,7 +300,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1", "42", "-", "-7" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -319,6 +326,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<int?> Property,
                      );
                      """;
@@ -326,7 +334,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1", "-", "42", "-", "-7" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -355,6 +363,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<MyEnum?> Property,
                      );
                      """;
@@ -362,7 +371,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "B", "A", "-" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -389,6 +398,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
                          [NullString("-")]
+                         [Length(3)]
                          FrozenSet<DateTime?> Property,
                      );
                      """;
@@ -396,7 +406,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "-", "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -423,6 +433,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
                          [NullString("-")]
+                         [Length(2)]
                          FrozenSet<TimeSpan?> Property,
                      );
                      """;
@@ -430,7 +441,7 @@ public class HashSetTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

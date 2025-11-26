@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -34,7 +35,7 @@ public static class AttributeAccessors
 
     public static bool TryGetAttributeValue<TAttribute, TValue>(
         IReadOnlyList<AttributeSyntax> attributeSyntaxList,
-        out TValue value,
+        [NotNullWhen(true)] out TValue value,
         int attributeParameterIndex = 0)
         where TAttribute : Attribute
     {
@@ -44,7 +45,14 @@ public static class AttributeAccessors
             return false;
         }
 
-        value = GetAttributeValue<TAttribute, TValue>(attributeSyntaxList, attributeParameterIndex);
+        var result = GetAttributeValue<TAttribute, TValue>(attributeSyntaxList, attributeParameterIndex);
+        if (result is null)
+        {
+            value = default!;
+            return false;
+        }
+
+        value = result;
         return true;
     }
 }

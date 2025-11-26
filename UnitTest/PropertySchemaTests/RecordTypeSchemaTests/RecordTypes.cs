@@ -76,7 +76,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         ImmutableArray<MyData> Data
+                         [Length(3)] ImmutableArray<MyData> Data
                      );
 
                      public record struct MyData(int Value);
@@ -103,7 +103,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenSet<MyData> Data
+                         [Length(3)] FrozenSet<MyData> Data
                      );
 
                      public record struct MyData(int Value);
@@ -130,7 +130,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<int, MyData> Data
+                         [Length(3)] FrozenDictionary<int, MyData> Data
                      );
 
                      public record struct MyData([Key] int Id, string Value);
@@ -157,7 +157,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         FrozenDictionary<KeyData, MyData> Data
+                         [Length(3)] FrozenDictionary<KeyData, MyData> Data
                      );
 
                      public record struct KeyData(int Key1, string Key2);

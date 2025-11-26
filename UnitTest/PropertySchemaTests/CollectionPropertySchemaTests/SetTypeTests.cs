@@ -35,7 +35,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                    [StaticDataRecord("Test", "TestSheet")]
                    public sealed record MyRecord(
-                       FrozenSet<{{type}}> Property,
+                       [Length(3)] FrozenSet<{{type}}> Property,
                    );
                    """;
 
@@ -63,7 +63,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
                    [StaticDataRecord("Test", "TestSheet")]
                    public sealed record MyRecord(
-                       FrozenSet<{{type}}> Property,
+                       [Length(3)] FrozenSet<{{type}}> Property,
                    );
                    """;
 
@@ -90,6 +90,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                    [StaticDataRecord("Test", "TestSheet")]
                    public sealed record MyRecord(
                        [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                       [Length(3)]
                        FrozenSet<{{type}}> Property,
                    );
                    """;
@@ -117,6 +118,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                    [StaticDataRecord("Test", "TestSheet")]
                    public sealed record MyRecord(
                        [TimeSpanFormat("c")]
+                       [Length(3)]
                        FrozenSet<{{type}}> Property,
                    );
                    """;

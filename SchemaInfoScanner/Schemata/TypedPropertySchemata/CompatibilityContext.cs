@@ -2,26 +2,14 @@ using SchemaInfoScanner.Catalogs;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
-public sealed class CompatibilityContext
+public sealed class CompatibilityContext(
+    EnumMemberCatalog enumMemberCatalog,
+    IReadOnlyList<string> arguments,
+    int startIndex = 0)
 {
-    public EnumMemberCatalog EnumMemberCatalog { get; }
-    public IReadOnlyList<string> Arguments { get; }
-    public int StartIndex { get; private set; }
-    public int? CollectionLength { get; }
-
-    public CompatibilityContext(
-        EnumMemberCatalog enumMemberCatalog,
-        IReadOnlyList<string> arguments,
-        int startIndex = 0,
-        int? collectionLength = null)
-    {
-        EnumMemberCatalog = enumMemberCatalog;
-        Arguments = arguments;
-        StartIndex = startIndex;
-        CollectionLength = collectionLength;
-    }
-
-    public bool IsCollection => CollectionLength.HasValue;
+    public EnumMemberCatalog EnumMemberCatalog { get; } = enumMemberCatalog;
+    public IReadOnlyList<string> Arguments { get; } = arguments;
+    public int StartIndex { get; private set; } = startIndex;
 
     public string CurrentArgument
     {
@@ -52,5 +40,6 @@ public sealed class CompatibilityContext
         return $"CompatibilityContext[{string.Join(", ", Arguments)}]";
     }
 
+    private readonly List<object?> collectedKeys = new();
     private readonly List<object?> collectedValues = new();
 }

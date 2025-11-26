@@ -35,7 +35,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                    [StaticDataRecord("Test", "TestSheet")]
                    public sealed record MyRecord(
-                       [NullString("")] ImmutableArray<{{type}}> Property,
+                       [Length(3)][NullString("")] ImmutableArray<{{type}}> Property,
                    );
                    """;
 
@@ -63,7 +63,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
                    [StaticDataRecord("Test", "TestSheet")]
                    public sealed record MyRecord(
-                       [NullString("")] ImmutableArray<{{type}}> Property,
+                       [Length(3)][NullString("")] ImmutableArray<{{type}}> Property,
                    );
                    """;
 
@@ -91,6 +91,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                    public sealed record MyRecord(
                        [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
                        [NullString("")]
+                       [Length(3)]
                        ImmutableArray<{{type}}> Property,
                    );
                    """;
@@ -119,6 +120,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                    public sealed record MyRecord(
                        [TimeSpanFormat("c")]
                        [NullString("")]
+                       [Length(3)]
                        ImmutableArray<{{type}}> Property,
                    );
                    """;

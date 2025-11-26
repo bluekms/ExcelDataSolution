@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
@@ -14,40 +15,43 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!context.IsCollection)
+        if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            throw new InvalidOperationException($"Invalid context: {context}");
+            throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        if (context.CollectionLength % 2 != 0)
+        if (context.Arguments.Count % 2 != 0)
         {
             throw new InvalidOperationException($"Invalid data length: {context}");
         }
 
         var isKey = true;
-        var keys = new List<object?>();
-        for (var i = 0; i < context.CollectionLength; i++)
+        var keys = new List<string>();
+        for (var i = 0; i < context.Arguments.Count; i++)
         {
             if (isKey)
             {
-                KeySchema.CheckCompatibility(context);
-                keys.Add(context.GetCollectedValues()[^1]);
                 isKey = false;
+                keys.Add(context.CurrentArgument);
+
+                KeySchema.CheckCompatibility(context);
             }
             else
             {
-                ValueSchema.CheckCompatibility(context);
                 isKey = true;
+                ValueSchema.CheckCompatibility(context);
             }
         }
 
-        var hs = new HashSet<object?>();
-        foreach (var key in keys)
+        var keysList = context.GetCollectedValues()
+            .Where((x, i) => i % 2 == 0)
+            .ToList();
+
+        var keyCount = keysList.ToHashSet().Count;
+
+        if (keys.Count != keyCount)
         {
-            if (!hs.Add(key))
-            {
-                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate key: {key} in context {context}.");
-            }
+            throw new InvalidOperationException($"Parameter {PropertyName} has mismatched length between keys and values in context {context}.");
         }
     }
 }

@@ -8,13 +8,13 @@ using Xunit.Abstractions;
 
 namespace UnitTest.AttributeValidators;
 
-public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
+public class LengthAttributeRuleTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void CanUseArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<MaxCounterAttributeRuleTests>() is not TestOutputLogger<MaxCounterAttributeRuleTests> logger)
+        if (factory.CreateLogger<LengthAttributeRuleTests>() is not TestOutputLogger<LengthAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,7 +22,7 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [MaxCount(3)]
+                         [Length(3)]
                          ImmutableArray<int> Property,
                      );
                      """;
@@ -39,7 +39,7 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
     public void CanUseSetTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<MaxCounterAttributeRuleTests>() is not TestOutputLogger<MaxCounterAttributeRuleTests> logger)
+        if (factory.CreateLogger<LengthAttributeRuleTests>() is not TestOutputLogger<LengthAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -47,7 +47,7 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [MaxCount(3)]
+                         [Length(3)]
                          FrozenSet<int> Property,
                      );
                      """;
@@ -61,10 +61,10 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void CanUseDictionaryTest()
+    public void CanUseMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<MaxCounterAttributeRuleTests>() is not TestOutputLogger<MaxCounterAttributeRuleTests> logger)
+        if (factory.CreateLogger<LengthAttributeRuleTests>() is not TestOutputLogger<LengthAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -72,7 +72,7 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [MaxCount(3)]
+                         [Length(3)]
                          FrozenDictionary<int, string> Property,
                      );
                      """;
@@ -86,10 +86,10 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DisallowTest()
+    public void MustUseTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<MaxCounterAttributeRuleTests>() is not TestOutputLogger<MaxCounterAttributeRuleTests> logger)
+        if (factory.CreateLogger<LengthAttributeRuleTests>() is not TestOutputLogger<LengthAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -97,8 +97,7 @@ public class MaxCounterAttributeRuleTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [MaxCount(3)]
-                         int Property,
+                         ImmutableArray<int> Property,
                      );
                      """;
 

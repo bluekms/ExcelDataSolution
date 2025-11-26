@@ -61,7 +61,7 @@ public class SingleColumnCollectionAttributeRuleTests(ITestOutputHelper testOutp
     }
 
     [Fact]
-    public void DisallowDictionaryTest()
+    public void DisallowMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<SingleColumnCollectionAttributeRuleTests>() is not TestOutputLogger<SingleColumnCollectionAttributeRuleTests> logger)
