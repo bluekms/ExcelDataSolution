@@ -1,5 +1,6 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
@@ -11,12 +12,12 @@ public sealed record RecordArrayPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        if (!context.IsCollection)
+        if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            throw new InvalidOperationException($"Invalid context: {context}");
+            throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        for (var i = 0; i < context.CollectionLength; i++)
+        for (var i = 0; i < length; i++)
         {
             GenericArgumentSchema.CheckCompatibility(context);
         }
