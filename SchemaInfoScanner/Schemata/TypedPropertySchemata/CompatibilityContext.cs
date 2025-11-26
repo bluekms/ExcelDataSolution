@@ -23,9 +23,15 @@ public sealed class CompatibilityContext(
         return Arguments[StartIndex++];
     }
 
-    public void Collect(object? value)
+    public void Collect(object value)
     {
         collectedValues.Add(value);
+    }
+
+    public void CollectNull()
+    {
+        StartIndex++;
+        collectedValues.Add(null);
     }
 
     public IReadOnlyList<object?> GetCollectedValues()

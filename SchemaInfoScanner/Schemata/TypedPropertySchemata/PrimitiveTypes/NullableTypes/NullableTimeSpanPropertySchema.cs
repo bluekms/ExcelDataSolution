@@ -13,11 +13,10 @@ public sealed record NullableTimeSpanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var result = NullStringAttributeChecker.Check(this, argument);
+        var result = NullStringAttributeChecker.Check(this, context.Current);
         if (result.IsNull)
         {
-            context.Collect(null);
+            context.CollectNull();
         }
         else
         {
