@@ -44,7 +44,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -78,7 +78,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -114,7 +114,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["A", "a", "C"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -149,7 +149,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["A", "A", "C"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -176,7 +176,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         [Length(3)]
+                         [Length(2)]
                          FrozenDictionary<DateTime, string> Property,
                      );
                      """;
@@ -184,7 +184,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -218,7 +218,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["1.02:03:04.5670000", "2.02:03:04.5670000"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -253,7 +253,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys, values);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0, data.Length);
+        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
