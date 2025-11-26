@@ -20,10 +20,10 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
 
         for (var i = 0; i < length; i++)
         {
-            var result = NullStringAttributeChecker.Check(this, context.Consume());
+            var result = NullStringAttributeChecker.Check(this, context.Current);
             if (result.IsNull)
             {
-                context.Collect(null);
+                context.CollectNull();
             }
             else
             {

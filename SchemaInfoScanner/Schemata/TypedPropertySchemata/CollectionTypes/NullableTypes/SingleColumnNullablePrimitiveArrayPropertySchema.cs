@@ -18,7 +18,11 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
         foreach (var argument in arguments)
         {
             var result = NullStringAttributeChecker.Check(this, argument);
-            if (!result.IsNull)
+            if (result.IsNull)
+            {
+                context.CollectNull();
+            }
+            else
             {
                 var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
