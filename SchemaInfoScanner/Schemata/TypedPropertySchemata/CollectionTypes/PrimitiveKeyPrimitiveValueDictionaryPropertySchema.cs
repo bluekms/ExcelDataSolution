@@ -32,7 +32,7 @@ public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
             if (isKey)
             {
                 isKey = false;
-                keys.Add(context.CurrentArgument);
+                keys.Add(context.Consume());
 
                 KeySchema.CheckCompatibility(context);
             }

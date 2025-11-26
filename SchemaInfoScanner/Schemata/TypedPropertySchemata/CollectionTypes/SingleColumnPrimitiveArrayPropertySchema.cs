@@ -13,7 +13,7 @@ public sealed record SingleColumnPrimitiveArrayPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.CurrentArgument.Split(Separator);
+        var arguments = context.Consume().Split(Separator);
 
         if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {

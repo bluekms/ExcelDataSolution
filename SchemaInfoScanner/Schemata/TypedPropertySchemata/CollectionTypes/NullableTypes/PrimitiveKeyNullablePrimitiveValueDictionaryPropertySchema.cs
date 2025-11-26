@@ -27,7 +27,7 @@ public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
             KeySchema.CheckCompatibility(context);
             keys.Add(context.GetCollectedValues()[^1]);
 
-            var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
+            var result = NullStringAttributeChecker.Check(this, context.Consume());
             if (!result.IsNull)
             {
                 ValueSchema.CheckCompatibility(context);

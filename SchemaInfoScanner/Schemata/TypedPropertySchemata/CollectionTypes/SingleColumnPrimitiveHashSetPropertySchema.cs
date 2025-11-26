@@ -12,7 +12,7 @@ public sealed record SingleColumnPrimitiveHashSetPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.CurrentArgument.Split(Separator);
+        var arguments = context.Consume().Split(Separator);
 
         var values = new List<object?>(arguments.Length);
         foreach (var argument in arguments)

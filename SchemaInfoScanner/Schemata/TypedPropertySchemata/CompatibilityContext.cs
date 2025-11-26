@@ -11,22 +11,20 @@ public sealed class CompatibilityContext(
     public IReadOnlyList<string> Arguments { get; } = arguments;
     public int StartIndex { get; private set; } = startIndex;
 
-    public string CurrentArgument
-    {
-        get
-        {
-            if (StartIndex >= Arguments.Count)
-            {
-                throw new InvalidOperationException($"StartIndex {StartIndex} is out of range for the provided arguments.");
-            }
+    public string Current => Arguments[StartIndex];
 
-            return Arguments[StartIndex];
+    public string Consume()
+    {
+        if (StartIndex >= Arguments.Count)
+        {
+            throw new InvalidOperationException($"StartIndex {StartIndex} is out of range for the provided arguments.");
         }
+
+        return Arguments[StartIndex++];
     }
 
     public void Collect(object? value)
     {
-        ++StartIndex;
         collectedValues.Add(value);
     }
 

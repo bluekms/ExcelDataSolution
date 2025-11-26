@@ -13,7 +13,7 @@ public sealed record NullableCharPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
         var result = NullStringAttributeChecker.Check(this, argument);
         if (result.IsNull)
         {

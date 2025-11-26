@@ -13,7 +13,7 @@ public sealed record SingleColumnNullablePrimitiveHashSetPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.CurrentArgument.Split(Separator);
+        var arguments = context.Consume().Split(Separator);
 
         var hashSet = arguments.ToHashSet();
         if (hashSet.Count != arguments.Length)

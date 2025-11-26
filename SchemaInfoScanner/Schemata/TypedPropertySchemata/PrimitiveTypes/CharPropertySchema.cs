@@ -15,7 +15,7 @@ public sealed record CharPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
         var value = char.Parse(argument);
 
         if (this.HasAttribute<RangeAttribute>())
