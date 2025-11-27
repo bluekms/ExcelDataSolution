@@ -6,7 +6,7 @@ using SchemaInfoScanner.TypeCheckers;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 
-public class RecordHashSetPropertySchemaFactory
+public class RecordSetPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
         PropertyName propertyName,
@@ -40,7 +40,7 @@ public class RecordHashSetPropertySchemaFactory
             RecordTypeGenericArgumentSchema.CollectionKind.HashSet,
             nestedSchema);
 
-        return new RecordHashSetPropertySchema(
+        return new RecordSetPropertySchema(
             genericArgumentSchema,
             propertySymbol,
             attributeList);

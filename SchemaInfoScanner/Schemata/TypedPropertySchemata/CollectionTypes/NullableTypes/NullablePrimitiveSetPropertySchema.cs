@@ -5,7 +5,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
-public sealed record NullablePrimitiveHashSetPropertySchema(
+public sealed record NullablePrimitiveSetPropertySchema(
     PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
@@ -23,7 +23,7 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
             var result = NullStringAttributeChecker.Check(this, context.Current);
             if (result.IsNull)
             {
-                context.CollectNull();
+                context.ConsumeNull();
             }
             else
             {
@@ -31,9 +31,6 @@ public sealed record NullablePrimitiveHashSetPropertySchema(
             }
         }
 
-        if (context.Arguments.Count != context.GetCollectedValues().Distinct().Count())
-        {
-            throw new InvalidOperationException($"Parameter {PropertyName} has incompatible argument count: {context}");
-        }
+        context.ValidateNoDuplicates();
     }
 }

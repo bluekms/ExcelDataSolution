@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest.NotSupportedPropertySchemaTests.CollectionPropertySchemaTests;
 
-public class HashSetTypeTest(ITestOutputHelper testOutputHelper)
+public class SetTypeTest(ITestOutputHelper testOutputHelper)
 {
     [Theory]
     [InlineData("List")]
@@ -14,7 +14,7 @@ public class HashSetTypeTest(ITestOutputHelper testOutputHelper)
     public void RejectsNestedCollectionTypes(string collection)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTest>() is not TestOutputLogger<HashSetTypeTest> logger)
+        if (factory.CreateLogger<SetTypeTest>() is not TestOutputLogger<SetTypeTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -35,7 +35,7 @@ public class HashSetTypeTest(ITestOutputHelper testOutputHelper)
     public void RejectsNestedDictionaryTypes()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<HashSetTypeTest>() is not TestOutputLogger<HashSetTypeTest> logger)
+        if (factory.CreateLogger<SetTypeTest>() is not TestOutputLogger<SetTypeTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
