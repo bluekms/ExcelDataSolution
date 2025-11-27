@@ -4,7 +4,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
-public sealed record PrimitiveHashSetPropertySchema(
+public sealed record PrimitiveSetPropertySchema(
     PrimitiveTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
@@ -22,9 +22,6 @@ public sealed record PrimitiveHashSetPropertySchema(
             GenericArgumentSchema.CheckCompatibility(context);
         }
 
-        if (context.Arguments.Count != context.GetCollectedValues().Distinct().Count())
-        {
-            throw new InvalidOperationException($"Parameter {PropertyName} has duplicate value.");
-        }
+        context.ValidateNoDuplicates();
     }
 }

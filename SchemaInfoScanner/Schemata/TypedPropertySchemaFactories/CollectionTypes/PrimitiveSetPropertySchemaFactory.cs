@@ -10,7 +10,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 
-public static class PrimitiveHashSetPropertySchemaFactory
+public static class PrimitiveSetPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
         PropertyName propertyName,
@@ -37,11 +37,11 @@ public static class PrimitiveHashSetPropertySchemaFactory
             nestedSchema);
 
         return isNullable
-            ? new NullablePrimitiveHashSetPropertySchema(
+            ? new NullablePrimitiveSetPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList)
-            : new PrimitiveHashSetPropertySchema(
+            : new PrimitiveSetPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList);
@@ -79,12 +79,12 @@ public static class PrimitiveHashSetPropertySchemaFactory
             nestedSchema);
 
         return isNullable
-            ? new SingleColumnNullablePrimitiveHashSetPropertySchema(
+            ? new SingleColumnNullablePrimitiveSetPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList,
                 separator)
-            : new SingleColumnPrimitiveHashSetPropertySchema(
+            : new SingleColumnPrimitiveSetPropertySchema(
                 genericArgumentSchema,
                 propertySymbol,
                 attributeList,

@@ -16,7 +16,7 @@ public sealed record NullableTimeSpanPropertySchema(
         var result = NullStringAttributeChecker.Check(this, context.Current);
         if (result.IsNull)
         {
-            context.CollectNull();
+            context.ConsumeNull();
         }
         else
         {

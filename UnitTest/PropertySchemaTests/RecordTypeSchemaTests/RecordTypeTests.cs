@@ -7,13 +7,13 @@ using Xunit.Abstractions;
 
 namespace UnitTest.PropertySchemaTests.RecordTypeSchemaTests;
 
-public class RecordTypes(ITestOutputHelper testOutputHelper)
+public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void InnerRecordTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -41,7 +41,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     public void AnotherRecordTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -68,7 +68,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     public void RecordArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -95,7 +95,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     public void RecordSetTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -122,7 +122,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     public void RecordMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -149,7 +149,7 @@ public class RecordTypes(ITestOutputHelper testOutputHelper)
     public void RecordKeyAndRecordValueMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypes>() is not TestOutputLogger<RecordTypes> logger)
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }

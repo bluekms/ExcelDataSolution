@@ -4,7 +4,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
-public sealed record RecordHashSetPropertySchema(
+public sealed record RecordSetPropertySchema(
     RecordTypeGenericArgumentSchema GenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
@@ -17,20 +17,11 @@ public sealed record RecordHashSetPropertySchema(
             throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        var keys = new List<object?>();
         for (var i = 0; i < length; i++)
         {
             GenericArgumentSchema.CheckCompatibility(context);
-            keys.Add(context.GetCollectedValues()[^1]);
         }
 
-        var hs = new HashSet<object?>();
-        foreach (var key in keys)
-        {
-            if (!hs.Add(key))
-            {
-                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate key: {key} in context {context}.");
-            }
-        }
+        context.ValidateNoDuplicates();
     }
 }

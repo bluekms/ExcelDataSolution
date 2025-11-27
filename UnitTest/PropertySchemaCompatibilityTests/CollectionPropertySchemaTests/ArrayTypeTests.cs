@@ -30,7 +30,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1", "42", "0", "-7" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -65,7 +65,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "C", "A" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -99,7 +99,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -133,7 +133,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -165,7 +165,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, ["1, 42, 0, -7"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["1, 42, 0, -7"]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -197,7 +197,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1", "42", "-", "-7" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -231,7 +231,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "B", "A", "-" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -266,7 +266,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "-", "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -301,7 +301,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -333,7 +333,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, ["1, 42, , -7"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["1, 42, , -7"]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -367,7 +367,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, ["C, A, "]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["C, A, "]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -400,7 +400,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, [", 1986-05-26 01:05:00.000, 1993-12-28 01:05:00.000"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, [", 1986-05-26 01:05:00.000, 1993-12-28 01:05:00.000"]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -433,7 +433,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, ["1.02:03:04.5670000, , 2.02:03:04.5670000"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["1.02:03:04.5670000, , 2.02:03:04.5670000"]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

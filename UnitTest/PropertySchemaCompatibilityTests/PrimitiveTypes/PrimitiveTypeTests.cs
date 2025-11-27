@@ -78,7 +78,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(
+        var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
             Enumerable.Repeat(argument, 1).ToList());
 
@@ -161,7 +161,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(
+        var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
             Enumerable.Repeat(argument, 1).ToList());
 
@@ -196,7 +196,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(
+        var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
             Enumerable.Repeat(argument, 1).ToList());
 
@@ -230,7 +230,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(
+        var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
             Enumerable.Repeat(argument, 1).ToList());
 
@@ -264,7 +264,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = new CompatibilityContext(
+        var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
             Enumerable.Repeat(argument, 1).ToList());
 

@@ -20,11 +20,11 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
             var result = NullStringAttributeChecker.Check(this, argument);
             if (result.IsNull)
             {
-                context.CollectNull();
+                context.ConsumeNull();
             }
             else
             {
-                var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
+                var nestedContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, [argument]);
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }
