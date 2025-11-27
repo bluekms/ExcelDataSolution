@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTests;
 
-public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
+public class MapTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Theory]
     [InlineData("bool", new[] { "true", "FALSE" })]
@@ -28,7 +28,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void PrimitiveKeyDictionaryTest(string keyType, string[] keys)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -62,7 +62,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void PrimitiveKeyDictionaryDuplicationFailTest(string keyType, string[] keys)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -96,7 +96,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void EnumKeyDictionaryTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -131,7 +131,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void EnumKeyDictionaryDuplicationFailTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -167,7 +167,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void DateTimeKeyDictionaryTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -201,7 +201,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void TimeSpanKeyDictionaryTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -236,7 +236,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void PrimitiveKeyNullablePrimitiveValueDictionaryTest(string keyType, string[] keys, string[] values)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }

@@ -5,7 +5,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 
-public sealed record PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
+public sealed record PrimitiveKeyPrimitiveValueMapPropertySchema(
     PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,

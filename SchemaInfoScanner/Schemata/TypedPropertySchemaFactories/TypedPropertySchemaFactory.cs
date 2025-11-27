@@ -38,7 +38,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsPrimitiveKeyAndValueMapType(propertySymbol))
         {
-            return PrimitiveKeyAndValueDictionarySchemaFactory.Create(
+            return PrimitiveKeyAndValueMapSchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList);
@@ -77,7 +77,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsPrimitiveKeyRecordValueMapType(propertySymbol))
         {
-            return PrimitiveKeyRecordValueDictionaryPropertySchemaFactory.Create(
+            return PrimitiveKeyRecordValueMapPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList,
@@ -85,7 +85,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsRecordKeyAndValueMapType(propertySymbol))
         {
-            return RecordKeyAndValueDictionaryPropertySchemaFactory.Create(
+            return RecordKeyAndValueMapPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList,

@@ -6,7 +6,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
-public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
+public sealed record PrimitiveKeyNullablePrimitiveValueMapPropertySchema(
     PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,

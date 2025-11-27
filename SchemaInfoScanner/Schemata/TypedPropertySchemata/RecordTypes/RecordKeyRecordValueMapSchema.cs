@@ -1,16 +1,15 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
 using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 
-public sealed record PrimitiveKeyRecordValueDictionarySchema(
-    PrimitiveTypeGenericArgumentSchema KeySchema,
-    RecordTypeGenericArgumentSchema ValueSchema,
+public sealed record RecordKeyRecordValueMapSchema(
+    RecordTypeGenericArgumentSchema KeyGenericArgumentSchema,
+    RecordTypeGenericArgumentSchema ValueGenericArgumentSchema,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList)
-    : PropertySchemaBase(KeySchema.PropertyName, NamedTypeSymbol, AttributeList)
+    : PropertySchemaBase(KeyGenericArgumentSchema.PropertyName, NamedTypeSymbol, AttributeList)
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
@@ -22,10 +21,10 @@ public sealed record PrimitiveKeyRecordValueDictionarySchema(
         var keys = new List<object?>();
         for (var i = 0; i < length; i++)
         {
-            KeySchema.CheckCompatibility(context);
+            KeyGenericArgumentSchema.CheckCompatibility(context);
             keys.Add(context.GetCollectedValues()[^1]);
 
-            ValueSchema.CheckCompatibility(context);
+            ValueGenericArgumentSchema.CheckCompatibility(context);
         }
 
         var hs = new HashSet<object?>();
