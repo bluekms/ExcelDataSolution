@@ -12,7 +12,7 @@ public sealed record BooleanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
 
         var value = bool.Parse(argument);
         context.Collect(value);

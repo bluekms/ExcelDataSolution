@@ -16,7 +16,7 @@ public sealed record TimeSpanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
 
         var format = this.GetAttributeValue<TimeSpanFormatAttribute, string>();
         var value = TimeSpan.ParseExact(argument, format, CultureInfo.InvariantCulture);

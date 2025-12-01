@@ -13,11 +13,10 @@ public sealed record NullableBooleanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
-        var result = NullStringAttributeChecker.Check(this, argument);
+        var result = NullStringAttributeChecker.Check(this, context.Current);
         if (result.IsNull)
         {
-            context.Collect(null);
+            context.ConsumeNull();
         }
         else
         {

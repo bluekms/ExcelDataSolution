@@ -16,7 +16,7 @@ public sealed record FloatPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
         var value = float.Parse(
             argument,
             NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,

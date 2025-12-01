@@ -3,22 +3,19 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata.RecordTypes;
 using SchemaInfoScanner.TypeCheckers;
 
-namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
+namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 
-public static class PrimitiveKeyAndValueDictionarySchemaFactory
+public static class PrimitiveKeyRecordValueMapPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
         PropertyName propertyName,
         INamedTypeSymbol propertySymbol,
-        IReadOnlyList<AttributeSyntax> attributeList)
+        IReadOnlyList<AttributeSyntax> attributeList,
+        INamedTypeSymbol parentRecordSymbol)
     {
-        if (!MapTypeChecker.IsSupportedMapType(propertySymbol))
-        {
-            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported dictionary type.");
-        }
-
         var keySymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[0];
         if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol))
         {
@@ -26,24 +23,19 @@ public static class PrimitiveKeyAndValueDictionarySchemaFactory
         }
 
         var valueSymbol = (INamedTypeSymbol)propertySymbol.TypeArguments[1];
-        if (!PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol))
+        if (!RecordTypeChecker.IsSupportedRecordType(valueSymbol))
         {
-            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Value type of dictionary must be a supported primitive type.");
+            throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) Value type of dictionary must be a supported record type.");
         }
 
         var keySchema = new PrimitiveTypeGenericArgumentSchema(
             PrimitiveTypeGenericArgumentSchema.CollectionKind.DictionaryKey,
             PrimitivePropertySchemaFactory.Create(propertyName, keySymbol, attributeList));
 
-        var valueSchema = new PrimitiveTypeGenericArgumentSchema(
-            PrimitiveTypeGenericArgumentSchema.CollectionKind.DictionaryValue,
-            PrimitivePropertySchemaFactory.Create(propertyName, valueSymbol, attributeList));
+        var valueSchema = new RecordTypeGenericArgumentSchema(
+            RecordTypeGenericArgumentSchema.CollectionKind.DictionaryValue,
+            RecordPropertySchemaFactory.Create(propertyName, valueSymbol, attributeList, parentRecordSymbol));
 
-        return new PrimitiveKeyPrimitiveValueDictionaryPropertySchema(
-            propertyName,
-            propertySymbol,
-            attributeList,
-            keySchema,
-            valueSchema);
+        return new PrimitiveKeyRecordValueMapSchema(keySchema, valueSchema, propertySymbol, attributeList);
     }
 }

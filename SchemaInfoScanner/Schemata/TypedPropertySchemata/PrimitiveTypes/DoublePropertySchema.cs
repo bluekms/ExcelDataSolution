@@ -16,7 +16,7 @@ public sealed record DoublePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
         var value = double.Parse(
             argument,
             NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,

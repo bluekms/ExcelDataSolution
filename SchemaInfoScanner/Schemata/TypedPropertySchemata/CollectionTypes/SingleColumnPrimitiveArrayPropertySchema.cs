@@ -13,7 +13,7 @@ public sealed record SingleColumnPrimitiveArrayPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.CurrentArgument.Split(Separator);
+        var arguments = context.Consume().Split(Separator);
 
         if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
@@ -30,7 +30,7 @@ public sealed record SingleColumnPrimitiveArrayPropertySchema(
                 throw new InvalidOperationException($"Parameter {PropertyName} has empty value in the argument: {context}");
             }
 
-            var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
+            var nestedContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, [argument]);
             GenericArgumentSchema.CheckCompatibility(nestedContext);
         }
     }

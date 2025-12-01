@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTests;
 
-public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
+public class MapTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Theory]
     [InlineData("bool", new[] { "true", "FALSE" })]
@@ -25,10 +25,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint", new[] { "4294967295", "4,294,967,290", "0" })]
     [InlineData("ulong", new[] { "0", "18,446,744,073,709,551,615", "18446744073709551610" })]
     [InlineData("ushort", new[] { "65535", "0", "65,530" })]
-    public void PrimitiveKeyDictionaryTest(string keyType, string[] keys)
+    public void PrimitiveKeyMapTest(string keyType, string[] keys)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -36,7 +36,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [Length(3)]
+                         [Length({{keys.Length}})]
                          FrozenDictionary<{{keyType}}, string> Property,
                      );
                      """;
@@ -44,7 +44,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -62,7 +62,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void PrimitiveKeyDictionaryDuplicationFailTest(string keyType, string[] keys)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -78,7 +78,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -93,10 +93,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void EnumKeyDictionaryTest()
+    public void EnumKeyMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -114,7 +114,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["A", "a", "C"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -131,7 +131,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void EnumKeyDictionaryDuplicationFailTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -149,7 +149,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["A", "A", "C"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -164,10 +164,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DateTimeKeyDictionaryTest()
+    public void DateTimeKeyMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -184,7 +184,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -198,10 +198,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void TimeSpanKeyDictionaryTest()
+    public void TimeSpanKeyMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -210,7 +210,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
-                         [Length(3)]
+                         [Length(2)]
                          FrozenDictionary<TimeSpan, string> Property,
                      );
                      """;
@@ -218,7 +218,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(["1.02:03:04.5670000", "2.02:03:04.5670000"]);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -233,10 +233,10 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("sbyte", new[] { "0", "1", "2", "3" }, new[] { "Hello", "", "World", "!" })]
-    public void PrimitiveKeyNullablePrimitiveValueDictionaryTest(string keyType, string[] keys, string[] values)
+    public void PrimitiveKeyNullablePrimitiveValueMapTest(string keyType, string[] keys, string[] values)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -253,7 +253,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys, values);
-        var context = new CompatibilityContext(catalogs.EnumMemberCatalog, data, 0);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

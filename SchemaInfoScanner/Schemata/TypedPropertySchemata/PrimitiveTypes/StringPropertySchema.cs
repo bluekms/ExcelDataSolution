@@ -15,7 +15,7 @@ public sealed record StringPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
 
         if (this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {

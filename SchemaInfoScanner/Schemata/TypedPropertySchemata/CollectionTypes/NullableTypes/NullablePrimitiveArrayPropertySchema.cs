@@ -20,8 +20,12 @@ public sealed record NullablePrimitiveArrayPropertySchema(
 
         for (var i = 0; i < length; i++)
         {
-            var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
-            if (!result.IsNull)
+            var result = NullStringAttributeChecker.Check(this, context.Current);
+            if (result.IsNull)
+            {
+                context.ConsumeNull();
+            }
+            else
             {
                 GenericArgumentSchema.CheckCompatibility(context);
             }

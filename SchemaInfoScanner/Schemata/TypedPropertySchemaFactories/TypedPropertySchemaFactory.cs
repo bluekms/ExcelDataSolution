@@ -33,12 +33,12 @@ public static class TypedPropertySchemaFactory
         {
             var isSingleColumnCollection = AttributeAccessors.HasAttribute<SingleColumnCollectionAttribute>(attributeList);
             return isSingleColumnCollection
-                ? PrimitiveHashSetPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
-                : PrimitiveHashSetPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
+                ? PrimitiveSetPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
+                : PrimitiveSetPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }
         else if (MapTypeChecker.IsPrimitiveKeyAndValueMapType(propertySymbol))
         {
-            return PrimitiveKeyAndValueDictionarySchemaFactory.Create(
+            return PrimitiveKeyAndValueMapSchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList);
@@ -69,7 +69,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (SetTypeChecker.IsSupportedSetType(propertySymbol))
         {
-            return RecordHashSetPropertySchemaFactory.Create(
+            return RecordSetPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList,
@@ -77,7 +77,8 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsPrimitiveKeyRecordValueMapType(propertySymbol))
         {
-            return PrimitiveKeyRecordValueDictionaryPropertySchemaFactory.Create(
+            // 여기서 propertyName으로 찾아와서 attributeList를 교체해 줘야 한다
+            return PrimitiveKeyRecordValueMapPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList,
@@ -85,7 +86,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsRecordKeyAndValueMapType(propertySymbol))
         {
-            return RecordKeyAndValueDictionaryPropertySchemaFactory.Create(
+            return RecordKeyAndValueMapPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
                 attributeList,

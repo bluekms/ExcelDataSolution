@@ -6,7 +6,7 @@ using SchemaInfoScanner.TypeCheckers;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 
-public static class RecordKeyAndValueDictionaryPropertySchemaFactory
+public static class RecordKeyAndValueMapPropertySchemaFactory
 {
     public static PropertySchemaBase Create(
         PropertyName propertyName,
@@ -34,6 +34,6 @@ public static class RecordKeyAndValueDictionaryPropertySchemaFactory
             RecordTypeGenericArgumentSchema.CollectionKind.DictionaryValue,
             RecordPropertySchemaFactory.Create(propertyName, valueSymbol, attributeList, parentRecordSymbol));
 
-        return new RecordKeyRecordValueDictionarySchema(keySchema, valueSchema, propertySymbol, attributeList);
+        return new RecordKeyRecordValueMapSchema(keySchema, valueSchema, propertySymbol, attributeList);
     }
 }

@@ -6,7 +6,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemata.CollectionTypes.NullableTypes;
 
-public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
+public sealed record PrimitiveKeyNullablePrimitiveValueMapPropertySchema(
     PropertyName PropertyName,
     INamedTypeSymbol NamedTypeSymbol,
     IReadOnlyList<AttributeSyntax> AttributeList,
@@ -25,9 +25,8 @@ public sealed record PrimitiveKeyNullablePrimitiveValueDictionaryPropertySchema(
         for (var i = 0; i < length; i++)
         {
             KeySchema.CheckCompatibility(context);
-            keys.Add(context.GetCollectedValues()[^1]);
 
-            var result = NullStringAttributeChecker.Check(this, context.CurrentArgument);
+            var result = NullStringAttributeChecker.Check(this, context.Current);
             if (!result.IsNull)
             {
                 ValueSchema.CheckCompatibility(context);

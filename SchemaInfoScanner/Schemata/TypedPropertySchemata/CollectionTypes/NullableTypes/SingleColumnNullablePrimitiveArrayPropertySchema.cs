@@ -13,14 +13,18 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.CurrentArgument.Split(Separator);
+        var arguments = context.Consume().Split(Separator);
 
         foreach (var argument in arguments)
         {
             var result = NullStringAttributeChecker.Check(this, argument);
-            if (!result.IsNull)
+            if (result.IsNull)
             {
-                var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
+                context.ConsumeNull();
+            }
+            else
+            {
+                var nestedContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, [argument]);
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }

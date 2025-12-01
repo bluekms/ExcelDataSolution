@@ -16,7 +16,7 @@ public sealed record DateTimePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
 
         var format = this.GetAttributeValue<DateTimeFormatAttribute, string>();
         var value = DateTime.ParseExact(argument, format, CultureInfo.InvariantCulture);

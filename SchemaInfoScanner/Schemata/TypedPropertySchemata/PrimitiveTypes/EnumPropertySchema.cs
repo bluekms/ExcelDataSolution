@@ -14,7 +14,7 @@ public sealed record EnumPropertySchema(
         var enumName = new EnumName(NamedTypeSymbol.Name);
         var enumMembers = context.EnumMemberCatalog.GetEnumMembers(enumName);
 
-        var argument = context.CurrentArgument;
+        var argument = context.Consume();
         if (!enumMembers.Contains(argument))
         {
             throw new InvalidOperationException($"{context} is not a member of {enumName.FullName}");

@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest.NotSupportedPropertySchemaTests.CollectionPropertySchemaTests;
 
-public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
+public class SetTypeTest(ITestOutputHelper testOutputHelper)
 {
     [Theory]
     [InlineData("List")]
@@ -14,7 +14,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void RejectsNestedCollectionTypes(string collection)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<SetTypeTest>() is not TestOutputLogger<SetTypeTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,7 +22,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<int, {{collection}}<int>> Property,
+                         HashSet<{{collection}}<int>> Property,
                      );
                      """;
 
@@ -35,7 +35,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
     public void RejectsNestedDictionaryTypes()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DictionaryTypeTests>() is not TestOutputLogger<DictionaryTypeTests> logger)
+        if (factory.CreateLogger<SetTypeTest>() is not TestOutputLogger<SetTypeTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -43,7 +43,7 @@ public class DictionaryTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         Dictionary<int, Dictionary<int, string>> Property,
+                         HashSet<Dictionary<int, string>> Property,
                      );
                      """;
 
