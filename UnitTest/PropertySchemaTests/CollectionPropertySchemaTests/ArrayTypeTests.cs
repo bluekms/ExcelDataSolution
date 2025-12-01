@@ -230,4 +230,57 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 
         Assert.Empty(logger.Logs);
     }
+
+    [Fact]
+    public void SingleColumnArrayTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [SingleColumnCollection(", ")]
+                         ImmutableArray<int> Property,
+                     );
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public void SingleColumnWithLengthArrayTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [SingleColumnCollection(", ")]
+                         [Length(3)]
+                         ImmutableArray<int> Property,
+                     );
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
 }

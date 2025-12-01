@@ -133,4 +133,59 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         Assert.Empty(logger.Logs);
     }
+
+    [Fact]
+    public void SingleColumnArrayTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [SingleColumnCollection(", ")]
+                         [NullString("")]
+                         FrozenSet<int?> Property,
+                     );
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public void SingleColumnWithLengthArrayTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [SingleColumnCollection(", ")]
+                         [Length(3)]
+                         [NullString("")]
+                         FrozenSet<int?> Property,
+                     );
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
 }

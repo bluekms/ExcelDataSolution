@@ -15,11 +15,11 @@ public sealed record SingleColumnPrimitiveArrayPropertySchema(
     {
         var arguments = context.Consume().Split(Separator);
 
-        if (!TryGetAttributeValue<LengthAttribute, int>(out var length))
+        if (TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
             if (arguments.Length != length)
             {
-                throw new InvalidOperationException($"Parameter {PropertyName} expects {length} elements, but got {arguments.Length} in the argument: {context}");
+                throw new InvalidOperationException($"{PropertyName} has {nameof(LengthAttribute)} ({length}). but context length ({arguments.Length}).");
             }
         }
 

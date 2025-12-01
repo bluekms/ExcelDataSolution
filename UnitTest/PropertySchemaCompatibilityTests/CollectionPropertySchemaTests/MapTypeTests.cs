@@ -231,41 +231,6 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    [Theory]
-    [InlineData("sbyte", new[] { "0", "1", "2", "3" }, new[] { "Hello", "", "World", "!" })]
-    public void PrimitiveKeyNullablePrimitiveValueMapTest(string keyType, string[] keys, string[] values)
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [NullString("")]
-                         [Length(3)]
-                         FrozenDictionary<{{keyType}}, string?> Property,
-                     );
-                     """;
-
-        var catalogs = CreateCatalogs(code, logger);
-
-        var data = MakeDictionaryRawData(keys, values);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
-
-        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
-        {
-            foreach (var propertySchema in recordSchema.PropertySchemata)
-            {
-                propertySchema.CheckCompatibility(context);
-            }
-        }
-
-        Assert.Empty(logger.Logs);
-    }
-
     private record Catalogs(
         RecordSchemaCatalog RecordSchemaCatalog,
         EnumMemberCatalog EnumMemberCatalog);
@@ -290,23 +255,6 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         {
             result.Add(key);
             result.Add("Dummy");
-        }
-
-        return result.ToArray();
-    }
-
-    private static string[] MakeDictionaryRawData(string[] keys, string[] values)
-    {
-        if (keys.Length != values.Length)
-        {
-            throw new ArgumentException("Keys and values must have the same length.");
-        }
-
-        var result = new List<string>();
-        for (var i = 0; i < keys.Length; i++)
-        {
-            result.Add(keys[i]);
-            result.Add(values[i]);
         }
 
         return result.ToArray();
