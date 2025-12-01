@@ -54,4 +54,6 @@ public class ObjectTypeTests(ITestOutputHelper testOutputHelper)
         Assert.Throws<NotSupportedException>(() => new RecordSchemaSet(loadResult, logger));
         Assert.Single(logger.Logs);
     }
+
+    // TODO 키가 레코드레코드, 레코드컨테이너 인 경우도 지원여부 확인할 것
 }
