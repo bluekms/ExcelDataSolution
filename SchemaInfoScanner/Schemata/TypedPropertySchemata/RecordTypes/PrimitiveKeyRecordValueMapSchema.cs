@@ -19,22 +19,22 @@ public sealed record PrimitiveKeyRecordValueMapSchema(
             throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        var keys = new List<object?>();
+        var valueContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, context.Arguments, context.Position);
         for (var i = 0; i < length; i++)
         {
+            context.BeginKeyScope();
+            var keyStartPosition = context.Position;
             KeySchema.CheckCompatibility(context);
-            keys.Add(context.GetCollectedValues()[^1]);
+            context.EndKeyScope();
 
-            ValueSchema.CheckCompatibility(context);
+            var valueStartPosition = valueContext.Position;
+            ValueSchema.CheckCompatibility(valueContext);
+
+            var valueConsumed = valueContext.Position - valueStartPosition;
+            var keyConsumed = context.Position - keyStartPosition;
+            context.Skip(valueConsumed - keyConsumed);
         }
 
-        var hs = new HashSet<object?>();
-        foreach (var key in keys)
-        {
-            if (!hs.Add(key))
-            {
-                throw new InvalidOperationException($"Parameter {PropertyName} has duplicate key: {key} in context {context}.");
-            }
-        }
+        context.ValidateNoDuplicates();
     }
 }

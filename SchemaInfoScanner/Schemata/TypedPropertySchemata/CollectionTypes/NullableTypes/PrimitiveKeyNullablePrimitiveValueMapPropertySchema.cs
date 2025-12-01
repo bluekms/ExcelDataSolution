@@ -25,7 +25,6 @@ public sealed record PrimitiveKeyNullablePrimitiveValueMapPropertySchema(
         for (var i = 0; i < length; i++)
         {
             KeySchema.CheckCompatibility(context);
-            keys.Add(context.GetCollectedValues()[^1]);
 
             var result = NullStringAttributeChecker.Check(this, context.Current);
             if (!result.IsNull)

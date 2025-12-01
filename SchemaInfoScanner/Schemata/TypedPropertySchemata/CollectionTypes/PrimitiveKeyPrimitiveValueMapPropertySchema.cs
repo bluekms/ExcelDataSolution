@@ -25,33 +25,17 @@ public sealed record PrimitiveKeyPrimitiveValueMapPropertySchema(
             throw new InvalidOperationException($"Invalid data length: {context}");
         }
 
-        var isKey = true;
-        var keys = new List<string>();
-        for (var i = 0; i < context.Arguments.Count; i++)
+        var valueContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, context.Arguments, context.Position);
+        for (var i = 0; i < length; i++)
         {
-            if (isKey)
-            {
-                isKey = false;
-                keys.Add(context.Consume());
+            context.BeginKeyScope();
+            KeySchema.CheckCompatibility(context);
+            context.EndKeyScope();
 
-                KeySchema.CheckCompatibility(context);
-            }
-            else
-            {
-                isKey = true;
-                ValueSchema.CheckCompatibility(context);
-            }
+            ValueSchema.CheckCompatibility(valueContext);
+            context.Skip(1);
         }
 
-        var keysList = context.GetCollectedValues()
-            .Where((x, i) => i % 2 == 0)
-            .ToList();
-
-        var keyCount = keysList.ToHashSet().Count;
-
-        if (keys.Count != keyCount)
-        {
-            throw new InvalidOperationException($"Parameter {PropertyName} has mismatched length between keys and values in context {context}.");
-        }
+        context.ValidateNoDuplicates();
     }
 }
