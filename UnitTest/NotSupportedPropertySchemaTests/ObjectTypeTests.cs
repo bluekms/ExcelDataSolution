@@ -55,5 +55,31 @@ public class ObjectTypeTests(ITestOutputHelper testOutputHelper)
         Assert.Single(logger.Logs);
     }
 
-    // TODO 키가 레코드레코드, 레코드컨테이너 인 경우도 지원여부 확인할 것
+    [Fact]
+    public void RecordRecordKeyAndRecordValueMapTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ObjectTypeTests>() is not TestOutputLogger<ObjectTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [Length(3)] FrozenDictionary<KeyData, MyData> Data
+                     );
+
+                     public record struct KeyData(InnerKey Inner, int Key1)
+                     {
+                         public record struct InnerKey(int X, int Y);
+                     }
+
+                     public record struct MyData([Key] KeyData Key, string Value);
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+        Assert.Throws<NotSupportedException>(() => new RecordSchemaSet(loadResult, logger));
+        Assert.Single(logger.Logs);
+    }
 }
