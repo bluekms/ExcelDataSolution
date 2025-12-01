@@ -24,7 +24,7 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
             }
             else
             {
-                var nestedContext = new CompatibilityContext(context.EnumMemberCatalog, [argument]);
+                var nestedContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, [argument]);
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }
