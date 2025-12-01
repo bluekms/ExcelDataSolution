@@ -1,9 +1,4 @@
-using System.Text;
-using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner;
-using SchemaInfoScanner.Extensions;
-using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -12,6 +7,9 @@ public class GenerateAllHeaderHandler
 {
     public static int Generate(GenerateAllHeaderOptions options)
     {
+        throw new NotImplementedException();
+
+        /*
         var logger = string.IsNullOrEmpty(options.LogPath)
             ? Logger.CreateLoggerWithoutFile<Program>(options.MinLogLevel)
             : Logger.CreateLogger<Program>(options.MinLogLevel, options.LogPath);
@@ -73,6 +71,7 @@ public class GenerateAllHeaderHandler
         }
 
         return 0;
+        */
     }
 
     private static readonly Action<ILogger, string, Exception?> LogTrace =

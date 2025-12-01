@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text;
 using ExcelColumnExtractor.Containers;
-using ExcelColumnExtractor.HeaderProcessors;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,6 @@ public static class RequiredHeadersChecker
         IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
         RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetNameContainer sheetNameContainer,
-        HeaderLengthContainer headerLengthContainer,
         ILogger logger)
     {
         var result = new Dictionary<RecordSchema, TargetColumnIndices>(staticDataRecordSchemaList.Count);
@@ -30,7 +28,7 @@ public static class RequiredHeadersChecker
             try
             {
                 var excelSheetName = sheetNameContainer.Get(recordSchema);
-                var headerLengths = headerLengthContainer.Get(recordSchema);
+                var headerLengths = new Dictionary<string, int>();
 
                 var targetColumnIndexSet = CheckAndGetTargetColumns(
                     recordSchema,

@@ -1,15 +1,7 @@
-using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-using CLICommonLibrary;
 using CommandLine;
-using ExcelColumnExtractor.Aggregator;
-using ExcelColumnExtractor.Checkers;
-using ExcelColumnExtractor.HeaderProcessors;
-using ExcelColumnExtractor.Scanners;
-using ExcelColumnExtractor.Writers;
 using Microsoft.Extensions.Logging;
-using StaticDataAttribute;
 
 namespace ExcelColumnExtractor;
 
@@ -24,6 +16,9 @@ public class Program
 
     private static void RunOptions(ProgramOptions options)
     {
+        throw new NotImplementedException();
+
+        /*
         var logger = string.IsNullOrEmpty(options.LogPath)
             ? Logger.CreateLoggerWithoutFile<Program>(options.MinLogLevel)
             : Logger.CreateLogger<Program>(options.MinLogLevel, options.LogPath);
@@ -100,6 +95,7 @@ public class Program
 
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(FolderStateScanner), null);
         LogInformation(logger, totalSw.Elapsed.TotalMilliseconds, nameof(ExcelColumnExtractor), null);
+        */
     }
 
     private static Encoding ParseEncoding(string? encoding)

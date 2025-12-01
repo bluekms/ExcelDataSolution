@@ -1,8 +1,6 @@
 using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Extensions;
-using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -24,7 +22,8 @@ public static class GenerateHeaderHandler
             LogError(logger, exception.Message, exception);
             throw exception;
         }
-        else if (recordSchemaCatalog.StaticDataRecordSchemata.Count > 1)
+
+        if (recordSchemaCatalog.StaticDataRecordSchemata.Count > 1)
         {
             LogWarning(logger, "Multiple records found with the specified name. Please provide a more specific name from the following options:", null);
             foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
@@ -36,19 +35,11 @@ public static class GenerateHeaderHandler
         }
 
         var targetRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata.Single();
-        var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
-            targetRecordSchema,
-            recordSchemaCatalog,
-            logger);
-
-        var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
-
-        var results = IniReader.Read(options.LengthIniPath, recordContainerInfo);
-        var iniFileResult = results[targetRecordSchema.RecordName];
+        var headerNameLengths = new Dictionary<string, int>();
         var headers = RecordFlattener.Flatten(
             targetRecordSchema,
             recordSchemaCatalog,
-            iniFileResult.HeaderNameLengths,
+            headerNameLengths,
             logger);
 
         var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(options.Separator, headers)}\n";
