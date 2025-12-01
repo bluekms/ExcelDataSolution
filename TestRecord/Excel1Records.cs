@@ -18,6 +18,6 @@ public sealed record ArraySheet2(
 [StaticDataRecord("Excel1", "SameNameSheet")]
 public sealed record SameNameSheet(string Name, int Score);
 
-[StaticDataRecord("Excel1", "SingleColumnContainerSheet")]
-public sealed record SingleColumnContainerSheet(int Id, [SingleColumnContainer(", ")] ImmutableArray<float> Values);
+[StaticDataRecord("Excel1", "SingleColumnCollectionSheet")]
+public sealed record SingleColumnCollectionSheet(int Id, [SingleColumnCollection(", ")] ImmutableArray<float> Values);
 

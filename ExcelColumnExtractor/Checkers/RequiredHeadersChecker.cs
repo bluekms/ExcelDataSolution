@@ -28,13 +28,11 @@ public static class RequiredHeadersChecker
             try
             {
                 var excelSheetName = sheetNameContainer.Get(recordSchema);
-                var headerLengths = new Dictionary<string, int>();
 
                 var targetColumnIndexSet = CheckAndGetTargetColumns(
                     recordSchema,
                     recordSchemaCatalog,
                     excelSheetName,
-                    headerLengths,
                     logger);
 
                 result.Add(recordSchema, targetColumnIndexSet);
@@ -56,14 +54,12 @@ public static class RequiredHeadersChecker
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetName excelSheetName,
-        IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
         var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
         var standardHeaders = RecordFlattener.Flatten(
             recordSchema,
             recordSchemaCatalog,
-            headerLengths,
             logger);
 
         var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(standardHeaders, sheetHeaders);
