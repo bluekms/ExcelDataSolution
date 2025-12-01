@@ -13,7 +13,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
         var code = @"
             public sealed record Subject(
                 string Name,
-                [Length(3)] ImmutableArray<int> QuarterScore
+                [Length(2)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -21,7 +21,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 string Name,
                 [Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                [Length(3)] ImmutableArray<Subject> SubjectB,
+                [Length(4)] ImmutableArray<Subject> SubjectB
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -32,18 +32,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "SubjectA", 3 },
-            { "SubjectA.QuarterScore", 4 },
-            { "SubjectB", 4 },
-            { "SubjectB.QuarterScore", 2 },
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -51,7 +42,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             testOutputHelper.WriteLine(header);
         }
 
-        Assert.Equal(29, results.Count);
+        Assert.Equal(23, results.Count);
         Assert.Empty(logger.Logs);
     }
 
@@ -61,7 +52,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
         var code = @"
             public sealed record Subject(
                 string Name,
-                [SingleColumnCollection("", "")][Length(3)] ImmutableArray<int> QuarterScore
+                [SingleColumnCollection("", "")][Length(4)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -69,7 +60,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 string Name,
                 [Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                [Length(3)] ImmutableArray<Subject> SubjectB,
+                [Length(4)] ImmutableArray<Subject> SubjectB
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -80,18 +71,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "SubjectA", 3 },
-            { "SubjectA.QuarterScore", 4 },
-            { "SubjectB", 4 },
-            { "SubjectB.QuarterScore", 2 },
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -109,7 +91,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
         var code = @"
             public sealed record Subject(
                 string Name,
-                [SingleColumnCollection("", "")][ColumnName(""QuarterScores"")][Length(3)] ImmutableArray<int> QuarterScore
+                [SingleColumnCollection("", "")][ColumnName(""QuarterScores"")][Length(4)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -117,7 +99,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 string Name,
                 [Length(3)] ImmutableArray<Subject> SubjectA,
                 int Age,
-                [Length(3)] ImmutableArray<Subject> SubjectB,
+                [Length(4)] ImmutableArray<Subject> SubjectB
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -128,18 +110,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "SubjectA", 3 },
-            { "SubjectA.QuarterScore", 4 },
-            { "SubjectB", 4 },
-            { "SubjectB.QuarterScore", 2 },
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -157,7 +130,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
         var code = @"
             public sealed record Subject(
                 [ColumnName(""Bar"")] string Name,
-                [ColumnName(""Scores"")][Length(3)] ImmutableArray<int> QuarterScore
+                [ColumnName(""Scores"")][Length(2)] ImmutableArray<int> QuarterScore
             );
 
             [StaticDataRecord(""Test"", ""TestSheet"")]
@@ -165,7 +138,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
                 string Name,
                 [Length(3)][ColumnName(""SubjectF"")] ImmutableArray<Subject> SubjectA,
                 int Age,
-                [Length(3)]ImmutableArray<Subject> SubjectB,
+                [Length(4)]ImmutableArray<Subject> SubjectB,
             );";
 
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -176,18 +149,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "SubjectF", 3 },
-            { "SubjectF.Scores", 4 },
-            { "SubjectB", 4 },
-            { "SubjectB.Scores", 2 },
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -195,7 +159,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             testOutputHelper.WriteLine(header);
         }
 
-        Assert.Equal(29, results.Count);
+        Assert.Equal(23, results.Count);
         Assert.Empty(logger.Logs);
     }
 
@@ -219,15 +183,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "MyDictionary", 3 },
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -259,15 +217,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "MyDictionary", 3 },
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -285,8 +237,8 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
         var code = @"
             public sealed record Address(string Street, string City);
             public sealed record ContactInfo(string PhoneNumber, string Email);
-            public sealed record Project(string ProjectName, [Length(3)] ImmutableArray<string> TeamMembers, double Budget);
-            public sealed record Department(string DepartmentName, [Length(3)] ImmutableArray<Project> Projects);
+            public sealed record Project(string ProjectName, [Length(6)] ImmutableArray<string> TeamMembers, double Budget);
+            public sealed record Department(string DepartmentName, [Length(2)] ImmutableArray<Project> Projects);
 
             public sealed record Employee(
                 string FullName,
@@ -301,7 +253,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             public sealed record Company(
                 string CompanyName,
                 Address HeadquartersAddress,
-                [Length(3)] FrozenSet<Employee> Employees,
+                [Length(5)] FrozenSet<Employee> Employees,
                 [Length(3)] ImmutableArray<Department> CoreDepartments
             );";
 
@@ -313,21 +265,9 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
 
         var parseResult = SimpleCordParser.Parse(code, logger);
 
-        var collectionLengths = new Dictionary<string, int>
-        {
-            { "Employees", 5 },
-            { "CoreDepartments", 3 },
-            { "Employees.Departments", 2 },
-            { "Employees.Departments.Projects", 4 },
-            { "Employees.Departments.Projects.TeamMembers", 6 },
-            { "CoreDepartments.Projects", 3 },
-            { "CoreDepartments.Projects.TeamMembers", 4 }
-        };
-
         var results = RecordFlattener.Flatten(
             parseResult.RawRecordSchemata[0],
             parseResult.RecordSchemaCatalog,
-            collectionLengths,
             logger);
 
         foreach (var header in results)
@@ -335,7 +275,7 @@ public class RecordSchemaParameterFlattenerTest(ITestOutputHelper testOutputHelp
             testOutputHelper.WriteLine(header);
         }
 
-        Assert.Equal(425, results.Count);
+        Assert.Equal(344, results.Count);
         Assert.Empty(logger.Logs);
     }
 }

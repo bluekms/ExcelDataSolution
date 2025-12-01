@@ -1,9 +1,8 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Extensions;
-using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -29,27 +28,13 @@ public class GenerateAllHeaderHandler
         var sb = new StringBuilder();
         foreach (var targetRecordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
-            var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
-                targetRecordSchema,
-                recordSchemaCatalog,
-                logger);
-
-            var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
-            if (recordContainerInfo.LengthRequiredHeaderNames.Count == 0)
-            {
-                LogTrace(logger, $"No length required header names found for {targetRecordSchema.RecordName.FullName}", null);
-                continue;
-            }
-
-            var results = IniReader.Read(options.LengthIniPath, recordContainerInfo);
-            var iniFileResult = results[targetRecordSchema.RecordName];
             var headers = RecordFlattener.Flatten(
                 targetRecordSchema,
                 recordSchemaCatalog,
-                iniFileResult.HeaderNameLengths,
                 logger);
 
-            var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(options.Separator, headers)}\n";
+            var actualSeparator = Regex.Unescape(options.Separator);
+            var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(actualSeparator, headers)}\n";
             sb.AppendLine(output);
 
             LogInformation(logger, $"\n{output}\n", null);

@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text;
 using ExcelColumnExtractor.Containers;
-using ExcelColumnExtractor.HeaderProcessors;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,6 @@ public static class RequiredHeadersChecker
         IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
         RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetNameContainer sheetNameContainer,
-        HeaderLengthContainer headerLengthContainer,
         ILogger logger)
     {
         var result = new Dictionary<RecordSchema, TargetColumnIndices>(staticDataRecordSchemaList.Count);
@@ -30,13 +28,11 @@ public static class RequiredHeadersChecker
             try
             {
                 var excelSheetName = sheetNameContainer.Get(recordSchema);
-                var headerLengths = headerLengthContainer.Get(recordSchema);
 
                 var targetColumnIndexSet = CheckAndGetTargetColumns(
                     recordSchema,
                     recordSchemaCatalog,
                     excelSheetName,
-                    headerLengths,
                     logger);
 
                 result.Add(recordSchema, targetColumnIndexSet);
@@ -58,14 +54,12 @@ public static class RequiredHeadersChecker
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetName excelSheetName,
-        IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
         var sheetHeaders = SheetHeaderScanner.Scan(excelSheetName, logger);
         var standardHeaders = RecordFlattener.Flatten(
             recordSchema,
             recordSchemaCatalog,
-            headerLengths,
             logger);
 
         var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(standardHeaders, sheetHeaders);

@@ -1,8 +1,7 @@
+using System.Text.RegularExpressions;
 using CLICommonLibrary;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
-using SchemaInfoScanner.Extensions;
-using StaticDataHeaderGenerator.IniHandlers;
 using StaticDataHeaderGenerator.ProgramOptions;
 
 namespace StaticDataHeaderGenerator.OptionHandlers;
@@ -24,34 +23,17 @@ public static class GenerateHeaderHandler
             LogError(logger, exception.Message, exception);
             throw exception;
         }
-        else if (recordSchemaCatalog.StaticDataRecordSchemata.Count > 1)
-        {
-            LogWarning(logger, "Multiple records found with the specified name. Please provide a more specific name from the following options:", null);
-            foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
-            {
-                LogWarning(logger, $"\t{recordSchema.RecordName.FullName}", null);
-            }
 
-            return 0;
-        }
+        var targetRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata
+            .Single(x => x.RecordName.Name == options.RecordName);
 
-        var targetRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata.Single();
-        var lengthRequiredNames = LengthRequiringFieldDetector.Detect(
-            targetRecordSchema,
-            recordSchemaCatalog,
-            logger);
-
-        var recordContainerInfo = new RecordContainerInfo(targetRecordSchema.RecordName, lengthRequiredNames);
-
-        var results = IniReader.Read(options.LengthIniPath, recordContainerInfo);
-        var iniFileResult = results[targetRecordSchema.RecordName];
         var headers = RecordFlattener.Flatten(
             targetRecordSchema,
             recordSchemaCatalog,
-            iniFileResult.HeaderNameLengths,
             logger);
 
-        var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(options.Separator, headers)}\n";
+        var actualSeparator = Regex.Unescape(options.Separator);
+        var output = $"[{targetRecordSchema.RecordName.FullName}]\n{string.Join(actualSeparator, headers)}\n";
         LogInformation(logger, $"\n{output}\n", null);
 
         if (!string.IsNullOrEmpty(options.OutputFileName))

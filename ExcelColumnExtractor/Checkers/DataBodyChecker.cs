@@ -2,7 +2,6 @@ using System.Globalization;
 using System.Text;
 using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.Exceptions;
-using ExcelColumnExtractor.HeaderProcessors;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Schemata;
@@ -15,7 +14,6 @@ public static class DataBodyChecker
         IReadOnlyList<RecordSchema> recordSchemaList,
         RecordSchemaCatalog recordSchemaCatalog,
         ExtractedTableContainer extractedTableContainer,
-        HeaderLengthContainer headerLengthContainer,
         ILogger<Program> logger)
     {
         var sb = new StringBuilder();
