@@ -14,13 +14,11 @@ public static class RecordFlattener
     public static IReadOnlyList<string> Flatten(
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
-        IReadOnlyDictionary<string, int> headerLengths,
         ILogger logger)
     {
         return OnFlatten(
             recordSchema,
             recordSchemaCatalog,
-            headerLengths,
             string.Empty,
             logger);
     }
@@ -28,7 +26,6 @@ public static class RecordFlattener
     private static List<string> OnFlatten(
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
-        IReadOnlyDictionary<string, int> headerLengths,
         string parentPrefix,
         ILogger logger)
     {
@@ -56,7 +53,12 @@ public static class RecordFlattener
                 }
                 else
                 {
-                    var result = FlattenPrimitiveCollection(headerName, headerLengths, logger);
+                    if (!parameter.TryGetAttributeValue<LengthAttribute, int>(out var length))
+                    {
+                        throw new InvalidOperationException($"Parameter {parameter.PropertyName} cannot have LengthAttribute");
+                    }
+
+                    var result = FlattenPrimitiveCollection(headerName, length);
                     headers.AddRange(result);
                 }
             }
@@ -65,13 +67,16 @@ public static class RecordFlattener
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Last();
                 var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
 
-                var length = ParseLength(headerLengths, headerName, logger);
+                if (!parameter.TryGetAttributeValue<LengthAttribute, int>(out var length))
+                {
+                    throw new InvalidOperationException($"Parameter {parameter.PropertyName} cannot have LengthAttribute");
+                }
+
                 for (var i = 0; i < length; ++i)
                 {
                     var innerFlattenResult = OnFlatten(
                         innerRecordSchema,
                         recordSchemaCatalog,
-                        headerLengths,
                         $"{headerName}[{i}]",
                         logger);
 
@@ -83,13 +88,16 @@ public static class RecordFlattener
                 var typeArgument = (INamedTypeSymbol)parameter.NamedTypeSymbol.TypeArguments.Single();
                 var innerRecordSchema = recordSchemaCatalog.Find(typeArgument);
 
-                var length = ParseLength(headerLengths, headerName, logger);
+                if (!parameter.TryGetAttributeValue<LengthAttribute, int>(out var length))
+                {
+                    throw new InvalidOperationException($"Parameter {parameter.PropertyName} cannot have LengthAttribute");
+                }
+
                 for (var i = 0; i < length; ++i)
                 {
                     var innerFlattenResult = OnFlatten(
                         innerRecordSchema,
                         recordSchemaCatalog,
-                        headerLengths,
                         $"{headerName}[{i}]",
                         logger);
 
@@ -103,7 +111,6 @@ public static class RecordFlattener
                 var innerFlatten = OnFlatten(
                     innerRecordSchema,
                     recordSchemaCatalog,
-                    headerLengths,
                     headerName,
                     logger);
 
@@ -116,12 +123,10 @@ public static class RecordFlattener
 
     private static List<string> FlattenPrimitiveCollection(
         string headerName,
-        IReadOnlyDictionary<string, int> collectionLengths,
-        ILogger logger)
+        int length)
     {
         var headers = new List<string>();
 
-        var length = ParseLength(collectionLengths, headerName, logger);
         for (var i = 0; i < length; ++i)
         {
             headers.Add($"{headerName}[{i}]");
