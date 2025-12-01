@@ -6,15 +6,15 @@ using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTests;
+namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTests.NullableTypes;
 
-public class SetTypeTests(ITestOutputHelper testOutputHelper)
+public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void PrimitiveSetTest()
+    public void PrimitiveArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,15 +22,14 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [Length(4)]
-                         FrozenSet<int> Property,
+                         [Length(3)][NullString("-")] ImmutableArray<int?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "42", "0", "-7" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var data = new[] { "1", "42", "-", "-7" };
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -44,79 +43,10 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void PrimitiveSetDuplicationFailTest()
+    public void EnumArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [Length(4)]
-                         FrozenSet<int> Property,
-                     );
-                     """;
-
-        var catalogs = CreateCatalogs(code, logger);
-
-        var data = new[] { "1", "0", "-7", "-7" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
-
-        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
-        {
-            foreach (var propertySchema in recordSchema.PropertySchemata)
-            {
-                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
-            }
-        }
-
-        Assert.Single(logger.Logs);
-    }
-
-    [Fact]
-    public void EnumSetTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     public enum MyEnum { A, a, C }
-
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [Length(2)]
-                         FrozenSet<MyEnum> Property,
-                     );
-                     """;
-
-        var catalogs = CreateCatalogs(code, logger);
-
-        var data = new[] { "a", "A" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data, 0);
-
-        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
-        {
-            foreach (var propertySchema in recordSchema.PropertySchemata)
-            {
-                propertySchema.CheckCompatibility(context);
-            }
-        }
-
-        Assert.Empty(logger.Logs);
-    }
-
-    [Fact]
-    public void EnumSetDuplicationFailTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -126,33 +56,31 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [Length(3)]
-                         FrozenSet<MyEnum> Property,
+                         [Length(3)][NullString("-")] ImmutableArray<MyEnum?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "C", "A", "A" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var data = new[] { "B", "A", "-" };
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
-                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
-        Assert.Single(logger.Logs);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
-    public void DateTimeSetTest()
+    public void DateTimeArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -161,15 +89,16 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         [Length(2)]
-                         FrozenSet<DateTime> Property,
+                         [NullString("-")]
+                         [Length(3)]
+                         ImmutableArray<DateTime?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var data = new[] { "-", "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -183,10 +112,10 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void TimeSpanSetTest()
+    public void TimeSpanArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -195,15 +124,16 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [TimeSpanFormat("c")]
+                         [NullString("-")]
                          [Length(2)]
-                         FrozenSet<TimeSpan> Property,
+                         ImmutableArray<TimeSpan?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
 
         var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -217,10 +147,10 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnSetTest()
+    public void SingleColumnArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -228,13 +158,14 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
+                         [NullString("")]
                          [SingleColumnCollection(", ")]
-                         FrozenSet<int> Property,
+                         ImmutableArray<int?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["1, 42, 0, -7"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["1, 42, , -7"]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -248,25 +179,27 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnWithLengthSetTest()
+    public void SingleColumnEnumArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
 
         var code = $$"""
+                     public enum MyEnum { A, B, C }
+
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [SingleColumnCollection(", ")]
-                         [Length(4)]
-                         FrozenSet<int> Property,
+                         [NullString("")]
+                         ImmutableArray<MyEnum?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["1, 42, 0, -7"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["C, A, "]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -280,10 +213,10 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void SingleColumnSetDuplicationFailTest()
+    public void SingleColumnDateTimeArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<SetTypeTests>() is not TestOutputLogger<SetTypeTests> logger)
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -292,23 +225,57 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          [SingleColumnCollection(", ")]
-                         FrozenSet<int> Property,
+                         [NullString("")]
+                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         ImmutableArray<DateTime?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["-7, 42, 0, -7"]);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, [", 1986-05-26 01:05:00.000, 1993-12-28 01:05:00.000"]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
-                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                propertySchema.CheckCompatibility(context);
             }
         }
 
-        Assert.Single(logger.Logs);
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public void SingleColumnTimeSpanArrayTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<ArrayTypeTests>() is not TestOutputLogger<ArrayTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [SingleColumnCollection(", ")]
+                         [TimeSpanFormat("c")]
+                         [NullString("")]
+                         ImmutableArray<TimeSpan?> Property,
+                     );
+                     """;
+
+        var catalogs = CreateCatalogs(code, logger);
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, ["1.02:03:04.5670000, , 2.02:03:04.5670000"]);
+
+        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
+        {
+            foreach (var propertySchema in recordSchema.PropertySchemata)
+            {
+                propertySchema.CheckCompatibility(context);
+            }
+        }
+
+        Assert.Empty(logger.Logs);
     }
 
     private record Catalogs(
