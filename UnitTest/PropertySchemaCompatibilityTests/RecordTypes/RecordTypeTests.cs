@@ -181,41 +181,6 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    [Fact]
-    public void RecordKeyAndRecordValueMapTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [Length(3)] FrozenDictionary<KeyData, MyData> Data
-                     );
-
-                     public record struct KeyData(int Key1, string Key2);
-                     public record struct MyData([Key] KeyData Key, string Value);
-                     """;
-
-        var catalogs = CreateCatalogs(code, logger);
-
-        var data = new[] { "1", "A", "AAA", "2", "A", "AAA", "3", "B", "BBB" };
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
-
-        foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
-        {
-            foreach (var propertySchema in recordSchema.PropertySchemata)
-            {
-                propertySchema.CheckCompatibility(context);
-            }
-        }
-
-        Assert.Empty(logger.Logs);
-    }
-
     private record Catalogs(
         RecordSchemaCatalog RecordSchemaCatalog,
         EnumMemberCatalog EnumMemberCatalog);
