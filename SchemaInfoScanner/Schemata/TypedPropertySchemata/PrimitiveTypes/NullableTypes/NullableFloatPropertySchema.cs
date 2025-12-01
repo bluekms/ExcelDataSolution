@@ -16,7 +16,7 @@ public sealed record NullableFloatPropertySchema(
         var result = NullStringAttributeChecker.Check(this, context.Current);
         if (result.IsNull)
         {
-            context.CollectNull();
+            context.ConsumeNull();
         }
         else
         {

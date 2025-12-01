@@ -20,7 +20,7 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
             var result = NullStringAttributeChecker.Check(this, argument);
             if (result.IsNull)
             {
-                context.CollectNull();
+                context.ConsumeNull();
             }
             else
             {

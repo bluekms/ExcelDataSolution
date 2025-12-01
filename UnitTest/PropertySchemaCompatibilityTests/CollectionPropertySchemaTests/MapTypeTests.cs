@@ -25,7 +25,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
     [InlineData("uint", new[] { "4294967295", "4,294,967,290", "0" })]
     [InlineData("ulong", new[] { "0", "18,446,744,073,709,551,615", "18446744073709551610" })]
     [InlineData("ushort", new[] { "65535", "0", "65,530" })]
-    public void PrimitiveKeyDictionaryTest(string keyType, string[] keys)
+    public void PrimitiveKeyMapTest(string keyType, string[] keys)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
@@ -93,7 +93,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void EnumKeyDictionaryTest()
+    public void EnumKeyMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
@@ -164,7 +164,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void DateTimeKeyDictionaryTest()
+    public void DateTimeKeyMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
@@ -198,7 +198,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void TimeSpanKeyDictionaryTest()
+    public void TimeSpanKeyMapTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
@@ -233,7 +233,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
     [Theory]
     [InlineData("sbyte", new[] { "0", "1", "2", "3" }, new[] { "Hello", "", "World", "!" })]
-    public void PrimitiveKeyNullablePrimitiveValueDictionaryTest(string keyType, string[] keys, string[] values)
+    public void PrimitiveKeyNullablePrimitiveValueMapTest(string keyType, string[] keys, string[] values)
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
