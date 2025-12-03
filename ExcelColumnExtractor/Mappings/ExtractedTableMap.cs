@@ -1,9 +1,9 @@
 using ExcelColumnExtractor.Aggregator;
 using SchemaInfoScanner.Schemata;
 
-namespace ExcelColumnExtractor.Containers;
+namespace ExcelColumnExtractor.Mappings;
 
-public sealed class ExtractedTableContainer(
+public sealed class ExtractedTableMap(
     IReadOnlyDictionary<RecordSchema, BodyColumnAggregator.ExtractedTable> extractedTables)
 {
     public IEnumerable<KeyValuePair<RecordSchema, BodyColumnAggregator.ExtractedTable>> SortedTables =>

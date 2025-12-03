@@ -1,6 +1,6 @@
 using System.Text;
 using ExcelColumnExtractor.Aggregator;
-using ExcelColumnExtractor.Containers;
+using ExcelColumnExtractor.Mappings;
 
 namespace ExcelColumnExtractor.Writers;
 
@@ -12,9 +12,9 @@ public static class CsvWriter
     public static void Write(
         string path,
         Encoding encoding,
-        ExtractedTableContainer extractedTableContainer)
+        ExtractedTableMap extractedTableMap)
     {
-        foreach (var (recordSchema, table) in extractedTableContainer.SortedTables)
+        foreach (var (recordSchema, table) in extractedTableMap.SortedTables)
         {
             var fileName = Path.Combine(path, $"{recordSchema.RecordName.FullName}.csv");
             var sb = new StringBuilder();

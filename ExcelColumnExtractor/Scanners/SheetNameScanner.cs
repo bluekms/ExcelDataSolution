@@ -1,4 +1,4 @@
-using ExcelColumnExtractor.Containers;
+using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.NameObjects;
 using ExcelDataReader;
 using Microsoft.Extensions.Logging;
@@ -7,7 +7,7 @@ namespace ExcelColumnExtractor.Scanners;
 
 public static class SheetNameScanner
 {
-    public static ExcelSheetNameContainer Scan(string excelPath, ILogger logger)
+    public static ExcelSheetNameMap Scan(string excelPath, ILogger logger)
     {
         var sheetNames = new Dictionary<string, ExcelSheetName>();
 

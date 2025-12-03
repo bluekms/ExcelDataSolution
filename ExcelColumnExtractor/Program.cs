@@ -1,7 +1,14 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using CLICommonLibrary;
 using CommandLine;
+using ExcelColumnExtractor.Aggregator;
+using ExcelColumnExtractor.Checkers;
+using ExcelColumnExtractor.Scanners;
+using ExcelColumnExtractor.Writers;
 using Microsoft.Extensions.Logging;
+using StaticDataAttribute;
 
 namespace ExcelColumnExtractor;
 
@@ -16,9 +23,6 @@ public class Program
 
     private static void RunOptions(ProgramOptions options)
     {
-        throw new NotImplementedException();
-
-        /*
         var logger = string.IsNullOrEmpty(options.LogPath)
             ? Logger.CreateLoggerWithoutFile<Program>(options.MinLogLevel)
             : Logger.CreateLogger<Program>(options.MinLogLevel, options.LogPath);
@@ -39,43 +43,30 @@ public class Program
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RecordScanner), null);
 
         sw.Restart();
-        var sheetNameContainer = SheetNameScanner.Scan(options.ExcelPath, logger);
+        var sheetNameMap = SheetNameScanner.Scan(options.ExcelPath, logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(SheetNameScanner), null);
 
-        sw.Restart();
-        var headerLengthContainer = HeaderLengthBuilder.Build(
+        var targetColumnIndicesCollection = RequiredHeadersChecker.Check(
             recordSchemaCatalog.StaticDataRecordSchemata,
             recordSchemaCatalog,
-            sheetNameContainer,
-            logger);
-        LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(HeaderLengthBuilder), null);
-
-        sw.Restart();
-
-        var targetColumnIndicesContainer = RequiredHeadersChecker.Check(
-            recordSchemaCatalog.StaticDataRecordSchemata,
-            recordSchemaCatalog,
-            sheetNameContainer,
-            headerLengthContainer,
+            sheetNameMap,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RequiredHeadersChecker), null);
 
         sw.Restart();
-        var extractedTableContainer = BodyColumnAggregator.Aggregate(
+        var extractedTableCollection = BodyColumnAggregator.Aggregate(
             recordSchemaCatalog.StaticDataRecordSchemata,
-            sheetNameContainer,
-            targetColumnIndicesContainer,
+            sheetNameMap,
+            targetColumnIndicesCollection,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(BodyColumnAggregator), null);
 
         sw.Restart();
 
-        // use length
         DataBodyChecker.Check(
             recordSchemaCatalog.StaticDataRecordSchemata,
             recordSchemaCatalog,
-            extractedTableContainer,
-            headerLengthContainer,
+            extractedTableCollection,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
 
@@ -83,7 +74,7 @@ public class Program
         CsvWriter.Write(
             CheckAndCreateOutputDirectory(options, logger),
             ParseEncoding(options.Encoding),
-            extractedTableContainer);
+            extractedTableCollection);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(CsvWriter), null);
 
         sw.Restart();
@@ -95,7 +86,6 @@ public class Program
 
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(FolderStateScanner), null);
         LogInformation(logger, totalSw.Elapsed.TotalMilliseconds, nameof(ExcelColumnExtractor), null);
-        */
     }
 
     private static Encoding ParseEncoding(string? encoding)
@@ -123,18 +113,16 @@ public class Program
         {
             Directory.CreateDirectory(path);
         }
-        else
+
+        if (options.Version is not null &&
+            !options.Version.Equals("Test", StringComparison.OrdinalIgnoreCase))
         {
-            if (options.Version is not null &&
-                !options.Version.Equals("Test", StringComparison.OrdinalIgnoreCase))
+            var fileCount = Directory.GetFiles(path).Length;
+            if (fileCount > 0)
             {
-                var fileCount = Directory.GetFiles(path).Length;
-                if (fileCount > 0)
-                {
-                    var exception = new ArgumentException($"The directory already exists and contains {fileCount} files.");
-                    LogError(logger, exception.Message, exception);
-                    throw exception;
-                }
+                var exception = new ArgumentException($"The directory already exists and contains {fileCount} files.");
+                LogError(logger, exception.Message, exception);
+                throw exception;
             }
         }
 

@@ -4,9 +4,9 @@ using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
 using StaticDataAttribute;
 
-namespace ExcelColumnExtractor.Containers;
+namespace ExcelColumnExtractor.Mappings;
 
-public sealed class ExcelSheetNameContainer(IReadOnlyDictionary<string, ExcelSheetName> sheetNames)
+public sealed class ExcelSheetNameMap(IReadOnlyDictionary<string, ExcelSheetName> sheetNames)
 {
     public int Count => sheetNames.Count;
 

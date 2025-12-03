@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text;
-using ExcelColumnExtractor.Containers;
+using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -12,24 +12,24 @@ namespace ExcelColumnExtractor.Checkers;
 
 public static class RequiredHeadersChecker
 {
-    public sealed record TargetColumnIndices(IReadOnlyList<string> Headers, IReadOnlySet<int> IndexSet);
+    public sealed record RequiredHeaderMapping(IReadOnlyList<string> SheetHeaders, IReadOnlySet<int> SheetHeaderIndexSet);
 
-    public static TargetColumnIndicesContainer Check(
+    public static RequiredHeaderMap Check(
         IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
         RecordSchemaCatalog recordSchemaCatalog,
-        ExcelSheetNameContainer sheetNameContainer,
+        ExcelSheetNameMap sheetNameMap,
         ILogger logger)
     {
-        var result = new Dictionary<RecordSchema, TargetColumnIndices>(staticDataRecordSchemaList.Count);
+        var result = new Dictionary<RecordSchema, RequiredHeaderMapping>(staticDataRecordSchemaList.Count);
 
         var sb = new StringBuilder();
         foreach (var recordSchema in staticDataRecordSchemaList)
         {
             try
             {
-                var excelSheetName = sheetNameContainer.Get(recordSchema);
+                var excelSheetName = sheetNameMap.Get(recordSchema);
 
-                var targetColumnIndexSet = CheckAndGetTargetColumns(
+                var targetColumnIndexSet = ResolveRequiredHeaderMapping(
                     recordSchema,
                     recordSchemaCatalog,
                     excelSheetName,
@@ -50,7 +50,7 @@ public static class RequiredHeadersChecker
             : new(result);
     }
 
-    private static TargetColumnIndices CheckAndGetTargetColumns(
+    private static RequiredHeaderMapping ResolveRequiredHeaderMapping(
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetName excelSheetName,
@@ -62,24 +62,24 @@ public static class RequiredHeadersChecker
             recordSchemaCatalog,
             logger);
 
-        var targetColumnIndexSet = CheckAndGetTargetHeaderIndexSet(standardHeaders, sheetHeaders);
-        var targetHeaders = targetColumnIndexSet.Select(index => sheetHeaders[index]).ToList();
-        if (targetHeaders.Count != targetColumnIndexSet.Count)
+        var targetColumnIndexSet = ComputeRequiredHeaderIndices(standardHeaders, sheetHeaders);
+        var requiredSheetHeaders = targetColumnIndexSet.Select(index => sheetHeaders[index]).ToList();
+        if (requiredSheetHeaders.Count != targetColumnIndexSet.Count)
         {
             var sb = new StringBuilder();
             sb.AppendLine(CultureInfo.InvariantCulture, $"Header and index count mismatch.");
-            sb.AppendLine(CultureInfo.InvariantCulture, $"Headers: {{ {string.Join(", ", targetHeaders)} }}");
+            sb.AppendLine(CultureInfo.InvariantCulture, $"Headers: {{ {string.Join(", ", requiredSheetHeaders)} }}");
             sb.AppendLine(CultureInfo.InvariantCulture, $"IndexSet: {{ {string.Join(", ", targetColumnIndexSet)} }}");
 
             throw new ArgumentException(sb.ToString());
         }
 
-        return new(targetHeaders, targetColumnIndexSet);
+        return new(requiredSheetHeaders, targetColumnIndexSet);
     }
 
-    private static HashSet<int> CheckAndGetTargetHeaderIndexSet(IReadOnlyList<string> standardHeaders, IReadOnlyList<string> sheetHeaders)
+    private static HashSet<int> ComputeRequiredHeaderIndices(IReadOnlyList<string> standardHeaders, IReadOnlyList<string> sheetHeaders)
     {
-        var targetHeaderIndexSet = new HashSet<int>();
+        var requiredHeaderIndices = new HashSet<int>();
         foreach (var standardHeader in standardHeaders)
         {
             var index = CaseInsensitiveIndexOf(sheetHeaders, standardHeader);
@@ -98,10 +98,10 @@ public static class RequiredHeadersChecker
                 throw new ArgumentException($"Header case sensitivity: {standardHeader}");
             }
 
-            targetHeaderIndexSet.Add(index);
+            requiredHeaderIndices.Add(index);
         }
 
-        return targetHeaderIndexSet;
+        return requiredHeaderIndices;
     }
 
     private static int CaseInsensitiveIndexOf(IReadOnlyList<string> list, string value)

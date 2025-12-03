@@ -1,6 +1,3 @@
-[ ] DataBodyChecker 완성
-[ ] 유닛테스트 작성
-
 # ExcelColumnExtractor
 
 1. C#코드를 기반으로 스키마를 파악

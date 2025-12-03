@@ -1,6 +1,6 @@
 using System.Text;
-using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.Exceptions;
+using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata;
@@ -13,10 +13,10 @@ public static class BodyColumnAggregator
 
     public sealed record ExtractedTable(IReadOnlyList<string> Headers, IReadOnlyList<ExtractedRow> Rows);
 
-    public static ExtractedTableContainer Aggregate(
+    public static ExtractedTableMap Aggregate(
         IReadOnlyList<RecordSchema> recordSchemaList,
-        ExcelSheetNameContainer sheetNameContainer,
-        TargetColumnIndicesContainer targetColumnIndicesContainer,
+        ExcelSheetNameMap sheetNameMap,
+        RequiredHeaderMap requiredHeaderMap,
         ILogger logger)
     {
         var result = new Dictionary<RecordSchema, ExtractedTable>();
@@ -26,17 +26,17 @@ public static class BodyColumnAggregator
         {
             try
             {
-                var excelSheetName = sheetNameContainer.Get(recordSchema);
+                var excelSheetName = sheetNameMap.Get(recordSchema);
                 var sheetBody = SheetBodyScanner.Scan(excelSheetName, logger);
-                var targetColumnData = targetColumnIndicesContainer.Get(recordSchema);
+                var targetColumnData = requiredHeaderMap.Get(recordSchema);
 
                 var filteredRows = sheetBody.Rows
                     .Select(row => new ExtractedRow(row.Data
-                        .Where((_, index) => targetColumnData.IndexSet.Contains(index))
+                        .Where((_, index) => targetColumnData.SheetHeaderIndexSet.Contains(index))
                         .ToList()))
                     .ToList();
 
-                result.Add(recordSchema, new(targetColumnData.Headers, filteredRows));
+                result.Add(recordSchema, new(targetColumnData.SheetHeaders, filteredRows));
             }
             catch (Exception e)
             {
