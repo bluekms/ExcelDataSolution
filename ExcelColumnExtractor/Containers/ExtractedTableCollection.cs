@@ -3,7 +3,7 @@ using SchemaInfoScanner.Schemata;
 
 namespace ExcelColumnExtractor.Containers;
 
-public sealed class ExtractedTableContainer(
+public sealed class ExtractedTableCollection(
     IReadOnlyDictionary<RecordSchema, BodyColumnAggregator.ExtractedTable> extractedTables)
 {
     public IEnumerable<KeyValuePair<RecordSchema, BodyColumnAggregator.ExtractedTable>> SortedTables =>
