@@ -1,9 +1,9 @@
 using ExcelColumnExtractor.Checkers;
 using SchemaInfoScanner.Schemata;
 
-namespace ExcelColumnExtractor.Containers;
+namespace ExcelColumnExtractor.Mappings;
 
-public class RequiredHeaderMappingCollection(
+public class RequiredHeaderMap(
     IReadOnlyDictionary<RecordSchema, RequiredHeadersChecker.RequiredHeaderMapping> targetColumnIndices)
 {
     public RequiredHeadersChecker.RequiredHeaderMapping Get(RecordSchema rawRecordSchema)

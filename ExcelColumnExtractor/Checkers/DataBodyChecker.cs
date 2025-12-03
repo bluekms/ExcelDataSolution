@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
-using ExcelColumnExtractor.Containers;
 using ExcelColumnExtractor.Exceptions;
+using ExcelColumnExtractor.Mappings;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Schemata;
@@ -13,14 +13,21 @@ public static class DataBodyChecker
     public static void Check(
         IReadOnlyList<RecordSchema> recordSchemaList,
         RecordSchemaCatalog recordSchemaCatalog,
-        ExtractedTableContainer extractedTableContainer,
+        ExtractedTableMap extractedTableMap,
         ILogger<Program> logger)
     {
         var sb = new StringBuilder();
+
+        // 스키마 순회
         foreach (var recordSchema in recordSchemaList)
         {
             try
             {
+                // 프로퍼티 순회
+                foreach (var propertySchema in recordSchema.PropertySchemata)
+                {
+                    // 레코드 순회?
+                }
             }
             catch (Exception e)
             {
