@@ -17,7 +17,11 @@ public sealed record DecimalPropertySchema(
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var cell = context.Consume();
-        var value = decimal.Parse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture);
+
+        if (!decimal.TryParse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

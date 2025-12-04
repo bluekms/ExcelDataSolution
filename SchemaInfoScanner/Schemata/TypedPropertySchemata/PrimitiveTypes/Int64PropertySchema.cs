@@ -17,7 +17,11 @@ public sealed record Int64PropertySchema(
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var cell = context.Consume();
-        var value = long.Parse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture);
+
+        if (!long.TryParse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

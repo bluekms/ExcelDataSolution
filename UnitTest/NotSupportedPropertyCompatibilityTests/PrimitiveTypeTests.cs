@@ -86,7 +86,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                     catalogs.EnumMemberCatalog,
                     cells);
 
-                var ex = Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex, ex.Message);
             }
         }

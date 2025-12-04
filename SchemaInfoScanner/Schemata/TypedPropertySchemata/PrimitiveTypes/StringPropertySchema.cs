@@ -21,8 +21,7 @@ public sealed record StringPropertySchema(
         {
             if (!Regex.IsMatch(cell.Value, pattern))
             {
-                throw new InvalidOperationException(
-                    $"The value '{cell.Value}' in cell {cell.Address} does not match the required pattern.");
+                throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}. Expected to match pattern '{pattern}'.");
             }
         }
 

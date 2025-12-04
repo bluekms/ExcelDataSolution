@@ -17,10 +17,15 @@ public sealed record DoublePropertySchema(
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var cell = context.Consume();
-        var value = double.Parse(
-            cell.Value,
-            NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,
-            CultureInfo.InvariantCulture);
+
+        if (!double.TryParse(
+                cell.Value,
+                NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,
+                CultureInfo.InvariantCulture,
+                out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

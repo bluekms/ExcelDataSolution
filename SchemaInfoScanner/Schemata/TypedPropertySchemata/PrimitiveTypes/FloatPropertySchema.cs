@@ -24,8 +24,7 @@ public sealed record FloatPropertySchema(
                 CultureInfo.InvariantCulture,
                 out var value))
         {
-            throw new InvalidOperationException(
-                $"The value '{cell.Value}' in cell {cell.Address} is not a valid float.");
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
         }
 
         if (this.HasAttribute<RangeAttribute>())

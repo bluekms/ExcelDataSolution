@@ -20,7 +20,7 @@ public sealed record EnumPropertySchema(
         if (!enumMembers.Contains(value))
         {
             throw new InvalidOperationException(
-                $"The value '{value}' in cell {cell.Address} is not a valid member of {enumName.FullName}.");
+                $"Invalid value '{cell.Value}' in cell {cell.Address}. Expected a member of {enumName.FullName}.");
         }
 
         context.Collect(value);
