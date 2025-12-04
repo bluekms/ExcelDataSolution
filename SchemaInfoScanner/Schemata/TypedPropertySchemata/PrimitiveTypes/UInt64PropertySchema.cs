@@ -16,8 +16,12 @@ public sealed record UInt64PropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = ulong.Parse(argument, NumberStyles.Number, CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+
+        if (!ulong.TryParse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

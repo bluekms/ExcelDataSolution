@@ -14,13 +14,15 @@ public sealed record SingleColumnNullablePrimitiveSetPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.Consume().Split(Separator);
+        var cell = context.Consume();
+        var arguments = cell.Value.Split(Separator);
 
         if (TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
             if (arguments.Length != length)
             {
-                throw new InvalidOperationException($"{PropertyName} has {nameof(LengthAttribute)} ({length}). but context length ({arguments.Length}).");
+                throw new InvalidOperationException(
+                    $"Cell {cell.Address} contains {arguments.Length} value(s), but {PropertyName} expects {length}.");
             }
         }
 
@@ -29,7 +31,11 @@ public sealed record SingleColumnNullablePrimitiveSetPropertySchema(
             var result = NullStringAttributeChecker.Check(this, argument);
             if (!result.IsNull)
             {
-                var nestedContext = CompatibilityContext.CreateCollectAll(context.EnumMemberCatalog, [argument]);
+                var nestedCells = new[] { new CellData(cell.Address, argument) };
+                var nestedContext = CompatibilityContext.CreateCollectAll(
+                    context.EnumMemberCatalog,
+                    nestedCells);
+
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }

@@ -14,26 +14,33 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.Consume().Split(Separator);
+        var cell = context.Consume();
+        var parts = cell.Value.Split(Separator);
 
         if (TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            if (arguments.Length != length)
+            if (parts.Length != length)
             {
-                throw new InvalidOperationException($"{PropertyName} has {nameof(LengthAttribute)} ({length}). but context length ({arguments.Length}).");
+                throw new InvalidOperationException(
+                    $"Cell {cell.Address} contains {parts.Length} value(s), but {PropertyName} expects {length}.");
             }
         }
 
-        foreach (var argument in arguments)
+        foreach (var part in parts)
         {
-            var result = NullStringAttributeChecker.Check(this, argument);
+            var result = NullStringAttributeChecker.Check(this, part);
+
             if (result.IsNull)
             {
                 context.ConsumeNull();
             }
             else
             {
-                var nestedContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, [argument]);
+                var nestedCells = new[] { new CellData(cell.Address, part) };
+                var nestedContext = CompatibilityContext.CreateNoCollect(
+                    context.EnumMemberCatalog,
+                    nestedCells);
+
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
             }
         }

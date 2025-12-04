@@ -13,52 +13,52 @@ public sealed class CompatibilityContext
 
     private CompatibilityContext(
         EnumMemberCatalog enumMemberCatalog,
-        IReadOnlyList<string> arguments,
+        IReadOnlyList<CellData> cells,
         CollectMode collectMode,
         int startPosition = 0)
     {
         EnumMemberCatalog = enumMemberCatalog;
-        Arguments = arguments;
+        Cells = cells;
         this.collectMode = collectMode;
         Position = startPosition;
     }
 
     public static CompatibilityContext CreateNoCollect(
         EnumMemberCatalog enumMemberCatalog,
-        IReadOnlyList<string> arguments,
+        IReadOnlyList<CellData> cells,
         int startPosition = 0)
-        => new(enumMemberCatalog, arguments, CollectMode.None, startPosition);
+        => new(enumMemberCatalog, cells, CollectMode.None, startPosition);
 
     public static CompatibilityContext CreateCollectAll(
         EnumMemberCatalog enumMemberCatalog,
-        IReadOnlyList<string> arguments,
+        IReadOnlyList<CellData> cells,
         int startPosition = 0)
-        => new(enumMemberCatalog, arguments, CollectMode.All, startPosition);
+        => new(enumMemberCatalog, cells, CollectMode.All, startPosition);
 
     public static CompatibilityContext CreateCollectKey(
         EnumMemberCatalog enumMemberCatalog,
-        IReadOnlyList<string> arguments,
+        IReadOnlyList<CellData> cells,
         int startPosition = 0)
-        => new(enumMemberCatalog, arguments, CollectMode.KeyOnly, startPosition);
+        => new(enumMemberCatalog, cells, CollectMode.KeyOnly, startPosition);
 
     public EnumMemberCatalog EnumMemberCatalog { get; }
-    public IReadOnlyList<string> Arguments { get; }
+    public IReadOnlyList<CellData> Cells { get; } // TODO : ImmutableArray
     public int Position { get; private set; }
     private readonly CollectMode collectMode;
     private readonly List<object?> duplicateCandidates = new();
     private readonly List<object?> keyScopeComponents = new();
     private bool isKeyScope;
 
-    public string Current => Arguments[Position];
+    public CellData Current => Cells[Position];
 
-    public string Consume()
+    public CellData Consume()
     {
-        if (Position >= Arguments.Count)
+        if (Position >= Cells.Count)
         {
             throw new InvalidOperationException($"StartIndex {Position} is out of range for the provided arguments.");
         }
 
-        return Arguments[Position++];
+        return Cells[Position++];
     }
 
     public void Collect(object? key)
@@ -158,7 +158,7 @@ public sealed class CompatibilityContext
 
     public override string ToString()
     {
-        return $"CompatibilityContext[{string.Join(", ", Arguments)}]";
+        return $"CompatibilityContext[{string.Join(", ", Cells)}]";
     }
 
     private sealed class RecordKey(object?[] values)

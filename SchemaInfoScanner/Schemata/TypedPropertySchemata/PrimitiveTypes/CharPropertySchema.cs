@@ -15,8 +15,12 @@ public sealed record CharPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = char.Parse(argument);
+        var cell = context.Consume();
+
+        if (!char.TryParse(cell.Value, out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

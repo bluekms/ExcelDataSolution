@@ -30,8 +30,15 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "42", "-", "-7" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "42"),
+            new CellData("A3", "-"),
+            new CellData("A4", "-7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -64,15 +71,23 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "-", "42", "-", "-7" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "-"),
+            new CellData("A3", "42"),
+            new CellData("A4", "-"),
+            new CellData("A5", "-7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                logger.LogError(ex, ex.Message);
             }
         }
 
@@ -101,8 +116,14 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "B", "A", "-" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "B"),
+            new CellData("A2", "A"),
+            new CellData("A3", "-")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -136,7 +157,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "-", "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
+        var data = new[]
+        {
+            new CellData("A1", "-"),
+            new CellData("A2", "1986-05-26 01:05:00.000"),
+            new CellData("A3", "1993-12-28 01:05:00.000")
+        };
+
         var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
@@ -171,8 +198,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data, 0);
+        var cells = new[]
+        {
+            new CellData("A1", "1.02:03:04.5670000"),
+            new CellData("A2", "2.02:03:04.5670000")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -204,7 +236,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["1, 42, , -7"]);
+
+        var cells = new[]
+        {
+            new CellData("A1", "1, 42, , -7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -238,7 +276,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["C, A, "]);
+
+        var cells = new[]
+        {
+            new CellData("A1", "C, A, ")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -271,7 +315,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, [", 1986-05-26 01:05:00.000, 1993-12-28 01:05:00.000"]);
+
+        var cells = new[]
+        {
+            new CellData("A1", ", 1986-05-26 01:05:00.000, 1993-12-28 01:05:00.000")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -304,7 +354,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["1.02:03:04.5670000, , 2.02:03:04.5670000"]);
+
+        var cells = new[]
+        {
+            new CellData("A1", "1.02:03:04.5670000, , 2.02:03:04.5670000")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

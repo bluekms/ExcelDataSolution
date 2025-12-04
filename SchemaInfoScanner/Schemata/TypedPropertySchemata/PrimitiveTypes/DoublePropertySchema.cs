@@ -16,11 +16,16 @@ public sealed record DoublePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = double.Parse(
-            argument,
-            NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,
-            CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+
+        if (!double.TryParse(
+                cell.Value,
+                NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,
+                CultureInfo.InvariantCulture,
+                out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

@@ -14,12 +14,15 @@ public sealed record EnumPropertySchema(
         var enumName = new EnumName(NamedTypeSymbol.Name);
         var enumMembers = context.EnumMemberCatalog.GetEnumMembers(enumName);
 
-        var argument = context.Consume();
-        if (!enumMembers.Contains(argument))
+        var cell = context.Consume();
+        var value = cell.Value;
+
+        if (!enumMembers.Contains(value))
         {
-            throw new InvalidOperationException($"{context} is not a member of {enumName.FullName}");
+            throw new InvalidOperationException(
+                $"Invalid value '{cell.Value}' in cell {cell.Address}. Expected a member of {enumName.FullName}.");
         }
 
-        context.Collect(argument);
+        context.Collect(value);
     }
 }

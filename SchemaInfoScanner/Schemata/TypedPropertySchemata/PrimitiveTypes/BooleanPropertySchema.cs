@@ -12,9 +12,13 @@ public sealed record BooleanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
+        var cell = context.Consume();
 
-        var value = bool.Parse(argument);
+        if (!bool.TryParse(cell.Value, out var value))
+        {
+            throw new InvalidOperationException($"Invalid value '{cell.Value}' in cell {cell.Address}.");
+        }
+
         context.Collect(value);
     }
 }
