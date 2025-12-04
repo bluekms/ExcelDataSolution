@@ -84,7 +84,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                logger.LogError(ex, ex.Message);
             }
         }
 
@@ -166,7 +166,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                logger.LogError(ex, ex.Message);
             }
         }
 
@@ -357,7 +357,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                logger.LogError(ex, ex.Message);
             }
         }
 

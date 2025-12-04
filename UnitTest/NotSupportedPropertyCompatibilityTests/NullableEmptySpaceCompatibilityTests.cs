@@ -45,8 +45,8 @@ public class NullableEmptySpaceCompatibilityTests(ITestOutputHelper testOutputHe
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
-                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                var ex = Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex, ex.Message);
             }
         }
 

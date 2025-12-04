@@ -76,7 +76,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", "1"),
             new CellData("A2", "-"),
             new CellData("A3", "42"),
-            new CellData("A4", string.Empty),
+            new CellData("A4", "-"),
             new CellData("A5", "-7")
         };
 
@@ -87,7 +87,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
-                logger.LogError(ex.Message, ex);
+                logger.LogError(ex, ex.Message);
             }
         }
 
