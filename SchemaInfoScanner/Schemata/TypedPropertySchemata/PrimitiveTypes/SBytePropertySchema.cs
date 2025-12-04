@@ -16,8 +16,8 @@ public sealed record SBytePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = sbyte.Parse(argument, NumberStyles.Number, CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+        var value = sbyte.Parse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {

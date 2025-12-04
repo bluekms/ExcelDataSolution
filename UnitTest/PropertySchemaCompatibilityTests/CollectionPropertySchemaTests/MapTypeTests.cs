@@ -43,8 +43,8 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(keys);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = MakeDictionaryRawData(keys);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -77,8 +77,8 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(keys);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = MakeDictionaryRawData(keys);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -113,8 +113,8 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(["A", "a", "C"]);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = MakeDictionaryRawData(["A", "a", "C"]);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -148,8 +148,8 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(["A", "A", "C"]);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = MakeDictionaryRawData(["A", "A", "C"]);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -183,8 +183,8 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(["1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000"]);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = MakeDictionaryRawData(["1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000"]);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -217,8 +217,8 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(["1.02:03:04.5670000", "2.02:03:04.5670000"]);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = MakeDictionaryRawData(["1.02:03:04.5670000", "2.02:03:04.5670000"]);
+        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -248,15 +248,17 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
             enumMemberCatalog);
     }
 
-    private static string[] MakeDictionaryRawData(string[] keys)
+    private static CellData[] MakeDictionaryRawData(string[] keys)
     {
-        var result = new List<string>();
+        var cells = new List<CellData>();
+        var row = 1;
+
         foreach (var key in keys)
         {
-            result.Add(key);
-            result.Add("Dummy");
+            cells.Add(new CellData($"A{row++}", key));
+            cells.Add(new CellData($"A{row++}", "Dummy"));
         }
 
-        return result.ToArray();
+        return cells.ToArray();
     }
 }

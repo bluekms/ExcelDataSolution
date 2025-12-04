@@ -16,8 +16,8 @@ public sealed record BytePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = byte.Parse(argument, NumberStyles.Number, CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+        var value = byte.Parse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {

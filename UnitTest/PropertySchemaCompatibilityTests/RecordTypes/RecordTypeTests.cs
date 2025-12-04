@@ -31,7 +31,11 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1" };
+        var data = new[]
+        {
+            new CellData("A1", "1")
+        };
+
         var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
@@ -65,7 +69,12 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "AAA" };
+        var data = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "AAA")
+        };
+
         var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
@@ -99,7 +108,16 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "AAA", "2", "BBB", "2", "BBB" };
+        var data = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "AAA"),
+            new CellData("A3", "2"),
+            new CellData("A4", "BBB"),
+            new CellData("A5", "2"),
+            new CellData("A6", "BBB")
+        };
+
         var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
@@ -133,7 +151,16 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "AAA", "2", "BBB", "3", "CCC" };
+        var data = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "AAA"),
+            new CellData("A3", "2"),
+            new CellData("A4", "BBB"),
+            new CellData("A5", "3"),
+            new CellData("A6", "CCC")
+        };
+
         var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
@@ -167,7 +194,16 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "AAA", "2", "BBB", "3", "CCC" };
+        var data = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "AAA"),
+            new CellData("A3", "2"),
+            new CellData("A4", "BBB"),
+            new CellData("A5", "3"),
+            new CellData("A6", "CCC")
+        };
+
         var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)

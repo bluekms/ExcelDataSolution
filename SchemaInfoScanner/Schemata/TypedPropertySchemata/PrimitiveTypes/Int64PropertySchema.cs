@@ -16,8 +16,8 @@ public sealed record Int64PropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = long.Parse(argument, NumberStyles.Number, CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+        var value = long.Parse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {

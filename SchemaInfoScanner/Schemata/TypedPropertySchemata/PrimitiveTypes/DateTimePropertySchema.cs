@@ -16,10 +16,10 @@ public sealed record DateTimePropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
+        var cell = context.Consume();
 
         var format = this.GetAttributeValue<DateTimeFormatAttribute, string>();
-        var value = DateTime.ParseExact(argument, format, CultureInfo.InvariantCulture);
+        var value = DateTime.ParseExact(cell.Value, format, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {

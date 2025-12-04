@@ -6,16 +6,15 @@ using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.PropertySchemaCompatibilityTests.CollectionPropertySchemaTests.NullableTypes;
+namespace UnitTest.NotSupportedPropertyCompatibilityTests;
 
-public class MapTypeTests(ITestOutputHelper testOutputHelper)
+public class NullableEmptySpaceCompatibilityTests(ITestOutputHelper testOutputHelper)
 {
-    [Theory]
-    [InlineData("sbyte", new[] { "0", "1", "2", "3" }, new[] { "Hello", "", "World", "!" })]
-    public void PrimitiveKeyNullablePrimitiveValueMapTest(string keyType, string[] keys, string[] values)
+    [Fact]
+    public void PrimitiveSetDuplicationFailTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<MapTypeTests>() is not TestOutputLogger<MapTypeTests> logger)
+        if (factory.CreateLogger<NullableEmptySpaceCompatibilityTests>() is not TestOutputLogger<NullableEmptySpaceCompatibilityTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -23,28 +22,38 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [NullString("")]
-                         [Length(3)]
-                         FrozenDictionary<{{keyType}}, string?> Property,
+                         [NullString("-")]
+                         [Length(5)]
+                         FrozenSet<int?> Property,
                      );
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = MakeDictionaryRawData(keys, values);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "-"),
+            new CellData("A3", "42"),
+            new CellData("A4", string.Empty),
+            new CellData("A5", "-7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
-                propertySchema.CheckCompatibility(context);
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
+                logger.LogError(ex.Message, ex);
             }
         }
 
-        Assert.Empty(logger.Logs);
+        Assert.Single(logger.Logs);
     }
 
+    // TODO 유닛테스트용 Catalogs를 지우고 ExcelColumnExtractor에서 추가된 것으로 교체
     private record Catalogs(
         RecordSchemaCatalog RecordSchemaCatalog,
         EnumMemberCatalog EnumMemberCatalog);
@@ -58,26 +67,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         return new Catalogs(
-            recordSchemaCatalog,
-            enumMemberCatalog);
-    }
-
-    private static CellData[] MakeDictionaryRawData(string[] keys, string[] values)
-    {
-        if (keys.Length != values.Length)
-        {
-            throw new ArgumentException("Keys and values must have the same length.");
-        }
-
-        var cells = new List<CellData>();
-        var row = 1;
-
-        for (var i = 0; i < keys.Length; i++)
-        {
-            cells.Add(new CellData($"A{row++}", keys[i]));
-            cells.Add(new CellData($"A{row++}", values[i]));
-        }
-
-        return cells.ToArray();
+            RecordSchemaCatalog: recordSchemaCatalog,
+            EnumMemberCatalog: enumMemberCatalog);
     }
 }

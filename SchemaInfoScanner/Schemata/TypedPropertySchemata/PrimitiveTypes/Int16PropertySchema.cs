@@ -16,8 +16,8 @@ public sealed record Int16PropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = short.Parse(argument, NumberStyles.Number, CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+        var value = short.Parse(cell.Value, NumberStyles.Number, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {

@@ -13,18 +13,24 @@ public sealed record SingleColumnPrimitiveSetPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var arguments = context.Consume().Split(Separator);
+        var cell = context.Consume();
+        var parts = cell.Value.Split(Separator);
 
         if (TryGetAttributeValue<LengthAttribute, int>(out var length))
         {
-            if (arguments.Length != length)
+            if (parts.Length != length)
             {
-                throw new InvalidOperationException($"{PropertyName} has {nameof(LengthAttribute)} ({length}). but context length ({arguments.Length}).");
+                throw new InvalidOperationException(
+                    $"Cell {cell.Address} contains {parts.Length} value(s), but {PropertyName} expects {length}.");
             }
         }
 
-        var nestedContext = CompatibilityContext.CreateCollectAll(context.EnumMemberCatalog, arguments);
-        for (var i = 0; i < arguments.Length; i++)
+        var nestedCells = parts
+            .Select(x => new CellData(cell.Address, x))
+            .ToArray();
+
+        var nestedContext = CompatibilityContext.CreateCollectAll(context.EnumMemberCatalog, nestedCells);
+        for (var i = 0; i < parts.Length; i++)
         {
             GenericArgumentSchema.CheckCompatibility(nestedContext);
         }

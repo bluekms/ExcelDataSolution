@@ -29,7 +29,14 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "42", "0", "-7" };
+        var data = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "42"),
+            new CellData("A3", "0"),
+            new CellData("A4", "-7")
+        };
+
         var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
@@ -62,8 +69,15 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1", "0", "-7", "-7" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "1"),
+            new CellData("A2", "0"),
+            new CellData("A3", "-7"),
+            new CellData("A4", "-7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -98,8 +112,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "a", "A" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data, 0);
+        var cells = new[]
+        {
+            new CellData("A1", "a"),
+            new CellData("A2", "A")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -133,8 +152,14 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "C", "A", "A" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "C"),
+            new CellData("A2", "A"),
+            new CellData("A3", "A")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -168,8 +193,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1986-05-26 01:05:00.000", "1993-12-28 01:05:00.000" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "1986-05-26 01:05:00.000"),
+            new CellData("A2", "1993-12-28 01:05:00.000")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -202,8 +232,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
 
         var catalogs = CreateCatalogs(code, logger);
 
-        var data = new[] { "1.02:03:04.5670000", "2.02:03:04.5670000" };
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var cells = new[]
+        {
+            new CellData("A1", "1.02:03:04.5670000"),
+            new CellData("A2", "2.02:03:04.5670000")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -234,7 +269,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["1, 42, 0, -7"]);
+
+        var cells = new[]
+        {
+            new CellData("A1", "1, 42, 0, -7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -266,7 +307,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["1, 42, 0, -7"]);
+
+        var cells = new[]
+        {
+            new CellData("A1", "1, 42, 0, -7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -297,7 +344,13 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, ["-7, 42, 0, -7"]);
+
+        var cells = new[]
+        {
+            new CellData("A1", "-7, 42, 0, -7")
+        };
+
+        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

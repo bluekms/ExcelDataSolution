@@ -78,9 +78,14 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
+        var cells = new[]
+        {
+            new CellData("A1", argument)
+        };
+
         var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
-            Enumerable.Repeat(argument, 1).ToList());
+            cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -163,7 +168,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
         var context = CompatibilityContext.CreateNoCollect(
             catalogs.EnumMemberCatalog,
-            Enumerable.Repeat(argument, 1).ToList());
+            new[] { new CellData("A1", argument) });
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -196,9 +201,13 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateNoCollect(
-            catalogs.EnumMemberCatalog,
-            Enumerable.Repeat(argument, 1).ToList());
+
+        var cells = new[]
+        {
+            new CellData("A1", argument)
+        };
+
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -230,9 +239,13 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateNoCollect(
-            catalogs.EnumMemberCatalog,
-            Enumerable.Repeat(argument, 1).ToList());
+
+        var cells = new[]
+        {
+            new CellData("A1", argument)
+        };
+
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -264,9 +277,13 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateNoCollect(
-            catalogs.EnumMemberCatalog,
-            Enumerable.Repeat(argument, 1).ToList());
+
+        var cells = new[]
+        {
+            new CellData("A1", argument)
+        };
+
+        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

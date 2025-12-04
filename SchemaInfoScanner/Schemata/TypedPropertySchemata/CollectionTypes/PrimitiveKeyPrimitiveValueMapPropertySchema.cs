@@ -20,12 +20,12 @@ public sealed record PrimitiveKeyPrimitiveValueMapPropertySchema(
             throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        if (context.Arguments.Count % 2 != 0)
+        if (context.Cells.Count % 2 != 0)
         {
             throw new InvalidOperationException($"Invalid data length: {context}");
         }
 
-        var valueContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, context.Arguments, context.Position);
+        var valueContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, context.Cells, context.Position);
         for (var i = 0; i < length; i++)
         {
             context.BeginKeyScope();

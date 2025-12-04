@@ -35,11 +35,16 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
+                var cells = new[]
+                {
+                    new CellData("A1", argument)
+                };
+
                 var context = CompatibilityContext.CreateNoCollect(
                     catalogs.EnumMemberCatalog,
-                    Enumerable.Repeat(argument, 1).ToList());
+                    cells);
 
-                var ex = Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex.Message, ex);
             }
         }
@@ -72,11 +77,16 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
+                var cells = new[]
+                {
+                    new CellData("A1", argument)
+                };
+
                 var context = CompatibilityContext.CreateNoCollect(
                     catalogs.EnumMemberCatalog,
-                    Enumerable.Repeat(argument, 1).ToList());
+                    cells);
 
-                var ex = Assert.Throws<FormatException>(() => propertySchema.CheckCompatibility(context));
+                var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex.Message, ex);
             }
         }

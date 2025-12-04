@@ -16,11 +16,17 @@ public sealed record FloatPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
-        var value = float.Parse(
-            argument,
-            NumberStyles.Integer | NumberStyles.Float | NumberStyles.AllowThousands,
-            CultureInfo.InvariantCulture);
+        var cell = context.Consume();
+
+        if (!float.TryParse(
+                cell.Value,
+                NumberStyles.Float | NumberStyles.AllowThousands,
+                CultureInfo.InvariantCulture,
+                out var value))
+        {
+            throw new InvalidOperationException(
+                $"The value '{cell.Value}' in cell {cell.Address} is not a valid float.");
+        }
 
         if (this.HasAttribute<RangeAttribute>())
         {

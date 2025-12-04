@@ -20,7 +20,7 @@ public sealed record NullablePrimitiveArrayPropertySchema(
 
         for (var i = 0; i < length; i++)
         {
-            var result = NullStringAttributeChecker.Check(this, context.Current);
+            var result = NullStringAttributeChecker.Check(this, context.Current.Value);
             if (result.IsNull)
             {
                 context.ConsumeNull();

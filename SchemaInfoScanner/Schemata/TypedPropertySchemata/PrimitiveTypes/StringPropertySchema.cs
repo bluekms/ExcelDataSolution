@@ -15,16 +15,17 @@ public sealed record StringPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
+        var cell = context.Consume();
 
         if (this.TryGetAttributeValue<RegularExpressionAttribute, string>(0, out var pattern))
         {
-            if (!Regex.IsMatch(argument, pattern))
+            if (!Regex.IsMatch(cell.Value, pattern))
             {
-                throw new ArgumentException($"The argument '{argument}' does not match the regular expression '{pattern}'.");
+                throw new InvalidOperationException(
+                    $"The value '{cell.Value}' in cell {cell.Address} does not match the required pattern.");
             }
         }
 
-        context.Collect(argument);
+        context.Collect(cell.Value);
     }
 }

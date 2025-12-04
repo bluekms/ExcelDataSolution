@@ -16,10 +16,10 @@ public sealed record TimeSpanPropertySchema(
 {
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
-        var argument = context.Consume();
+        var cell = context.Consume();
 
         var format = this.GetAttributeValue<TimeSpanFormatAttribute, string>();
-        var value = TimeSpan.ParseExact(argument, format, CultureInfo.InvariantCulture);
+        var value = TimeSpan.ParseExact(cell.Value, format, CultureInfo.InvariantCulture);
 
         if (this.HasAttribute<RangeAttribute>())
         {
