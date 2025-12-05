@@ -94,11 +94,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         Assert.Single(logger.Logs);
     }
 
-    private record Catalogs(
-        RecordSchemaCatalog RecordSchemaCatalog,
-        EnumMemberCatalog EnumMemberCatalog);
-
-    private static Catalogs CreateCatalogs(string code, ILogger logger)
+    private static MetadataCatalogs CreateCatalogs(string code, ILogger logger)
     {
         var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
@@ -106,8 +102,6 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        return new Catalogs(
-            RecordSchemaCatalog: recordSchemaCatalog,
-            EnumMemberCatalog: enumMemberCatalog);
+        return new(recordSchemaCatalog, enumMemberCatalog);
     }
 }

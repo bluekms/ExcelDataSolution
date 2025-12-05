@@ -53,12 +53,7 @@ public class NullableEmptySpaceCompatibilityTests(ITestOutputHelper testOutputHe
         Assert.Single(logger.Logs);
     }
 
-    // TODO 유닛테스트용 Catalogs를 지우고 ExcelColumnExtractor에서 추가된 것으로 교체
-    private record Catalogs(
-        RecordSchemaCatalog RecordSchemaCatalog,
-        EnumMemberCatalog EnumMemberCatalog);
-
-    private static Catalogs CreateCatalogs(string code, ILogger logger)
+    private static MetadataCatalogs CreateCatalogs(string code, ILogger logger)
     {
         var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
@@ -66,8 +61,6 @@ public class NullableEmptySpaceCompatibilityTests(ITestOutputHelper testOutputHe
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        return new Catalogs(
-            RecordSchemaCatalog: recordSchemaCatalog,
-            EnumMemberCatalog: enumMemberCatalog);
+        return new(recordSchemaCatalog, enumMemberCatalog);
     }
 }
