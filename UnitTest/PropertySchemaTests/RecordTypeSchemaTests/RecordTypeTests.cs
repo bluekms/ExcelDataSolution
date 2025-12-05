@@ -172,4 +172,36 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
 
         Assert.Empty(logger.Logs);
     }
+
+    [Fact]
+    public void RecordRecordKeyAndRecordValueMapTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<RecordTypeTests>() is not TestOutputLogger<RecordTypeTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [Length(3)] FrozenDictionary<KeyData, MyData> Data
+                     );
+
+                     public record struct KeyData(InnerKey Inner, int Key1)
+                     {
+                         public record struct InnerKey(int X, int Y);
+                     }
+
+                     public record struct MyData([Key] KeyData Key, string Value);
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+
+        Assert.Empty(logger.Logs);
+    }
 }
