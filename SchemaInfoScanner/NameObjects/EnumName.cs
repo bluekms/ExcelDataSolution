@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
 
@@ -18,8 +19,10 @@ public class EnumName : IEquatable<EnumName>
             : $"{namespaceName}.{Name}";
     }
 
-    public EnumName(string fullName)
+    public EnumName(INamedTypeSymbol namedTypeSymbol)
     {
+        var fullName = namedTypeSymbol.ToString();
+
         if (string.IsNullOrEmpty(fullName) || fullName[^1] == '.')
         {
             throw new ArgumentException("fullName should not be null, empty, or end with '.'");
