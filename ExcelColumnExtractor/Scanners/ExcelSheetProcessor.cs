@@ -1,8 +1,10 @@
+using System.Text;
 using System.Text.RegularExpressions;
 using ExcelColumnExtractor.NameObjects;
 using ExcelDataReader;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Exceptions;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace ExcelColumnExtractor.Scanners;
 
@@ -66,6 +68,8 @@ public sealed class ExcelSheetProcessor
             throw new EndOfStreamException($"{excelSheetName.FullName} 예상치 못한 Sheet의 끝입니다.");
         }
 
+        var excelPhysicalRow = 1;
+
         var startCell = reader.GetValue(0)?.ToString();
         if (startCell is null || !IsValidCellAddress(startCell))
         {
@@ -73,12 +77,14 @@ public sealed class ExcelSheetProcessor
         }
 
         var (startColumn, startRow) = ParseCellAddress(startCell);
-        while (--startRow > 0)
+        while (excelPhysicalRow < startRow)
         {
             if (!reader.Read())
             {
                 throw new EndOfStreamException($"{excelSheetName.FullName} 예상치 못한 Sheet의 끝입니다. A1: {startCell}");
             }
+
+            excelPhysicalRow++;
         }
 
         if (processHeader is not null)
@@ -95,7 +101,12 @@ public sealed class ExcelSheetProcessor
         }
         else
         {
-            reader.Read();
+            if (!reader.Read())
+            {
+                throw new EndOfStreamException($"{excelSheetName.FullName} 예상치 못한 Sheet의 끝입니다. A1: {startCell}");
+            }
+
+            excelPhysicalRow++;
         }
 
         if (processBodyRow is null)
@@ -103,14 +114,37 @@ public sealed class ExcelSheetProcessor
             return;
         }
 
+        static string ToExcelColumnName(int columnNumber)
+        {
+            var sb = new StringBuilder();
+
+            while (columnNumber > 0)
+            {
+                columnNumber--;
+                sb.Insert(0, (char)('A' + (columnNumber % 26)));
+                columnNumber /= 26;
+            }
+
+            return sb.ToString();
+        }
+
         while (reader.Read())
         {
+            excelPhysicalRow++;
+
             var cells = new object[reader.FieldCount];
             reader.GetValues(cells);
 
             var rowCells = cells
                 .Skip(startColumn - 1)
-                .Select(x => x?.ToString() ?? string.Empty)
+                .Select((x, offset) =>
+                {
+                    var column = startColumn + offset;
+                    var address = ToExcelColumnName(column) + excelPhysicalRow;
+                    var value = x?.ToString() ?? string.Empty;
+
+                    return new CellData(address, value);
+                })
                 .ToList();
 
             processBodyRow(new(rowCells));
