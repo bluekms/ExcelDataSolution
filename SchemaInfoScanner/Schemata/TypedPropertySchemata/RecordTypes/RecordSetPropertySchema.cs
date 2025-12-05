@@ -19,7 +19,9 @@ public sealed record RecordSetPropertySchema(
 
         for (var i = 0; i < length; i++)
         {
+            context.BeginKeyScope();
             GenericArgumentSchema.CheckCompatibility(context);
+            context.EndKeyScope();
         }
 
         context.ValidateNoDuplicates();
