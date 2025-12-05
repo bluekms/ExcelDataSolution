@@ -40,9 +40,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                     new CellData("A1", argument)
                 };
 
-                var context = CompatibilityContext.CreateNoCollect(
-                    catalogs.EnumMemberCatalog,
-                    cells);
+                var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex, ex.Message);
@@ -82,9 +80,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                     new CellData("A1", argument)
                 };
 
-                var context = CompatibilityContext.CreateNoCollect(
-                    catalogs.EnumMemberCatalog,
-                    cells);
+                var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
                 var ex = Assert.Throws<InvalidOperationException>(() => propertySchema.CheckCompatibility(context));
                 logger.LogError(ex, ex.Message);

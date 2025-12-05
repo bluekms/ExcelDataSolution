@@ -12,7 +12,7 @@ public sealed record EnumPropertySchema(
     protected override void OnCheckCompatibility(CompatibilityContext context)
     {
         var enumName = new EnumName(NamedTypeSymbol);
-        var enumMembers = context.EnumMemberCatalog.GetEnumMembers(enumName);
+        var enumMembers = context.MetadataCatalogs.EnumMemberCatalog.GetEnumMembers(enumName);
 
         var cell = context.Consume();
         var value = cell.Value;

@@ -32,7 +32,7 @@ public class MapTypeTests(ITestOutputHelper testOutputHelper)
         var catalogs = CreateCatalogs(code, logger);
 
         var data = MakeDictionaryRawData(keys, values);
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateCollectKey(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

@@ -39,7 +39,7 @@ public class NullableEmptySpaceCompatibilityTests(ITestOutputHelper testOutputHe
             new CellData("A5", "-7")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

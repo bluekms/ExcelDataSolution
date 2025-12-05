@@ -84,7 +84,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -171,7 +171,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -210,7 +210,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -249,7 +249,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -288,7 +288,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

@@ -36,7 +36,7 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", "1")
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -75,7 +75,7 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A2", "AAA")
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -118,7 +118,7 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A6", "BBB")
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -161,7 +161,7 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A6", "CCC")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -204,7 +204,7 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A6", "CCC")
         };
 
-        var context = CompatibilityContext.CreateCollectKey(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateCollectKey(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

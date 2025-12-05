@@ -38,7 +38,7 @@ public sealed record SingleColumnNullablePrimitiveArrayPropertySchema(
             {
                 var nestedCells = new[] { new CellData(cell.Address, part) };
                 var nestedContext = CompatibilityContext.CreateNoCollect(
-                    context.EnumMemberCatalog,
+                    context.MetadataCatalogs,
                     nestedCells);
 
                 GenericArgumentSchema.CheckCompatibility(nestedContext);

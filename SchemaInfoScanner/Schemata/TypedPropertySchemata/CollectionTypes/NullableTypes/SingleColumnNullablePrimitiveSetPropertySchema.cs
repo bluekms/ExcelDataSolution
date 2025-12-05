@@ -33,7 +33,7 @@ public sealed record SingleColumnNullablePrimitiveSetPropertySchema(
             {
                 var nestedCells = new[] { new CellData(cell.Address, argument) };
                 var nestedContext = CompatibilityContext.CreateCollectAll(
-                    context.EnumMemberCatalog,
+                    context.MetadataCatalogs,
                     nestedCells);
 
                 GenericArgumentSchema.CheckCompatibility(nestedContext);

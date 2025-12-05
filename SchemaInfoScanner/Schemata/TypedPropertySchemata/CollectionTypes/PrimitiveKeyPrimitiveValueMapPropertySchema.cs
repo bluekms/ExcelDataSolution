@@ -25,7 +25,7 @@ public sealed record PrimitiveKeyPrimitiveValueMapPropertySchema(
             throw new InvalidOperationException($"Invalid data length: {context}");
         }
 
-        var valueContext = CompatibilityContext.CreateNoCollect(context.EnumMemberCatalog, context.Cells, context.Position);
+        var valueContext = CompatibilityContext.CreateNoCollect(context.MetadataCatalogs, context.Cells, context.Position);
         for (var i = 0; i < length; i++)
         {
             context.BeginKeyScope();

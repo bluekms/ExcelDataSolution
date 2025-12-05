@@ -37,7 +37,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A4", "-7")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, data);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -77,7 +77,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A4", "-7")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -118,7 +118,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A2", "A")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells, 0);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells, 0);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -159,7 +159,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A3", "A")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -199,7 +199,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A2", "1993-12-28 01:05:00.000")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -238,7 +238,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A2", "2.02:03:04.5670000")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -275,7 +275,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", "1, 42, 0, -7")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -313,7 +313,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", "1, 42, 0, -7")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -350,7 +350,7 @@ public class SetTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", "-7, 42, 0, -7")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateCollectAll(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
