@@ -19,22 +19,45 @@ public static class RecordPropertySchemaFactory
             throw new NotSupportedException($"{propertyName}({propertySymbol.Name}) is not a supported record type.");
         }
 
-        var memberSymbols = propertySymbol.GetMembers()
+        var memberProperties = propertySymbol
+            .GetMembers()
             .OfType<IPropertySymbol>()
             .Where(x => x.DeclaringSyntaxReferences.Length > 0)
-            .Where(x => x.Type is INamedTypeSymbol)
-            .Select(x => (INamedTypeSymbol)x.Type);
+            .Where(x => x.Type is INamedTypeSymbol);
 
         var memberSchemata = new List<PropertySchemaBase>();
-        foreach (var symbol in memberSymbols)
+        foreach (var member in memberProperties)
         {
-            // Excel3.School.Students에는 Attribute가 없다
-            // Excel3.School.Student에는 NullString Attribute가 있는데 제대로 전달되지 않는 버그가 있다
+            var memberAttributeList = new List<AttributeSyntax>();
+
+            foreach (var syntaxRef in member.DeclaringSyntaxReferences)
+            {
+                var syntax = syntaxRef.GetSyntax();
+
+                if (syntax is ParameterSyntax parameterSyntax)
+                {
+                    foreach (var attrList in parameterSyntax.AttributeLists)
+                    {
+                        memberAttributeList.AddRange(attrList.Attributes);
+                    }
+
+                    continue;
+                }
+
+                if (syntax is PropertyDeclarationSyntax propertyDeclSyntax)
+                {
+                    foreach (var attrList in propertyDeclSyntax.AttributeLists)
+                    {
+                        memberAttributeList.AddRange(attrList.Attributes);
+                    }
+                }
+            }
+
             var innerSchema = TypedPropertySchemaFactory.Create(
                 propertyName,
-                symbol,
-                attributeList,
-                parentRecordSymbol);
+                (INamedTypeSymbol)member.Type,
+                memberAttributeList,
+                propertySymbol);
 
             memberSchemata.Add(innerSchema);
         }
