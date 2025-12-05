@@ -83,9 +83,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(
-            catalogs.EnumMemberCatalog,
-            cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -166,9 +164,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
                      """;
 
         var catalogs = CreateCatalogs(code, logger);
-        var context = CompatibilityContext.CreateNoCollect(
-            catalogs.EnumMemberCatalog,
-            new[] { new CellData("A1", argument) });
+        var context = CompatibilityContext.CreateNoCollect(catalogs, [new CellData("A1", argument)]);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -207,7 +203,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -245,7 +241,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -283,7 +279,7 @@ public class PrimitiveTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

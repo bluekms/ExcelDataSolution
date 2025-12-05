@@ -46,9 +46,7 @@ public class ErrorMessageTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(
-            catalogs.EnumMemberCatalog,
-            cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
@@ -91,7 +89,7 @@ public class ErrorMessageTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
@@ -135,7 +133,7 @@ public class ErrorMessageTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
@@ -178,7 +176,7 @@ public class ErrorMessageTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {
@@ -221,7 +219,7 @@ public class ErrorMessageTests(ITestOutputHelper testOutputHelper)
             new CellData("A1", argument)
         };
 
-        var context = CompatibilityContext.CreateNoCollect(catalogs.EnumMemberCatalog, cells);
+        var context = CompatibilityContext.CreateNoCollect(catalogs, cells);
 
         var ex = Assert.Throws<InvalidOperationException>(() =>
         {

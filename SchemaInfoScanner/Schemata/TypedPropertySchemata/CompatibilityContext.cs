@@ -12,38 +12,43 @@ public sealed class CompatibilityContext
     }
 
     private CompatibilityContext(
-        EnumMemberCatalog enumMemberCatalog,
+        MetadataCatalogs metadataCatalogs,
         IReadOnlyList<CellData> cells,
         CollectMode collectMode,
         int startPosition = 0)
     {
-        EnumMemberCatalog = enumMemberCatalog;
+        MetadataCatalogs = metadataCatalogs;
         Cells = cells;
         this.collectMode = collectMode;
         Position = startPosition;
     }
 
     public static CompatibilityContext CreateNoCollect(
-        EnumMemberCatalog enumMemberCatalog,
+        MetadataCatalogs metadataCatalogs,
         IReadOnlyList<CellData> cells,
         int startPosition = 0)
-        => new(enumMemberCatalog, cells, CollectMode.None, startPosition);
+        => new(metadataCatalogs, cells, CollectMode.None, startPosition);
 
     public static CompatibilityContext CreateCollectAll(
-        EnumMemberCatalog enumMemberCatalog,
+        MetadataCatalogs metadataCatalogs,
         IReadOnlyList<CellData> cells,
         int startPosition = 0)
-        => new(enumMemberCatalog, cells, CollectMode.All, startPosition);
+        => new(metadataCatalogs, cells, CollectMode.All, startPosition);
 
     public static CompatibilityContext CreateCollectKey(
-        EnumMemberCatalog enumMemberCatalog,
+        MetadataCatalogs metadataCatalogs,
         IReadOnlyList<CellData> cells,
         int startPosition = 0)
-        => new(enumMemberCatalog, cells, CollectMode.KeyOnly, startPosition);
+        => new(metadataCatalogs, cells, CollectMode.KeyOnly, startPosition);
 
-    public EnumMemberCatalog EnumMemberCatalog { get; }
+    public MetadataCatalogs MetadataCatalogs { get; }
+    public EnumMemberCatalog EnumMemberCatalog => MetadataCatalogs.EnumMemberCatalog;
+    public RecordSchemaCatalog RecordSchemaCatalog => MetadataCatalogs.RecordSchemaCatalog;
+
     public IReadOnlyList<CellData> Cells { get; } // TODO : ImmutableArray
+
     public int Position { get; private set; }
+
     private readonly CollectMode collectMode;
     private readonly List<object?> duplicateCandidates = new();
     private readonly List<object?> keyScopeComponents = new();

@@ -29,7 +29,7 @@ public sealed record SingleColumnPrimitiveSetPropertySchema(
             .Select(x => new CellData(cell.Address, x))
             .ToArray();
 
-        var nestedContext = CompatibilityContext.CreateCollectAll(context.EnumMemberCatalog, nestedCells);
+        var nestedContext = CompatibilityContext.CreateCollectAll(context.MetadataCatalogs, nestedCells);
         for (var i = 0; i < parts.Length; i++)
         {
             GenericArgumentSchema.CheckCompatibility(nestedContext);
