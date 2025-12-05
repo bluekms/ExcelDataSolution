@@ -62,6 +62,8 @@ public class Program
         DataBodyChecker.Check(catalogs, extractedTableCollection, logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
 
+        // TODO BodyChecker 결과로 FK도 체크해줄 수 없을까?
+
         sw.Restart();
         CsvWriter.Write(
             EnsureOutputDirectory(options, logger),
