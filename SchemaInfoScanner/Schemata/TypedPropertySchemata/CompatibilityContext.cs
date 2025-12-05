@@ -7,7 +7,6 @@ public sealed class CompatibilityContext
     private enum CollectMode
     {
         None,
-        All,
         KeyOnly,
     }
 
@@ -28,12 +27,6 @@ public sealed class CompatibilityContext
         IReadOnlyList<CellData> cells,
         int startPosition = 0)
         => new(metadataCatalogs, cells, CollectMode.None, startPosition);
-
-    public static CompatibilityContext CreateCollectAll(
-        MetadataCatalogs metadataCatalogs,
-        IReadOnlyList<CellData> cells,
-        int startPosition = 0)
-        => new(metadataCatalogs, cells, CollectMode.All, startPosition);
 
     public static CompatibilityContext CreateCollectKey(
         MetadataCatalogs metadataCatalogs,
@@ -79,12 +72,6 @@ public sealed class CompatibilityContext
             return;
         }
 
-        if (collectMode is CollectMode.All)
-        {
-            duplicateCandidates.Add(key);
-            return;
-        }
-
         throw new InvalidOperationException("Unreachable code reached in Collect method.");
     }
 
@@ -104,7 +91,7 @@ public sealed class CompatibilityContext
     public void ConsumeNull()
     {
         Position++;
-        Collect(null);
+        duplicateCandidates.Add(null);
     }
 
     public void Skip(int count = 1)

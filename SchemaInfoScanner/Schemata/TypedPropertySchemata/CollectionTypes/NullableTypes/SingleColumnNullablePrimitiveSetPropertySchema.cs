@@ -29,14 +29,18 @@ public sealed record SingleColumnNullablePrimitiveSetPropertySchema(
         foreach (var argument in arguments)
         {
             var result = NullStringAttributeChecker.Check(this, argument);
-            if (!result.IsNull)
+            if (result.IsNull)
+            {
+                context.ConsumeNull();
+            }
+            else
             {
                 var nestedCells = new[] { new CellData(cell.Address, argument) };
-                var nestedContext = CompatibilityContext.CreateCollectAll(
-                    context.MetadataCatalogs,
-                    nestedCells);
+                var nestedContext = CompatibilityContext.CreateCollectKey(context.MetadataCatalogs, nestedCells);
 
+                nestedContext.BeginKeyScope();
                 GenericArgumentSchema.CheckCompatibility(nestedContext);
+                nestedContext.EndKeyScope();
             }
         }
 

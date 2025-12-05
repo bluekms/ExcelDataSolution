@@ -27,7 +27,9 @@ public sealed record NullablePrimitiveSetPropertySchema(
             }
             else
             {
+                context.BeginKeyScope();
                 GenericArgumentSchema.CheckCompatibility(context);
+                context.EndKeyScope();
             }
         }
 
