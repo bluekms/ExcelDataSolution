@@ -161,7 +161,7 @@ public class RecordTypeTests(ITestOutputHelper testOutputHelper)
             new CellData("A6", "CCC")
         };
 
-        var context = CompatibilityContext.CreateCollectAll(catalogs, data);
+        var context = CompatibilityContext.CreateCollectKey(catalogs, data);
 
         foreach (var recordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {

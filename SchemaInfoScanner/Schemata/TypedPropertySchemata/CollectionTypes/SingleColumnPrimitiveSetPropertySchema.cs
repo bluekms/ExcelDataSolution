@@ -29,10 +29,12 @@ public sealed record SingleColumnPrimitiveSetPropertySchema(
             .Select(x => new CellData(cell.Address, x))
             .ToArray();
 
-        var nestedContext = CompatibilityContext.CreateCollectAll(context.MetadataCatalogs, nestedCells);
+        var nestedContext = CompatibilityContext.CreateCollectKey(context.MetadataCatalogs, nestedCells);
         for (var i = 0; i < parts.Length; i++)
         {
+            nestedContext.BeginKeyScope();
             GenericArgumentSchema.CheckCompatibility(nestedContext);
+            nestedContext.EndKeyScope();
         }
 
         nestedContext.ValidateNoDuplicates();
