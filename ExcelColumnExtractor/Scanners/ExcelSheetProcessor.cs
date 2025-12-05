@@ -99,33 +99,10 @@ public sealed class ExcelSheetProcessor
 
             processHeader(new(headerCells));
         }
-        else
-        {
-            if (!reader.Read())
-            {
-                throw new EndOfStreamException($"{excelSheetName.FullName} 예상치 못한 Sheet의 끝입니다. A1: {startCell}");
-            }
-
-            excelPhysicalRow++;
-        }
 
         if (processBodyRow is null)
         {
             return;
-        }
-
-        static string ToExcelColumnName(int columnNumber)
-        {
-            var sb = new StringBuilder();
-
-            while (columnNumber > 0)
-            {
-                columnNumber--;
-                sb.Insert(0, (char)('A' + (columnNumber % 26)));
-                columnNumber /= 26;
-            }
-
-            return sb.ToString();
         }
 
         while (reader.Read())
@@ -149,6 +126,20 @@ public sealed class ExcelSheetProcessor
 
             processBodyRow(new(rowCells));
         }
+    }
+
+    private static string ToExcelColumnName(int columnNumber)
+    {
+        var sb = new StringBuilder();
+
+        while (columnNumber > 0)
+        {
+            columnNumber--;
+            sb.Insert(0, (char)('A' + (columnNumber % 26)));
+            columnNumber /= 26;
+        }
+
+        return sb.ToString();
     }
 
     private static bool IsValidCellAddress(string cellAddress)
