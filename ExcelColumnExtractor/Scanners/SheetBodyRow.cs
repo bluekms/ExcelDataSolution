@@ -1,3 +1,5 @@
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
+
 namespace ExcelColumnExtractor.Scanners;
 
-public sealed record SheetBodyRow(IReadOnlyList<string> Cells);
+public sealed record SheetBodyRow(IReadOnlyList<CellData> Cells);

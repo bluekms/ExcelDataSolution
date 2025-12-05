@@ -1,11 +1,12 @@
 using ExcelColumnExtractor.NameObjects;
 using Microsoft.Extensions.Logging;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace ExcelColumnExtractor.Scanners;
 
 public class SheetBodyScanner
 {
-    public sealed record RowData(IReadOnlyList<string> Data);
+    public sealed record RowData(IReadOnlyList<CellData> Data);
     public sealed record BodyData(IReadOnlyList<RowData> Rows);
 
     public static BodyData Scan(ExcelSheetName excelSheetName, ILogger logger)
