@@ -42,17 +42,20 @@ public static class CsvWriter
     private static string ConvertRowToCsv(BodyColumnAggregator.ExtractedRow row)
     {
         var sb = new StringBuilder();
+
         foreach (var cell in row.Data)
         {
-            if (cell.IndexOfAny(SpecialChars) != -1)
+            var value = cell.Value ?? string.Empty;
+
+            if (value.IndexOfAny(SpecialChars) != -1)
             {
                 sb.Append('"');
-                sb.Append(cell.Replace("\"", "\"\""));
+                sb.Append(value.Replace("\"", "\"\""));
                 sb.Append('"');
             }
             else
             {
-                sb.Append(cell);
+                sb.Append(value);
             }
 
             sb.Append(',');
@@ -60,7 +63,7 @@ public static class CsvWriter
 
         if (sb.Length > 0)
         {
-            --sb.Length;
+            sb.Length -= 1;
         }
 
         return sb.ToString();

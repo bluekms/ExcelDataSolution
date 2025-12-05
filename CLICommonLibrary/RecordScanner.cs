@@ -7,7 +7,7 @@ namespace CLICommonLibrary;
 
 public static class RecordScanner
 {
-    public static RecordSchemaCatalog Scan(string csPath, ILogger logger)
+    public static MetadataCatalogs Scan(string csPath, ILogger logger)
     {
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResults, logger);
@@ -16,9 +16,12 @@ public static class RecordScanner
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
         var exceptionCount = RecordComplianceChecker.TryCheck(recordSchemaCatalog, logger);
+        if (exceptionCount > 0)
+        {
+            logger.LogError("There are {ExceptionCount} exceptions.", exceptionCount);
+        }
 
-        return exceptionCount > 0
-            ? throw new InvalidOperationException($"There are {exceptionCount} exceptions.")
-            : recordSchemaCatalog;
+        var enumMemberCatalog = new EnumMemberCatalog(loadResults);
+        return new(recordSchemaCatalog, enumMemberCatalog);
     }
 }

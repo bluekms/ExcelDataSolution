@@ -8,7 +8,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class SetTypeChecker
+public static class SetTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames =
     [

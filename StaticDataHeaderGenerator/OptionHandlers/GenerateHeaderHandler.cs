@@ -16,20 +16,20 @@ public static class GenerateHeaderHandler
 
         LogInformation(logger, "Generate Header File", null);
 
-        var recordSchemaCatalog = RecordScanner.Scan(options.RecordCsPath, logger);
-        if (recordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
+        var catalogs = RecordScanner.Scan(options.RecordCsPath, logger);
+        if (catalogs.RecordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"RecordName {options.RecordName} is not found.");
             LogError(logger, exception.Message, exception);
             throw exception;
         }
 
-        var targetRecordSchema = recordSchemaCatalog.StaticDataRecordSchemata
+        var targetRecordSchema = catalogs.RecordSchemaCatalog.StaticDataRecordSchemata
             .Single(x => x.RecordName.Name == options.RecordName);
 
         var headers = RecordFlattener.Flatten(
             targetRecordSchema,
-            recordSchemaCatalog,
+            catalogs.RecordSchemaCatalog,
             logger);
 
         var actualSeparator = Regex.Unescape(options.Separator);

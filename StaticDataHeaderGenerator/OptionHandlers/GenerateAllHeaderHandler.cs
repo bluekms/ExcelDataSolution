@@ -17,8 +17,8 @@ public class GenerateAllHeaderHandler
 
         LogInformation(logger, "Generate Header File", null);
 
-        var recordSchemaCatalog = RecordScanner.Scan(options.RecordCsPath, logger);
-        if (recordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
+        var catalogs = RecordScanner.Scan(options.RecordCsPath, logger);
+        if (catalogs.RecordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException("No records found.");
             LogError(logger, exception.Message, exception);
@@ -26,11 +26,11 @@ public class GenerateAllHeaderHandler
         }
 
         var sb = new StringBuilder();
-        foreach (var targetRecordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
+        foreach (var targetRecordSchema in catalogs.RecordSchemaCatalog.StaticDataRecordSchemata)
         {
             var headers = RecordFlattener.Flatten(
                 targetRecordSchema,
-                recordSchemaCatalog,
+                catalogs.RecordSchemaCatalog,
                 logger);
 
             var actualSeparator = Regex.Unescape(options.Separator);

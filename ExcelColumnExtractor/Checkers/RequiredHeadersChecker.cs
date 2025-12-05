@@ -15,15 +15,14 @@ public static class RequiredHeadersChecker
     public sealed record RequiredHeaderMapping(IReadOnlyList<string> SheetHeaders, IReadOnlySet<int> SheetHeaderIndexSet);
 
     public static RequiredHeaderMap Check(
-        IReadOnlyList<RecordSchema> staticDataRecordSchemaList,
         RecordSchemaCatalog recordSchemaCatalog,
         ExcelSheetNameMap sheetNameMap,
         ILogger logger)
     {
-        var result = new Dictionary<RecordSchema, RequiredHeaderMapping>(staticDataRecordSchemaList.Count);
+        var result = new Dictionary<RecordSchema, RequiredHeaderMapping>(recordSchemaCatalog.StaticDataRecordSchemata.Count);
 
         var sb = new StringBuilder();
-        foreach (var recordSchema in staticDataRecordSchemaList)
+        foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
             try
             {

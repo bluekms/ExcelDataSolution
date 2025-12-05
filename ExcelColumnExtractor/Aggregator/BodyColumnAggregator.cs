@@ -4,12 +4,13 @@ using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 
 namespace ExcelColumnExtractor.Aggregator;
 
 public static class BodyColumnAggregator
 {
-    public sealed record ExtractedRow(IReadOnlyList<string> Data);
+    public sealed record ExtractedRow(IReadOnlyList<CellData> Data);
 
     public sealed record ExtractedTable(IReadOnlyList<string> Headers, IReadOnlyList<ExtractedRow> Rows);
 

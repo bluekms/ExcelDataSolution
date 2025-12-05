@@ -1,33 +1,30 @@
 using System.Globalization;
 using System.Text;
+using ExcelColumnExtractor.Aggregator;
 using ExcelColumnExtractor.Exceptions;
 using ExcelColumnExtractor.Mappings;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Schemata;
+using SchemaInfoScanner.Schemata.TypedPropertySchemata;
+using SchemaInfoScanner.TypeCheckers;
 
 namespace ExcelColumnExtractor.Checkers;
 
 public static class DataBodyChecker
 {
     public static void Check(
-        IReadOnlyList<RecordSchema> recordSchemaList,
-        RecordSchemaCatalog recordSchemaCatalog,
+        MetadataCatalogs metadataCatalogs,
         ExtractedTableMap extractedTableMap,
         ILogger<Program> logger)
     {
         var sb = new StringBuilder();
 
-        // 스키마 순회
-        foreach (var recordSchema in recordSchemaList)
+        foreach (var (recordSchema, table) in extractedTableMap.SortedTables)
         {
             try
             {
-                // 프로퍼티 순회
-                foreach (var propertySchema in recordSchema.PropertySchemata)
-                {
-                    // 레코드 순회?
-                }
+                CheckTable(metadataCatalogs, recordSchema, table);
             }
             catch (Exception e)
             {
@@ -39,6 +36,54 @@ public static class DataBodyChecker
         if (sb.Length > 0)
         {
             throw new DataBodyCheckerException(sb.ToString());
+        }
+    }
+
+    private static void CheckTable(
+        MetadataCatalogs metadataCatalogs,
+        RecordSchema recordSchema,
+        BodyColumnAggregator.ExtractedTable table)
+    {
+        foreach (var row in table.Rows)
+        {
+            var context = CompatibilityContext.CreateNoCollect(metadataCatalogs, row.Data);
+
+            foreach (var propertySchema in recordSchema.PropertySchemata)
+            {
+                var startPosition = context.Position;
+
+                if (SetTypeChecker.IsSupportedSetType(propertySchema.NamedTypeSymbol))
+                {
+                    var setContext = CompatibilityContext.CreateCollectKey(
+                        context.MetadataCatalogs,
+                        context.Cells,
+                        startPosition);
+
+                    propertySchema.CheckCompatibility(setContext);
+                    setContext.ValidateNoDuplicates();
+
+                    var consumed = setContext.Position - startPosition;
+                    context.Skip(consumed);
+                    continue;
+                }
+
+                if (MapTypeChecker.IsSupportedMapType(propertySchema.NamedTypeSymbol))
+                {
+                    var mapContext = CompatibilityContext.CreateCollectKey(
+                        context.MetadataCatalogs,
+                        context.Cells,
+                        startPosition);
+
+                    propertySchema.CheckCompatibility(mapContext);
+                    mapContext.ValidateNoDuplicates();
+
+                    var consumed = mapContext.Position - startPosition;
+                    context.Skip(consumed);
+                    continue;
+                }
+
+                propertySchema.CheckCompatibility(context);
+            }
         }
     }
 
