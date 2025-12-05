@@ -326,11 +326,7 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    private record Catalogs(
-        RecordSchemaCatalog RecordSchemaCatalog,
-        EnumMemberCatalog EnumMemberCatalog);
-
-    private static Catalogs CreateCatalogs(string code, ILogger logger)
+    private static MetadataCatalogs CreateCatalogs(string code, ILogger logger)
     {
         var loadResult = RecordSchemaLoader.OnLoad(code, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
@@ -338,8 +334,6 @@ public class ArrayTypeTests(ITestOutputHelper testOutputHelper)
         var enumMemberCatalog = new EnumMemberCatalog(loadResult);
         RecordComplianceChecker.Check(recordSchemaCatalog, logger);
 
-        return new Catalogs(
-            recordSchemaCatalog,
-            enumMemberCatalog);
+        return new(recordSchemaCatalog, enumMemberCatalog);
     }
 }
