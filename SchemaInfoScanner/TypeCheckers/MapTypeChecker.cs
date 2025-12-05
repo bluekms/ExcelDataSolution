@@ -9,7 +9,7 @@ using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 
-internal static class MapTypeChecker
+public static class MapTypeChecker
 {
     private static readonly HashSet<string> SupportedTypeNames =
     [
