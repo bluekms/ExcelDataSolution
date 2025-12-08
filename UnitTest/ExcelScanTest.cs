@@ -79,6 +79,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             "..",
             "..",
             "..",
+            "Docs",
             "TestExcel");
 
         return SheetNameScanner.Scan(excelPath, logger);
@@ -92,6 +93,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             "..",
             "..",
             "..",
+            "Docs",
             "TestRecord",
             "Excel3Records.cs");
 
