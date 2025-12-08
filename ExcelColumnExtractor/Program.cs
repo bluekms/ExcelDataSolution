@@ -17,11 +17,11 @@ public class Program
     public static void Main(string[] args)
     {
         Parser.Default.ParseArguments<ProgramOptions>(args)
-            .WithParsed(RunOptions)
-            .WithNotParsed(HandleParseError);
+            .WithParsed(Run)
+            .WithNotParsed(HandleParseErrors);
     }
 
-    private static void RunOptions(ProgramOptions options)
+    private static void Run(ProgramOptions options)
     {
         var logger = string.IsNullOrEmpty(options.LogPath)
             ? Logger.CreateLoggerWithoutFile<Program>(options.MinLogLevel)
@@ -32,8 +32,8 @@ public class Program
 
         var totalSw = Stopwatch.StartNew();
         var sw = Stopwatch.StartNew();
-        var recordSchemaCatalog = RecordScanner.Scan(options.RecordCsPath, logger);
-        if (recordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
+        var catalogs = RecordScanner.Scan(options.RecordCsPath, logger);
+        if (catalogs.RecordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
         {
             var exception = new ArgumentException($"{nameof(StaticDataRecordAttribute)} is not found.");
             LogError(logger, exception.Message, exception);
@@ -46,34 +46,27 @@ public class Program
         var sheetNameMap = SheetNameScanner.Scan(options.ExcelPath, logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(SheetNameScanner), null);
 
-        var targetColumnIndicesCollection = RequiredHeadersChecker.Check(
-            recordSchemaCatalog.StaticDataRecordSchemata,
-            recordSchemaCatalog,
-            sheetNameMap,
-            logger);
+        var requiredHeaderMap = RequiredHeadersChecker.Check(catalogs.RecordSchemaCatalog, sheetNameMap, logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(RequiredHeadersChecker), null);
 
         sw.Restart();
         var extractedTableCollection = BodyColumnAggregator.Aggregate(
-            recordSchemaCatalog.StaticDataRecordSchemata,
+            catalogs.RecordSchemaCatalog.StaticDataRecordSchemata,
             sheetNameMap,
-            targetColumnIndicesCollection,
+            requiredHeaderMap,
             logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(BodyColumnAggregator), null);
 
         sw.Restart();
 
-        DataBodyChecker.Check(
-            recordSchemaCatalog.StaticDataRecordSchemata,
-            recordSchemaCatalog,
-            extractedTableCollection,
-            logger);
+        DataBodyChecker.Check(catalogs, extractedTableCollection, logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
 
+        // TODO BodyChecker 결과로 FK도 체크해줄 수 없을까?
         sw.Restart();
         CsvWriter.Write(
-            CheckAndCreateOutputDirectory(options, logger),
-            ParseEncoding(options.Encoding),
+            EnsureOutputDirectory(options, logger),
+            GetEncoding(options.Encoding),
             extractedTableCollection);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(CsvWriter), null);
 
@@ -88,7 +81,7 @@ public class Program
         LogInformation(logger, totalSw.Elapsed.TotalMilliseconds, nameof(ExcelColumnExtractor), null);
     }
 
-    private static Encoding ParseEncoding(string? encoding)
+    private static Encoding GetEncoding(string? encoding)
     {
         var encodingName = (string.IsNullOrEmpty(encoding) ? "UTF-8" : encoding)
             .ToUpper(CultureInfo.InvariantCulture);
@@ -103,7 +96,7 @@ public class Program
         };
     }
 
-    private static string CheckAndCreateOutputDirectory(ProgramOptions options, ILogger<Program> logger)
+    private static string EnsureOutputDirectory(ProgramOptions options, ILogger<Program> logger)
     {
         var path = string.IsNullOrEmpty(options.Version)
             ? options.OutputPath
@@ -129,7 +122,7 @@ public class Program
         return path;
     }
 
-    private static void HandleParseError(IEnumerable<Error> errors)
+    private static void HandleParseErrors(IEnumerable<Error> errors)
     {
         var errorList = errors.ToList();
 

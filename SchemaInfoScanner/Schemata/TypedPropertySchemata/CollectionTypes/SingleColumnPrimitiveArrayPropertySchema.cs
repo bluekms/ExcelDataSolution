@@ -34,9 +34,7 @@ public sealed record SingleColumnPrimitiveArrayPropertySchema(
             }
 
             var nestedCells = new[] { new CellData(cell.Address, part) };
-            var nestedContext = CompatibilityContext.CreateNoCollect(
-                context.MetadataCatalogs,
-                nestedCells);
+            var nestedContext = CompatibilityContext.CreateNoCollect(context.MetadataCatalogs, nestedCells);
 
             GenericArgumentSchema.CheckCompatibility(nestedContext);
         }

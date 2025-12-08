@@ -19,6 +19,12 @@ public sealed class EnumMemberCatalog
         enumMemberDictionary = enumMemberCollector.AsReadOnly();
     }
 
+    public EnumMemberCatalog(IReadOnlyList<RecordSchemaLoader.Result> loadResults)
+    {
+        var enumMemberCollector = new EnumDefinitionSet(loadResults);
+        enumMemberDictionary = enumMemberCollector.AsReadOnly();
+    }
+
     public IReadOnlyList<string> GetEnumMembers(EnumName enumName)
     {
         return enumMemberDictionary[enumName];
