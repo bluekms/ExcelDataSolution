@@ -25,27 +25,27 @@ jobs:
 
       - name: Publish ExcelColumnExtractor Windows
         run: |
-          dotnet publish ./ExcelColumnExtractor/ExcelColumnExtractor -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/ExcelColumnExtractor/win-x64
+          dotnet publish ./ExcelColumnExtractor -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/ExcelColumnExtractor/win-x64
           mkdir -p ./release-files
           cp ./artifacts/ExcelColumnExtractor/win-x64/ExcelColumnExtractor.exe ./release-files/ExcelColumnExtractor-${GITHUB_REF#refs/tags/}-win-x64.exe
 
       - name: Publish ExcelColumnExtractor Linux
         run: |
-          dotnet publish ./ExcelColumnExtractor/ExcelColumnExtractor -c Release -r linux-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/ExcelColumnExtractor/linux-x64
+          dotnet publish ./ExcelColumnExtractor -c Release -r linux-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/ExcelColumnExtractor/linux-x64
           cp ./artifacts/ExcelColumnExtractor/linux-x64/ExcelColumnExtractor ./release-files/ExcelColumnExtractor-${GITHUB_REF#refs/tags/}-linux-x64
 
       - name: Publish StaticDataHeaderGenerator Windows
         run: |
-          dotnet publish ./StaticDataHeaderGenerator/StaticDataHeaderGenerator -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/win-x64
+          dotnet publish ./StaticDataHeaderGenerator -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/win-x64
           cp ./artifacts/StaticDataHeaderGenerator/win-x64/StaticDataHeaderGenerator.exe ./release-files/StaticDataHeaderGenerator-${GITHUB_REF#refs/tags/}-win-x64.exe
 
       - name: Publish StaticDataHeaderGenerator Linux
         run: |
-          dotnet publish ./StaticDataHeaderGenerator/StaticDataHeaderGenerator -c Release -r linux-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/linux-x64
+          dotnet publish ./StaticDataHeaderGenerator -c Release -r linux-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/linux-x64
           cp ./artifacts/StaticDataHeaderGenerator/linux-x64/StaticDataHeaderGenerator ./release-files/StaticDataHeaderGenerator-${GITHUB_REF#refs/tags/}-linux-x64
 
       - name: Build StaticDataAttribute
-        run: dotnet build ./StaticDataAttribute/StaticDataAttribute -c Release
+        run: dotnet build ./StaticDataAttribute -c Release
       - name: Copy StaticDataAttribute DLL
         run: |
           cp ./StaticDataAttribute/StaticDataAttribute/bin/Release/netstandard2.0/StaticDataAttribute.dll ./release-files/StaticDataAttribute-${GITHUB_REF#refs/tags/}.dll
