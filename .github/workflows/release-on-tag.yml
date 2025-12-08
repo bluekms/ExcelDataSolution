@@ -48,7 +48,7 @@ jobs:
         run: dotnet build ./StaticDataAttribute -c Release
       - name: Copy StaticDataAttribute DLL
         run: |
-          cp ./StaticDataAttribute/bin/Release/netstandard2.0/StaticDataAttribute.dll ./release-files/StaticDataAttribute-${GITHUB_REF#refs/tags/}.dll
+          cp ./StaticDataAttribute/bin/Release/net9.0/StaticDataAttribute.dll ./release-files/StaticDataAttribute-${GITHUB_REF#refs/tags/}.dll
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
