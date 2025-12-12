@@ -1,8 +1,8 @@
+using Eds;
 using FluentValidation;
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.TypeCheckers;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.SchemaValidators;
 
@@ -10,40 +10,40 @@ internal partial class SchemaRuleValidator
 {
     private void RegisterNullStringAttributeRule()
     {
-        // nullable 타입이라면 반드시 있어야 한다.
+        // nullable ?�?�이?�면 반드???�어???�다.
         When(x => x.IsNullable(), () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<NullStringAttribute>())
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable 이므로 {nameof(NullStringAttribute)} 를 사용해야 합니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable ?��?�?{nameof(NullStringAttribute)} �??�용?�야 ?�니??");
         });
 
-        // nullable 아이템이 사용된 array 라면 반드시 있어야 한다.
+        // nullable ?�이?�이 ?�용??array ?�면 반드???�어???�다.
         When(IsNullablePrimitiveArray, () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<NullStringAttribute>())
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable primitive array 이므로 {nameof(NullStringAttribute)} 를 사용해야 합니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable primitive array ?��?�?{nameof(NullStringAttribute)} �??�용?�야 ?�니??");
         });
 
-        // nullable 아이템이 사용된 set 이라면 반드시 있어야 한다.
+        // nullable ?�이?�이 ?�용??set ?�라�?반드???�어???�다.
         When(IsNullablePrimitiveSet, () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<NullStringAttribute>())
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable primitive set 이므로 {nameof(NullStringAttribute)} 를 사용해야 합니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable primitive set ?��?�?{nameof(NullStringAttribute)} �??�용?�야 ?�니??");
         });
 
-        // nullable 아이템이 사용된 map 이라면 반드시 있어야 한다.
+        // nullable ?�이?�이 ?�용??map ?�라�?반드???�어???�다.
         When(IsNullablePrimitiveMapValue, () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<NullStringAttribute>())
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable primitive set 이므로 {nameof(NullStringAttribute)} 를 사용해야 합니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable primitive set ?��?�?{nameof(NullStringAttribute)} �??�용?�야 ?�니??");
         });
 
         When(IsDisallowType, () =>
@@ -51,7 +51,7 @@ internal partial class SchemaRuleValidator
             RuleFor(x => x)
                 .Must(x => !x.HasAttribute<NullStringAttribute>())
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable이거나 nullable이 있는 컬랙션이 아니므로 {nameof(NullStringAttribute)} 를 사용할 수 없습니다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): nullable?�거??nullable???�는 컬랙?�이 ?�니므�?{nameof(NullStringAttribute)} �??�용?????�습?�다.");
         });
     }
 

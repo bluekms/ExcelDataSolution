@@ -1,5 +1,5 @@
+using Eds;
 using SchemaInfoScanner.Extensions;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.AttributeCheckers;
 

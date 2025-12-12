@@ -1,9 +1,9 @@
+using Eds;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.TypeCheckers;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner;
 
