@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using SchemaInfoScanner.Extensions;
 
 namespace SchemaInfoScanner.Schemata.AttributeCheckers;

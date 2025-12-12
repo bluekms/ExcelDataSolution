@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Eds;
+using Eds.Attributes;
 using ExcelColumnExtractor.NameObjects;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using CLICommonLibrary;
 using CommandLine;
-using Eds;
+using Eds.Attributes;
 using ExcelColumnExtractor.Aggregator;
 using ExcelColumnExtractor.Checkers;
 using ExcelColumnExtractor.Scanners;

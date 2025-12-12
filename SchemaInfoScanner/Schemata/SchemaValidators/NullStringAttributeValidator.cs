@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using FluentValidation;
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Extensions;

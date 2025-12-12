@@ -1,4 +1,4 @@
-namespace Eds;
+namespace Eds.Attributes;
 
 // https://learn.microsoft.com/ko-kr/dotnet/standard/base-types/standard-timespan-format-strings
 [AttributeUsage(AttributeTargets.Parameter)]

@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using FluentValidation;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
