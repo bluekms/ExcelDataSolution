@@ -77,7 +77,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsPrimitiveKeyRecordValueMapType(propertySymbol))
         {
-            // ?�기??propertyName?�로 찾아?�??attributeList�?교체??줘야 ?�다
+            // 여기서 propertyName으로 찾아온 attributeList를 교체해 줘야 한다
             return PrimitiveKeyRecordValueMapPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,
