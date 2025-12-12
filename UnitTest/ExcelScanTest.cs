@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Reflection;
+using Eds;
 using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,6 @@ using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Extensions;
-using StaticDataAttribute;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 

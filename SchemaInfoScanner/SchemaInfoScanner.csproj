@@ -27,7 +27,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Analyzers\Analyzers\Analyzers.csproj"
                         OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
-      <ProjectReference Include="..\StaticDataAttribute\StaticDataAttribute.csproj" />
+      <ProjectReference Include="..\Eds\Eds.csproj" />
     </ItemGroup>
 
 </Project>

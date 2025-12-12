@@ -1,7 +1,7 @@
+using Eds;
 using FluentValidation;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.TypeCheckers;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.SchemaValidators;
 
@@ -13,7 +13,7 @@ internal partial class SchemaRuleValidator
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<LengthAttribute>())
-                .WithMessage(x => $"{x.PropertyName.Name}({x.GetType().FullName}): 컬렉션 타입에는 반드시 {nameof(LengthAttribute)} 를 사용해야 합니다.");
+                .WithMessage(x => $"{x.PropertyName.Name}({x.GetType().FullName}): 컬렉???�?�에??반드??{nameof(LengthAttribute)} �??�용?�야 ?�니??");
         });
     }
 

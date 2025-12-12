@@ -1,4 +1,4 @@
-namespace StaticDataAttribute;
+namespace Eds;
 
 [AttributeUsage(AttributeTargets.Parameter)]
 public class NullStringAttribute(string nullString) : Attribute

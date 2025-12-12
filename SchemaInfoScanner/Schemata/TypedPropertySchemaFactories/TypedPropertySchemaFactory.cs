@@ -1,3 +1,4 @@
+using Eds;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;
@@ -6,7 +7,6 @@ using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.CollectionTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.PrimitiveTypes;
 using SchemaInfoScanner.Schemata.TypedPropertySchemaFactories.RecordTypes;
 using SchemaInfoScanner.TypeCheckers;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.Schemata.TypedPropertySchemaFactories;
 
@@ -77,7 +77,7 @@ public static class TypedPropertySchemaFactory
         }
         else if (MapTypeChecker.IsPrimitiveKeyRecordValueMapType(propertySymbol))
         {
-            // 여기서 propertyName으로 찾아와서 attributeList를 교체해 줘야 한다
+            // ?�기??propertyName?�로 찾아?�??attributeList�?교체??줘야 ?�다
             return PrimitiveKeyRecordValueMapPropertySchemaFactory.Create(
                 propertyName,
                 propertySymbol,

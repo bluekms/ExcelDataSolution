@@ -1,3 +1,4 @@
+using Eds;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
@@ -5,7 +6,6 @@ using SchemaInfoScanner.Exceptions;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.NameObjects;
 using SchemaInfoScanner.Schemata;
-using StaticDataAttribute;
 
 namespace SchemaInfoScanner.TypeCheckers;
 

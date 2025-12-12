@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using Eds;
 using ExcelColumnExtractor.NameObjects;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata;
-using StaticDataAttribute;
 
 namespace ExcelColumnExtractor.Mappings;
 
