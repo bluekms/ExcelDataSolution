@@ -1,4 +1,4 @@
-namespace Eds;
+namespace Eds.Attributes;
 
 [AttributeUsage(AttributeTargets.Parameter)]
 public class NullStringAttribute(string nullString) : Attribute

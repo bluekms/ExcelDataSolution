@@ -1,4 +1,4 @@
-namespace Eds;
+namespace Eds.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class StaticDataRecordAttribute(

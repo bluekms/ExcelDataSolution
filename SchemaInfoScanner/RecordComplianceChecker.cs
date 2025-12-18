@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Extensions;

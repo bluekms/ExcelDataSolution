@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Eds;
+using Eds.Attributes;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;

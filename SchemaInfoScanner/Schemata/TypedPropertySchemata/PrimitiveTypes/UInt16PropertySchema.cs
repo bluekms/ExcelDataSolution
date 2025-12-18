@@ -1,5 +1,5 @@
 using System.Globalization;
-using Eds;
+using Eds.Attributes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SchemaInfoScanner.Extensions;

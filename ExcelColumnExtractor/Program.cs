@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using CLICommonLibrary;
 using CommandLine;
-using Eds;
+using Eds.Attributes;
 using ExcelColumnExtractor.Aggregator;
 using ExcelColumnExtractor.Checkers;
 using ExcelColumnExtractor.Scanners;
@@ -62,7 +62,7 @@ public class Program
         DataBodyChecker.Check(catalogs, extractedTableCollection, logger);
         LogTrace(logger, sw.Elapsed.TotalMilliseconds, nameof(DataBodyChecker), null);
 
-        // TODO BodyChecker 결과�?FK??체크?�줄 ???�을�?
+        // TODO BodyChecker 결과로 FK를 체크해줄 수 있을까?
         sw.Restart();
         CsvWriter.Write(
             EnsureOutputDirectory(options, logger),

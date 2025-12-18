@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using FluentValidation;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
@@ -18,7 +18,7 @@ internal partial class SchemaRuleValidator
                     IsTimeSpanCollection(x) ||
                     x is TimeSpanPropertySchema or NullableTimeSpanPropertySchema)
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): {nameof(TimeSpan)} ???�니므�?{nameof(TimeSpanPropertySchema)} ?�용?????�습?�다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): {nameof(TimeSpan)}이 아니므로 {nameof(TimeSpanFormatAttribute)}를 사용할 수 없습니다.");
         });
 
         When(x => x is TimeSpanPropertySchema, () =>
@@ -26,7 +26,7 @@ internal partial class SchemaRuleValidator
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<TimeSpanFormatAttribute>())
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): {nameof(TimeSpan)} ?��?�?{nameof(TimeSpanFormatAttribute)} �??�용?�야 ?�니??");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): {nameof(TimeSpan)} 타입은 {nameof(TimeSpanFormatAttribute)}를 사용해야 합니다.");
         });
     }
 

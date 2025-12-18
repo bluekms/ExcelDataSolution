@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Reflection;
-using Eds;
+using Eds.Attributes;
 using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;

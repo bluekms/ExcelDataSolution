@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text;
-using Eds;
+using Eds.Attributes;
 using Microsoft.CodeAnalysis;
 using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Extensions;

@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using FluentValidation;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.TypeCheckers;
@@ -14,12 +14,12 @@ internal partial class SchemaRuleValidator
             RuleFor(x => x)
                 .Must(x => CollectionTypeChecker.IsSupportedCollectionType(x.NamedTypeSymbol))
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): 지?�되??컬랙?�이 ?�니�??�문??{nameof(SingleColumnCollectionAttribute)} �??�용?????�습?�다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): 지원되는 컬렉션이 아니기 때문에 {nameof(SingleColumnCollectionAttribute)}를 사용할 수 없습니다.");
 
             RuleFor(x => x)
                 .Must(x => !MapTypeChecker.IsSupportedMapType(x.NamedTypeSymbol))
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): Map 컬랙?�에?�는 {nameof(SingleColumnCollectionAttribute)} �??�용?????�습?�다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): Map 컬렉션에서는 {nameof(SingleColumnCollectionAttribute)}를 사용할 수 없습니다.");
         });
     }
 }

@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Eds;
+using Eds.Attributes;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;

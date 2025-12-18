@@ -1,4 +1,4 @@
-using Eds;
+using Eds.Attributes;
 using FluentValidation;
 using SchemaInfoScanner.Extensions;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata.PrimitiveTypes;
@@ -14,7 +14,7 @@ internal partial class SchemaRuleValidator
             RuleFor(x => x)
                 .Must(x => x is StringPropertySchema)
                 .WithMessage(x =>
-                    $"{x.PropertyName.FullName}({x.GetType().FullName}): string ???�니므�?{nameof(RegularExpressionAttribute)} �??�용?????�습?�다.");
+                    $"{x.PropertyName.FullName}({x.GetType().FullName}): string이 아니므로 {nameof(RegularExpressionAttribute)}를 사용할 수 없습니다.");
         });
     }
 }
