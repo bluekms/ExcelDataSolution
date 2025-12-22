@@ -6,15 +6,15 @@ using SchemaInfoScanner.Exceptions;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.AttributeValidators;
+namespace UnitTest.AttributeValidatorTests;
 
-public class RegularExpressionAttributeRuleTests(ITestOutputHelper testOutputHelper)
+public class TimeSpanFormatAttributeRuleTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void CanUseTest()
+    public void RequireTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RegularExpressionAttributeRuleTests>() is not TestOutputLogger<RegularExpressionAttributeRuleTests> logger)
+        if (factory.CreateLogger<TimeSpanFormatAttributeRuleTests>() is not TestOutputLogger<TimeSpanFormatAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,8 +22,8 @@ public class RegularExpressionAttributeRuleTests(ITestOutputHelper testOutputHel
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w+$")]
-                         string EmailAddress,
+                         [TimeSpanFormat("c")]
+                         TimeSpan Property,
                      );
                      """;
 
@@ -36,10 +36,10 @@ public class RegularExpressionAttributeRuleTests(ITestOutputHelper testOutputHel
     }
 
     [Fact]
-    public void DisallowTest()
+    public void MissingTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<RegularExpressionAttributeRuleTests>() is not TestOutputLogger<RegularExpressionAttributeRuleTests> logger)
+        if (factory.CreateLogger<TimeSpanFormatAttributeRuleTests>() is not TestOutputLogger<TimeSpanFormatAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -47,7 +47,31 @@ public class RegularExpressionAttributeRuleTests(ITestOutputHelper testOutputHel
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w+$")]
+                         TimeSpan Property,
+                     );
+                     """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+
+        Assert.Throws<InvalidAttributeUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Single(logger.Logs);
+    }
+
+    [Fact]
+    public void DisallowTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<TimeSpanFormatAttributeRuleTests>() is not TestOutputLogger<TimeSpanFormatAttributeRuleTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var code = $$"""
+                     [StaticDataRecord("Test", "TestSheet")]
+                     public sealed record MyRecord(
+                         [TimeSpanFormat("c")]
                          int Property,
                      );
                      """;

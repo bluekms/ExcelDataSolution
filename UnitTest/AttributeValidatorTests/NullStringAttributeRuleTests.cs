@@ -6,7 +6,7 @@ using SchemaInfoScanner.Exceptions;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.AttributeValidators;
+namespace UnitTest.AttributeValidatorTests;
 
 public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
 {
@@ -88,32 +88,6 @@ public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void RequireMapTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<NullStringAttributeRuleTests>() is not TestOutputLogger<NullStringAttributeRuleTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [NullString("-")]
-                         [Length(3)]
-                         FrozenDictionary<int, int?> Property
-                     );
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-
-        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
-        Assert.Empty(logger.Logs);
-    }
-
-    [Fact]
     public void MissingTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
@@ -174,30 +148,6 @@ public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
                          FrozenSet<int?> Property
-                     );
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-
-        Assert.Throws<InvalidAttributeUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
-        Assert.Single(logger.Logs);
-    }
-
-    [Fact]
-    public void MissingMapTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<NullStringAttributeRuleTests>() is not TestOutputLogger<NullStringAttributeRuleTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         FrozenDictionary<int, int?> Property
                      );
                      """;
 
@@ -334,31 +284,6 @@ public class NullStringAttributeRuleTests(ITestOutputHelper testOutputHelper)
                      public sealed record MyRecord(
                          [NullString("-")]
                          FrozenSet<int> Property
-                     );
-                     """;
-
-        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
-        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
-        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
-
-        Assert.Throws<InvalidAttributeUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
-        Assert.Single(logger.Logs);
-    }
-
-    [Fact]
-    public void DisallowMapTest()
-    {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<NullStringAttributeRuleTests>() is not TestOutputLogger<NullStringAttributeRuleTests> logger)
-        {
-            throw new InvalidOperationException("Logger creation failed.");
-        }
-
-        var code = $$"""
-                     [StaticDataRecord("Test", "TestSheet")]
-                     public sealed record MyRecord(
-                         [NullString("-")]
-                         FrozenDictionary<int, int> Property
                      );
                      """;
 

@@ -6,15 +6,15 @@ using SchemaInfoScanner.Exceptions;
 using UnitTest.Utility;
 using Xunit.Abstractions;
 
-namespace UnitTest.AttributeValidators;
+namespace UnitTest.AttributeValidatorTests;
 
-public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper)
+public class SingleColumnCollectionAttributeRuleTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
-    public void RequireTest()
+    public void CanUseArrayTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DateTimeFormatAttributeRuleTests>() is not TestOutputLogger<DateTimeFormatAttributeRuleTests> logger)
+        if (factory.CreateLogger<SingleColumnCollectionAttributeRuleTests>() is not TestOutputLogger<SingleColumnCollectionAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -22,8 +22,8 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
-                         DateTime Property,
+                         [SingleColumnCollection(",")]
+                         ImmutableArray<int> Property,
                      );
                      """;
 
@@ -36,10 +36,10 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
     }
 
     [Fact]
-    public void MissingTest()
+    public void CanUseSetTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DateTimeFormatAttributeRuleTests>() is not TestOutputLogger<DateTimeFormatAttributeRuleTests> logger)
+        if (factory.CreateLogger<SingleColumnCollectionAttributeRuleTests>() is not TestOutputLogger<SingleColumnCollectionAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -47,7 +47,8 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         DateTime Property,
+                         [SingleColumnCollection(",")]
+                         FrozenSet<int> Property,
                      );
                      """;
 
@@ -55,15 +56,15 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
         var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
 
-        Assert.Throws<InvalidAttributeUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
-        Assert.Single(logger.Logs);
+        RecordComplianceChecker.Check(recordSchemaCatalog, logger);
+        Assert.Empty(logger.Logs);
     }
 
     [Fact]
     public void DisallowTest()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
-        if (factory.CreateLogger<DateTimeFormatAttributeRuleTests>() is not TestOutputLogger<DateTimeFormatAttributeRuleTests> logger)
+        if (factory.CreateLogger<SingleColumnCollectionAttributeRuleTests>() is not TestOutputLogger<SingleColumnCollectionAttributeRuleTests> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");
         }
@@ -71,7 +72,7 @@ public class DateTimeFormatAttributeRuleTests(ITestOutputHelper testOutputHelper
         var code = $$"""
                      [StaticDataRecord("Test", "TestSheet")]
                      public sealed record MyRecord(
-                         [DateTimeFormat("yyyy-MM-dd HH:mm:ss.fff")]
+                         [SingleColumnCollection(",")]
                          int Property,
                      );
                      """;

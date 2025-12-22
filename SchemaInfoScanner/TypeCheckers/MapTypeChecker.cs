@@ -86,25 +86,6 @@ public static class MapTypeChecker
         return SupportedTypeNames.Contains(genericTypeDefinitionName);
     }
 
-    public static bool IsPrimitiveKeyAndValueMapType(INamedTypeSymbol symbol)
-    {
-        if (!IsSupportedMapType(symbol))
-        {
-            return false;
-        }
-
-        var keySymbol = (INamedTypeSymbol)symbol.TypeArguments[0];
-        if (keySymbol.NullableAnnotation is NullableAnnotation.Annotated)
-        {
-            throw new NotSupportedException($"Key type of dictionary must be non-nullable.");
-        }
-
-        var valueSymbol = (INamedTypeSymbol)symbol.TypeArguments[1];
-
-        return PrimitiveTypeChecker.IsSupportedPrimitiveType(keySymbol) &&
-               PrimitiveTypeChecker.IsSupportedPrimitiveType(valueSymbol);
-    }
-
     public static bool IsPrimitiveKeyRecordValueMapType(INamedTypeSymbol symbol)
     {
         if (!IsSupportedMapType(symbol))

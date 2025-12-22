@@ -58,8 +58,10 @@ public static class RecordFlattener
                         throw new InvalidOperationException($"Parameter {parameter.PropertyName} cannot have LengthAttribute");
                     }
 
-                    var result = FlattenPrimitiveCollection(headerName, length);
-                    headers.AddRange(result);
+                    for (var i = 0; i < length; ++i)
+                    {
+                        headers.Add(FormattableString.Invariant($"{headerName}[{i}]"));
+                    }
                 }
             }
             else if (MapTypeChecker.IsSupportedMapType(parameter.NamedTypeSymbol))
@@ -116,20 +118,6 @@ public static class RecordFlattener
 
                 headers.AddRange(innerFlatten);
             }
-        }
-
-        return headers;
-    }
-
-    private static List<string> FlattenPrimitiveCollection(
-        string headerName,
-        int length)
-    {
-        var headers = new List<string>();
-
-        for (var i = 0; i < length; ++i)
-        {
-            headers.Add($"{headerName}[{i}]");
         }
 
         return headers;

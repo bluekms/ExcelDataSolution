@@ -36,13 +36,6 @@ public static class TypedPropertySchemaFactory
                 ? PrimitiveSetPropertySchemaFactory.CreateForSingleColumn(propertyName, propertySymbol, attributeList)
                 : PrimitiveSetPropertySchemaFactory.Create(propertyName, propertySymbol, attributeList);
         }
-        else if (MapTypeChecker.IsPrimitiveKeyAndValueMapType(propertySymbol))
-        {
-            return PrimitiveKeyAndValueMapSchemaFactory.Create(
-                propertyName,
-                propertySymbol,
-                attributeList);
-        }
         else if (RecordTypeChecker.IsSupportedRecordType(propertySymbol))
         {
             return RecordPropertySchemaFactory.Create(
