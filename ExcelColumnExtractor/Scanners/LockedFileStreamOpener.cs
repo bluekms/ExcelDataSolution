@@ -18,8 +18,44 @@ public class LockedFileStreamOpener : IDisposable
         catch (IOException)
         {
             TempFileName = Path.GetTempFileName();
-            ForceCopyAsync(fileName, TempFileName);
+            ForceCopy(fileName, TempFileName);
             Stream = File.Open(TempFileName, FileMode.Open, FileAccess.Read);
+        }
+    }
+
+    private LockedFileStreamOpener(Stream stream, string? tempFileName)
+    {
+        Stream = stream;
+        TempFileName = tempFileName;
+    }
+
+    public static async Task<LockedFileStreamOpener> CreateAsync(string fileName, CancellationToken cancellationToken = default)
+    {
+        System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+        try
+        {
+            var stream = new FileStream(
+                fileName,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 4096,
+                useAsync: true);
+            return new LockedFileStreamOpener(stream, null);
+        }
+        catch (IOException)
+        {
+            var tempFileName = Path.GetTempFileName();
+            await ForceCopyAsync(fileName, tempFileName, cancellationToken);
+            var stream = new FileStream(
+                tempFileName,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 4096,
+                useAsync: true);
+            return new LockedFileStreamOpener(stream, tempFileName);
         }
     }
 
@@ -37,7 +73,7 @@ public class LockedFileStreamOpener : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static void ForceCopyAsync(string src, string dst)
+    private static void ForceCopy(string src, string dst)
     {
         var command = $"COPY /B /Y {src} {dst}";
         var process = new Process
@@ -52,5 +88,22 @@ public class LockedFileStreamOpener : IDisposable
         };
         process.Start();
         process.WaitForExit();
+    }
+
+    private static async Task ForceCopyAsync(string src, string dst, CancellationToken cancellationToken)
+    {
+        var command = $"COPY /B /Y {src} {dst}";
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                Arguments = $"/C {command}",
+            },
+            EnableRaisingEvents = true
+        };
+        process.Start();
+        await process.WaitForExitAsync(cancellationToken);
     }
 }

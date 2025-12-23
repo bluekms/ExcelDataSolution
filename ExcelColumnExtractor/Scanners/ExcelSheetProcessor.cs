@@ -45,7 +45,24 @@ public sealed class ExcelSheetProcessor
             LogInformation(logger, $"{nameof(SheetHeaderScanner)}: {Path.GetFileName(excelSheetName.ExcelPath)} 이미 열려있어 사본을 읽습니다. 마지막으로 저장된 시간: {lastWriteTime}", null);
         }
 
-        using var reader = ExcelReaderFactory.CreateReader(loader.Stream);
+        ProcessCore(loader.Stream, excelSheetName, logger);
+    }
+
+    public async Task ProcessAsync(ExcelSheetName excelSheetName, ILogger logger, CancellationToken cancellationToken = default)
+    {
+        using var loader = await LockedFileStreamOpener.CreateAsync(excelSheetName.ExcelPath, cancellationToken);
+        if (loader.IsTemp)
+        {
+            var lastWriteTime = File.GetLastWriteTime(excelSheetName.ExcelPath);
+            LogInformation(logger, $"{nameof(SheetHeaderScanner)}: {Path.GetFileName(excelSheetName.ExcelPath)} 이미 열려있어 사본을 읽습니다. 마지막으로 저장된 시간: {lastWriteTime}", null);
+        }
+
+        ProcessCore(loader.Stream, excelSheetName, logger);
+    }
+
+    private void ProcessCore(Stream stream, ExcelSheetName excelSheetName, ILogger logger)
+    {
+        using var reader = ExcelReaderFactory.CreateReader(stream);
 
         var sheetFound = false;
         do
