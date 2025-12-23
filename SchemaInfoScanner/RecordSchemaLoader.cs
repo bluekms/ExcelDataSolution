@@ -51,6 +51,8 @@ public static class RecordSchemaLoader
 
     public static async Task<IReadOnlyList<Result>> LoadAsync(string csPath, ILogger logger, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var results = new List<Result>();
 
         if (File.Exists(csPath))

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ExcelColumnExtractor.Scanners;
 
@@ -14,6 +15,10 @@ public class LockedFileStreamOpener : IDisposable
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             Stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
         }
         catch (IOException)
         {
@@ -31,6 +36,8 @@ public class LockedFileStreamOpener : IDisposable
 
     public static async Task<LockedFileStreamOpener> CreateAsync(string fileName, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
         try
@@ -43,6 +50,10 @@ public class LockedFileStreamOpener : IDisposable
                 bufferSize: 4096,
                 useAsync: true);
             return new LockedFileStreamOpener(stream, null);
+        }
+        catch (FileNotFoundException)
+        {
+            throw;
         }
         catch (IOException)
         {
@@ -75,35 +86,43 @@ public class LockedFileStreamOpener : IDisposable
 
     private static void ForceCopy(string src, string dst)
     {
-        var command = $"COPY /B /Y {src} {dst}";
-        var process = new Process
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            StartInfo = new ProcessStartInfo
+            using var process = new Process();
+            process.StartInfo = new ProcessStartInfo
             {
-                WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
-                Arguments = $"/C {command}",
-            },
-            EnableRaisingEvents = true
-        };
-        process.Start();
-        process.WaitForExit();
+                Arguments = $"/c copy /y \"{src}\" \"{dst}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            process.Start();
+            process.WaitForExit();
+        }
+        else
+        {
+            File.Copy(src, dst, overwrite: true);
+        }
     }
 
     private static async Task ForceCopyAsync(string src, string dst, CancellationToken cancellationToken)
     {
-        var command = $"COPY /B /Y {src} {dst}";
-        var process = new Process
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            StartInfo = new ProcessStartInfo
+            using var process = new Process();
+            process.StartInfo = new ProcessStartInfo
             {
-                WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "cmd.exe",
-                Arguments = $"/C {command}",
-            },
-            EnableRaisingEvents = true
-        };
-        process.Start();
-        await process.WaitForExitAsync(cancellationToken);
+                Arguments = $"/c copy /y \"{src}\" \"{dst}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            process.Start();
+            await process.WaitForExitAsync(cancellationToken);
+        }
+        else
+        {
+            await Task.Run(() => File.Copy(src, dst, overwrite: true), cancellationToken);
+        }
     }
 }
