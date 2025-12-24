@@ -24,7 +24,7 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void LoadTest()
     {
-        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Trace);
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<ExcelScanTest>() is not TestOutputLogger<ExcelScanTest> logger)
         {
             throw new InvalidOperationException("Logger creation failed.");

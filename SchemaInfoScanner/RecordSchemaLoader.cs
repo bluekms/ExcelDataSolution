@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Data;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -39,6 +38,34 @@ public static class RecordSchemaLoader
             foreach (var file in files)
             {
                 var code = File.ReadAllText(file);
+                results.Add(OnLoad(code, logger));
+            }
+        }
+        else
+        {
+            throw new ArgumentException("The file or directory does not exist.", nameof(csPath));
+        }
+
+        return results;
+    }
+
+    public static async Task<IReadOnlyList<Result>> LoadAsync(string csPath, ILogger logger, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var results = new List<Result>();
+
+        if (File.Exists(csPath))
+        {
+            var code = await File.ReadAllTextAsync(csPath, cancellationToken);
+            results.Add(OnLoad(code, logger));
+        }
+        else if (Directory.Exists(csPath))
+        {
+            var files = Directory.GetFiles(csPath, "*.cs");
+            foreach (var file in files)
+            {
+                var code = await File.ReadAllTextAsync(file, cancellationToken);
                 results.Add(OnLoad(code, logger));
             }
         }

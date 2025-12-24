@@ -38,7 +38,7 @@ public sealed class CompatibilityContext
     public EnumMemberCatalog EnumMemberCatalog => MetadataCatalogs.EnumMemberCatalog;
     public RecordSchemaCatalog RecordSchemaCatalog => MetadataCatalogs.RecordSchemaCatalog;
 
-    public IReadOnlyList<CellData> Cells { get; } // TODO : ImmutableArray
+    public IReadOnlyList<CellData> Cells { get; }
 
     public int Position { get; private set; }
 
