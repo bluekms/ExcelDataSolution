@@ -39,3 +39,6 @@ dotnet_diagnostic.SA1201.severity = silent
 
 # 불필요한 using에 대해 경고
 dotnet_diagnostic.IDE0005.severity = warning
+
+# 로깅 성능 관련 - logger.LogXxx() 스타일 유지
+dotnet_diagnostic.CA1873.severity = silent
