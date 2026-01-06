@@ -44,11 +44,11 @@ jobs:
           dotnet publish ./StaticDataHeaderGenerator -c Release -r linux-x64 /p:PublishSingleFile=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/linux-x64
           cp ./artifacts/StaticDataHeaderGenerator/linux-x64/StaticDataHeaderGenerator ./release-files/StaticDataHeaderGenerator-${GITHUB_REF#refs/tags/}-linux-x64
 
-      - name: Build StaticDataAttribute
-        run: dotnet build ./StaticDataAttribute -c Release
-      - name: Copy StaticDataAttribute DLL
+      - name: Build Eds
+        run: dotnet build ./Eds -c Release
+      - name: Copy Eds DLL
         run: |
-          cp ./StaticDataAttribute/bin/Release/net9.0/StaticDataAttribute.dll ./release-files/StaticDataAttribute.dll
+          cp ./Eds/bin/Release/net10.0/Eds.dll ./release-files/Eds.dll
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
