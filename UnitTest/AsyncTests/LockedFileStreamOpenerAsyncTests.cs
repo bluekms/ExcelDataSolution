@@ -2,6 +2,7 @@ using ExcelColumnExtractor.Scanners;
 
 namespace UnitTest.AsyncTests;
 
+[Collection("ExcelFileTests")]
 public class LockedFileStreamOpenerAsyncTests
 {
     private static string GetTestExcelPath()

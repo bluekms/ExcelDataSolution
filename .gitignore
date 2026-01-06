@@ -14,9 +14,9 @@ appsettings.*.json
 *.userosscache
 *.sln.docstates
 *.private.env.json
-
-# User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+.claude
+CLAUDE.*.md
 
 # Build results
 [Dd]ebug/

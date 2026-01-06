@@ -13,6 +13,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest;
 
+[Collection("ExcelFileTests")]
 public class ExcelScanTest(ITestOutputHelper testOutputHelper)
 {
     private static readonly Action<ILogger, string, Exception?> LogTrace =

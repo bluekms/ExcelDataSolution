@@ -6,6 +6,7 @@ using Xunit.Abstractions;
 
 namespace UnitTest.AsyncTests;
 
+[Collection("ExcelFileTests")]
 public class ExcelSheetProcessorAsyncTests(ITestOutputHelper testOutputHelper)
 {
     private static string GetTestExcelPath()
