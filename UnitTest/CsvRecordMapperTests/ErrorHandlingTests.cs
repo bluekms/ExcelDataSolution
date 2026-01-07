@@ -1,4 +1,4 @@
-using Eds.Mapper;
+using Eds.Csv;
 
 namespace UnitTest.CsvRecordMapperTests;
 

@@ -101,6 +101,16 @@ switch (value)
 public, private, protected, internal, required, file, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async
 ```
 
+#### empty string 사용
+
+```aiignore
+// Good
+string s = string.Empty;
+
+// bad
+string s = "";
+```
+
 ### 로깅
 
 - **`logger.LogXxx()` 스타일 유지**
@@ -146,7 +156,5 @@ public sealed record ArenaRanker(long Rank, int Rating, WholeUserData User);
 
 ## 빌드
 
-```bash
-dotnet build
-dotnet test
-```
+* 빌드하지 않는다
+* 커밋하지 않는다

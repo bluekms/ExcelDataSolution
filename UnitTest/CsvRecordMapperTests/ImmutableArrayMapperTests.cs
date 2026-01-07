@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using Eds.Attributes;
-using Eds.Mapper;
+using Eds.Csv;
 
 namespace UnitTest.CsvRecordMapperTests;
 
