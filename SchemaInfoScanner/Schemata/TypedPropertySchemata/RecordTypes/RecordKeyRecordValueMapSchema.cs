@@ -18,22 +18,26 @@ public sealed record RecordKeyRecordValueMapSchema(
             throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
-        var valueContext = CompatibilityContext.CreateNoCollect(context.MetadataCatalogs, context.Cells, context.Position);
+        var startPosition = context.Position;
+        var keyContext = CompatibilityContext.CreateCollectKey(context.MetadataCatalogs, context.Cells, startPosition);
+        var valueContext = CompatibilityContext.CreateNoCollect(context.MetadataCatalogs, context.Cells, startPosition);
+
         for (var i = 0; i < length; i++)
         {
-            context.BeginKeyScope();
-            var keyStartPosition = context.Position;
-            KeyGenericArgumentSchema.CheckCompatibility(context);
-            context.EndKeyScope();
+            keyContext.BeginKeyScope();
+            var keyStartPosition = keyContext.Position;
+            KeyGenericArgumentSchema.CheckCompatibility(keyContext);
+            keyContext.EndKeyScope();
 
             var valueStartPosition = valueContext.Position;
             ValueGenericArgumentSchema.CheckCompatibility(valueContext);
 
             var valueConsumed = valueContext.Position - valueStartPosition;
-            var keyConsumed = context.Position - keyStartPosition;
-            context.Skip(valueConsumed - keyConsumed);
+            var keyConsumed = keyContext.Position - keyStartPosition;
+            keyContext.Skip(valueConsumed - keyConsumed);
         }
 
-        context.ValidateNoDuplicates();
+        keyContext.ValidateNoDuplicates();
+        context.Skip(keyContext.Position - startPosition);
     }
 }
