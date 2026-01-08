@@ -92,13 +92,25 @@ internal static class CsvTypeCache
         var columnNameAttr = param.GetCustomAttribute<ColumnNameAttribute>();
         var lengthAttr = param.GetCustomAttribute<LengthAttribute>();
         var nullStringAttr = param.GetCustomAttribute<NullStringAttribute>();
+        var singleColumnAttr = param.GetCustomAttribute<SingleColumnCollectionAttribute>();
 
         var paramType = param.ParameterType;
         var collectionType = CollectionKind.None;
         Type? elementType = null;
         Type? keyType = null;
+        string? singleColumnSeparator = null;
 
-        if (lengthAttr is not null && paramType.IsGenericType)
+        if (singleColumnAttr is not null && paramType.IsGenericType)
+        {
+            var genericTypeDef = paramType.GetGenericTypeDefinition();
+            if (genericTypeDef == typeof(ImmutableArray<>))
+            {
+                collectionType = CollectionKind.SingleColumnImmutableArray;
+                elementType = paramType.GetGenericArguments()[0];
+                singleColumnSeparator = singleColumnAttr.Separator;
+            }
+        }
+        else if (lengthAttr is not null && paramType.IsGenericType)
         {
             var genericTypeDef = paramType.GetGenericTypeDefinition();
             if (genericTypeDef == typeof(ImmutableArray<>))
@@ -127,7 +139,8 @@ internal static class CsvTypeCache
             nullStringAttr?.NullString,
             collectionType,
             elementType,
-            keyType);
+            keyType,
+            singleColumnSeparator);
     }
 }
 
@@ -140,7 +153,8 @@ internal sealed record ParameterMappingInfo(
     string? NullString,
     CollectionKind CollectionKind,
     Type? ElementType,
-    Type? KeyType);
+    Type? KeyType,
+    string? SingleColumnSeparator);
 
 internal enum CollectionKind
 {
@@ -148,4 +162,5 @@ internal enum CollectionKind
     ImmutableArray,
     FrozenSet,
     FrozenDictionary,
+    SingleColumnImmutableArray,
 }
