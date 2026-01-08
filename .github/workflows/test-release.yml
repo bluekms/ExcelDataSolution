@@ -1,0 +1,76 @@
+name: Test Release
+
+on:
+  workflow_dispatch:
+
+env:
+  TAG_NAME: v0.1.0-test
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete existing release
+        run: gh release delete ${{ env.TAG_NAME }} --yes || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete existing tag
+        run: git push origin --delete ${{ env.TAG_NAME }} || true
+
+      - name: Create tag
+        run: |
+          git tag ${{ env.TAG_NAME }}
+          git push origin ${{ env.TAG_NAME }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build all projects
+        run: dotnet build -c Release
+
+      - name: Publish ExcelColumnExtractor Windows
+        run: |
+          dotnet publish ./ExcelColumnExtractor -c Release -r win-x64 /p:PublishSingleFile=true --self-contained true -o ./artifacts/ExcelColumnExtractor/win-x64
+          mkdir -p ./release-files
+          cp ./artifacts/ExcelColumnExtractor/win-x64/ExcelColumnExtractor.exe ./release-files/ExcelColumnExtractor-${{ env.TAG_NAME }}-win-x64.exe
+
+      - name: Publish ExcelColumnExtractor Linux
+        run: |
+          dotnet publish ./ExcelColumnExtractor -c Release -r linux-x64 /p:PublishSingleFile=true --self-contained true -o ./artifacts/ExcelColumnExtractor/linux-x64
+          cp ./artifacts/ExcelColumnExtractor/linux-x64/ExcelColumnExtractor ./release-files/ExcelColumnExtractor-${{ env.TAG_NAME }}-linux-x64
+
+      - name: Publish StaticDataHeaderGenerator Windows
+        run: |
+          dotnet publish ./StaticDataHeaderGenerator -c Release -r win-x64 /p:PublishSingleFile=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/win-x64
+          cp ./artifacts/StaticDataHeaderGenerator/win-x64/StaticDataHeaderGenerator.exe ./release-files/StaticDataHeaderGenerator-${{ env.TAG_NAME }}-win-x64.exe
+
+      - name: Publish StaticDataHeaderGenerator Linux
+        run: |
+          dotnet publish ./StaticDataHeaderGenerator -c Release -r linux-x64 /p:PublishSingleFile=true --self-contained true -o ./artifacts/StaticDataHeaderGenerator/linux-x64
+          cp ./artifacts/StaticDataHeaderGenerator/linux-x64/StaticDataHeaderGenerator ./release-files/StaticDataHeaderGenerator-${{ env.TAG_NAME }}-linux-x64
+
+      - name: Build Eds
+        run: dotnet build ./Eds -c Release
+
+      - name: Copy Eds DLL
+        run: cp ./Eds/bin/Release/net10.0/Eds.dll ./release-files/Eds.dll
+
+      - name: Create GitHub Pre-Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          prerelease: true
+          files: ./release-files/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
