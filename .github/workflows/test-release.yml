@@ -21,7 +21,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete existing tag
-        run: git push origin --delete ${{ env.TAG_NAME }} || true
+        run: |
+          git push origin --delete ${{ env.TAG_NAME }} || true
+          git tag -d ${{ env.TAG_NAME }} || true
 
       - name: Create tag
         run: |
