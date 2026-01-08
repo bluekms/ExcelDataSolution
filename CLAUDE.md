@@ -153,6 +153,19 @@ public sealed record ArenaRanker(long Rank, int Rating, WholeUserData User);
 - 공개 API에 대한 XML 주석은 필수가 아님 (CS1591 silent)
 - 필요한 경우에만 주석 추가
 
+### 테스트 (xUnit)
+
+- 컬렉션 크기가 1개인지 검증할 때 `Assert.Single()` 사용
+
+```csharp
+// Good
+var record = Assert.Single(result);
+Assert.Equal("expected", record.Name);
+
+// Bad (xUnit2013)
+Assert.Equal(1, result.Count);
+```
+
 
 ## 빌드
 
