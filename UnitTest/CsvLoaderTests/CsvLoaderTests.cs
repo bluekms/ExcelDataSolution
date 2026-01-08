@@ -132,4 +132,66 @@ public class CsvLoaderTests
             File.Delete(tempFile);
         }
     }
+
+    [Fact]
+    public void Parse_WithQuotedFieldContainingComma_ParsesCorrectly()
+    {
+        var csv = """
+            Id,Name,Score
+            1,"Smith, John",95.5
+            2,"Doe, Jane",87.3
+            """;
+
+        var result = CsvLoader.Parse<SimpleRecord>(csv);
+
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Smith, John", result[0].Name);
+        Assert.Equal("Doe, Jane", result[1].Name);
+    }
+
+    [Fact]
+    public void Parse_WithMultiLineQuotedField_ParsesCorrectly()
+    {
+        var csv = "Id,Name,Score\n1,\"Hello\nWorld\",95.5\n2,Bob,87.3";
+
+        var result = CsvLoader.Parse<SimpleRecord>(csv);
+
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Hello\nWorld", result[0].Name);
+        Assert.Equal("Bob", result[1].Name);
+    }
+
+    [Fact]
+    public void Parse_WithEscapedQuotes_ParsesCorrectly()
+    {
+        var csv = "Id,Name,Score\n1,\"Say \"\"Hello\"\"\",95.5";
+
+        var result = CsvLoader.Parse<SimpleRecord>(csv);
+
+        var record = Assert.Single(result);
+        Assert.Equal("Say \"Hello\"", record.Name);
+    }
+
+    [Fact]
+    public void Parse_WithComplexMultiLineField_ParsesCorrectly()
+    {
+        var csv = "Id,Name,Score\n1,\"Line1\nLine2\nLine3\",95.5\n2,Simple,87.3";
+
+        var result = CsvLoader.Parse<SimpleRecord>(csv);
+
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Line1\nLine2\nLine3", result[0].Name);
+        Assert.Equal("Simple", result[1].Name);
+    }
+
+    [Fact]
+    public void Parse_WithQuotedFieldContainingCommaAndNewline_ParsesCorrectly()
+    {
+        var csv = "Id,Name,Score\n1,\"Hello, World\nGoodbye\",95.5";
+
+        var result = CsvLoader.Parse<SimpleRecord>(csv);
+
+        var record = Assert.Single(result);
+        Assert.Equal("Hello, World\nGoodbye", record.Name);
+    }
 }
