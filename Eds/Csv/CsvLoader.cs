@@ -73,6 +73,15 @@ public static class CsvLoader
                         i++;
                     }
                 }
+                else if (c == '\r')
+                {
+                    field.Append('\n');
+                    i++;
+                    if (i < content.Length && content[i] == '\n')
+                    {
+                        i++;
+                    }
+                }
                 else
                 {
                     field.Append(c);

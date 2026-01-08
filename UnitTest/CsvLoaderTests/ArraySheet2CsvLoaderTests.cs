@@ -25,7 +25,7 @@ public class ArraySheet2CsvLoaderTests
         Assert.Equal(9, records.Count);
 
         // 첫 번째 레코드 검증 (멀티라인 + 특수문자 포함)
-        Assert.Equal("동해물과\r\n백두산이, 마르고 닳도록　~.", records[0].Name);
+        Assert.Equal("동해물과\n백두산이, 마르고 닳도록　~.", records[0].Name);
         Assert.Equal(3, records[0].Scores.Length);
         Assert.Equal(111, records[0].Scores[0]);
         Assert.Equal(222, records[0].Scores[1]);
