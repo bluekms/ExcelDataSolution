@@ -64,6 +64,12 @@ internal static class CsvRecordMapper
                     headerIndexMap,
                     values,
                     paramInfo.NullString),
+                CollectionKind.SingleColumnImmutableArray => ConvertToSingleColumnImmutableArray(
+                    paramInfo.ElementType!,
+                    baseName,
+                    paramInfo.SingleColumnSeparator!,
+                    headerIndexMap,
+                    values),
                 _ => throw new InvalidOperationException($"Unknown collection type: {paramInfo.CollectionKind}"),
             };
         }
@@ -153,6 +159,33 @@ internal static class CsvRecordMapper
                 convertedValue = CreateRecordInstance(elementType, headerName, headerIndexMap, values, nullString);
             }
 
+            array.SetValue(convertedValue, i);
+        }
+
+        var createMethod = CsvTypeCache.GetImmutableArrayCreateMethod(elementType);
+        return createMethod.Invoke(null, [array]);
+    }
+
+    private static object? ConvertToSingleColumnImmutableArray(
+        Type elementType,
+        string baseName,
+        string separator,
+        Dictionary<string, int> headerIndexMap,
+        string[] values)
+    {
+        if (!headerIndexMap.TryGetValue(baseName, out var index))
+        {
+            throw new InvalidOperationException($"Header '{baseName}' not found in CSV");
+        }
+
+        var cellValue = values[index];
+        var parts = cellValue.Split(separator);
+        var array = Array.CreateInstance(elementType, parts.Length);
+
+        for (var i = 0; i < parts.Length; i++)
+        {
+            var trimmedValue = parts[i].Trim();
+            var convertedValue = ConvertStringValue(elementType, trimmedValue, null);
             array.SetValue(convertedValue, i);
         }
 

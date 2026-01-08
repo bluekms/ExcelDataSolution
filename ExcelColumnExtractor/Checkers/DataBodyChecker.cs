@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using SchemaInfoScanner.Catalogs;
 using SchemaInfoScanner.Schemata;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata;
-using SchemaInfoScanner.TypeCheckers;
 
 namespace ExcelColumnExtractor.Checkers;
 
@@ -50,38 +49,6 @@ public static class DataBodyChecker
 
             foreach (var propertySchema in recordSchema.PropertySchemata)
             {
-                var startPosition = context.Position;
-
-                if (SetTypeChecker.IsSupportedSetType(propertySchema.NamedTypeSymbol))
-                {
-                    var setContext = CompatibilityContext.CreateCollectKey(
-                        context.MetadataCatalogs,
-                        context.Cells,
-                        startPosition);
-
-                    propertySchema.CheckCompatibility(setContext);
-                    setContext.ValidateNoDuplicates();
-
-                    var consumed = setContext.Position - startPosition;
-                    context.Skip(consumed);
-                    continue;
-                }
-
-                if (MapTypeChecker.IsSupportedMapType(propertySchema.NamedTypeSymbol))
-                {
-                    var mapContext = CompatibilityContext.CreateCollectKey(
-                        context.MetadataCatalogs,
-                        context.Cells,
-                        startPosition);
-
-                    propertySchema.CheckCompatibility(mapContext);
-                    mapContext.ValidateNoDuplicates();
-
-                    var consumed = mapContext.Position - startPosition;
-                    context.Skip(consumed);
-                    continue;
-                }
-
                 propertySchema.CheckCompatibility(context);
             }
         }

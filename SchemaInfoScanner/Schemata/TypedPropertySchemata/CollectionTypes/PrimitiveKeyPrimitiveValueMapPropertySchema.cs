@@ -25,17 +25,21 @@ public sealed record PrimitiveKeyPrimitiveValueMapPropertySchema(
             throw new InvalidOperationException($"Invalid data length: {context}");
         }
 
-        var valueContext = CompatibilityContext.CreateNoCollect(context.MetadataCatalogs, context.Cells, context.Position);
+        var startPosition = context.Position;
+        var keyContext = CompatibilityContext.CreateCollectKey(context.MetadataCatalogs, context.Cells, startPosition);
+        var valueContext = CompatibilityContext.CreateNoCollect(context.MetadataCatalogs, context.Cells, startPosition);
+
         for (var i = 0; i < length; i++)
         {
-            context.BeginKeyScope();
-            KeySchema.CheckCompatibility(context);
-            context.EndKeyScope();
+            keyContext.BeginKeyScope();
+            KeySchema.CheckCompatibility(keyContext);
+            keyContext.EndKeyScope();
 
             ValueSchema.CheckCompatibility(valueContext);
-            context.Skip(1);
+            keyContext.Skip(1);
         }
 
-        context.ValidateNoDuplicates();
+        keyContext.ValidateNoDuplicates();
+        context.Skip(keyContext.Position - startPosition);
     }
 }

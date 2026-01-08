@@ -21,7 +21,16 @@ public record School(
     [Length(3)] ImmutableArray<Student> Students,
     [Length(5)] FrozenSet<string> AvailableCourses,
     [Length(3)] FrozenDictionary<int, Teacher> Teachers,
-    [Length(3)] FrozenDictionary<Student, Enrollment> StudentEnrollments);
+    [Length(3)] FrozenDictionary<Student, Enrollment> StudentEnrollments)
+{
+    public override string ToString()
+    {
+        return System.Text.Json.JsonSerializer.Serialize(this, new System.Text.Json.JsonSerializerOptions
+        {
+            WriteIndented = true,
+        });
+    }
+}
 
 public record Enrollment(
     [Key]

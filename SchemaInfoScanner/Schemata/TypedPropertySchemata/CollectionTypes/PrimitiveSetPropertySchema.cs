@@ -17,13 +17,17 @@ public sealed record PrimitiveSetPropertySchema(
             throw new InvalidOperationException($"Parameter {PropertyName} cannot have LengthAttribute in the argument: {context}");
         }
 
+        var startPosition = context.Position;
+        var keyContext = CompatibilityContext.CreateCollectKey(context.MetadataCatalogs, context.Cells, startPosition);
+
         for (var i = 0; i < length; i++)
         {
-            context.BeginKeyScope();
-            GenericArgumentSchema.CheckCompatibility(context);
-            context.EndKeyScope();
+            keyContext.BeginKeyScope();
+            GenericArgumentSchema.CheckCompatibility(keyContext);
+            keyContext.EndKeyScope();
         }
 
-        context.ValidateNoDuplicates();
+        keyContext.ValidateNoDuplicates();
+        context.Skip(keyContext.Position - startPosition);
     }
 }
