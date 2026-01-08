@@ -16,7 +16,7 @@ public sealed record ArraySheet2(
 
 // Excel2의 SameNameSheet와 이름이 같지만, namespace가 다르기 때문에 충돌이 발생하지 않음
 [StaticDataRecord("Excel1", "SameNameSheet")]
-public sealed record SameNameSheet(string Name, int Score);
+public sealed record SameNameSheet(string Name, float Score);
 
 [StaticDataRecord("Excel1", "SingleColumnCollectionSheet")]
 public sealed record SingleColumnCollectionSheet(int Id, [SingleColumnCollection(", ")] ImmutableArray<float> Values);
