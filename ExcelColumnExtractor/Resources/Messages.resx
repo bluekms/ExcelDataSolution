@@ -75,4 +75,7 @@
   <data name="PrimaryKeyHeaderNotFound" xml:space="preserve">
     <value>Primary key column '{0}' not found in sheet headers.</value>
   </data>
+  <data name="EmptyStartCellInAttribute" xml:space="preserve">
+    <value>StartCell in StaticDataRecord attribute is empty for '{0}'.</value>
+  </data>
 </root>

@@ -93,6 +93,9 @@ internal static class Messages
     internal static string PrimaryKeyHeaderNotFound
         => ResourceManager.GetString("PrimaryKeyHeaderNotFound", Culture)!;
 
+    internal static string EmptyStartCellInAttribute
+        => ResourceManager.GetString("EmptyStartCellInAttribute", Culture)!;
+
     internal static class Composite
     {
         internal static CompositeFormat FileAlreadyOpen => CompositeFormat.Parse(Messages.FileAlreadyOpen);
@@ -116,5 +119,6 @@ internal static class Messages
         internal static CompositeFormat ParseErrorCount => CompositeFormat.Parse(Messages.ParseErrorCount);
         internal static CompositeFormat PrimaryKeyDuplicateFound => CompositeFormat.Parse(Messages.PrimaryKeyDuplicateFound);
         internal static CompositeFormat PrimaryKeyHeaderNotFound => CompositeFormat.Parse(Messages.PrimaryKeyHeaderNotFound);
+        internal static CompositeFormat EmptyStartCellInAttribute => CompositeFormat.Parse(Messages.EmptyStartCellInAttribute);
     }
 }

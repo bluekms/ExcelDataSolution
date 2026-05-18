@@ -1,5 +1,6 @@
 using System.Text;
 using ExcelColumnExtractor.Exceptions;
+using ExcelColumnExtractor.Extensions;
 using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,8 @@ public static class BodyColumnAggregator
             try
             {
                 var excelSheetName = sheetNameMap.Get(recordSchema);
-                var sheetBody = SheetBodyScanner.Scan(excelSheetName, startCell, logger);
+                var recordStartCell = StartCellResolver.Resolve(recordSchema, startCell);
+                var sheetBody = SheetBodyScanner.Scan(excelSheetName, recordStartCell, logger);
                 var targetColumnData = requiredHeaderMap.Get(recordSchema);
 
                 var filteredRows = sheetBody.Rows
