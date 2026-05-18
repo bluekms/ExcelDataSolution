@@ -1,6 +1,5 @@
 using System.Globalization;
 using Microsoft.Extensions.Logging;
-using SchemaInfoScanner.Collectors;
 using SchemaInfoScanner.Schemata.TypedPropertySchemata;
 using UnitTest.Utility;
 using Xunit.Abstractions;

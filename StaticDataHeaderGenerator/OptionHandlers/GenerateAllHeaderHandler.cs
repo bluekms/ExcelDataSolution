@@ -39,6 +39,8 @@ public class GenerateAllHeaderHandler
                 catalogs.RecordSchemaCatalog,
                 logger);
 
+            HeaderSeparatorValidator.Validate(targetRecordSchema.RecordName.FullName, headers, options.Separator);
+
             var excelFileName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(0);
             var sheetName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
 
@@ -57,7 +59,7 @@ public class GenerateAllHeaderHandler
 
             sb.AppendLine("### Headers (TSV)");
             sb.AppendLine("```");
-            sb.AppendLine(string.Join("\t", headers));
+            sb.AppendLine(string.Join(options.Separator, headers));
             sb.AppendLine("```");
             sb.AppendLine();
 
@@ -119,6 +121,8 @@ public class GenerateAllHeaderHandler
                 catalogs.RecordSchemaCatalog,
                 logger);
 
+            HeaderSeparatorValidator.Validate(targetRecordSchema.RecordName.FullName, headers, options.Separator);
+
             var excelFileName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(0);
             var sheetName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
 
@@ -137,7 +141,7 @@ public class GenerateAllHeaderHandler
 
             sb.AppendLine("### Headers (TSV)");
             sb.AppendLine("```");
-            sb.AppendLine(string.Join("\t", headers));
+            sb.AppendLine(string.Join(options.Separator, headers));
             sb.AppendLine("```");
             sb.AppendLine();
 

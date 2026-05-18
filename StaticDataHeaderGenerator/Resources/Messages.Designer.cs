@@ -42,11 +42,15 @@ internal static class Messages
     internal static string ParseErrorCount
         => ResourceManager.GetString("ParseErrorCount", Culture)!;
 
+    internal static string HeaderContainsSeparator
+        => ResourceManager.GetString("HeaderContainsSeparator", Culture)!;
+
     internal static class Composite
     {
         internal static CompositeFormat HeadersGenerated => CompositeFormat.Parse(Messages.HeadersGenerated);
         internal static CompositeFormat HeaderFileSaved => CompositeFormat.Parse(Messages.HeaderFileSaved);
         internal static CompositeFormat RecordNameNotFound => CompositeFormat.Parse(Messages.RecordNameNotFound);
         internal static CompositeFormat ParseErrorCount => CompositeFormat.Parse(Messages.ParseErrorCount);
+        internal static CompositeFormat HeaderContainsSeparator => CompositeFormat.Parse(Messages.HeaderContainsSeparator);
     }
 }

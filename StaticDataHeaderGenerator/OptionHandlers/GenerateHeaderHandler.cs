@@ -40,10 +40,12 @@ public static class GenerateHeaderHandler
             catalogs.RecordSchemaCatalog,
             logger);
 
+        HeaderSeparatorValidator.Validate(targetRecordSchema.RecordName.FullName, headers, options.Separator);
+
         var excelFileName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(0);
         var sheetName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
 
-        var output = BuildMarkdownOutput(targetRecordSchema.RecordName.FullName, headers, excelFileName, sheetName);
+        var output = BuildMarkdownOutput(targetRecordSchema.RecordName.FullName, headers, excelFileName, sheetName, options.Separator);
         LogInformation(logger, FormattableString.Invariant($"\n{output}\n"), null);
 
         if (!string.IsNullOrEmpty(options.OutputFileName))
@@ -98,10 +100,12 @@ public static class GenerateHeaderHandler
             catalogs.RecordSchemaCatalog,
             logger);
 
+        HeaderSeparatorValidator.Validate(targetRecordSchema.RecordName.FullName, headers, options.Separator);
+
         var excelFileName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(0);
         var sheetName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
 
-        var output = BuildMarkdownOutput(targetRecordSchema.RecordName.FullName, headers, excelFileName, sheetName);
+        var output = BuildMarkdownOutput(targetRecordSchema.RecordName.FullName, headers, excelFileName, sheetName, options.Separator);
         LogInformation(logger, FormattableString.Invariant($"\n{output}\n"), null);
 
         if (!string.IsNullOrEmpty(options.OutputFileName))
@@ -137,7 +141,7 @@ public static class GenerateHeaderHandler
     private static readonly Action<ILogger, string, Exception?> LogError =
         LoggerMessage.Define<string>(LogLevel.Error, new EventId(0, nameof(LogError)), "{Message}");
 
-    private static string BuildMarkdownOutput(string recordFullName, IReadOnlyList<string> headers, string excelFileName, string sheetName)
+    private static string BuildMarkdownOutput(string recordFullName, IReadOnlyList<string> headers, string excelFileName, string sheetName, string separator)
     {
         var sb = new StringBuilder();
         sb.AppendLine("# StaticDataHeaderGenerator Results");
@@ -157,7 +161,7 @@ public static class GenerateHeaderHandler
 
         sb.AppendLine("### Headers (TSV)");
         sb.AppendLine("```");
-        sb.AppendLine(string.Join("\t", headers));
+        sb.AppendLine(string.Join(separator, headers));
         sb.AppendLine("```");
 
         return sb.ToString();
