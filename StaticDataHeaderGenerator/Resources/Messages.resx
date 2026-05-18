@@ -24,4 +24,7 @@
   <data name="ParseErrorCount" xml:space="preserve">
     <value>Parse errors: {0}</value>
   </data>
+  <data name="HeaderContainsSeparator" xml:space="preserve">
+    <value>Header(s) of '{0}' contain the separator '{1}' and cannot be safely joined: [{2}]. Change the [ColumnName] value or pick a different --separator.</value>
+  </data>
 </root>
