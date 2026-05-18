@@ -159,7 +159,7 @@ public static class GenerateHeaderHandler
 
         sb.AppendLine();
 
-        sb.AppendLine("### Headers (TSV)");
+        sb.AppendLine(HeaderSectionTitle.Resolve(separator));
         sb.AppendLine("```");
         sb.AppendLine(string.Join(separator, headers));
         sb.AppendLine("```");
