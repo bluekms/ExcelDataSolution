@@ -36,6 +36,9 @@
   <data name="SwitchFkDuplicateConditionValue" xml:space="preserve">
     <value>Switch FK on '{0}.{1}' has duplicate condition (Column={2}, Value={3}). Each condition value must map to a single target.</value>
   </data>
+  <data name="SwitchFkConditionValueNotMatched" xml:space="preserve">
+    <value>Switch FK on '{0}.{1}' has no matching condition for '{2}={3}'.</value>
+  </data>
   <data name="FkSwitchFkConflict" xml:space="preserve">
     <value>{0}.{1}: [ForeignKey] and [SwitchForeignKey] cannot be used together on the same parameter.</value>
   </data>

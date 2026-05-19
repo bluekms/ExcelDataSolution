@@ -36,6 +36,9 @@
   <data name="SwitchFkDuplicateConditionValue" xml:space="preserve">
     <value>'{0}.{1}'의 Switch FK에 중복된 조건이 있습니다 (Column={2}, Value={3}). 각 조건 값은 단일 타겟에만 매핑되어야 합니다.</value>
   </data>
+  <data name="SwitchFkConditionValueNotMatched" xml:space="preserve">
+    <value>'{0}.{1}'의 Switch FK 조건 '{2}={3}'에 대응하는 분기가 없습니다.</value>
+  </data>
   <data name="FkSwitchFkConflict" xml:space="preserve">
     <value>{0}.{1}: 같은 파라미터에 [ForeignKey]와 [SwitchForeignKey]를 함께 사용할 수 없습니다.</value>
   </data>

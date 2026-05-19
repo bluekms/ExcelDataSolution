@@ -68,6 +68,14 @@ internal static class SwitchForeignKeyValidator
 
         if (matchingBranch is null)
         {
+            errors.Add(new InvalidOperationException(string.Format(
+                CultureInfo.CurrentCulture,
+                Messages.Composite.SwitchFkConditionValueNotMatched,
+                recordType.Name,
+                check.FkProperty.Name,
+                check.ConditionProperty.Name,
+                conditionValue)));
+
             return;
         }
 
