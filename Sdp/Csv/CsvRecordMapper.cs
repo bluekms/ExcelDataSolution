@@ -52,14 +52,18 @@ internal static class CsvRecordMapper
                     paramInfo.Length!.Value,
                     headerIndexMap,
                     values,
-                    paramInfo.NullString),
+                    paramInfo.NullString,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat),
                 CollectionKind.FrozenSet => ConvertToFrozenSet(
                     paramInfo.ElementType!,
                     baseName,
                     paramInfo.Length!.Value,
                     headerIndexMap,
                     values,
-                    paramInfo.NullString),
+                    paramInfo.NullString,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat),
                 CollectionKind.FrozenDictionary => ConvertToFrozenDictionary(
                     paramInfo.KeyType!,
                     paramInfo.ElementType!,
@@ -74,7 +78,9 @@ internal static class CsvRecordMapper
                     paramInfo.SingleColumnSeparator!,
                     headerIndexMap,
                     values,
-                    paramInfo.NullString),
+                    paramInfo.NullString,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat),
                 _ => throw new InvalidOperationException(string.Format(
                     CultureInfo.CurrentCulture,
                     Messages.Composite.UnknownCollectionType,
@@ -100,10 +106,22 @@ internal static class CsvRecordMapper
                 baseName));
         }
 
-        return ConvertStringValue(paramInfo.ParameterType, values[index], paramInfo.NullString, paramInfo.IsKey);
+        return ConvertStringValue(
+            paramInfo.ParameterType,
+            values[index],
+            paramInfo.NullString,
+            paramInfo.IsKey,
+            paramInfo.DateTimeFormat,
+            paramInfo.TimeSpanFormat);
     }
 
-    private static object ConvertStringValue(Type targetType, string value, string? nullString, bool skipEnumDefinedCheck = false)
+    private static object ConvertStringValue(
+        Type targetType,
+        string value,
+        string? nullString,
+        bool skipEnumDefinedCheck = false,
+        string? dateTimeFormat = null,
+        string? timeSpanFormat = null)
     {
         var underlyingType = Nullable.GetUnderlyingType(targetType);
         if (underlyingType is not null)
@@ -141,6 +159,16 @@ internal static class CsvRecordMapper
             return parsed;
         }
 
+        if (targetType == typeof(DateTime))
+        {
+            return DateTime.ParseExact(value, dateTimeFormat!, CultureInfo.InvariantCulture);
+        }
+
+        if (targetType == typeof(TimeSpan))
+        {
+            return TimeSpan.ParseExact(value, timeSpanFormat!, CultureInfo.InvariantCulture);
+        }
+
         return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
     }
 
@@ -150,7 +178,9 @@ internal static class CsvRecordMapper
         int length,
         Dictionary<string, int> headerIndexMap,
         string[] values,
-        string? nullString)
+        string? nullString,
+        string? dateTimeFormat = null,
+        string? timeSpanFormat = null)
     {
         var array = Array.CreateInstance(elementType, length);
         var isPrimitive = IsPrimitiveOrSimpleType(elementType);
@@ -170,7 +200,12 @@ internal static class CsvRecordMapper
                         headerName));
                 }
 
-                convertedValue = ConvertStringValue(elementType, values[index], nullString);
+                convertedValue = ConvertStringValue(
+                    elementType,
+                    values[index],
+                    nullString,
+                    dateTimeFormat: dateTimeFormat,
+                    timeSpanFormat: timeSpanFormat);
             }
             else
             {
@@ -190,7 +225,9 @@ internal static class CsvRecordMapper
         string separator,
         Dictionary<string, int> headerIndexMap,
         string[] values,
-        string? nullString)
+        string? nullString,
+        string? dateTimeFormat = null,
+        string? timeSpanFormat = null)
     {
         if (!headerIndexMap.TryGetValue(baseName, out var index))
         {
@@ -207,7 +244,12 @@ internal static class CsvRecordMapper
         for (var i = 0; i < parts.Length; i++)
         {
             var trimmedValue = parts[i].Trim();
-            var convertedValue = ConvertStringValue(elementType, trimmedValue, nullString);
+            var convertedValue = ConvertStringValue(
+                elementType,
+                trimmedValue,
+                nullString,
+                dateTimeFormat: dateTimeFormat,
+                timeSpanFormat: timeSpanFormat);
             array.SetValue(convertedValue, i);
         }
 
@@ -221,10 +263,12 @@ internal static class CsvRecordMapper
         int length,
         Dictionary<string, int> headerIndexMap,
         string[] values,
-        string? nullString)
+        string? nullString,
+        string? dateTimeFormat = null,
+        string? timeSpanFormat = null)
     {
         var helperMethod = CsvTypeCache.GetFrozenSetHelperMethod(elementType, nameof(ConvertToFrozenSetHelper));
-        return helperMethod.Invoke(null, [baseName, length, headerIndexMap, values, nullString]);
+        return helperMethod.Invoke(null, [baseName, length, headerIndexMap, values, nullString, dateTimeFormat, timeSpanFormat]);
     }
 
     internal static FrozenSet<T> ConvertToFrozenSetHelper<T>(
@@ -232,7 +276,9 @@ internal static class CsvRecordMapper
         int length,
         Dictionary<string, int> headerIndexMap,
         string[] values,
-        string? nullString)
+        string? nullString,
+        string? dateTimeFormat,
+        string? timeSpanFormat)
     {
         var list = new List<T>(length);
         var elementType = typeof(T);
@@ -253,7 +299,12 @@ internal static class CsvRecordMapper
                         headerName));
                 }
 
-                convertedValue = ConvertStringValue(elementType, values[index], nullString);
+                convertedValue = ConvertStringValue(
+                    elementType,
+                    values[index],
+                    nullString,
+                    dateTimeFormat: dateTimeFormat,
+                    timeSpanFormat: timeSpanFormat);
             }
             else
             {
@@ -339,7 +390,9 @@ internal static class CsvRecordMapper
                     paramInfo.ParameterType,
                     values[index],
                     paramInfo.NullString ?? nullString,
-                    paramInfo.IsKey);
+                    paramInfo.IsKey,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat);
                 return typeInfo.Constructor.Invoke([value]);
             }
         }
@@ -375,14 +428,18 @@ internal static class CsvRecordMapper
                     paramInfo.Length!.Value,
                     headerIndexMap,
                     values,
-                    effectiveNullString),
+                    effectiveNullString,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat),
                 CollectionKind.FrozenSet => ConvertToFrozenSet(
                     paramInfo.ElementType!,
                     baseName,
                     paramInfo.Length!.Value,
                     headerIndexMap,
                     values,
-                    effectiveNullString),
+                    effectiveNullString,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat),
                 CollectionKind.FrozenDictionary => ConvertToFrozenDictionary(
                     paramInfo.KeyType!,
                     paramInfo.ElementType!,
@@ -408,7 +465,13 @@ internal static class CsvRecordMapper
                     baseName));
             }
 
-            return ConvertStringValue(paramInfo.ParameterType, values[index], effectiveNullString, paramInfo.IsKey);
+            return ConvertStringValue(
+                paramInfo.ParameterType,
+                values[index],
+                effectiveNullString,
+                paramInfo.IsKey,
+                paramInfo.DateTimeFormat,
+                paramInfo.TimeSpanFormat);
         }
 
         return CreateRecordInstance(paramInfo.ParameterType, baseName, headerIndexMap, values, effectiveNullString);

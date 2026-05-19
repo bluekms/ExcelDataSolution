@@ -100,6 +100,8 @@ internal static class CsvTypeCache
         var lengthAttr = param.GetCustomAttribute<LengthAttribute>();
         var nullStringAttr = param.GetCustomAttribute<NullStringAttribute>();
         var singleColumnAttr = param.GetCustomAttribute<SingleColumnCollectionAttribute>();
+        var dateTimeFormatAttr = param.GetCustomAttribute<DateTimeFormatAttribute>();
+        var timeSpanFormatAttr = param.GetCustomAttribute<TimeSpanFormatAttribute>();
         var isKey = param.GetCustomAttribute<KeyAttribute>() is not null;
 
         var paramType = param.ParameterType;
@@ -149,7 +151,9 @@ internal static class CsvTypeCache
             elementType,
             keyType,
             singleColumnSeparator,
-            isKey);
+            isKey,
+            dateTimeFormatAttr?.FormatString,
+            timeSpanFormatAttr?.FormatString);
     }
 }
 
@@ -164,7 +168,9 @@ internal sealed record ParameterMappingInfo(
     Type? ElementType,
     Type? KeyType,
     string? SingleColumnSeparator,
-    bool IsKey);
+    bool IsKey,
+    string? DateTimeFormat,
+    string? TimeSpanFormat);
 
 internal enum CollectionKind
 {
