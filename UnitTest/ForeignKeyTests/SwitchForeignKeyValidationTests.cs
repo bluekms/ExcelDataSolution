@@ -40,6 +40,22 @@ public class SwitchForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
         1,None,0
         """;
 
+    private const string MultipleNoConditionQuestCsv =
+        """
+        QuestId,RewardType,RewardId
+        1,None,0
+        2,None,0
+        3,None,0
+        """;
+
+    private const string MixedMatchedAndUnmatchedQuestCsv =
+        """
+        QuestId,RewardType,RewardId
+        1,Item,101
+        2,None,0
+        3,Character,5
+        """;
+
     // RewardId=5는 CharacterTable에 존재하지만 ItemTable에는 없음
     // SwitchFK는 RewardType=Item일 때 ItemTable만 검사해야 하므로 실패해야 함
     private const string CrossTableQuestCsv =
@@ -161,7 +177,7 @@ public class SwitchForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public async Task Load_SwitchFk_UnmatchedCondition_SkipsValidation()
+    public async Task Load_SwitchFk_UnmatchedCondition_ThrowsAggregateException()
     {
         var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
         if (factory.CreateLogger<SwitchForeignKeyValidationTests>() is not TestOutputLogger<SwitchForeignKeyValidationTests> logger)
@@ -174,10 +190,59 @@ public class SwitchForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
         WriteFixedCsvs(dir);
 
         var staticData = new StaticData(logger);
-        await staticData.LoadAsync(dir.Path);
 
-        var quest = Assert.Single(staticData.QuestTable.Records);
-        Assert.Equal(RewardType.None, quest.RewardType);
+        var ex = await Assert.ThrowsAsync<AggregateException>(() => staticData.LoadAsync(dir.Path));
+
+        var inner = Assert.Single(ex.InnerExceptions);
+        Assert.Contains("QuestRecord", inner.Message);
+        Assert.Contains("RewardId", inner.Message);
+        Assert.Contains("RewardType=None", inner.Message);
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public async Task Load_SwitchFk_MultipleUnmatchedRows_AggregatesAllErrors()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<SwitchForeignKeyValidationTests>() is not TestOutputLogger<SwitchForeignKeyValidationTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        using var dir = new CsvTestDirectory();
+        dir.Write("Quest.Sheet1.csv", MultipleNoConditionQuestCsv);
+        WriteFixedCsvs(dir);
+
+        var staticData = new StaticData(logger);
+
+        var ex = await Assert.ThrowsAsync<AggregateException>(() => staticData.LoadAsync(dir.Path));
+
+        Assert.Equal(3, ex.InnerExceptions.Count);
+        Assert.All(ex.InnerExceptions, inner => Assert.Contains("RewardType=None", inner.Message));
+        Assert.Empty(logger.Logs);
+    }
+
+    [Fact]
+    public async Task Load_SwitchFk_MixedMatchedAndUnmatched_ReportsOnlyUnmatched()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<SwitchForeignKeyValidationTests>() is not TestOutputLogger<SwitchForeignKeyValidationTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        using var dir = new CsvTestDirectory();
+        dir.Write("Quest.Sheet1.csv", MixedMatchedAndUnmatchedQuestCsv);
+        WriteFixedCsvs(dir);
+
+        var staticData = new StaticData(logger);
+
+        var ex = await Assert.ThrowsAsync<AggregateException>(() => staticData.LoadAsync(dir.Path));
+
+        var inner = Assert.Single(ex.InnerExceptions);
+        Assert.Contains("RewardType=None", inner.Message);
+        Assert.DoesNotContain("RewardType=Item", inner.Message);
+        Assert.DoesNotContain("RewardType=Character", inner.Message);
         Assert.Empty(logger.Logs);
     }
 
