@@ -15,10 +15,12 @@ internal static class ViewSetBuilder
         var ctors = typeof(TViewSet).GetConstructors();
         if (ctors.Length != 1)
         {
-            throw new InvalidOperationException(string.Format(
+            var ctorError = new InvalidOperationException(string.Format(
                 CultureInfo.CurrentCulture,
                 Messages.Composite.ViewSetMustHaveSingleConstructor,
                 typeof(TViewSet).Name));
+
+            throw new AggregateException(Messages.ViewsFailedToBuild, [ctorError]);
         }
 
         var ctor = ctors[0];
