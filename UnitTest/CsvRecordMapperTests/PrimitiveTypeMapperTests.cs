@@ -72,7 +72,9 @@ public class PrimitiveTypeMapperTests
         Assert.Null(result.NullableString);
     }
 
-    public sealed record RecordWithDecimal(decimal Price, DateTime Date);
+    public sealed record RecordWithDecimal(
+        decimal Price,
+        [DateTimeFormat("yyyy-MM-dd")] DateTime Date);
 
     [Fact]
     public void MapDecimalAndDateTime()
