@@ -189,6 +189,9 @@
   <data name="RegularExpressionAttributeOnlyForString" xml:space="preserve">
     <value>{0}({1}): string이 아니므로 RegularExpressionAttribute를 사용할 수 없습니다.</value>
   </data>
+  <data name="RangeAttributeNotApplicable" xml:space="preserve">
+    <value>{0}({1}): 숫자형 / char / DateTime / TimeSpan / string / enum이 아니므로 RangeAttribute를 사용할 수 없습니다.</value>
+  </data>
   <data name="CountRangeAttributeOnlyForSingleColumnCollection" xml:space="preserve">
     <value>CountRangeAttribute는 SingleColumnCollectionAttribute와 함께만 사용할 수 있습니다.</value>
   </data>
