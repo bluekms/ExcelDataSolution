@@ -70,12 +70,23 @@ internal static class ForeignKeyTargetValidator
     {
         foreach (var param in recordType.GetConstructors().Single().GetParameters())
         {
-            foreach (var attr in param.GetCustomAttributes<ForeignKeyAttribute>())
+            var fkAttrs = param.GetCustomAttributes<ForeignKeyAttribute>().ToList();
+            var switchAttrs = param.GetCustomAttributes<SwitchForeignKeyAttribute>().ToList();
+
+            if (fkAttrs.Count > 0 && switchAttrs.Count > 0)
+            {
+                errors.Add(new InvalidOperationException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    Messages.Composite.FkSwitchFkConflict,
+                    recordType.Name,
+                    param.Name)));
+            }
+
+            foreach (var attr in fkAttrs)
             {
                 ValidateTarget(attr.TableSetName, attr.RecordColumnName, recordTypeMap, errors);
             }
 
-            var switchAttrs = param.GetCustomAttributes<SwitchForeignKeyAttribute>().ToList();
             foreach (var attr in switchAttrs)
             {
                 ValidateTarget(attr.TableSetName, attr.RecordColumnName, recordTypeMap, errors);

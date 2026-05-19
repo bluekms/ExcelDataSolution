@@ -54,6 +54,9 @@ internal static class Messages
     internal static string SwitchFkDuplicateConditionValue
         => ResourceManager.GetString("SwitchFkDuplicateConditionValue", Culture)!;
 
+    internal static string FkSwitchFkConflict
+        => ResourceManager.GetString("FkSwitchFkConflict", Culture)!;
+
     internal static string StaticDataRecordAttributeRequired
         => ResourceManager.GetString("StaticDataRecordAttributeRequired", Culture)!;
 
@@ -127,6 +130,7 @@ internal static class Messages
         internal static CompositeFormat SwitchFkConditionColumnNotFound => CompositeFormat.Parse(Messages.SwitchFkConditionColumnNotFound);
         internal static CompositeFormat FkTargetIsSingleColumnCollection => CompositeFormat.Parse(Messages.FkTargetIsSingleColumnCollection);
         internal static CompositeFormat SwitchFkDuplicateConditionValue => CompositeFormat.Parse(Messages.SwitchFkDuplicateConditionValue);
+        internal static CompositeFormat FkSwitchFkConflict => CompositeFormat.Parse(Messages.FkSwitchFkConflict);
         internal static CompositeFormat StaticDataRecordAttributeRequired => CompositeFormat.Parse(Messages.StaticDataRecordAttributeRequired);
         internal static CompositeFormat DuplicateKey => CompositeFormat.Parse(Messages.DuplicateKey);
         internal static CompositeFormat KeyNotFound => CompositeFormat.Parse(Messages.KeyNotFound);
