@@ -36,11 +36,11 @@ public sealed class RecordSchemaCatalog
 
         StaticDataRecordSchemata = recordSchemaDictionary.Values
             .Where(x => x.HasAttribute<StaticDataRecordAttribute>())
-            .OrderBy(x => x.RecordName.FullName)
+            .OrderBy(x => x.RecordName.FullName, StringComparer.Ordinal)
             .ToList();
 
         WholeRecordSchemata = recordSchemaDictionary
-            .OrderBy(pair => pair.Key.FullName)
+            .OrderBy(pair => pair.Key.FullName, StringComparer.Ordinal)
             .Select(pair => pair.Value)
             .ToList();
     }
