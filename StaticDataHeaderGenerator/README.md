@@ -1,7 +1,7 @@
 # StaticDataHeaderGenerator
-이 프로그램은 C# Static Data Record를 토대로 데이터 시트를 작업할 때 사용하는 표준 헤더를 생성하는 프로그램입니다.
+C# Static Data Record를 기준으로, 데이터 시트 작성에 쓰는 표준 헤더를 생성합니다.
 
-## 표준 해더 정의
+## 표준 헤더 정의
 
 | Name | Score1 | Score2 | Score3 |
 |------|--------|--------|--------|
@@ -13,13 +13,13 @@
 |------|----------|----------|----------|
 | AAA  | 100      | 80       | 60       |
 
-표준 해더란 Static Data Solution 에서 읽기 쉬운 위와 같이 작업된 헤더를 뜻합니다.
+표준 헤더란 Static Data Solution이 쉽게 읽을 수 있도록 위처럼 작성된 헤더를 뜻합니다.
 
 |Name|Subjects[0].Subject|Subjects[0].Score|Subjects[1].Subject|Subjects[1].Score|Subjects[2].Subject|Subjects[2].Score|
 |----|-------------------|-----------------|-------------------|-----------------|-------------------|-----------------|
 |AAA |Math               |100              |Korean             |80               |English            |60               |
 
-이 툴은 복잡한 계층구조를 가진 record 파일을 표준 헤더로 출력해 줍니다.
+이 툴은 복잡한 계층 구조를 가진 record 파일을 표준 헤더로 출력합니다.
 
 ## 표준 헤더 생성 과정
 
@@ -36,7 +36,7 @@ public sealed record DictionarySheet(
     FrozenDictionary<string, SubjectData> Subjects);
 ```
 
-프로그래머가 위와 같은 record.cs를 작업했다면
+프로그래머가 위와 같은 record.cs를 작성했다면
 
 ``` StandardHeader
   - Name
@@ -55,8 +55,8 @@ public sealed record DictionarySheet(
 
 ### 옵션 설명
 * -r, --record-path : 레코드 파일 경로
-* -n, --record-name : 레코드명 (없다면 경로명의 모든 레코드를 대상으로 출력)
+* -n, --record-name : 레코드명 (지정하지 않으면 해당 파일 안의 모든 레코드를 출력)
 * -s, --separator : 헤더 구분자. 기본값 : \t
-* -o, --output-file : 헤더 파일 경로. 제공되지 않으면 콘솔에만 출력
+* -o, --output-file : 헤더 파일 경로. 지정하지 않으면 콘솔에만 출력
 * -l, --log-path : 로그 파일 경로
 * -v : 최소 로그 레벨. 기본값 : Information (Verbose, Debug, Information, Warning, Error, Fatal)

@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using ExcelColumnExtractor.Extensions;
 using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.NameObjects;
 using ExcelColumnExtractor.Resources;
@@ -29,12 +30,13 @@ public static class RequiredHeadersChecker
             try
             {
                 var excelSheetName = sheetNameMap.Get(recordSchema);
+                var recordStartCell = StartCellResolver.Resolve(recordSchema, startCell);
 
                 var targetColumnIndexSet = ResolveRequiredHeaderMapping(
                     recordSchema,
                     recordSchemaCatalog,
                     excelSheetName,
-                    startCell,
+                    recordStartCell,
                     logger);
 
                 result.Add(recordSchema, targetColumnIndexSet);
