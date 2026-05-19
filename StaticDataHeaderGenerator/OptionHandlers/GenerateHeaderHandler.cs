@@ -147,7 +147,7 @@ public static class GenerateHeaderHandler
         sb.AppendLine("# StaticDataHeaderGenerator Results");
         sb.AppendLine();
         sb.AppendLine(FormattableString.Invariant($"## {recordFullName}"));
-        sb.AppendLine(FormattableString.Invariant($"- Excel File: `Docs/SampleExcel/{excelFileName}.xlsx`"));
+        sb.AppendLine(FormattableString.Invariant($"- Excel File: `Docs/SampleExcels/{excelFileName}.xlsx`"));
         sb.AppendLine(FormattableString.Invariant($"- Sheet Name: `{sheetName}`"));
         sb.AppendLine();
 
