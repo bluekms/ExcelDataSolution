@@ -207,6 +207,9 @@ internal static class Messages
     internal static string RegularExpressionAttributeOnlyForString
         => ResourceManager.GetString("RegularExpressionAttributeOnlyForString", Culture)!;
 
+    internal static string RangeAttributeNotApplicable
+        => ResourceManager.GetString("RangeAttributeNotApplicable", Culture)!;
+
     internal static string CountRangeAttributeOnlyForSingleColumnCollection
         => ResourceManager.GetString("CountRangeAttributeOnlyForSingleColumnCollection", Culture)!;
 
@@ -363,6 +366,7 @@ internal static class Messages
         internal static CompositeFormat NullStringAttributeRequiredForNullableMap => CompositeFormat.Parse(Messages.NullStringAttributeRequiredForNullableMap);
         internal static CompositeFormat NullStringAttributeNotAllowed => CompositeFormat.Parse(Messages.NullStringAttributeNotAllowed);
         internal static CompositeFormat RegularExpressionAttributeOnlyForString => CompositeFormat.Parse(Messages.RegularExpressionAttributeOnlyForString);
+        internal static CompositeFormat RangeAttributeNotApplicable => CompositeFormat.Parse(Messages.RangeAttributeNotApplicable);
         internal static CompositeFormat CountRangeAttributeOnlyForSingleColumnCollection => CompositeFormat.Parse(Messages.CountRangeAttributeOnlyForSingleColumnCollection);
         internal static CompositeFormat CountOutOfRange => CompositeFormat.Parse(Messages.CountOutOfRange);
         internal static CompositeFormat SingleColumnCollectionNotForUnsupportedCollection => CompositeFormat.Parse(Messages.SingleColumnCollectionNotForUnsupportedCollection);

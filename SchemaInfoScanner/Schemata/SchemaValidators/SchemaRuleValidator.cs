@@ -17,6 +17,7 @@ internal partial class SchemaRuleValidator : AbstractValidator<PropertySchemaBas
         RegisterSwitchForeignKeyDuplicateConditionRule();
         RegisterLengthAttributeRule();
         RegisterNullStringAttributeRule();
+        RegisterRangeAttributeNotApplicableRule();
         RegisterRegularExpressionAttributeRule();
         RegisterSingleColumnCollectionAttributeRule();
         RegisterTimeSpanFormatAttributeRule();
