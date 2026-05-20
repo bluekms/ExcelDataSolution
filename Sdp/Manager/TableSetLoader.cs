@@ -157,7 +157,7 @@ internal static class TableSetLoader
 
     private static ConstructorInfo FindTableConstructor(Type tableType, Type recordType)
     {
-        var paramType = typeof(ImmutableList<>).MakeGenericType(recordType);
+        var paramType = typeof(ImmutableArray<>).MakeGenericType(recordType);
         var ctor = tableType.GetConstructor(
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
             [paramType]);

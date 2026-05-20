@@ -48,13 +48,13 @@ public class SwitchForeignKeySameConditionMultipleAttrTests(ITestOutputHelper te
     [StaticDataRecord("Foo", "Sheet1")]
     private record FooRecord(int Id, string Name);
 
-    private sealed class QuestTable(ImmutableList<QuestRecord> records)
+    private sealed class QuestTable(ImmutableArray<QuestRecord> records)
         : StaticDataTable<QuestTable, QuestRecord>(records);
 
-    private sealed class ItemTable(ImmutableList<ItemRecord> records)
+    private sealed class ItemTable(ImmutableArray<ItemRecord> records)
         : StaticDataTable<ItemTable, ItemRecord>(records);
 
-    private sealed class FooTable(ImmutableList<FooRecord> records)
+    private sealed class FooTable(ImmutableArray<FooRecord> records)
         : StaticDataTable<FooTable, FooRecord>(records);
 
     private sealed class StaticData(ILogger logger)
@@ -117,10 +117,10 @@ public class SwitchForeignKeySameConditionMultipleAttrTests(ITestOutputHelper te
     [StaticDataRecord("Bar", "Sheet1")]
     private record BarRecord(int Id, string Name);
 
-    private sealed class QuestTripleTable(ImmutableList<QuestTripleRecord> records)
+    private sealed class QuestTripleTable(ImmutableArray<QuestTripleRecord> records)
         : StaticDataTable<QuestTripleTable, QuestTripleRecord>(records);
 
-    private sealed class BarTable(ImmutableList<BarRecord> records)
+    private sealed class BarTable(ImmutableArray<BarRecord> records)
         : StaticDataTable<BarTable, BarRecord>(records);
 
     private sealed class StaticDataTriple(ILogger logger)

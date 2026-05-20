@@ -61,13 +61,13 @@ public class MultipleForeignKeyValidationTests(ITestOutputHelper testOutputHelpe
         [ForeignKey("Teacher", "Id")]
         int RecipientId);
 
-    private sealed class SchoolTable(ImmutableList<SchoolRecord> records)
+    private sealed class SchoolTable(ImmutableArray<SchoolRecord> records)
         : StaticDataTable<SchoolTable, SchoolRecord>(records);
 
-    private sealed class TeacherTable(ImmutableList<TeacherRecord> records)
+    private sealed class TeacherTable(ImmutableArray<TeacherRecord> records)
         : StaticDataTable<TeacherTable, TeacherRecord>(records);
 
-    private sealed class ScholarshipTable(ImmutableList<ScholarshipRecord> records)
+    private sealed class ScholarshipTable(ImmutableArray<ScholarshipRecord> records)
         : StaticDataTable<ScholarshipTable, ScholarshipRecord>(records);
 
     private sealed class StaticData(ILogger logger)
@@ -100,7 +100,7 @@ public class MultipleForeignKeyValidationTests(ITestOutputHelper testOutputHelpe
         var staticData = new StaticData(logger);
         await staticData.LoadAsync(dir.Path);
 
-        Assert.Equal(2, staticData.ScholarshipTable.Records.Count);
+        Assert.Equal(2, staticData.ScholarshipTable.Records.Length);
         Assert.Empty(logger.Logs);
     }
 

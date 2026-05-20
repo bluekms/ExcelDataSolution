@@ -49,13 +49,13 @@ public class FkTargetSingleColumnCollectionValidationTests(ITestOutputHelper tes
         TagKind Kind,
         [SwitchForeignKey("Kind", "Alpha", "TagBundle", "Tags")] string Tag);
 
-    private sealed class TagBundleTable(ImmutableList<TagBundleRecord> records)
+    private sealed class TagBundleTable(ImmutableArray<TagBundleRecord> records)
         : StaticDataTable<TagBundleTable, TagBundleRecord>(records);
 
-    private sealed class FkConsumerTable(ImmutableList<FkConsumerRecord> records)
+    private sealed class FkConsumerTable(ImmutableArray<FkConsumerRecord> records)
         : StaticDataTable<FkConsumerTable, FkConsumerRecord>(records);
 
-    private sealed class SwitchFkConsumerTable(ImmutableList<SwitchFkConsumerRecord> records)
+    private sealed class SwitchFkConsumerTable(ImmutableArray<SwitchFkConsumerRecord> records)
         : StaticDataTable<SwitchFkConsumerTable, SwitchFkConsumerRecord>(records);
 
     private sealed class FkStaticData(ILogger logger)

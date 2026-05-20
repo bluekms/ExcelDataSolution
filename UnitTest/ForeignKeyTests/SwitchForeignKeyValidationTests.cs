@@ -103,16 +103,16 @@ public class SwitchForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
     [StaticDataRecord("Currency", "Sheet1")]
     private record CurrencyRecord(int Id, string Name);
 
-    private sealed class QuestTable(ImmutableList<QuestRecord> records)
+    private sealed class QuestTable(ImmutableArray<QuestRecord> records)
         : StaticDataTable<QuestTable, QuestRecord>(records);
 
-    private sealed class ItemTable(ImmutableList<ItemRecord> records)
+    private sealed class ItemTable(ImmutableArray<ItemRecord> records)
         : StaticDataTable<ItemTable, ItemRecord>(records);
 
-    private sealed class CharacterTable(ImmutableList<CharacterRecord> records)
+    private sealed class CharacterTable(ImmutableArray<CharacterRecord> records)
         : StaticDataTable<CharacterTable, CharacterRecord>(records);
 
-    private sealed class CurrencyTable(ImmutableList<CurrencyRecord> records)
+    private sealed class CurrencyTable(ImmutableArray<CurrencyRecord> records)
         : StaticDataTable<CurrencyTable, CurrencyRecord>(records);
 
     private sealed class StaticData(ILogger logger)
@@ -150,7 +150,7 @@ public class SwitchForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
         var staticData = new StaticData(logger);
         await staticData.LoadAsync(dir.Path);
 
-        Assert.Equal(3, staticData.QuestTable.Records.Count);
+        Assert.Equal(3, staticData.QuestTable.Records.Length);
         Assert.Empty(logger.Logs);
     }
 
@@ -296,10 +296,10 @@ public class SwitchForeignKeyConfigurationErrorTests(ITestOutputHelper testOutpu
     [StaticDataRecord("Target", "Sheet1")]
     private record TargetRecord(int Id);
 
-    private sealed class BadConditionQuestTable(ImmutableList<BadConditionQuestRecord> records)
+    private sealed class BadConditionQuestTable(ImmutableArray<BadConditionQuestRecord> records)
         : StaticDataTable<BadConditionQuestTable, BadConditionQuestRecord>(records);
 
-    private sealed class TargetTable(ImmutableList<TargetRecord> records)
+    private sealed class TargetTable(ImmutableArray<TargetRecord> records)
         : StaticDataTable<TargetTable, TargetRecord>(records);
 
     private sealed class ConditionColumnStaticData(ILogger logger)
@@ -327,7 +327,7 @@ public class SwitchForeignKeyConfigurationErrorTests(ITestOutputHelper testOutpu
         [SwitchForeignKey("RewardType", "Item", "NonExistentTable", "Id")]
         int RewardId);
 
-    private sealed class BadTargetQuestTable(ImmutableList<BadTargetQuestRecord> records)
+    private sealed class BadTargetQuestTable(ImmutableArray<BadTargetQuestRecord> records)
         : StaticDataTable<BadTargetQuestTable, BadTargetQuestRecord>(records);
 
     private sealed class TargetTableStaticData(ILogger logger)
