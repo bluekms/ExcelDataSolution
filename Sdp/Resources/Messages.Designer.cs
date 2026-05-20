@@ -123,6 +123,15 @@ internal static class Messages
     internal static string LoadAsyncAlreadyInProgress
         => ResourceManager.GetString("LoadAsyncAlreadyInProgress", Culture)!;
 
+    internal static string ValueOutOfRange
+        => ResourceManager.GetString("ValueOutOfRange", Culture)!;
+
+    internal static string PatternMismatch
+        => ResourceManager.GetString("PatternMismatch", Culture)!;
+
+    internal static string CountOutOfRange
+        => ResourceManager.GetString("CountOutOfRange", Culture)!;
+
     internal static class Composite
     {
         internal static CompositeFormat InvalidTableParameter => CompositeFormat.Parse(Messages.InvalidTableParameter);
@@ -151,5 +160,8 @@ internal static class Messages
         internal static CompositeFormat ViewConstructorNotFound => CompositeFormat.Parse(Messages.ViewConstructorNotFound);
         internal static CompositeFormat ViewSetMustHaveSingleConstructor => CompositeFormat.Parse(Messages.ViewSetMustHaveSingleConstructor);
         internal static CompositeFormat ViewSetMemberMustBeNonNullable => CompositeFormat.Parse(Messages.ViewSetMemberMustBeNonNullable);
+        internal static CompositeFormat ValueOutOfRange => CompositeFormat.Parse(Messages.ValueOutOfRange);
+        internal static CompositeFormat PatternMismatch => CompositeFormat.Parse(Messages.PatternMismatch);
+        internal static CompositeFormat CountOutOfRange => CompositeFormat.Parse(Messages.CountOutOfRange);
     }
 }

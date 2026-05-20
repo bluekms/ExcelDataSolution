@@ -105,4 +105,13 @@
   <data name="LoadAsyncAlreadyInProgress" xml:space="preserve">
     <value>LoadAsync is already in progress; concurrent loads are not supported.</value>
   </data>
+  <data name="ValueOutOfRange" xml:space="preserve">
+    <value>Column '{0}' value ({1}) must be between {2} and {3}.</value>
+  </data>
+  <data name="PatternMismatch" xml:space="preserve">
+    <value>Column '{0}' value '{1}' does not match pattern '{2}'.</value>
+  </data>
+  <data name="CountOutOfRange" xml:space="preserve">
+    <value>Column '{0}' has {1} item(s), but must have between {2} and {3}.</value>
+  </data>
 </root>
