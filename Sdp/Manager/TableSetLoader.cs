@@ -19,16 +19,7 @@ internal static class TableSetLoader
         ILogger logger)
         where TTableSet : class
     {
-        var ctors = typeof(TTableSet).GetConstructors();
-        if (ctors.Length != 1)
-        {
-            throw new InvalidOperationException(string.Format(
-                CultureInfo.CurrentCulture,
-                Messages.Composite.TableSetMustHaveSingleConstructor,
-                typeof(TTableSet).Name));
-        }
-
-        var ctor = ctors[0];
+        var ctor = EnsureSingleConstructor<TTableSet>();
         var parameters = ctor.GetParameters();
         var recordCache = new ConcurrentDictionary<RecordCacheKey, Lazy<Task<object>>>();
 
@@ -56,6 +47,21 @@ internal static class TableSetLoader
         }
 
         return (TTableSet)ctor.Invoke(tasks.Select(t => t.Result).ToArray());
+    }
+
+    internal static ConstructorInfo EnsureSingleConstructor<TTableSet>()
+        where TTableSet : class
+    {
+        var ctors = typeof(TTableSet).GetConstructors();
+        if (ctors.Length != 1)
+        {
+            throw new InvalidOperationException(string.Format(
+                CultureInfo.CurrentCulture,
+                Messages.Composite.TableSetMustHaveSingleConstructor,
+                typeof(TTableSet).Name));
+        }
+
+        return ctors[0];
     }
 
     private static async Task<object?> CreateTableAsync(
