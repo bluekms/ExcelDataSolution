@@ -1,5 +1,7 @@
 using System.Collections.Frozen;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using Sdp.Attributes;
 using Sdp.Resources;
 
 namespace Sdp.Csv;
@@ -79,6 +81,7 @@ internal static class CsvRecordMapper
                     headerIndexMap,
                     values,
                     paramInfo.NullString,
+                    paramInfo.CountRange,
                     paramInfo.DateTimeFormat,
                     paramInfo.TimeSpanFormat),
                 _ => throw new InvalidOperationException(string.Format(
@@ -106,13 +109,54 @@ internal static class CsvRecordMapper
                 baseName));
         }
 
-        return ConvertStringValue(
+        var convertedValue = ConvertStringValue(
             paramInfo.ParameterType,
             values[index],
             paramInfo.NullString,
             paramInfo.IsKey,
             paramInfo.DateTimeFormat,
             paramInfo.TimeSpanFormat);
+
+        ValidateScalar(paramInfo, convertedValue);
+        return convertedValue;
+    }
+
+    private static void ValidateScalar(ParameterMappingInfo paramInfo, object? value)
+    {
+        if (value is null)
+        {
+            return;
+        }
+
+        if (paramInfo.Range is not null)
+        {
+            RangeValidator.Validate(
+                paramInfo.Range,
+                value,
+                paramInfo.ColumnName,
+                paramInfo.DateTimeFormat,
+                paramInfo.TimeSpanFormat);
+        }
+
+        if (paramInfo.Pattern is not null && value is string text)
+        {
+            ValidatePattern(paramInfo.Pattern, text, paramInfo.ColumnName);
+        }
+    }
+
+    private static void ValidatePattern(Regex pattern, string value, string columnName)
+    {
+        if (pattern.IsMatch(value))
+        {
+            return;
+        }
+
+        throw new ArgumentException(string.Format(
+            CultureInfo.CurrentCulture,
+            Messages.Composite.PatternMismatch,
+            columnName,
+            value,
+            pattern.ToString()));
     }
 
     private static object ConvertStringValue(
@@ -226,6 +270,7 @@ internal static class CsvRecordMapper
         Dictionary<string, int> headerIndexMap,
         string[] values,
         string? nullString,
+        CountRangeAttribute? countRange,
         string? dateTimeFormat = null,
         string? timeSpanFormat = null)
     {
@@ -239,6 +284,18 @@ internal static class CsvRecordMapper
 
         var cellValue = values[index];
         var parts = cellValue.Split(separator);
+
+        if (countRange is not null && (parts.Length < countRange.MinCount || parts.Length > countRange.MaxCount))
+        {
+            throw new ArgumentException(string.Format(
+                CultureInfo.CurrentCulture,
+                Messages.Composite.CountOutOfRange,
+                baseName,
+                parts.Length,
+                countRange.MinCount,
+                countRange.MaxCount));
+        }
+
         var array = Array.CreateInstance(elementType, parts.Length);
 
         for (var i = 0; i < parts.Length; i++)
@@ -393,6 +450,8 @@ internal static class CsvRecordMapper
                     paramInfo.IsKey,
                     paramInfo.DateTimeFormat,
                     paramInfo.TimeSpanFormat);
+
+                ValidateScalar(paramInfo, value);
                 return typeInfo.Constructor.Invoke([value]);
             }
         }
@@ -465,13 +524,16 @@ internal static class CsvRecordMapper
                     baseName));
             }
 
-            return ConvertStringValue(
+            var convertedValue = ConvertStringValue(
                 paramInfo.ParameterType,
                 values[index],
                 effectiveNullString,
                 paramInfo.IsKey,
                 paramInfo.DateTimeFormat,
                 paramInfo.TimeSpanFormat);
+
+            ValidateScalar(paramInfo, convertedValue);
+            return convertedValue;
         }
 
         return CreateRecordInstance(paramInfo.ParameterType, baseName, headerIndexMap, values, effectiveNullString);

@@ -105,4 +105,13 @@
   <data name="LoadAsyncAlreadyInProgress" xml:space="preserve">
     <value>LoadAsync가 이미 실행 중입니다. 동시 로드는 지원하지 않습니다.</value>
   </data>
+  <data name="ValueOutOfRange" xml:space="preserve">
+    <value>'{0}' 컬럼의 값({1})은 {2}과(와) {3} 사이여야 합니다.</value>
+  </data>
+  <data name="PatternMismatch" xml:space="preserve">
+    <value>'{0}' 컬럼의 값 '{1}'이(가) 패턴 '{2}'과(와) 일치하지 않습니다.</value>
+  </data>
+  <data name="CountOutOfRange" xml:space="preserve">
+    <value>'{0}' 컬럼에 {1}개의 값이 있지만 {2}~{3}개여야 합니다.</value>
+  </data>
 </root>

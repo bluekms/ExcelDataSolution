@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Sdp.Attributes;
 using Sdp.Resources;
 
@@ -102,7 +103,14 @@ internal static class CsvTypeCache
         var singleColumnAttr = param.GetCustomAttribute<SingleColumnCollectionAttribute>();
         var dateTimeFormatAttr = param.GetCustomAttribute<DateTimeFormatAttribute>();
         var timeSpanFormatAttr = param.GetCustomAttribute<TimeSpanFormatAttribute>();
+        var rangeAttr = param.GetCustomAttribute<RangeAttribute>();
+        var countRangeAttr = param.GetCustomAttribute<CountRangeAttribute>();
+        var regularExpressionAttr = param.GetCustomAttribute<RegularExpressionAttribute>();
         var isKey = param.GetCustomAttribute<KeyAttribute>() is not null;
+
+        var pattern = regularExpressionAttr is not null
+            ? new Regex(regularExpressionAttr.Pattern)
+            : null;
 
         var paramType = param.ParameterType;
         var collectionType = CollectionKind.None;
@@ -153,7 +161,10 @@ internal static class CsvTypeCache
             singleColumnSeparator,
             isKey,
             dateTimeFormatAttr?.FormatString,
-            timeSpanFormatAttr?.FormatString);
+            timeSpanFormatAttr?.FormatString,
+            rangeAttr,
+            pattern,
+            countRangeAttr);
     }
 }
 
@@ -170,7 +181,10 @@ internal sealed record ParameterMappingInfo(
     string? SingleColumnSeparator,
     bool IsKey,
     string? DateTimeFormat,
-    string? TimeSpanFormat);
+    string? TimeSpanFormat,
+    RangeAttribute? Range,
+    Regex? Pattern,
+    CountRangeAttribute? CountRange);
 
 internal enum CollectionKind
 {
