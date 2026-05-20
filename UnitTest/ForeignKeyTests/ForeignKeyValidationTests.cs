@@ -78,7 +78,7 @@ public class ForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
     {
         private readonly UniqueIndex<SchoolRecord, int> byId;
 
-        public SchoolTable(ImmutableList<SchoolRecord> records)
+        public SchoolTable(ImmutableArray<SchoolRecord> records)
             : base(records)
         {
             byId = new(records, x => x.Id);
@@ -91,7 +91,7 @@ public class ForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
     {
         private readonly UniqueIndex<TeacherRecord, int> byId;
 
-        public TeacherTable(ImmutableList<TeacherRecord> records)
+        public TeacherTable(ImmutableArray<TeacherRecord> records)
             : base(records)
         {
             byId = new(records, x => x.Id);
@@ -104,7 +104,7 @@ public class ForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
     {
         private readonly UniqueIndex<StudentRecord, int> byId;
 
-        public StudentTable(ImmutableList<StudentRecord> records)
+        public StudentTable(ImmutableArray<StudentRecord> records)
             : base(records)
         {
             byId = new(records, x => x.Id);
@@ -143,9 +143,9 @@ public class ForeignKeyValidationTests(ITestOutputHelper testOutputHelper)
         var staticData = new StaticData(logger);
         await staticData.LoadAsync(dir.Path);
 
-        Assert.Equal(5, staticData.SchoolTable.Records.Count);
-        Assert.Equal(3, staticData.TeacherTable.Records.Count);
-        Assert.Equal(5, staticData.StudentTable.Records.Count);
+        Assert.Equal(5, staticData.SchoolTable.Records.Length);
+        Assert.Equal(3, staticData.TeacherTable.Records.Length);
+        Assert.Equal(5, staticData.StudentTable.Records.Length);
         Assert.Empty(logger.Logs);
     }
 

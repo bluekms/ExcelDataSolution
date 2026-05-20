@@ -31,7 +31,7 @@ public class SingleColumnCollectionSheetCsvLoaderTests
         var records = CsvLoader.Parse<SingleColumnCollectionSheet>(SingleColumnCollectionSheetCsv);
 
         Assert.NotEmpty(records);
-        Assert.Equal(9, records.Count);
+        Assert.Equal(9, records.Length);
 
         // Id=2: "1.234, 5.678"
         var record2 = records.First(r => r.Id == 2);

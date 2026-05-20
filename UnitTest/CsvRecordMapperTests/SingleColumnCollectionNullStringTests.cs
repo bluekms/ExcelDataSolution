@@ -26,10 +26,10 @@ public class SingleColumnCollectionNullStringTests(ITestOutputHelper testOutputH
         [NullString("")]
         ImmutableArray<int?> Values);
 
-    private sealed class DashTable(ImmutableList<DashRecord> records)
+    private sealed class DashTable(ImmutableArray<DashRecord> records)
         : StaticDataTable<DashTable, DashRecord>(records);
 
-    private sealed class EmptyTable(ImmutableList<EmptyRecord> records)
+    private sealed class EmptyTable(ImmutableArray<EmptyRecord> records)
         : StaticDataTable<EmptyTable, EmptyRecord>(records);
 
     private sealed class DashManager(ILogger logger)

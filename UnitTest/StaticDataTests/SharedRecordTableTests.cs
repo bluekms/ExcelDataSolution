@@ -25,7 +25,7 @@ public class SharedRecordTableTests(ITestOutputHelper testOutputHelper)
     {
         private readonly UniqueIndex<ItemRecord, int> byId;
 
-        public PrimaryItemTable(ImmutableList<ItemRecord> records)
+        public PrimaryItemTable(ImmutableArray<ItemRecord> records)
             : base(records)
         {
             byId = new(records, x => x.Id);
@@ -38,7 +38,7 @@ public class SharedRecordTableTests(ITestOutputHelper testOutputHelper)
     {
         private readonly UniqueIndex<ItemRecord, string> byName;
 
-        public SecondaryItemTable(ImmutableList<ItemRecord> records)
+        public SecondaryItemTable(ImmutableArray<ItemRecord> records)
             : base(records)
         {
             byName = new(records, x => x.Name);

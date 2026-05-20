@@ -23,10 +23,10 @@ public class SharedCsvTableTests(ITestOutputHelper testOutputHelper)
     [StaticDataRecord("Unit", "Main")]
     private record UnitProfileRecord(int Id, string Name, string Description);
 
-    private sealed class UnitStatTable(ImmutableList<UnitStatRecord> records)
+    private sealed class UnitStatTable(ImmutableArray<UnitStatRecord> records)
         : StaticDataTable<UnitStatTable, UnitStatRecord>(records);
 
-    private sealed class UnitProfileTable(ImmutableList<UnitProfileRecord> records)
+    private sealed class UnitProfileTable(ImmutableArray<UnitProfileRecord> records)
         : StaticDataTable<UnitProfileTable, UnitProfileRecord>(records);
 
     private sealed class StaticData(ILogger logger)
@@ -57,11 +57,11 @@ public class SharedCsvTableTests(ITestOutputHelper testOutputHelper)
             var staticData = new StaticData(logger);
             await staticData.LoadAsync(dir);
 
-            Assert.Equal(2, staticData.StatTable.Records.Count);
+            Assert.Equal(2, staticData.StatTable.Records.Length);
             Assert.Equal(100, staticData.StatTable.Records[0].Hp);
             Assert.Equal(10, staticData.StatTable.Records[0].Attack);
 
-            Assert.Equal(2, staticData.ProfileTable.Records.Count);
+            Assert.Equal(2, staticData.ProfileTable.Records.Length);
             Assert.Equal("Goblin", staticData.ProfileTable.Records[0].Name);
             Assert.Equal("Small green creature", staticData.ProfileTable.Records[0].Description);
             Assert.Empty(logger.Logs);

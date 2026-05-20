@@ -58,13 +58,13 @@ public class SwitchForeignKeyNonKeyValidationTests(ITestOutputHelper testOutputH
     [StaticDataRecord("Designer", "Sheet1")]
     private record DesignerRecord(int Id, string Name);
 
-    private sealed class StaffTable(ImmutableList<StaffRecord> records)
+    private sealed class StaffTable(ImmutableArray<StaffRecord> records)
         : StaticDataTable<StaffTable, StaffRecord>(records);
 
-    private sealed class EngineerTable(ImmutableList<EngineerRecord> records)
+    private sealed class EngineerTable(ImmutableArray<EngineerRecord> records)
         : StaticDataTable<EngineerTable, EngineerRecord>(records);
 
-    private sealed class DesignerTable(ImmutableList<DesignerRecord> records)
+    private sealed class DesignerTable(ImmutableArray<DesignerRecord> records)
         : StaticDataTable<DesignerTable, DesignerRecord>(records);
 
     private sealed class StaticData(ILogger logger)
@@ -95,7 +95,7 @@ public class SwitchForeignKeyNonKeyValidationTests(ITestOutputHelper testOutputH
         var staticData = new StaticData(logger);
         await staticData.LoadAsync(dir.Path);
 
-        Assert.Equal(2, staticData.StaffTable.Records.Count);
+        Assert.Equal(2, staticData.StaffTable.Records.Length);
         Assert.Empty(logger.Logs);
     }
 

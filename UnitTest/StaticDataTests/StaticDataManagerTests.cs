@@ -15,7 +15,7 @@ public class StaticDataManagerTests(ITestOutputHelper testOutputHelper)
     [StaticDataRecord("Fake", "Sheet1")]
     private sealed record FakeRecord(int Id);
 
-    private sealed class FakeTable(ImmutableList<FakeRecord> records)
+    private sealed class FakeTable(ImmutableArray<FakeRecord> records)
         : StaticDataTable<FakeTable, FakeRecord>(records);
 
     private sealed class FakeManager(ILogger logger)
@@ -74,7 +74,7 @@ public class StaticDataManagerTests(ITestOutputHelper testOutputHelper)
         for (var i = 0; i < 10000; i++)
         {
             var currentStaticData = manager.Current;
-            var count = currentStaticData.Items?.Records.Count;
+            var count = currentStaticData.Items?.Records.Length;
             Assert.True(
                 count == CountA || count == CountB,
                 FormattableString.Invariant($"예상: {CountA} 또는 {CountB}, 실제: {count}"));

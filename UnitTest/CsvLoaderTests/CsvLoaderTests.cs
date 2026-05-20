@@ -7,7 +7,7 @@ public class CsvLoaderTests
     public sealed record SimpleRecord(int Id, string Name, double Score);
 
     [Fact]
-    public void Parse_WithValidCsv_ReturnsImmutableList()
+    public void Parse_WithValidCsv_ReturnsImmutableArray()
     {
         var csv = """
                   Id,Name,Score
@@ -18,7 +18,7 @@ public class CsvLoaderTests
 
         var result = CsvLoader.Parse<SimpleRecord>(csv);
 
-        Assert.Equal(3, result.Count);
+        Assert.Equal(3, result.Length);
 
         Assert.Equal(1, result[0].Id);
         Assert.Equal("Alice", result[0].Name);
@@ -65,7 +65,7 @@ public class CsvLoaderTests
 
         var result = CsvLoader.Parse<SimpleRecord>(csv);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(2, result.Length);
         Assert.Equal(1, result[0].Id);
         Assert.Equal(2, result[1].Id);
     }
@@ -80,11 +80,11 @@ public class CsvLoaderTests
 
         var result = CsvLoader.Parse<SimpleRecord>(csv);
 
-        Assert.IsType<System.Collections.Immutable.ImmutableList<SimpleRecord>>(result);
+        Assert.IsType<System.Collections.Immutable.ImmutableArray<SimpleRecord>>(result);
     }
 
     [Fact]
-    public async Task Load_WithValidFile_ReturnsImmutableList()
+    public async Task Load_WithValidFile_ReturnsImmutableArray()
     {
         var tempFile = Path.GetTempFileName();
         try
@@ -98,7 +98,7 @@ public class CsvLoaderTests
 
             var result = await CsvLoader.LoadAsync<SimpleRecord>(tempFile);
 
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.Length);
             Assert.Equal(1, result[0].Id);
             Assert.Equal(2, result[1].Id);
         }
@@ -109,7 +109,7 @@ public class CsvLoaderTests
     }
 
     [Fact]
-    public async Task LoadAsync_WithValidFile_ReturnsImmutableList()
+    public async Task LoadAsync_WithValidFile_ReturnsImmutableArray()
     {
         var tempFile = Path.GetTempFileName();
         try
@@ -123,7 +123,7 @@ public class CsvLoaderTests
 
             var result = await CsvLoader.LoadAsync<SimpleRecord>(tempFile);
 
-            Assert.Equal(2, result.Count);
+            Assert.Equal(2, result.Length);
             Assert.Equal(1, result[0].Id);
             Assert.Equal(2, result[1].Id);
         }
@@ -144,7 +144,7 @@ public class CsvLoaderTests
 
         var result = CsvLoader.Parse<SimpleRecord>(csv);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(2, result.Length);
         Assert.Equal("Smith, John", result[0].Name);
         Assert.Equal("Doe, Jane", result[1].Name);
     }
@@ -156,7 +156,7 @@ public class CsvLoaderTests
 
         var result = CsvLoader.Parse<SimpleRecord>(csv);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(2, result.Length);
         Assert.Equal("Hello\nWorld", result[0].Name);
         Assert.Equal("Bob", result[1].Name);
     }
@@ -179,7 +179,7 @@ public class CsvLoaderTests
 
         var result = CsvLoader.Parse<SimpleRecord>(csv);
 
-        Assert.Equal(2, result.Count);
+        Assert.Equal(2, result.Length);
         Assert.Equal("Line1\nLine2\nLine3", result[0].Name);
         Assert.Equal("Simple", result[1].Name);
     }

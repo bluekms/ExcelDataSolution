@@ -22,11 +22,11 @@ public class FilteredRecordTableTests(ITestOutputHelper testOutputHelper)
     [StaticDataRecord("Buff", "Main")]
     private record BuffRecord(int Id, string Name, bool IsNormal);
 
-    private sealed class NormalBuffTable(ImmutableList<BuffRecord> records)
-        : StaticDataTable<NormalBuffTable, BuffRecord>(records.Where(x => x.IsNormal).ToImmutableList());
+    private sealed class NormalBuffTable(ImmutableArray<BuffRecord> records)
+        : StaticDataTable<NormalBuffTable, BuffRecord>(records.Where(x => x.IsNormal).ToImmutableArray());
 
-    private sealed class AbnormalBuffTable(ImmutableList<BuffRecord> records)
-        : StaticDataTable<AbnormalBuffTable, BuffRecord>(records.Where(x => !x.IsNormal).ToImmutableList());
+    private sealed class AbnormalBuffTable(ImmutableArray<BuffRecord> records)
+        : StaticDataTable<AbnormalBuffTable, BuffRecord>(records.Where(x => !x.IsNormal).ToImmutableArray());
 
     private sealed class StaticData(ILogger logger)
         : StaticDataManager<StaticData.TableSet>(logger)
@@ -56,10 +56,10 @@ public class FilteredRecordTableTests(ITestOutputHelper testOutputHelper)
             var staticData = new StaticData(logger);
             await staticData.LoadAsync(dir);
 
-            Assert.Equal(2, staticData.NormalTable.Records.Count);
+            Assert.Equal(2, staticData.NormalTable.Records.Length);
             Assert.All(staticData.NormalTable.Records, x => Assert.True(x.IsNormal));
 
-            Assert.Equal(2, staticData.AbnormalTable.Records.Count);
+            Assert.Equal(2, staticData.AbnormalTable.Records.Length);
             Assert.All(staticData.AbnormalTable.Records, x => Assert.False(x.IsNormal));
             Assert.Empty(logger.Logs);
         }
