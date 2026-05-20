@@ -21,6 +21,7 @@ internal static class ArrayTypeChecker
         PropertySchemaBase property,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         if (!IsSupportedArrayType(property.NamedTypeSymbol))
@@ -55,7 +56,7 @@ internal static class ArrayTypeChecker
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);
-        RecordTypeChecker.Check(innerRecordSchema, recordSchemaCatalog, visited, logger);
+        RecordTypeChecker.Check(innerRecordSchema, recordSchemaCatalog, visited, visiting, logger);
     }
 
     public static bool IsSupportedArrayType(INamedTypeSymbol symbol)

@@ -132,6 +132,9 @@ internal static class Messages
     internal static string CountOutOfRange
         => ResourceManager.GetString("CountOutOfRange", Culture)!;
 
+    internal static string DuplicateValueInSet
+        => ResourceManager.GetString("DuplicateValueInSet", Culture)!;
+
     internal static class Composite
     {
         internal static CompositeFormat InvalidTableParameter => CompositeFormat.Parse(Messages.InvalidTableParameter);
@@ -163,5 +166,6 @@ internal static class Messages
         internal static CompositeFormat ValueOutOfRange => CompositeFormat.Parse(Messages.ValueOutOfRange);
         internal static CompositeFormat PatternMismatch => CompositeFormat.Parse(Messages.PatternMismatch);
         internal static CompositeFormat CountOutOfRange => CompositeFormat.Parse(Messages.CountOutOfRange);
+        internal static CompositeFormat DuplicateValueInSet => CompositeFormat.Parse(Messages.DuplicateValueInSet);
     }
 }

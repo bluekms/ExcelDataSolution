@@ -21,6 +21,7 @@ public static class SetTypeChecker
         PropertySchemaBase property,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         if (!IsSupportedSetType(property.NamedTypeSymbol))
@@ -55,7 +56,7 @@ public static class SetTypeChecker
         }
 
         var innerRecordSchema = property.FindInnerRecordSchema(recordSchemaCatalog);
-        RecordTypeChecker.Check(innerRecordSchema, recordSchemaCatalog, visited, logger);
+        RecordTypeChecker.Check(innerRecordSchema, recordSchemaCatalog, visited, visiting, logger);
     }
 
     public static bool IsSupportedSetType(INamedTypeSymbol symbol)

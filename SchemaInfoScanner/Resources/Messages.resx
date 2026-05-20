@@ -9,6 +9,9 @@
   <data name="AlreadyVisited" xml:space="preserve">
     <value>{0} already visited.</value>
   </data>
+  <data name="CircularReference" xml:space="preserve">
+    <value>Circular reference detected: {0} directly or indirectly contains itself.</value>
+  </data>
   <data name="Ignored" xml:space="preserve">
     <value>{0} ignored.</value>
   </data>

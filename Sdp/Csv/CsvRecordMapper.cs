@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using System.Globalization;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Sdp.Attributes;
 using Sdp.Resources;
@@ -75,6 +76,16 @@ internal static class CsvRecordMapper
                     values,
                     paramInfo.NullString),
                 CollectionKind.SingleColumnImmutableArray => ConvertToSingleColumnImmutableArray(
+                    paramInfo.ElementType!,
+                    baseName,
+                    paramInfo.SingleColumnSeparator!,
+                    headerIndexMap,
+                    values,
+                    paramInfo.NullString,
+                    paramInfo.CountRange,
+                    paramInfo.DateTimeFormat,
+                    paramInfo.TimeSpanFormat),
+                CollectionKind.SingleColumnFrozenSet => ConvertToSingleColumnFrozenSet(
                     paramInfo.ElementType!,
                     baseName,
                     paramInfo.SingleColumnSeparator!,
@@ -263,6 +274,45 @@ internal static class CsvRecordMapper
         return createMethod.Invoke(null, [array]);
     }
 
+    private static string[] SplitSingleColumnCell(
+        string baseName,
+        string separator,
+        Dictionary<string, int> headerIndexMap,
+        string[] values)
+    {
+        if (!headerIndexMap.TryGetValue(baseName, out var index))
+        {
+            throw new InvalidOperationException(string.Format(
+                CultureInfo.CurrentCulture,
+                Messages.Composite.CsvHeaderNotFound,
+                baseName));
+        }
+
+        return values[index].Split(separator);
+    }
+
+    private static void ValidateCountRange(
+        string baseName,
+        int count,
+        CountRangeAttribute? countRange)
+    {
+        if (countRange is null)
+        {
+            return;
+        }
+
+        if (count < countRange.MinCount || count > countRange.MaxCount)
+        {
+            throw new ArgumentException(string.Format(
+                CultureInfo.CurrentCulture,
+                Messages.Composite.CountOutOfRange,
+                baseName,
+                count,
+                countRange.MinCount,
+                countRange.MaxCount));
+        }
+    }
+
     private static object? ConvertToSingleColumnImmutableArray(
         Type elementType,
         string baseName,
@@ -274,27 +324,8 @@ internal static class CsvRecordMapper
         string? dateTimeFormat = null,
         string? timeSpanFormat = null)
     {
-        if (!headerIndexMap.TryGetValue(baseName, out var index))
-        {
-            throw new InvalidOperationException(string.Format(
-                CultureInfo.CurrentCulture,
-                Messages.Composite.CsvHeaderNotFound,
-                baseName));
-        }
-
-        var cellValue = values[index];
-        var parts = cellValue.Split(separator);
-
-        if (countRange is not null && (parts.Length < countRange.MinCount || parts.Length > countRange.MaxCount))
-        {
-            throw new ArgumentException(string.Format(
-                CultureInfo.CurrentCulture,
-                Messages.Composite.CountOutOfRange,
-                baseName,
-                parts.Length,
-                countRange.MinCount,
-                countRange.MaxCount));
-        }
+        var parts = SplitSingleColumnCell(baseName, separator, headerIndexMap, values);
+        ValidateCountRange(baseName, parts.Length, countRange);
 
         var array = Array.CreateInstance(elementType, parts.Length);
 
@@ -314,6 +345,18 @@ internal static class CsvRecordMapper
         return createMethod.Invoke(null, [array]);
     }
 
+    private static object? InvokeHelper(MethodInfo helperMethod, object?[] arguments)
+    {
+        try
+        {
+            return helperMethod.Invoke(null, arguments);
+        }
+        catch (TargetInvocationException e)
+        {
+            throw e.InnerException ?? e;
+        }
+    }
+
     private static object? ConvertToFrozenSet(
         Type elementType,
         string baseName,
@@ -325,7 +368,7 @@ internal static class CsvRecordMapper
         string? timeSpanFormat = null)
     {
         var helperMethod = CsvTypeCache.GetFrozenSetHelperMethod(elementType, nameof(ConvertToFrozenSetHelper));
-        return helperMethod.Invoke(null, [baseName, length, headerIndexMap, values, nullString, dateTimeFormat, timeSpanFormat]);
+        return InvokeHelper(helperMethod, [baseName, length, headerIndexMap, values, nullString, dateTimeFormat, timeSpanFormat]);
     }
 
     internal static FrozenSet<T> ConvertToFrozenSetHelper<T>(
@@ -374,6 +417,60 @@ internal static class CsvRecordMapper
         return list.ToFrozenSet();
     }
 
+    private static object? ConvertToSingleColumnFrozenSet(
+        Type elementType,
+        string baseName,
+        string separator,
+        Dictionary<string, int> headerIndexMap,
+        string[] values,
+        string? nullString,
+        CountRangeAttribute? countRange,
+        string? dateTimeFormat = null,
+        string? timeSpanFormat = null)
+    {
+        var helperMethod = CsvTypeCache.GetFrozenSetHelperMethod(elementType, nameof(ConvertToSingleColumnFrozenSetHelper));
+        return InvokeHelper(helperMethod, [baseName, separator, headerIndexMap, values, nullString, countRange, dateTimeFormat, timeSpanFormat]);
+    }
+
+    internal static FrozenSet<T> ConvertToSingleColumnFrozenSetHelper<T>(
+        string baseName,
+        string separator,
+        Dictionary<string, int> headerIndexMap,
+        string[] values,
+        string? nullString,
+        CountRangeAttribute? countRange,
+        string? dateTimeFormat,
+        string? timeSpanFormat)
+    {
+        var parts = SplitSingleColumnCell(baseName, separator, headerIndexMap, values);
+
+        var elementType = typeof(T);
+        var set = new HashSet<T>(parts.Length);
+
+        foreach (var part in parts)
+        {
+            var trimmedValue = part.Trim();
+            var convertedValue = ConvertStringValue(
+                elementType,
+                trimmedValue,
+                nullString,
+                dateTimeFormat: dateTimeFormat,
+                timeSpanFormat: timeSpanFormat);
+
+            if (!set.Add((T)convertedValue!))
+            {
+                throw new ArgumentException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    Messages.Composite.DuplicateValueInSet,
+                    baseName,
+                    convertedValue));
+            }
+        }
+
+        ValidateCountRange(baseName, set.Count, countRange);
+        return set.ToFrozenSet();
+    }
+
     private static object? ConvertToFrozenDictionary(
         Type keyType,
         Type valueType,
@@ -387,7 +484,7 @@ internal static class CsvRecordMapper
             keyType,
             valueType,
             nameof(ConvertToFrozenDictionaryHelper));
-        return helperMethod.Invoke(null, [baseName, length, headerIndexMap, values, nullString]);
+        return InvokeHelper(helperMethod, [baseName, length, headerIndexMap, values, nullString]);
     }
 
     internal static FrozenDictionary<TKey, TValue> ConvertToFrozenDictionaryHelper<TKey, TValue>(
@@ -408,7 +505,16 @@ internal static class CsvRecordMapper
 
             var keyProperty = CsvTypeCache.GetKeyProperty(valueType);
             var keyInstance = keyProperty.GetValue(valueInstance);
-            dictionary.Add((TKey)keyInstance!, (TValue)valueInstance!);
+            var key = (TKey)keyInstance!;
+
+            if (!dictionary.TryAdd(key, (TValue)valueInstance!))
+            {
+                throw new ArgumentException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    Messages.Composite.DuplicateKey,
+                    key,
+                    baseName));
+            }
         }
 
         return dictionary.ToFrozenDictionary();

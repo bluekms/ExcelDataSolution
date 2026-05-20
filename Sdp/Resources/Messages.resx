@@ -114,4 +114,7 @@
   <data name="CountOutOfRange" xml:space="preserve">
     <value>Column '{0}' has {1} item(s), but must have between {2} and {3}.</value>
   </data>
+  <data name="DuplicateValueInSet" xml:space="preserve">
+    <value>Column '{0}' contains a duplicate value '{1}'; a set does not allow duplicates.</value>
+  </data>
 </root>

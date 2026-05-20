@@ -17,6 +17,7 @@ internal static class RecordTypeChecker
         RecordSchema recordSchema,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         if (recordSchema.HasAttribute<IgnoreAttribute>())
@@ -38,6 +39,15 @@ internal static class RecordTypeChecker
                     recordSchema.RecordName.FullName));
         }
 
+        if (visiting.Contains(recordSchema.RecordName))
+        {
+            throw new InvalidOperationException(
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Messages.Composite.CircularReference,
+                    recordSchema.RecordName.FullName));
+        }
+
         if (!visited.Add(recordSchema.RecordName))
         {
             var visitedMsg = string.Format(
@@ -54,9 +64,17 @@ internal static class RecordTypeChecker
             recordSchema.RecordName.FullName);
         LogTrace(logger, startedMsg, null);
 
-        foreach (var recordParameterSchema in recordSchema.PropertySchemata)
+        visiting.Add(recordSchema.RecordName);
+        try
         {
-            SupportedTypeChecker.Check(recordParameterSchema, recordSchemaCatalog, visited, logger);
+            foreach (var recordParameterSchema in recordSchema.PropertySchemata)
+            {
+                SupportedTypeChecker.Check(recordParameterSchema, recordSchemaCatalog, visited, visiting, logger);
+            }
+        }
+        finally
+        {
+            visiting.Remove(recordSchema.RecordName);
         }
 
         var finishedMsg = string.Format(
@@ -104,6 +122,7 @@ internal static class RecordTypeChecker
         INamedTypeSymbol symbol,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         var recordSchema = recordSchemaCatalog.TryFind(symbol);
@@ -121,7 +140,7 @@ internal static class RecordTypeChecker
             throw new NotSupportedException(msg, innerException);
         }
 
-        Check(recordSchema, recordSchemaCatalog, visited, logger);
+        Check(recordSchema, recordSchemaCatalog, visited, visiting, logger);
         return recordSchema;
     }
 

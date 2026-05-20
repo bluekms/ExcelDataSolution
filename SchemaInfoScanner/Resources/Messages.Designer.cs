@@ -27,6 +27,9 @@ internal static class Messages
     internal static string AlreadyVisited
         => ResourceManager.GetString("AlreadyVisited", Culture)!;
 
+    internal static string CircularReference
+        => ResourceManager.GetString("CircularReference", Culture)!;
+
     internal static string Ignored
         => ResourceManager.GetString("Ignored", Culture)!;
 
@@ -315,6 +318,7 @@ internal static class Messages
     internal static class Composite
     {
         internal static CompositeFormat AlreadyVisited => CompositeFormat.Parse(Messages.AlreadyVisited);
+        internal static CompositeFormat CircularReference => CompositeFormat.Parse(Messages.CircularReference);
         internal static CompositeFormat Ignored => CompositeFormat.Parse(Messages.Ignored);
         internal static CompositeFormat RecordStarted => CompositeFormat.Parse(Messages.RecordStarted);
         internal static CompositeFormat RecordFinished => CompositeFormat.Parse(Messages.RecordFinished);

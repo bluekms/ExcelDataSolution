@@ -1,10 +1,13 @@
 using System.Collections.Frozen;
+using Microsoft.Extensions.Logging;
 using Sdp.Attributes;
 using Sdp.Csv;
+using UnitTest.Utility;
+using Xunit.Abstractions;
 
 namespace UnitTest.CsvRecordMapperTests;
 
-public class FrozenDictionaryMapperTests
+public class FrozenDictionaryMapperTests(ITestOutputHelper testOutputHelper)
 {
     public sealed record SimpleValue([Key] int Id, string Name);
 
@@ -28,6 +31,30 @@ public class FrozenDictionaryMapperTests
         Assert.True(result.Inventory.ContainsKey(2));
         Assert.Equal("First", result.Inventory[1].Name);
         Assert.Equal("Second", result.Inventory[2].Name);
+    }
+
+    [Fact]
+    public void MapFrozenDictionaryWithDuplicateKey_Throws()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<FrozenDictionaryMapperTests>() is not TestOutputLogger<FrozenDictionaryMapperTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        var headers = new[]
+        {
+            "Inventory[0].Id", "Inventory[0].Name",
+            "Inventory[1].Id", "Inventory[1].Name",
+        };
+        var values = new[] { "1", "First", "1", "Second" };
+
+        var ex = Assert.Throws<ArgumentException>(
+            () => CsvRecordMapper.MapToRecord<SimpleInventoryRecord>(headers, values));
+        logger.LogError(ex, ex.Message);
+
+        Assert.Contains("Inventory", ex.Message);
+        Assert.Single(logger.Logs);
     }
 
     public sealed record KeyRecord(int Id, string Name);
