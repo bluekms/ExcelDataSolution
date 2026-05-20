@@ -8,8 +8,8 @@ namespace Sdp.Csv;
 
 internal static class CsvLoader
 {
-    private static readonly MethodInfo BuildImmutableListGenericMethod = typeof(CsvLoader)
-        .GetMethod(nameof(BuildImmutableListTyped), BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo BuildImmutableArrayGenericMethod = typeof(CsvLoader)
+        .GetMethod(nameof(BuildImmutableArrayTyped), BindingFlags.NonPublic | BindingFlags.Static)!;
 
     public static async Task<object> LoadAsync(string filePath, Type recordType)
     {
@@ -17,16 +17,16 @@ internal static class CsvLoader
         return Parse(content, recordType, filePath);
     }
 
-    public static async Task<ImmutableList<TRecord>> LoadAsync<TRecord>(string filePath)
+    public static async Task<ImmutableArray<TRecord>> LoadAsync<TRecord>(string filePath)
         where TRecord : notnull
-        => (ImmutableList<TRecord>)await LoadAsync(filePath, typeof(TRecord));
+        => (ImmutableArray<TRecord>)await LoadAsync(filePath, typeof(TRecord));
 
     private static object Parse(string csvContent, Type recordType, string? filePath = null)
     {
         var rows = ParseCsvContent(csvContent);
         if (rows.Count == 0)
         {
-            return BuildEmptyList(recordType);
+            return BuildEmptyArray(recordType);
         }
 
         var headers = rows[0];
@@ -67,22 +67,22 @@ internal static class CsvLoader
             }
         }
 
-        return BuildImmutableList(recordType, records);
+        return BuildImmutableArray(recordType, records);
     }
 
-    public static ImmutableList<TRecord> Parse<TRecord>(string csvContent, string? filePath = null)
+    public static ImmutableArray<TRecord> Parse<TRecord>(string csvContent, string? filePath = null)
         where TRecord : notnull
-        => (ImmutableList<TRecord>)Parse(csvContent, typeof(TRecord), filePath);
+        => (ImmutableArray<TRecord>)Parse(csvContent, typeof(TRecord), filePath);
 
-    private static object BuildImmutableList(Type recordType, List<object> records)
-        => BuildImmutableListGenericMethod.MakeGenericMethod(recordType).Invoke(null, [records])!;
+    private static object BuildImmutableArray(Type recordType, List<object> records)
+        => BuildImmutableArrayGenericMethod.MakeGenericMethod(recordType).Invoke(null, [records])!;
 
-    private static object BuildEmptyList(Type recordType)
-    => BuildImmutableListGenericMethod.MakeGenericMethod(recordType).Invoke(null, [new List<object>()])!;
+    private static object BuildEmptyArray(Type recordType)
+    => BuildImmutableArrayGenericMethod.MakeGenericMethod(recordType).Invoke(null, [new List<object>()])!;
 
-    private static ImmutableList<T> BuildImmutableListTyped<T>(List<object> records)
+    private static ImmutableArray<T> BuildImmutableArrayTyped<T>(List<object> records)
         where T : notnull
-        => records.Cast<T>().ToImmutableList();
+        => records.Cast<T>().ToImmutableArray();
 
     private static List<string[]> ParseCsvContent(string content)
     {

@@ -3,12 +3,12 @@ using System.Collections.Immutable;
 
 namespace Sdp.Table;
 
-public abstract class StaticDataTable<TSelf, TRecord>(ImmutableList<TRecord> records)
+public abstract class StaticDataTable<TSelf, TRecord>(ImmutableArray<TRecord> records)
     : IStaticDataTable
     where TSelf : StaticDataTable<TSelf, TRecord>
     where TRecord : notnull
 {
-    public ImmutableList<TRecord> Records => records;
+    public ImmutableArray<TRecord> Records => records;
 
     protected virtual void Validate()
     {
