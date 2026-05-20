@@ -114,4 +114,7 @@
   <data name="CountOutOfRange" xml:space="preserve">
     <value>'{0}' 컬럼에 {1}개의 값이 있지만 {2}~{3}개여야 합니다.</value>
   </data>
+  <data name="DuplicateValueInSet" xml:space="preserve">
+    <value>'{0}' 컬럼에 중복된 값 '{1}'이(가) 있습니다. 집합은 중복을 허용하지 않습니다.</value>
+  </data>
 </root>

@@ -13,7 +13,7 @@ internal static class CsvTypeCache
 {
     private static readonly ConcurrentDictionary<Type, TypeMappingInfo> TypeCache = new();
     private static readonly ConcurrentDictionary<Type, MethodInfo> ImmutableArrayCreateCache = new();
-    private static readonly ConcurrentDictionary<Type, MethodInfo> FrozenSetHelperCache = new();
+    private static readonly ConcurrentDictionary<(Type, string), MethodInfo> FrozenSetHelperCache = new();
     private static readonly ConcurrentDictionary<(Type, Type), MethodInfo> FrozenDictionaryHelperCache = new();
     private static readonly ConcurrentDictionary<Type, PropertyInfo> KeyPropertyCache = new();
 
@@ -47,10 +47,10 @@ internal static class CsvTypeCache
 
     public static MethodInfo GetFrozenSetHelperMethod(Type elementType, string helperMethodName)
     {
-        return FrozenSetHelperCache.GetOrAdd(elementType, et =>
+        return FrozenSetHelperCache.GetOrAdd((elementType, helperMethodName), key =>
             typeof(CsvRecordMapper)
-                .GetMethod(helperMethodName, BindingFlags.NonPublic | BindingFlags.Static)!
-                .MakeGenericMethod(et));
+                .GetMethod(key.Item2, BindingFlags.NonPublic | BindingFlags.Static)!
+                .MakeGenericMethod(key.Item1));
     }
 
     public static MethodInfo GetFrozenDictionaryHelperMethod(Type keyType, Type valueType, string helperMethodName)
@@ -127,6 +127,12 @@ internal static class CsvTypeCache
                 elementType = paramType.GetGenericArguments()[0];
                 singleColumnSeparator = singleColumnAttr.Separator;
             }
+            else if (genericTypeDef == typeof(FrozenSet<>))
+            {
+                collectionType = CollectionKind.SingleColumnFrozenSet;
+                elementType = paramType.GetGenericArguments()[0];
+                singleColumnSeparator = singleColumnAttr.Separator;
+            }
         }
         else if (lengthAttr is not null && paramType.IsGenericType)
         {
@@ -193,4 +199,5 @@ internal enum CollectionKind
     FrozenSet,
     FrozenDictionary,
     SingleColumnImmutableArray,
+    SingleColumnFrozenSet,
 }
