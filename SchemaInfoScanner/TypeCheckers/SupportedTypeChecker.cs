@@ -17,6 +17,7 @@ internal static class SupportedTypeChecker
         PropertySchemaBase property,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         if (property.HasAttribute<IgnoreAttribute>())
@@ -47,7 +48,7 @@ internal static class SupportedTypeChecker
 
         if (CollectionTypeChecker.IsSupportedCollectionType(property.NamedTypeSymbol))
         {
-            CheckSupportedCollectionType(property, recordSchemaCatalog, visited, logger);
+            CheckSupportedCollectionType(property, recordSchemaCatalog, visited, visiting, logger);
             return;
         }
 
@@ -66,26 +67,27 @@ internal static class SupportedTypeChecker
             throw new NotSupportedException(msg, innerException);
         }
 
-        RecordTypeChecker.Check(recordSchema, recordSchemaCatalog, visited, logger);
+        RecordTypeChecker.Check(recordSchema, recordSchemaCatalog, visited, visiting, logger);
     }
 
     private static void CheckSupportedCollectionType(
         PropertySchemaBase property,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         if (SetTypeChecker.IsSupportedSetType(property.NamedTypeSymbol))
         {
-            SetTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
+            SetTypeChecker.Check(property, recordSchemaCatalog, visited, visiting, logger);
         }
         else if (ArrayTypeChecker.IsSupportedArrayType(property.NamedTypeSymbol))
         {
-            ArrayTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
+            ArrayTypeChecker.Check(property, recordSchemaCatalog, visited, visiting, logger);
         }
         else if (MapTypeChecker.IsSupportedMapType(property.NamedTypeSymbol))
         {
-            MapTypeChecker.Check(property, recordSchemaCatalog, visited, logger);
+            MapTypeChecker.Check(property, recordSchemaCatalog, visited, visiting, logger);
         }
         else
         {

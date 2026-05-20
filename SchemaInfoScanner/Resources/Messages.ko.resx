@@ -9,6 +9,9 @@
   <data name="AlreadyVisited" xml:space="preserve">
     <value>{0} 이미 처리되었습니다.</value>
   </data>
+  <data name="CircularReference" xml:space="preserve">
+    <value>순환 참조가 감지되었습니다: {0}이(가) 자기 자신을 직접 또는 간접적으로 포함합니다.</value>
+  </data>
   <data name="Ignored" xml:space="preserve">
     <value>{0} 무시됩니다.</value>
   </data>

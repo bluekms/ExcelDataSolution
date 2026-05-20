@@ -22,6 +22,7 @@ public static class MapTypeChecker
         PropertySchemaBase property,
         RecordSchemaCatalog recordSchemaCatalog,
         HashSet<RecordName> visited,
+        HashSet<RecordName> visiting,
         ILogger logger)
     {
         if (!IsSupportedMapType(property.NamedTypeSymbol))
@@ -50,7 +51,7 @@ public static class MapTypeChecker
             throw new NotSupportedException(Messages.DictionaryValueMustBeNonNullable);
         }
 
-        var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaCatalog, visited, logger);
+        var valueRecordSchema = RecordTypeChecker.CheckAndGetSchema(valueSymbol, recordSchemaCatalog, visited, visiting, logger);
 
         var valueRecordKeyParameterSchema = valueRecordSchema.PropertySchemata
             .SingleOrDefault(x => x.HasAttribute<KeyAttribute>());
@@ -66,7 +67,7 @@ public static class MapTypeChecker
 
         if (RecordTypeChecker.IsSupportedRecordType(keySymbol))
         {
-            var keyRecordSchema = RecordTypeChecker.CheckAndGetSchema(keySymbol, recordSchemaCatalog, visited, logger);
+            var keyRecordSchema = RecordTypeChecker.CheckAndGetSchema(keySymbol, recordSchemaCatalog, visited, visiting, logger);
 
             var valueRecordKeyParameterRecordName = new RecordName(valueRecordKeyParameterSchema.NamedTypeSymbol);
             if (!keyRecordSchema.RecordName.Equals(valueRecordKeyParameterRecordName))
