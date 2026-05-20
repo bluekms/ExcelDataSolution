@@ -113,7 +113,6 @@ public static class RandomValueGenerator
 
         if (underlyingType == typeof(char))
         {
-            // return (char)Random.Shared.Next(65, 123); // A-Z, a-z
             return (char)Random.Shared.Next(33, 127); // 모든 printable ASCII 문자
         }
 
