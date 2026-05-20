@@ -484,7 +484,7 @@ internal static class CsvRecordMapper
             keyType,
             valueType,
             nameof(ConvertToFrozenDictionaryHelper));
-        return helperMethod.Invoke(null, [baseName, length, headerIndexMap, values, nullString]);
+        return InvokeHelper(helperMethod, [baseName, length, headerIndexMap, values, nullString]);
     }
 
     internal static FrozenDictionary<TKey, TValue> ConvertToFrozenDictionaryHelper<TKey, TValue>(
@@ -505,7 +505,16 @@ internal static class CsvRecordMapper
 
             var keyProperty = CsvTypeCache.GetKeyProperty(valueType);
             var keyInstance = keyProperty.GetValue(valueInstance);
-            dictionary.Add((TKey)keyInstance!, (TValue)valueInstance!);
+            var key = (TKey)keyInstance!;
+
+            if (!dictionary.TryAdd(key, (TValue)valueInstance!))
+            {
+                throw new ArgumentException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    Messages.Composite.DuplicateKey,
+                    key,
+                    baseName));
+            }
         }
 
         return dictionary.ToFrozenDictionary();
