@@ -25,6 +25,8 @@ public abstract class StaticDataManager<TTableSet, TViewSet>(ILogger logger)
         {
             var stopwatch = Stopwatch.StartNew();
 
+            TableSetLoader.EnsureSingleConstructor<TTableSet>();
+
             var fkTargetError = ForeignKeyTargetValidator.Validate<TTableSet>();
             if (fkTargetError is not null)
             {
