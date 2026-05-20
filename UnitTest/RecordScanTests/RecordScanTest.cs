@@ -1,4 +1,3 @@
-using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
 using SchemaInfoScanner.Catalogs;
@@ -10,6 +9,13 @@ namespace UnitTest.RecordScanTests;
 
 public class RecordScanTest(ITestOutputHelper testOutputHelper)
 {
+    private static readonly string[] RecordResourceFileNames =
+    [
+        "Excel1Records.cs",
+        "Excel2Records.cs",
+        "Excel3Records.cs",
+    ];
+
     [Fact]
     public void LoadAndCheckTest()
     {
@@ -19,16 +25,9 @@ public class RecordScanTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleRecords");
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
 
-        var loadResults = RecordSchemaLoader.Load(csPath, logger);
+        var loadResults = RecordSchemaLoader.Load(testData.Path, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResults, logger);
         var enumDefinitionSet = new EnumDefinitionSet(loadResults);
         var semanticModelSet = new SemanticModelSet(loadResults);

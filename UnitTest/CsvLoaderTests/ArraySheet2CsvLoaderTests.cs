@@ -1,10 +1,19 @@
-using Docs.SampleRecords.Excel1;
+using System.Collections.Immutable;
+using Sdp.Attributes;
 using Sdp.Csv;
 
 namespace UnitTest.CsvLoaderTests;
 
 public class ArraySheet2CsvLoaderTests
 {
+    [StaticDataRecord("Excel1", "ArraySheet")]
+    private sealed record ArraySheet(
+        int Id,
+        string Name,
+        [ColumnName("Score")]
+        [Length(3)]
+        ImmutableArray<int> Scores);
+
     private const string ArraySheetCsv =
         """
         Id,Name,Score[0],Score[1],Score[2]

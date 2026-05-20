@@ -1,6 +1,4 @@
 using System.Globalization;
-using System.Reflection;
-using ExcelColumnExtractor.Mappings;
 using ExcelColumnExtractor.Scanners;
 using Microsoft.Extensions.Logging;
 using SchemaInfoScanner;
@@ -16,6 +14,15 @@ namespace UnitTest;
 [Collection("ExcelFileTests")]
 public class ExcelScanTest(ITestOutputHelper testOutputHelper)
 {
+    private const string Excel3RecordsResourceFileName = "Excel3Records.cs";
+
+    private static readonly string[] ExcelResourceFileNames =
+    [
+        "Excel1.xlsx",
+        "Excel2.xlsx",
+        "Excel3.xlsx",
+    ];
+
     private static readonly Action<ILogger, string, Exception?> LogTrace =
         LoggerMessage.Define<string>(LogLevel.Trace, new EventId(0, nameof(LogTrace)), "{Message}");
 
@@ -31,7 +38,8 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var sheetNames = ScanExcelFiles(logger);
+        using var excelData = new TestDataDirectory(ExcelResourceFileNames);
+        var sheetNames = SheetNameScanner.Scan(excelData.Path, logger);
 
         testOutputHelper.WriteLine(sheetNames.Count.ToString(CultureInfo.InvariantCulture));
         Assert.Empty(logger.Logs);
@@ -46,8 +54,11 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var sheetNameCollection = ScanExcelFiles(logger);
-        var recordSchemaCatalog = ScanRecordFiles(logger);
+        using var excelData = new TestDataDirectory(ExcelResourceFileNames);
+        using var recordData = new TestDataDirectory(Excel3RecordsResourceFileName);
+
+        var sheetNameCollection = SheetNameScanner.Scan(excelData.Path, logger);
+        var recordSchemaCatalog = ScanRecordFile(recordData.GetFilePath(Excel3RecordsResourceFileName), logger);
 
         foreach (var recordSchema in recordSchemaCatalog.StaticDataRecordSchemata)
         {
@@ -72,32 +83,8 @@ public class ExcelScanTest(ITestOutputHelper testOutputHelper)
         Assert.Empty(logger.Logs);
     }
 
-    private static ExcelSheetNameMap ScanExcelFiles(ILogger logger)
+    private static RecordSchemaCatalog ScanRecordFile(string csPath, ILogger logger)
     {
-        var excelPath = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleExcels");
-
-        return SheetNameScanner.Scan(excelPath, logger);
-    }
-
-    private static RecordSchemaCatalog ScanRecordFiles(ILogger logger)
-    {
-        var csPath = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleRecords",
-            "Excel3Records.cs");
-
         var loadResults = RecordSchemaLoader.Load(csPath, logger);
         var recordSchemaSet = new RecordSchemaSet(loadResults, logger);
 

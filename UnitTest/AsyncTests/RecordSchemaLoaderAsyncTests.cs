@@ -7,17 +7,12 @@ namespace UnitTest.AsyncTests;
 
 public class RecordSchemaLoaderAsyncTests(ITestOutputHelper testOutputHelper)
 {
-    private static string GetTestRecordPath()
-    {
-        return Path.Combine(
-            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleRecords");
-    }
+    private static readonly string[] RecordResourceFileNames =
+    [
+        "Excel1Records.cs",
+        "Excel2Records.cs",
+        "Excel3Records.cs",
+    ];
 
     [Fact]
     public async Task LoadAsync_WithValidDirectory_ReturnsResults()
@@ -28,8 +23,8 @@ public class RecordSchemaLoaderAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
-        var results = await RecordSchemaLoader.LoadAsync(csPath, logger);
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
+        var results = await RecordSchemaLoader.LoadAsync(testData.Path, logger);
 
         Assert.NotEmpty(results);
         Assert.Empty(logger.Logs);
@@ -44,8 +39,8 @@ public class RecordSchemaLoaderAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
-        var files = Directory.GetFiles(csPath, "*.cs");
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
+        var files = Directory.GetFiles(testData.Path, "*.cs");
         Assert.NotEmpty(files);
         var singleFile = files[0];
 
@@ -64,12 +59,12 @@ public class RecordSchemaLoaderAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         await Assert.ThrowsAsync<OperationCanceledException>(() =>
-            RecordSchemaLoader.LoadAsync(csPath, logger, cts.Token));
+            RecordSchemaLoader.LoadAsync(testData.Path, logger, cts.Token));
 
         Assert.Empty(logger.Logs);
     }
@@ -83,7 +78,8 @@ public class RecordSchemaLoaderAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var invalidPath = Path.Combine(GetTestRecordPath(), "NonExistentPath");
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
+        var invalidPath = Path.Combine(testData.Path, "NonExistentPath");
 
         await Assert.ThrowsAsync<ArgumentException>(() =>
             RecordSchemaLoader.LoadAsync(invalidPath, logger));
@@ -100,10 +96,10 @@ public class RecordSchemaLoaderAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
 
-        var syncResults = RecordSchemaLoader.Load(csPath, logger);
-        var asyncResults = await RecordSchemaLoader.LoadAsync(csPath, logger);
+        var syncResults = RecordSchemaLoader.Load(testData.Path, logger);
+        var asyncResults = await RecordSchemaLoader.LoadAsync(testData.Path, logger);
 
         Assert.Equal(syncResults.Count, asyncResults.Count);
         for (var i = 0; i < syncResults.Count; i++)
