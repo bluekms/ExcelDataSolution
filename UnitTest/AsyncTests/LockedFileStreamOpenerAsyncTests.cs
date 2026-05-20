@@ -1,27 +1,18 @@
 using ExcelColumnExtractor.Scanners;
+using UnitTest.Utility;
 
 namespace UnitTest.AsyncTests;
 
 [Collection("ExcelFileTests")]
 public class LockedFileStreamOpenerAsyncTests
 {
-    private static string GetTestExcelPath()
-    {
-        return Path.Combine(
-            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleExcels",
-            "Excel1.xlsx");
-    }
+    private const string ExcelResourceFileName = "Excel1.xlsx";
 
     [Fact]
     public async Task CreateAsync_WithValidFile_ReturnsOpener()
     {
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
         Assert.True(File.Exists(excelPath), $"Test file not found: {excelPath}");
 
         using var opener = await LockedFileStreamOpener.CreateAsync(excelPath);
@@ -34,7 +25,8 @@ public class LockedFileStreamOpenerAsyncTests
     [Fact]
     public async Task CreateAsync_WithCancellation_ThrowsOperationCanceledException()
     {
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
@@ -54,7 +46,8 @@ public class LockedFileStreamOpenerAsyncTests
     [Fact]
     public async Task CreateAsync_StreamDisposesCorrectly()
     {
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
 
         var opener = await LockedFileStreamOpener.CreateAsync(excelPath);
         var stream = opener.Stream;
@@ -66,7 +59,8 @@ public class LockedFileStreamOpenerAsyncTests
     [Fact]
     public async Task CreateAsync_IsTemp_IsFalseForUnlockedFile()
     {
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
         using var opener = await LockedFileStreamOpener.CreateAsync(excelPath);
 
         Assert.False(opener.IsTemp);

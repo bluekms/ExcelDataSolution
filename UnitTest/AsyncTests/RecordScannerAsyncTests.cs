@@ -7,17 +7,12 @@ namespace UnitTest.AsyncTests;
 
 public class RecordScannerAsyncTests(ITestOutputHelper testOutputHelper)
 {
-    private static string GetTestRecordPath()
-    {
-        return Path.Combine(
-            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleRecords");
-    }
+    private static readonly string[] RecordResourceFileNames =
+    [
+        "Excel1Records.cs",
+        "Excel2Records.cs",
+        "Excel3Records.cs",
+    ];
 
     [Fact]
     public async Task ScanAsync_WithValidPath_ReturnsCatalogs()
@@ -28,8 +23,8 @@ public class RecordScannerAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
-        var catalogs = await RecordScanner.ScanAsync(csPath, logger);
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
+        var catalogs = await RecordScanner.ScanAsync(testData.Path, logger);
 
         Assert.NotNull(catalogs);
         Assert.NotNull(catalogs.RecordSchemaCatalog);
@@ -46,12 +41,12 @@ public class RecordScannerAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         await Assert.ThrowsAsync<OperationCanceledException>(() =>
-            RecordScanner.ScanAsync(csPath, logger, cts.Token));
+            RecordScanner.ScanAsync(testData.Path, logger, cts.Token));
 
         Assert.Empty(logger.Logs);
     }
@@ -65,9 +60,9 @@ public class RecordScannerAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var csPath = GetTestRecordPath();
-        var syncCatalogs = RecordScanner.Scan(csPath, logger);
-        var asyncCatalogs = await RecordScanner.ScanAsync(csPath, logger);
+        using var testData = new TestDataDirectory(RecordResourceFileNames);
+        var syncCatalogs = RecordScanner.Scan(testData.Path, logger);
+        var asyncCatalogs = await RecordScanner.ScanAsync(testData.Path, logger);
 
         Assert.Equal(
             syncCatalogs.RecordSchemaCatalog.StaticDataRecordSchemata.Count,

@@ -34,7 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Docs\SampleRecords\*.cs" Link="SampleRecords\%(Filename)%(Extension)" />
+    <Compile Remove="TestData\**\*.cs" />
+    <EmbeddedResource Include="TestData\*.cs" />
+    <EmbeddedResource Include="TestData\*.xlsx" />
   </ItemGroup>
 
 </Project>

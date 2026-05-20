@@ -10,19 +10,7 @@ namespace UnitTest.AsyncTests;
 public class ExcelSheetProcessorAsyncTests(ITestOutputHelper testOutputHelper)
 {
     private const string TestStartCell = "C7";
-
-    private static string GetTestExcelPath()
-    {
-        return Path.Combine(
-            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!,
-            "..",
-            "..",
-            "..",
-            "..",
-            "Docs",
-            "SampleExcels",
-            "Excel1.xlsx");
-    }
+    private const string ExcelResourceFileName = "Excel1.xlsx";
 
     [Fact]
     public async Task ProcessAsync_WithValidSheet_ProcessesHeader()
@@ -33,7 +21,8 @@ public class ExcelSheetProcessorAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
         Assert.True(File.Exists(excelPath), $"Test file not found: {excelPath}");
 
         SheetHeader? capturedHeader = null;
@@ -62,7 +51,8 @@ public class ExcelSheetProcessorAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
@@ -92,7 +82,8 @@ public class ExcelSheetProcessorAsyncTests(ITestOutputHelper testOutputHelper)
             throw new InvalidOperationException("Logger creation failed.");
         }
 
-        var excelPath = GetTestExcelPath();
+        using var testData = new TestDataDirectory(ExcelResourceFileName);
+        var excelPath = testData.GetFilePath(ExcelResourceFileName);
 
         SheetHeader? syncHeader = null;
         SheetHeader? asyncHeader = null;
