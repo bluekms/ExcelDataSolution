@@ -28,7 +28,7 @@ internal partial class SchemaRuleValidator
                         x.GetType().FullName));
         });
 
-        When(x => x is DateTimePropertySchema, () =>
+        When(x => x is DateTimePropertySchema or NullableDateTimePropertySchema, () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<DateTimeFormatAttribute>())

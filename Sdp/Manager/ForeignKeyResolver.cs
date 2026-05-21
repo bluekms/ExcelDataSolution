@@ -49,7 +49,7 @@ internal static class ForeignKeyResolver
         {
             errors.Add(new InvalidOperationException(string.Format(
                 CultureInfo.CurrentCulture,
-                Messages.Composite.IndexNotRegistered,
+                Messages.Composite.FkTargetColumnNotFound,
                 columnName,
                 targetTable.RecordType.Name)));
 

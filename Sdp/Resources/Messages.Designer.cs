@@ -36,8 +36,8 @@ internal static class Messages
     internal static string FkTargetNotFound
         => ResourceManager.GetString("FkTargetNotFound", Culture)!;
 
-    internal static string IndexNotRegistered
-        => ResourceManager.GetString("IndexNotRegistered", Culture)!;
+    internal static string FkTargetColumnNotFound
+        => ResourceManager.GetString("FkTargetColumnNotFound", Culture)!;
 
     internal static string FkValueNotFound
         => ResourceManager.GetString("FkValueNotFound", Culture)!;
@@ -140,7 +140,7 @@ internal static class Messages
         internal static CompositeFormat InvalidTableParameter => CompositeFormat.Parse(Messages.InvalidTableParameter);
         internal static CompositeFormat TableConstructorNotFound => CompositeFormat.Parse(Messages.TableConstructorNotFound);
         internal static CompositeFormat FkTargetNotFound => CompositeFormat.Parse(Messages.FkTargetNotFound);
-        internal static CompositeFormat IndexNotRegistered => CompositeFormat.Parse(Messages.IndexNotRegistered);
+        internal static CompositeFormat FkTargetColumnNotFound => CompositeFormat.Parse(Messages.FkTargetColumnNotFound);
         internal static CompositeFormat FkValueNotFound => CompositeFormat.Parse(Messages.FkValueNotFound);
         internal static CompositeFormat SwitchFkConditionColumnNotFound => CompositeFormat.Parse(Messages.SwitchFkConditionColumnNotFound);
         internal static CompositeFormat FkTargetIsSingleColumnCollection => CompositeFormat.Parse(Messages.FkTargetIsSingleColumnCollection);

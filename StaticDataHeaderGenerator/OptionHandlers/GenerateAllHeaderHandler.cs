@@ -45,7 +45,7 @@ public class GenerateAllHeaderHandler
             var sheetName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
 
             sb.AppendLine(FormattableString.Invariant($"## {targetRecordSchema.RecordName.FullName}"));
-            sb.AppendLine(FormattableString.Invariant($"- Excel File: `Docs/SampleExcels/{excelFileName}.xlsx`"));
+            sb.AppendLine(FormattableString.Invariant($"- Excel File: `{excelFileName}.xlsx`"));
             sb.AppendLine(FormattableString.Invariant($"- Sheet Name: `{sheetName}`"));
             sb.AppendLine();
 
@@ -127,7 +127,7 @@ public class GenerateAllHeaderHandler
             var sheetName = targetRecordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
 
             sb.AppendLine(FormattableString.Invariant($"## {targetRecordSchema.RecordName.FullName}"));
-            sb.AppendLine(FormattableString.Invariant($"- Excel File: `Docs/SampleExcels/{excelFileName}.xlsx`"));
+            sb.AppendLine(FormattableString.Invariant($"- Excel File: `{excelFileName}.xlsx`"));
             sb.AppendLine(FormattableString.Invariant($"- Sheet Name: `{sheetName}`"));
             sb.AppendLine();
 

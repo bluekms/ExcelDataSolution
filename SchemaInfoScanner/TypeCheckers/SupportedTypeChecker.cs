@@ -67,6 +67,14 @@ internal static class SupportedTypeChecker
             throw new NotSupportedException(msg, innerException);
         }
 
+        if (property.PropertyName.IsNullableTypeSyntax)
+        {
+            throw new NotSupportedException(string.Format(
+                CultureInfo.CurrentCulture,
+                Messages.Composite.NullableRecordNotSupported,
+                property.PropertyName.FullName));
+        }
+
         RecordTypeChecker.Check(recordSchema, recordSchemaCatalog, visited, visiting, logger);
     }
 

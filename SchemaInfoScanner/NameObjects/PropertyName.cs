@@ -9,6 +9,7 @@ public class PropertyName(
 {
     public RecordName RecordName { get; } = recordName;
     public string Name { get; } = parameterSyntax.Identifier.ValueText;
+    public bool IsNullableTypeSyntax { get; } = parameterSyntax.Type is NullableTypeSyntax;
     public string FullName => $"{RecordName.FullName}.{Name}";
 
     public override bool Equals(object? obj)

@@ -21,7 +21,11 @@ public static class GenerateHeaderHandler
         LogInformation(logger, Messages.GeneratingHeaderFile, null);
 
         var catalogs = RecordScanner.Scan(options.RecordCsPath, logger);
-        if (catalogs.RecordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
+
+        var targetRecordSchema = catalogs.RecordSchemaCatalog.StaticDataRecordSchemata
+            .SingleOrDefault(x => x.RecordName.Name == options.RecordName);
+
+        if (targetRecordSchema is null)
         {
             var exception = new ArgumentException(
                 string.Format(
@@ -31,9 +35,6 @@ public static class GenerateHeaderHandler
             LogError(logger, exception.Message, exception);
             throw exception;
         }
-
-        var targetRecordSchema = catalogs.RecordSchemaCatalog.StaticDataRecordSchemata
-            .Single(x => x.RecordName.Name == options.RecordName);
 
         var headers = RecordFlattener.Flatten(
             targetRecordSchema,
@@ -81,7 +82,11 @@ public static class GenerateHeaderHandler
         LogInformation(logger, Messages.GeneratingHeaderFile, null);
 
         var catalogs = await RecordScanner.ScanAsync(options.RecordCsPath, logger, cancellationToken);
-        if (catalogs.RecordSchemaCatalog.StaticDataRecordSchemata.Count == 0)
+
+        var targetRecordSchema = catalogs.RecordSchemaCatalog.StaticDataRecordSchemata
+            .SingleOrDefault(x => x.RecordName.Name == options.RecordName);
+
+        if (targetRecordSchema is null)
         {
             var exception = new ArgumentException(
                 string.Format(
@@ -91,9 +96,6 @@ public static class GenerateHeaderHandler
             LogError(logger, exception.Message, exception);
             throw exception;
         }
-
-        var targetRecordSchema = catalogs.RecordSchemaCatalog.StaticDataRecordSchemata
-            .Single(x => x.RecordName.Name == options.RecordName);
 
         var headers = RecordFlattener.Flatten(
             targetRecordSchema,
@@ -147,7 +149,7 @@ public static class GenerateHeaderHandler
         sb.AppendLine("# StaticDataHeaderGenerator Results");
         sb.AppendLine();
         sb.AppendLine(FormattableString.Invariant($"## {recordFullName}"));
-        sb.AppendLine(FormattableString.Invariant($"- Excel File: `Docs/SampleExcels/{excelFileName}.xlsx`"));
+        sb.AppendLine(FormattableString.Invariant($"- Excel File: `{excelFileName}.xlsx`"));
         sb.AppendLine(FormattableString.Invariant($"- Sheet Name: `{sheetName}`"));
         sb.AppendLine();
 

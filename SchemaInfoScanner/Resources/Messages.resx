@@ -159,6 +159,9 @@
   <data name="NullableCollectionNotSupported" xml:space="preserve">
     <value>{0}({1}): nullable collection type is not supported.</value>
   </data>
+  <data name="NullableRecordNotSupported" xml:space="preserve">
+    <value>{0} is not supported. Nullable record type is not supported.</value>
+  </data>
   <data name="KeyAttributeMustBeNonNullable" xml:space="preserve">
     <value>{0}({1}): parameter with KeyAttribute must be non-nullable.</value>
   </data>
