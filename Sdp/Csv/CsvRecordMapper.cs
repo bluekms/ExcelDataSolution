@@ -58,6 +58,7 @@ internal static class CsvRecordMapper
                     paramInfo.NullString,
                     paramInfo.DateTimeFormat,
                     paramInfo.TimeSpanFormat),
+
                 CollectionKind.FrozenSet => ConvertToFrozenSet(
                     paramInfo.ElementType!,
                     baseName,
@@ -67,6 +68,7 @@ internal static class CsvRecordMapper
                     paramInfo.NullString,
                     paramInfo.DateTimeFormat,
                     paramInfo.TimeSpanFormat),
+
                 CollectionKind.FrozenDictionary => ConvertToFrozenDictionary(
                     paramInfo.KeyType!,
                     paramInfo.ElementType!,
@@ -75,6 +77,7 @@ internal static class CsvRecordMapper
                     headerIndexMap,
                     values,
                     paramInfo.NullString),
+
                 CollectionKind.SingleColumnImmutableArray => ConvertToSingleColumnImmutableArray(
                     paramInfo.ElementType!,
                     baseName,
@@ -85,6 +88,7 @@ internal static class CsvRecordMapper
                     paramInfo.CountRange,
                     paramInfo.DateTimeFormat,
                     paramInfo.TimeSpanFormat),
+
                 CollectionKind.SingleColumnFrozenSet => ConvertToSingleColumnFrozenSet(
                     paramInfo.ElementType!,
                     baseName,
@@ -95,6 +99,7 @@ internal static class CsvRecordMapper
                     paramInfo.CountRange,
                     paramInfo.DateTimeFormat,
                     paramInfo.TimeSpanFormat),
+
                 _ => throw new InvalidOperationException(string.Format(
                     CultureInfo.CurrentCulture,
                     Messages.Composite.UnknownCollectionType,

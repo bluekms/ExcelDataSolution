@@ -159,18 +159,18 @@ internal static class CsvTypeCache
         return new ParameterMappingInfo(
             columnNameAttr?.Name ?? param.Name ?? string.Empty,
             paramType,
-            lengthAttr?.Length,
-            nullStringAttr?.NullString,
             collectionType,
+            isKey,
+            countRangeAttr,
+            dateTimeFormatAttr?.FormatString,
             elementType,
             keyType,
-            singleColumnSeparator,
-            isKey,
-            dateTimeFormatAttr?.FormatString,
-            timeSpanFormatAttr?.FormatString,
-            rangeAttr,
+            lengthAttr?.Length,
+            nullStringAttr?.NullString,
             pattern,
-            countRangeAttr);
+            rangeAttr,
+            singleColumnSeparator,
+            timeSpanFormatAttr?.FormatString);
     }
 }
 
@@ -179,18 +179,18 @@ internal sealed record TypeMappingInfo(ConstructorInfo Constructor, ParameterMap
 internal sealed record ParameterMappingInfo(
     string ColumnName,
     Type ParameterType,
-    int? Length,
-    string? NullString,
     CollectionKind CollectionKind,
+    bool IsKey,
+    CountRangeAttribute? CountRange,
+    string? DateTimeFormat,
     Type? ElementType,
     Type? KeyType,
-    string? SingleColumnSeparator,
-    bool IsKey,
-    string? DateTimeFormat,
-    string? TimeSpanFormat,
-    RangeAttribute? Range,
+    int? Length,
+    string? NullString,
     Regex? Pattern,
-    CountRangeAttribute? CountRange);
+    RangeAttribute? Range,
+    string? SingleColumnSeparator,
+    string? TimeSpanFormat);
 
 internal enum CollectionKind
 {

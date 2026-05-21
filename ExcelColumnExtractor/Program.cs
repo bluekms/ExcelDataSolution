@@ -14,11 +14,16 @@ namespace ExcelColumnExtractor;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
-        Parser.Default.ParseArguments<ProgramOptions>(args)
-            .WithParsed(Run)
-            .WithNotParsed(HandleParseErrors);
+        return Parser.Default.ParseArguments<ProgramOptions>(args)
+            .MapResult(
+                options =>
+                {
+                    Run(options);
+                    return 0;
+                },
+                HandleParseErrors);
     }
 
     private static void Run(ProgramOptions options)
@@ -130,7 +135,7 @@ public class Program
         return path;
     }
 
-    private static void HandleParseErrors(IEnumerable<Error> errors)
+    private static int HandleParseErrors(IEnumerable<Error> errors)
     {
         var errorList = errors.ToList();
 
@@ -143,6 +148,8 @@ public class Program
         {
             Console.WriteLine(error.ToString());
         }
+
+        return 1;
     }
 
     private static readonly Action<ILogger, double, string, Exception?> LogTrace =

@@ -13,12 +13,12 @@
     <value>Parameter '{0}' of type '{1}' is not a StaticDataTable&lt;,&gt; subtype.</value>
   </data>
   <data name="TableConstructorNotFound" xml:space="preserve">
-    <value>{0} must have a constructor accepting ImmutableList&lt;{1}&gt;.</value>
+    <value>{0} must have a constructor accepting ImmutableArray&lt;{1}&gt;.</value>
   </data>
   <data name="FkTargetNotFound" xml:space="preserve">
     <value>FK target '{0}' not found or disabled.</value>
   </data>
-  <data name="IndexNotRegistered" xml:space="preserve">
+  <data name="FkTargetColumnNotFound" xml:space="preserve">
     <value>Column '{0}' not found on {1}.</value>
   </data>
   <data name="FkValueNotFound" xml:space="preserve">

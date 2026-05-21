@@ -27,7 +27,7 @@ internal partial class SchemaRuleValidator
                         x.GetType().FullName));
         });
 
-        When(x => x is TimeSpanPropertySchema, () =>
+        When(x => x is TimeSpanPropertySchema or NullableTimeSpanPropertySchema, () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<TimeSpanFormatAttribute>())
