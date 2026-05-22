@@ -41,6 +41,12 @@ internal partial class SchemaRuleValidator
         });
     }
 
+    private static bool IsDateTimeFormatRequired(PropertySchemaBase property)
+    {
+        return property is DateTimePropertySchema or NullableDateTimePropertySchema ||
+               IsPrimitiveDateTimeCollection(property);
+    }
+
     private static bool IsDateTimeCollection(PropertySchemaBase property)
     {
         if (MapTypeChecker.HasDateTimeProperty(property.NamedTypeSymbol))
@@ -48,6 +54,11 @@ internal partial class SchemaRuleValidator
             return true;
         }
 
+        return IsPrimitiveDateTimeCollection(property);
+    }
+
+    private static bool IsPrimitiveDateTimeCollection(PropertySchemaBase property)
+    {
         if (!CollectionTypeChecker.IsPrimitiveCollection(property.NamedTypeSymbol))
         {
             return false;
