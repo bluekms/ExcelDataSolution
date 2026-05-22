@@ -117,7 +117,7 @@ public class Program
             Directory.CreateDirectory(path);
         }
 
-        if (options.Version is not null && !options.Force)
+        if (!string.IsNullOrEmpty(options.Version) && !options.Force)
         {
             var fileCount = Directory.GetFiles(path).Length;
             if (fileCount > 0)

@@ -27,7 +27,7 @@ internal partial class SchemaRuleValidator
                         x.GetType().FullName));
         });
 
-        When(x => x is TimeSpanPropertySchema or NullableTimeSpanPropertySchema, () =>
+        When(x => IsTimeSpanFormatRequired(x), () =>
         {
             RuleFor(x => x)
                 .Must(x => x.HasAttribute<TimeSpanFormatAttribute>())
@@ -40,6 +40,16 @@ internal partial class SchemaRuleValidator
         });
     }
 
+    private static bool IsTimeSpanFormatRequired(PropertySchemaBase property)
+    {
+        if (property is TimeSpanPropertySchema or NullableTimeSpanPropertySchema)
+        {
+            return true;
+        }
+
+        return IsPrimitiveTimeSpanCollection(property);
+    }
+
     private static bool IsTimeSpanCollection(PropertySchemaBase property)
     {
         if (MapTypeChecker.HasTimeSpanProperty(property.NamedTypeSymbol))
@@ -47,6 +57,11 @@ internal partial class SchemaRuleValidator
             return true;
         }
 
+        return IsPrimitiveTimeSpanCollection(property);
+    }
+
+    private static bool IsPrimitiveTimeSpanCollection(PropertySchemaBase property)
+    {
         if (!CollectionTypeChecker.IsPrimitiveCollection(property.NamedTypeSymbol))
         {
             return false;
