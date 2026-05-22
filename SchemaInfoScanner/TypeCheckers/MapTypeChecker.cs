@@ -164,8 +164,8 @@ public static class MapTypeChecker
         return valueTypeArgument
             .GetMembers()
             .OfType<IPropertySymbol>()
-            .Where(x => x.IsStatic)
-            .Where(x => symbol.DeclaredAccessibility == Accessibility.Public)
+            .Where(x => !x.IsStatic)
+            .Where(x => x.DeclaredAccessibility == Accessibility.Public)
             .Select(x => x.Type)
             .Any(PrimitiveTypeChecker.IsDateTimeType);
     }
@@ -192,8 +192,8 @@ public static class MapTypeChecker
         return valueTypeArgument
             .GetMembers()
             .OfType<IPropertySymbol>()
-            .Where(x => x.IsStatic)
-            .Where(x => symbol.DeclaredAccessibility == Accessibility.Public)
+            .Where(x => !x.IsStatic)
+            .Where(x => x.DeclaredAccessibility == Accessibility.Public)
             .Select(x => x.Type)
             .Any(PrimitiveTypeChecker.IsTimeSpanType);
     }
