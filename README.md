@@ -66,6 +66,11 @@ See the [Quick Start](./Docs/en/quickstart.md) for the full walkthrough.
 
 - [English](./Docs/en/README.md)
 - [한국어](./Docs/ko/README.md)
+- [日本語](./Docs/ja/README.md)
+- [简体中文](./Docs/zh/README.md)
+
+Korean is the source of truth. The English, Japanese, and Chinese documentation
+is machine-translated by AI.
 
 Korean is the source of truth. The English, Japanese, and Chinese documentation
 is machine-translated by AI.
