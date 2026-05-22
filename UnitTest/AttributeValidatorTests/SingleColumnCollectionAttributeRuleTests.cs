@@ -87,4 +87,60 @@ public class SingleColumnCollectionAttributeRuleTests(ITestOutputHelper testOutp
         Assert.Throws<InvalidAttributeUsageException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
         Assert.Single(logger.Logs);
     }
+
+    [Fact]
+    public void RecordElementArrayDisallowTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<SingleColumnCollectionAttributeRuleTests>() is not TestOutputLogger<SingleColumnCollectionAttributeRuleTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        // language=C#
+        var code = """
+                   public sealed record InnerRecord(int Value);
+
+                   [StaticDataRecord("Test", "TestSheet")]
+                   public sealed record MyRecord(
+                       [SingleColumnCollection(",")]
+                       ImmutableArray<InnerRecord> Property,
+                   );
+                   """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+
+        Assert.Throws<NotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Single(logger.Logs);
+    }
+
+    [Fact]
+    public void RecordElementSetDisallowTest()
+    {
+        var factory = new TestOutputLoggerFactory(testOutputHelper, LogLevel.Warning);
+        if (factory.CreateLogger<SingleColumnCollectionAttributeRuleTests>() is not TestOutputLogger<SingleColumnCollectionAttributeRuleTests> logger)
+        {
+            throw new InvalidOperationException("Logger creation failed.");
+        }
+
+        // language=C#
+        var code = """
+                   public sealed record InnerRecord(int Value);
+
+                   [StaticDataRecord("Test", "TestSheet")]
+                   public sealed record MyRecord(
+                       [SingleColumnCollection(",")]
+                       FrozenSet<InnerRecord> Property,
+                   );
+                   """;
+
+        var loadResult = RecordSchemaLoader.OnLoad(code, logger);
+        var recordSchemaSet = new RecordSchemaSet(loadResult, logger);
+        var recordSchemaCatalog = new RecordSchemaCatalog(recordSchemaSet);
+
+        Assert.Throws<NotSupportedException>(() => RecordComplianceChecker.Check(recordSchemaCatalog, logger));
+        Assert.Single(logger.Logs);
+    }
 }
