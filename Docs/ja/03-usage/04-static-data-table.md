@@ -16,7 +16,7 @@ public sealed class ItemTable(ImmutableArray<ItemRecord> records)
 
 1. **CRTP** で自分自身を第 1 型引数に入れる: `StaticDataTable<ItemTable, ItemRecord>`。
 2. 2 つの型引数は順に `TSelf`、`TRecord`。
-3. 必ず `ImmutableArray<TRecord>` 1 つだけを受け取るコンストラクタを提供する。Sdp がリフレクションでこのコンストラクタを呼び出す。
+3. 必ず `ImmutableArray<TRecord>` 1 つだけを受け取るコンストラクターを提供する。Sdp がリフレクションでこのコンストラクターを呼び出す。
 
 この状態では `Records` プロパティで全体のリストだけが公開されます。
 
@@ -114,7 +114,7 @@ public sealed class ItemTable : StaticDataTable<ItemTable, ItemRecord>
 
 ## まとめ
 
-- `StaticDataTable<TSelf, TRecord>` を継承し、`ImmutableArray<TRecord>` コンストラクタを提供する。
+- `StaticDataTable<TSelf, TRecord>` を継承し、`ImmutableArray<TRecord>` コンストラクターを提供する。
 - `Records` は CSV の行順を維持する。
 - キー照会やグループ照会は `UniqueIndex` / `MultiIndex` をメンバーとして持ち、Getter で公開する。
 - 実際の CSV ロードは `StaticDataManager` が担当する。

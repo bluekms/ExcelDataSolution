@@ -13,7 +13,7 @@
 
 `Memo` はデータ作業者の参考用カラムです。C# 側では使用しません。**Record が要求しないカラムは CSV に抽出されません** — 下記の結果 CSV で `Memo` が抜けるという点をあらかじめ見ておいてください。
 
-データ作業者は価格を `Cost` と呼んでいますが、C# コードでは `Price` という名前を使いたいとします。この場合 `[ColumnName]` でシートヘッダーとパラメータ名を分離してマッピングできます。
+データ作業者は価格を `Cost` と呼んでいますが、C# コードでは `Price` という名前を使いたいとします。この場合 `[ColumnName]` でシートヘッダーとパラメーター名を分離してマッピングできます。
 
 ## Record 定義
 
@@ -46,11 +46,11 @@ public sealed record ItemRecord(
 
 ### `int Id`, `string Name`
 
-特別な Attribute がなければ、カラム名は **パラメータ名と同一** です。シートのヘッダーに `Id`、`Name` カラムがないとマッピングされません。
+特別な Attribute がなければ、カラム名は **パラメーター名と同一** です。シートのヘッダーに `Id`、`Name` カラムがないとマッピングされません。
 
 ### `[ColumnName("Cost")][Range(0, 1_000_000)] int Price`
 
-`[ColumnName(name)]` は Excel ヘッダー名と C# パラメータ名が異なるとき、そのマッピングを伝えます。上記シートのヘッダーは `Cost` で Record パラメータは `Price` なので、`[ColumnName("Cost")]` で 2 つを結びつけます。ヘッダーとパラメータ名が同じであれば、わざわざ書かなくても構いません。
+`[ColumnName(name)]` は Excel ヘッダー名と C# パラメーター名が異なるとき、そのマッピングを伝えます。上記シートのヘッダーは `Cost` で Record パラメーターは `Price` なので、`[ColumnName("Cost")]` で 2 つを結びつけます。ヘッダーとパラメーター名が同じであれば、わざわざ書かなくても構いません。
 
 `[Range(min, max)]` は値が指定した範囲の中にあるかを検査します。`System.ComponentModel.DataAnnotations.RangeAttribute` を継承した Attribute です。範囲を外れた値は抽出ステージとランタイムロードの両方でふるい落とされます。
 
@@ -94,7 +94,7 @@ Id,Name,Cost,Category
 
 CSV ファイル名は **`{ファイル}.{シート}.csv`** のルールです。`GameItems.xlsx` の `Items` シート → `GameItems.Items.csv`。
 
-CSV のヘッダーはシートの元のヘッダー (`Cost`) をそのまま維持します。ロードステージで `[ColumnName("Cost")]` が `Cost` カラムを Record の `Price` パラメータに結びつけてくれます。
+CSV のヘッダーはシートの元のヘッダー (`Cost`) をそのまま維持します。ロードステージで `[ColumnName("Cost")]` が `Cost` カラムを Record の `Price` パラメーターに結びつけてくれます。
 
 元のシートにあった `Memo` は Record が要求しないので CSV には含まれません。同じ Excel をサーバー、クライアント、ツールがそれぞれ異なる Record 定義で消費できる理由がここにあります。
 

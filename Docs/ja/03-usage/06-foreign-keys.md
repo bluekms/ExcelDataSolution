@@ -32,8 +32,8 @@ public sealed record ItemRecord(
 
 2 つの引数の意味は次のとおりです。
 
-- 第 1 引数 `"CategoryTable"` — **TableSet のプロパティ名** (= TableSet record のパラメータ名)。
-- 第 2 引数 `"Id"` — **その対象テーブル Record のパラメータ名**。
+- 第 1 引数 `"CategoryTable"` — **TableSet のプロパティ名** (= TableSet record のパラメーター名)。
+- 第 2 引数 `"Id"` — **その対象テーブル Record のパラメーター名**。
 
 検証時に `CategoryId` が対象テーブルの中に存在するかどうかを確認します。
 
@@ -44,12 +44,12 @@ public sealed record ItemRecord(
 `LoadAsync` の ForeignKey 検証は 3 つのステージに分かれて進行します。
 
 1. **スキーマステージ — Record/TableSet 型の解析だけで確認 (テーブルのロード前)**
-   - `tableSetName` が実際の TableSet パラメータとして存在するか? (`FkTargetNotFound`)
+   - `tableSetName` が実際の TableSet パラメーターとして存在するか? (`FkTargetNotFound`)
    - 対象が `[SingleColumnCollection]` でまとめられたカラムではないか? (`FkTargetIsSingleColumnCollection`)
-   - 同じパラメータに `[ForeignKey]` と `[SwitchForeignKey]` が同時に付いていないか? (`FkSwitchFkConflict`)
+   - 同じパラメーターに `[ForeignKey]` と `[SwitchForeignKey]` が同時に付いていないか? (`FkSwitchFkConflict`)
    - `[SwitchForeignKey]` の同じ条件が 2 回以上登場していないか? (`SwitchFkDuplicateConditionValue`)
 2. **ターゲット解決ステージ — テーブルのロード後、値検証の直前**
-   - `recordColumnName` が対象 Record のパラメータとして存在するか? (`FkTargetColumnNotFound`)
+   - `recordColumnName` が対象 Record のパラメーターとして存在するか? (`FkTargetColumnNotFound`)
    - `[SwitchForeignKey]` の条件カラムが同じ Record の中に存在するか? (`SwitchFkConditionColumnNotFound`)
    - 対象テーブルが `disabledTables` で除外されていないか? (`FkTargetNotFound`)
 3. **値ステージ — 実際の参照の存在有無**
@@ -75,7 +75,7 @@ AggregateException: FK の検証に失敗しました。
 
 ## 複数の ForeignKey — 「どこか 1 つにでもあれば有効」
 
-同じ ID 体系を複数のテーブルが分け合って持つ場合があります。たとえば `RewardRecord.TargetId` が `ItemTable` または `CurrencyTable` のどちらか一方に入ってさえいればよい状況です。`[ForeignKey]` は `AllowMultiple = true` なので同じパラメータに複数回付けることができ、**どちらか 1 つでも一致すれば通過** させます。
+同じ ID 体系を複数のテーブルが分け合って持つ場合があります。たとえば `RewardRecord.TargetId` が `ItemTable` または `CurrencyTable` のどちらか一方に入ってさえいればよい状況です。`[ForeignKey]` は `AllowMultiple = true` なので同じパラメーターに複数回付けることができ、**どちらか 1 つでも一致すれば通過** させます。
 
 ```csharp
 [StaticDataRecord("GameItems", "Currencies")]
@@ -121,7 +121,7 @@ public sealed record RewardRecord(
 - `conditionColumnName` — 同じ Record の中のどのカラムが分岐条件か。
 - `conditionValue` — そのカラムがどの値のときにこの SwitchForeignKey を適用するか。
 - `tableSetName` — その条件のときに指す TableSet のプロパティ名。
-- `recordColumnName` — その対象テーブル Record のパラメータ名。
+- `recordColumnName` — その対象テーブル Record のパラメーター名。
 
 上記の例の行ごとの検証結果は次のように決まります。
 
@@ -214,7 +214,7 @@ Id,Kind,TargetId,Amount
 ## まとめ
 
 - `[ForeignKey(tableSet, column)]` — 単一の対象。複数回付けると「どれか 1 つにあれば有効」になる。
-- `[SwitchForeignKey(conditionColumn, conditionValue, tableSet, column)]` — 分岐する対象。同じパラメータに複数回付けて分岐表を作る。
+- `[SwitchForeignKey(conditionColumn, conditionValue, tableSet, column)]` — 分岐する対象。同じパラメーターに複数回付けて分岐表を作る。
 - 検証は `LoadAsync` の中で 3 つのステージ — スキーマ (対象の存在有無)、ターゲット解決 (カラム/条件カラムの存在有無)、値 (実際の参照の存在) — で処理され、失敗は `AggregateException` として一度にまとめて通知される。
 - `disabledTables` で対象テーブルをスキップすると、そのテーブルを参照する ForeignKey 検証は失敗する — 独立したグループだけを disable するのが安全である。
 

@@ -30,13 +30,13 @@ Sdp が提供する Attribute をアルファベット順に整理します。
 
 |項目|内容|
 |-|-|
-|対象|Record パラメータ|
+|対象|Record パラメーター|
 |引数|`name` — ヘッダー名|
 |複数許可|X|
 |検証ルール|なし — ヘッダー名を決定・マッチングするためだけに使用 (スキャナの `RecordFlattener`、ヘッダー生成、CSV マッピング)|
-|省略時|パラメータ名がそのままヘッダー名|
+|省略時|パラメーター名がそのままヘッダー名|
 
-ヘッダー名をパラメータ名と異なるものにしたいときに使用します。コレクションパラメータに付けると、展開されたヘッダーの **接頭辞** になります。
+ヘッダー名をパラメーター名と異なるものにしたいときに使用します。コレクションパラメーターに付けると、展開されたヘッダーの **接頭辞** になります。
 
 ```csharp
 [StaticDataRecord("GameItems", "Items")]
@@ -58,7 +58,7 @@ public sealed record ItemRecord(
 
 |項目|内容|
 |-|-|
-|対象|`[SingleColumnCollection]` が付いたコレクションパラメータ|
+|対象|`[SingleColumnCollection]` が付いたコレクションパラメーター|
 |引数|`minCount` (≥ 1)、`maxCount`|
 |複数許可|X|
 |検証タイミング|スキャナ (整合性)、抽出 / ロード (分割個数)|
@@ -87,7 +87,7 @@ public sealed record ItemRecord(
 
 |項目|内容|
 |-|-|
-|対象|`DateTime` または `DateTime?` 型のパラメータ (コレクション要素を含む)|
+|対象|`DateTime` または `DateTime?` 型のパラメーター (コレクション要素を含む)|
 |引数|`format` — .NET 標準の日付/時刻フォーマット文字列 ([標準](https://learn.microsoft.com/dotnet/standard/base-types/standard-date-and-time-format-strings)、[カスタム](https://learn.microsoft.com/dotnet/standard/base-types/custom-date-and-time-format-strings))|
 |複数許可|X|
 |検証タイミング|スキャナ (存在有無)、抽出 (`DateTime.TryParseExact`)、ロード (`DateTime.ParseExact`)|
@@ -113,8 +113,8 @@ public sealed record ScheduleRecord(
 
 |項目|内容|
 |-|-|
-|対象|Record パラメータ|
-|引数|`tableSetName` — TableSet のプロパティ (= コンストラクタパラメータ) 名。`recordColumnName` — 対象 Record のプロパティ名。|
+|対象|Record パラメーター|
+|引数|`tableSetName` — TableSet のプロパティ (= コンストラクターパラメーター) 名。`recordColumnName` — 対象 Record のプロパティ名。|
 |複数許可|O (`AllowMultiple = true`) — 「複数の対象のうちいずれか一つでも一致すれば有効」方式|
 |検証タイミング|スキャナ (FK/SFK 同時付与のブロック) + ロード (FK/SFK 同時付与の再確認、ターゲット検証、参照検証)|
 |`[SwitchForeignKey]` と同時付与|スキャナとロードの両方が `FkSwitchFkConflict` 診断で拒否|
@@ -152,12 +152,12 @@ public sealed record RewardRecord(
 
 |項目|内容|
 |-|-|
-|対象|Record クラス **または** Record パラメータ|
+|対象|Record クラス **または** Record パラメーター|
 |引数|なし|
 |複数許可|X|
 |検証タイミング|スキャナ (適用時にスキップ)|
 
-スキャナが該当する Record またはパラメータをスキップします。作業中の Record を一時的に外したり、Record 内部の計算用パラメータを除外するときに使用します。
+スキャナが該当する Record またはパラメーターをスキップします。作業中の Record を一時的に外したり、Record 内部の計算用パラメーターを除外するときに使用します。
 
 ```csharp
 [Ignore]
@@ -180,7 +180,7 @@ public sealed record ItemRecord(
 
 |項目|内容|
 |-|-|
-|対象|Record パラメータ|
+|対象|Record パラメーター|
 |引数|なし|
 |複数許可|X (Record ごとに一つ)|
 |検証タイミング|スキャナ (Map Value Record での必須性)、抽出 (重複検査)、ロード|
@@ -193,8 +193,8 @@ public sealed record ItemRecord(
 付随ルール:
 
 - Record 全体で `[Key]` は最大一つです (スキャナが `StaticDataRecordMustHaveAtMostOneKey` 例外を発生)。
-- `[Key]` が付いたパラメータは non-nullable でなければなりません (スキャナが `KeyAttributeMustBeNonNullable` 例外を発生)。
-- enum パラメータに `[Key]` を付けるとマッピング時の `Enum.IsDefined` 検査が省略されます — [5.3 型ブランディングパターン](./03-type-branding.md) を参照。
+- `[Key]` が付いたパラメーターは non-nullable でなければなりません (スキャナが `KeyAttributeMustBeNonNullable` 例外を発生)。
+- enum パラメーターに `[Key]` を付けるとマッピング時の `Enum.IsDefined` 検査が省略されます — [5.3 型ブランディングパターン](./03-type-branding.md) を参照。
 
 ---
 
@@ -205,7 +205,7 @@ public sealed record ItemRecord(
 
 |項目|内容|
 |-|-|
-|対象|コレクションパラメータ (`ImmutableArray<T>`、`FrozenSet<T>`、`FrozenDictionary<K,V>`)|
+|対象|コレクションパラメーター (`ImmutableArray<T>`、`FrozenSet<T>`、`FrozenDictionary<K,V>`)|
 |引数|`length` — 固定長|
 |複数許可|X|
 |検証タイミング|スキャナ|
@@ -233,7 +233,7 @@ public sealed record ItemRecord(
 
 |項目|内容|
 |-|-|
-|対象|Nullable パラメータ (または Nullable 要素を持つコレクション)|
+|対象|Nullable パラメーター (または Nullable 要素を持つコレクション)|
 |引数|`nullString` — null を意味する文字列表現|
 |複数許可|X|
 |検証タイミング|スキャナ (存在有無)、ロード (置換)|
@@ -261,7 +261,7 @@ public sealed record ItemRecord(
 
 |項目|内容|
 |-|-|
-|対象|数値型、`char`、`DateTime`、`TimeSpan`、`string`、`enum` パラメータ (各 nullable バリアントを含む)|
+|対象|数値型、`char`、`DateTime`、`TimeSpan`、`string`、`enum` パラメーター (各 nullable バリアントを含む)|
 |引数|`(int, int)`、`(double, double)`、`(Type, string, string)` の三つのオーバーロード|
 |複数許可|X|
 |検証タイミング|抽出 (`SchemaInfoScanner` の `RangeAttributeChecker`)、ロード (`Sdp.Csv.RangeValidator`)|
@@ -318,7 +318,7 @@ Nullable バリアント (`int?`、`DateTime?`、`string?`、`Tier?` など) も
 
 |項目|内容|
 |-|-|
-|対象|`string` または `string?` パラメータ|
+|対象|`string` または `string?` パラメーター|
 |引数|`pattern` — [.NET 正規表現パターン](https://learn.microsoft.com/dotnet/standard/base-types/regular-expression-language-quick-reference)|
 |複数許可|X|
 |検証タイミング|スキャナ (型確認)、抽出 / ロード (`Regex.IsMatch`)|
@@ -400,7 +400,7 @@ public sealed record QuestRecord(int Id, string Title);
 
 |項目|内容|
 |-|-|
-|対象|Record パラメータ|
+|対象|Record パラメーター|
 |引数|`conditionColumnName`、`conditionValue`、`tableSetName`、`recordColumnName`|
 |複数許可|O (`AllowMultiple = true`)|
 |検証タイミング|スキャナ (FK/SFK 同時付与のブロック、重複条件のブロック) + ロード (FK/SFK 同時付与の再確認、重複条件の再確認、ターゲット検証、参照検証)|
@@ -413,7 +413,7 @@ public sealed record QuestRecord(int Id, string Title);
 |条件カラムの値がどの分岐にもマッチしない|値検証ステージで `SwitchFkConditionValueNotMatched` 例外を発生|
 |値検証の失敗|`AggregateException(FkValidationFailed, ...)` の内部に `FkValueNotFound` (条件値を含む) 例外を発生|
 
-同じパラメータ値が **別のカラムの値に応じて異なるテーブルを参照** しなければならないときに使います。詳細なフローと例は [3.6 外部キー](../03-usage/06-foreign-keys.md) を参照してください。
+同じパラメーター値が **別のカラムの値に応じて異なるテーブルを参照** しなければならないときに使います。詳細なフローと例は [3.6 外部キー](../03-usage/06-foreign-keys.md) を参照してください。
 
 上記のロードステージ診断も単独でスローされません — `FkTargetNotFound`、`FkTargetIsSingleColumnCollection`、`SwitchFkConditionColumnNotFound`、`FkTargetColumnNotFound`、`SwitchFkConditionValueNotMatched`、`FkValueNotFound` はすべて `AggregateException(FkValidationFailed, ...)` の `InnerExceptions` に集約され一度に通知されます。
 
@@ -437,7 +437,7 @@ public sealed record RewardRecord(
 
 |項目|内容|
 |-|-|
-|対象|`TimeSpan` または `TimeSpan?` 型のパラメータ (コレクション要素を含む)|
+|対象|`TimeSpan` または `TimeSpan?` 型のパラメーター (コレクション要素を含む)|
 |引数|`format` — .NET 標準の TimeSpan フォーマット文字列 ([標準](https://learn.microsoft.com/dotnet/standard/base-types/standard-timespan-format-strings)、[カスタム](https://learn.microsoft.com/dotnet/standard/base-types/custom-timespan-format-strings))|
 |複数許可|X|
 |検証タイミング|スキャナ (存在有無)、抽出 (`TimeSpan.TryParseExact`)、ロード (`TimeSpan.ParseExact`)|

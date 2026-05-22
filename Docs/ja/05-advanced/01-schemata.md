@@ -1,6 +1,6 @@
 # 5.1 サポートされる型 (Schemata)
 
-Sdp は Record のパラメータ型を静的解析し、その型が CSV セル値として表現可能かを検査します。この章では **どの型が許可されるか**、**各型にどの Attribute を付けられるか**、**どの Attribute が必須か** を整理します。
+Sdp は Record のパラメーター型を静的解析し、その型が CSV セル値として表現可能かを検査します。この章では **どの型が許可されるか**、**各型にどの Attribute を付けられるか**、**どの Attribute が必須か** を整理します。
 
 各 Attribute の詳しい説明は [5.2 Attribute カタログ](./02-attributes.md) に譲り、ここでは Schemata の観点からのみ扱います。Attribute 名をクリックすると該当項目へ移動します。
 
@@ -43,7 +43,7 @@ Sdp が受け付ける型は 3 つのカテゴリに分かれます。
 
 ```mermaid
 flowchart TB
-    Root["Record パラメータ型"]
+    Root["Record パラメーター型"]
     Single["単一値<br/>bool, int, double, string, DateTime, TimeSpan, enum, ..."]
     Collection["コレクション<br/>ImmutableArray / FrozenSet / FrozenDictionary"]
     Nested["ネストされた Record"]
@@ -366,7 +366,7 @@ flowchart TB
 
 `ImmutableArray<T>` と `FrozenSet<T>` の要素がプリミティブな単一値である場合に限り、追加で **単一カラムモード** ([`[SingleColumnCollection]`](./02-attributes.md#attr-singlecolumncollection)) を使用できます。分割された要素数に制約が必要であれば [`[CountRange]`](./02-attributes.md#attr-countrange) を併せて付けます (任意)。
 
-要素が nullable のコレクション (`ImmutableArray<int?>`, `FrozenSet<DateTime?>`, `FrozenDictionary<int, string?>` など) は、コレクションパラメータの位置に [`[NullString]`](./02-attributes.md#attr-nullstring) が必須です。どのモード (Length / SingleColumnCollection) かに関わらず該当します。
+要素が nullable のコレクション (`ImmutableArray<int?>`, `FrozenSet<DateTime?>`, `FrozenDictionary<int, string?>` など) は、コレクションパラメーターの位置に [`[NullString]`](./02-attributes.md#attr-nullstring) が必須です。どのモード (Length / SingleColumnCollection) かに関わらず該当します。
 
 ### 基本 Array / Set
 
@@ -394,7 +394,7 @@ Excel シートは次のように埋められます。
 | **2** | 1     | Potion | heal      | consumable    | small     |
 | **3** | 2     | Sword  | melee     | iron          | starter   |
 
-要素が `DateTime` / `TimeSpan` であれば、コレクションパラメータにそれぞれ [`[DateTimeFormat]`](./02-attributes.md#attr-datetimeformat) / [`[TimeSpanFormat]`](./02-attributes.md#attr-timespanformat) が必須です。
+要素が `DateTime` / `TimeSpan` であれば、コレクションパラメーターにそれぞれ [`[DateTimeFormat]`](./02-attributes.md#attr-datetimeformat) / [`[TimeSpanFormat]`](./02-attributes.md#attr-timespanformat) が必須です。
 
 ```csharp
 [StaticDataRecord("Events", "Schedules")]
@@ -441,7 +441,7 @@ Excel シート:
 
 ### Record Array / Set
 
-要素がさらに別の Record である場合です。**`[Length(n)]` のみ可能** です。ヘッダーは `Col[i].Field1`, `Col[i].Field2`, ... に展開されます。要素 Record の各パラメータは自身の型のルールを再帰的に従います。この程度からヘッダーが長くなるため、[3.2 標準ヘッダージェネレーター](../03-usage/02-header-generator.md) を併用すると手作業で揃える負担が軽くなります。
+要素がさらに別の Record である場合です。**`[Length(n)]` のみ可能** です。ヘッダーは `Col[i].Field1`, `Col[i].Field2`, ... に展開されます。要素 Record の各パラメーターは自身の型のルールを再帰的に従います。この程度からヘッダーが長くなるため、[3.2 標準ヘッダージェネレーター](../03-usage/02-header-generator.md) を併用すると手作業で揃える負担が軽くなります。
 
 ```csharp
 public sealed record SubjectScore(string Subject, int Score);
@@ -471,7 +471,7 @@ Excel シート:
 
 **`[Length(n)]` のみ使用可能です。** [`[SingleColumnCollection]`](./02-attributes.md#attr-singlecolumncollection) は Map に適用できません。
 
-Map の Value は **`[Key]` がちょうど 1 つ付いた Record** でなければなりません。Dictionary のキーは Value Record の `[Key]` パラメータから抽出されます。そのためヘッダーには別途 `Key` カラムがなく、Value Record の `[Key]` パラメータ名がその位置を占めます。
+Map の Value は **`[Key]` がちょうど 1 つ付いた Record** でなければなりません。Dictionary のキーは Value Record の `[Key]` パラメーターから抽出されます。そのためヘッダーには別途 `Key` カラムがなく、Value Record の `[Key]` パラメーター名がその位置を占めます。
 
 #### Key がプリミティブな単一値の Map
 
@@ -487,7 +487,7 @@ public sealed record StudentRecord(
     [Length(3)] FrozenDictionary<string, SubjectScore> Scores);
 ```
 
-標準ヘッダー (Value の `[Key]` パラメータ名 `Subject` がキーの位置を占める):
+標準ヘッダー (Value の `[Key]` パラメーター名 `Subject` がキーの位置を占める):
 
 ```
 Id    Name    Scores[0].Subject    Scores[0].Score    Scores[1].Subject    Scores[1].Score    Scores[2].Subject    Scores[2].Score
@@ -503,7 +503,7 @@ Excel シート:
 
 #### Key が Record の Map
 
-`CharId(int Value)` のようなブランディング用の単一パラメータ record から複数フィールドを持つ record まで、Key の位置に入ることができます。このとき **Key の record 型と Value Record `[Key]` パラメータの record 型が同じでなければなりません**。
+`CharId(int Value)` のようなブランディング用の単一パラメーター record から複数フィールドを持つ record まで、Key の位置に入ることができます。このとき **Key の record 型と Value Record `[Key]` パラメーターの record 型が同じでなければなりません**。
 
 ```csharp
 public sealed record ItemKey(int Id, string Type);
@@ -518,7 +518,7 @@ public sealed record InventoryRecord(
     [Length(2)] FrozenDictionary<ItemKey, ItemStatus> Inventory);
 ```
 
-標準ヘッダー (Value の `[Key]` パラメータ名 `Key` が位置を占め、その下に record が展開される):
+標準ヘッダー (Value の `[Key]` パラメーター名 `Key` が位置を占め、その下に record が展開される):
 
 ```
 Inventory[0].Key.Id    Inventory[0].Key.Type    Inventory[0].Level    Inventory[0].Power    Inventory[1].Key.Id    Inventory[1].Key.Type    Inventory[1].Level    Inventory[1].Power
@@ -532,13 +532,13 @@ Inventory[0].Key.Id    Inventory[0].Key.Type    Inventory[0].Level    Inventory[
 |-|-|-|
 |プリミティブな単一値 (`int`, `string`, `DateTime`, enum, ...)|O|`DateTime` / `TimeSpan` は [`[DateTimeFormat]`](./02-attributes.md#attr-datetimeformat) / [`[TimeSpanFormat]`](./02-attributes.md#attr-timespanformat) が必要|
 |Nullable (`K?`)|X|Map の Key は nullable にできない|
-|Record (単一/複数フィールド)|O|Value の `[Key]` パラメータの型と同一の record でなければならない|
+|Record (単一/複数フィールド)|O|Value の `[Key]` パラメーターの型と同一の record でなければならない|
 
 #### Value 型のサポート表
 
 |Value 型|サポート|備考|
 |-|-|-|
-|Record (`[Key]` がちょうど 1 つ)|O|`[Key]` パラメータの型と Map の `K` 型が一致しなければならない|
+|Record (`[Key]` がちょうど 1 つ)|O|`[Key]` パラメーターの型と Map の `K` 型が一致しなければならない|
 |Nullable Record (`MyRecord?`)|X|コレクションの Value の位置に nullable は許可されない|
 
 ### コレクション自体に対する制約
@@ -551,7 +551,7 @@ Inventory[0].Key.Id    Inventory[0].Key.Type    Inventory[0].Level    Inventory[
 
 ## ネストされた Record
 
-Record のパラメータがさらに別の Record であることがあります。このとき内部 Record のすべてのパラメータは、このドキュメントで説明したルールを再帰的に従います。
+Record のパラメーターがさらに別の Record であることがあります。このとき内部 Record のすべてのパラメーターは、このドキュメントで説明したルールを再帰的に従います。
 
 ```csharp
 public sealed record Position(int X, int Y);
@@ -576,7 +576,7 @@ Excel シート:
 | **2** | 1     | 10        | 20        |
 | **3** | 2     | 30        | 40        |
 
-内部 Record の各パラメータが自身の位置のカラムに展開されます。展開されたヘッダーが長くなれば [3.2 標準ヘッダージェネレーター](../03-usage/02-header-generator.md) で自動的に組み立てられます。
+内部 Record の各パラメーターが自身の位置のカラムに展開されます。展開されたヘッダーが長くなれば [3.2 標準ヘッダージェネレーター](../03-usage/02-header-generator.md) で自動的に組み立てられます。
 
 - 使用可能な Attribute: [`[ColumnName]`](./02-attributes.md#attr-columnname) でヘッダーの接頭辞を変更できます。
 - **Nullable Record** (`Position?`) は許可されません。
