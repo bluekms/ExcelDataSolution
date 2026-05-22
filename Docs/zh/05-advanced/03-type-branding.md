@@ -41,7 +41,7 @@ public sealed record HeroRecord(
 Id    Name
 ```
 
-只要在 CSV 单元格中写下 `100`，就会映射为 `new CharId(100)`。此外，由于附加了 [`[Key]`](./02-attributes.md#attr-key)，`ExcelColumnExtractor` 还会在抽取阶段一并检查该列的值是否重复。
+只要在 CSV 单元格中写下 `100`，就会映射为 `new CharId(100)`。此外，由于附加了 [`[Key]`](./02-attributes.md#attr-key)，`ExcelColumnExtractor` 还会在提取阶段一并检查该列的值是否重复。
 
 ---
 

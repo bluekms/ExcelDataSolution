@@ -84,7 +84,7 @@ foreach (var item in tables.ItemTable!.Records)
 
 `LoadAsync` 按以下顺序运作。
 
-1. **模式阶段检查** — 确认 TableSet 恰好有一个构造函数（两个以上会以 `TableSetMustHaveSingleConstructor` 被拒绝），并确认 `[ForeignKey]` / `[SwitchForeignKey]` 的目标存在于 TableSet 中、所指向的列是标量。如果没有 FK，则跳过 FK 目标检查。
+1. **架构阶段检查** — 确认 TableSet 恰好有一个构造函数（两个以上会以 `TableSetMustHaveSingleConstructor` 被拒绝），并确认 `[ForeignKey]` / `[SwitchForeignKey]` 的目标存在于 TableSet 中、所指向的列是标量。如果没有 FK，则跳过 FK 目标检查。
 2. **TableSet 并行加载** — 逐个遍历 TableSet 的构造函数参数，并行加载每个表的 CSV。每个表实例化之后立即调用 `StaticDataTable.Validate()`，各表的加载时间以 `Trace` 级别记录。只要有一个失败，就把所有失败汇总并作为 `AggregateException(Messages.TablesFailedToLoad, ...)` 抛出。
 3. **FK 值校验** — 全部成功后组装 TableSet，如果有 FK 则校验其实际值。如果有任何校验失败，则作为 `AggregateException(Messages.FkValidationFailed, ...)` 抛出。
 4. **StaticDataManager 校验** — 调用 StaticDataManager 的 `Validate(TTableSet)`（如果被 override）。如果它抛出异常，则原样抛出该异常。
@@ -108,7 +108,7 @@ await staticData.LoadAsync("./csv", disabledTables: ["ItemTable"]);
 
 每个表在 TableSet 中被声明为 nullable 的最大理由就是这个选项的存在。`null` 的可能性必须体现在类型上，这样才能写出不读取被 disable 的位置、直接跳过的代码。
 
-实务中它常被用作 **临时绕过破坏性变更的开发期选项**。当某个表的模式损坏，但你需要先构建并运行不使用该表的代码时，把该表 disable 掉就能在不修改代码的情况下继续推进。你不需要在调用方写额外代码来绕开被 disable 的位置，但如有必要也可以用 nullable 守卫加一个分支。
+实务中它常被用作 **临时绕过破坏性变更的开发期选项**。当某个表的架构损坏，但你需要先构建并运行不使用该表的代码时，把该表 disable 掉就能在不修改代码的情况下继续推进。你不需要在调用方写额外代码来绕开被 disable 的位置，但如有必要也可以用 nullable 守卫加一个分支。
 
 </br></br></br>
 
@@ -116,8 +116,8 @@ await staticData.LoadAsync("./csv", disabledTables: ["ItemTable"]);
 
 `StaticDataManager` 通过注入的 `ILogger` 记录两个阶段。
 
-- 各表加载完成 — `Trace` 级别，消息键 `LoadedTable`（`Loaded table {Name} in {ElapsedMs} ms`）。
-- 整体 `LoadAsync` 完成 — `Information` 级别，消息键 `LoadAsyncCompleted`（`LoadAsync completed in {ElapsedMs} ms`）。
+- 各表加载完成 — `Trace` 级别，消息键 `LoadedTable`（`表 {Name} 加载完成 ({ElapsedMs}ms)`）。
+- 整体 `LoadAsync` 完成 — `Information` 级别，消息键 `LoadAsyncCompleted`（`LoadAsync 完成 ({ElapsedMs}ms)`）。
 
 如果想单独查看各表的时间，在宿主端把最低日志级别降到 `Trace`。为了保持正常运维日志的整洁，保持在 `Information` 就只会留下整体完成时间。
 

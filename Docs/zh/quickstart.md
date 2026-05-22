@@ -31,7 +31,7 @@ flowchart LR
     Manager --> App
 ```
 
-`ExcelColumnExtractor` 同时以 Record 和 Excel 文件作为输入并抽取出 CSV，该 CSV 再通过 StaticDataManager 的 `LoadAsync` 加载到表中。查询从 StaticDataManager 的 `Current` 快照开始。
+`ExcelColumnExtractor` 同时以 Record 和 Excel 文件作为输入并提取出 CSV，该 CSV 再通过 StaticDataManager 的 `LoadAsync` 加载到表中。查询从 StaticDataManager 的 `Current` 快照开始。
 
 </br></br></br>
 
@@ -69,10 +69,10 @@ public sealed record QuestRecord(
     int RewardItemId);
 ```
 
-- `[StaticDataRecord("文件", "工作表")]` —— 第一个参数是 Excel 文件名（不含扩展名），第二个参数是工作表名。文件名和工作表名可以不同。抽取出的 CSV 遵循 `{文件}.{工作表}.csv` 的约定，最终为 `GameItems.Items.csv`。
+- `[StaticDataRecord("文件", "工作表")]` —— 第一个参数是 Excel 文件名（不含扩展名），第二个参数是工作表名。文件名和工作表名可以不同。提取出的 CSV 遵循 `{文件}.{工作表}.csv` 的约定，最终为 `GameItems.Items.csv`。
 - 参数名即为表头名。enum 按字符串进行匹配。
-- `[Range(0, 1_000_000)]` —— 检查 `Price` 的值是否在 0 至 1,000,000 范围内。只需声明，即可在抽取阶段和运行时加载两端自动验证，超出范围的值无需额外代码即被过滤掉。
-- `[RegularExpression(@"^.{1,50}$")]` —— 用正则表达式检查 `Title` 是否为 1 至 50 个字符。这同样只需声明即可在抽取和加载两端验证。
+- `[Range(0, 1_000_000)]` —— 检查 `Price` 的值是否在 0 至 1,000,000 范围内。只需声明，即可在提取阶段和运行时加载两端自动验证，超出范围的值无需额外代码即被过滤掉。
+- `[RegularExpression(@"^.{1,50}$")]` —— 用正则表达式检查 `Title` 是否为 1 至 50 个字符。这同样只需声明即可在提取和加载两端验证。
 
 </br></br></br>
 

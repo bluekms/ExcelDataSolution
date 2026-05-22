@@ -156,7 +156,7 @@ private static UniqueIndex<EventBundle, int> Build(GameStaticData.TableSet t)
 
 `LoadAsync` 的流程与 [3.5](./05-static-data-manager.md) 的单泛型 StaticDataManager 几乎相同，**在所有校验通过之后追加了一个 ViewSet 构建阶段**。
 
-1. **模式阶段检查** — 确认 TableSet 的单一构造函数并校验 FK 目标。
+1. **架构阶段检查** — 确认 TableSet 的单一构造函数并校验 FK 目标。
 2. **TableSet 并行加载** — 各表的 `Trace` 日志 `LoadedTable`。
 3. **FK 值校验** — 校验实际的 FK 值。
 4. **StaticDataManager 校验** — 调用 `Validate(TTableSet)`（如果被 override）。

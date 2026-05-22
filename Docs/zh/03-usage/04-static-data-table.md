@@ -57,7 +57,7 @@ public sealed class ItemTable : StaticDataTable<ItemTable, ItemRecord>
 }
 ```
 
-`UniqueIndex` 在创建时点检查键的重复。如果同一个 `Id` 出现两次以上，会抛出 `InvalidOperationException`。
+`UniqueIndex` 在创建时检查键是否重复。如果同一个 `Id` 出现两次以上，会抛出 `InvalidOperationException`。
 
 ```csharp
 var potion = table.Get(1);
@@ -121,4 +121,4 @@ public sealed class ItemTable : StaticDataTable<ItemTable, ItemRecord>
 
 ---
 
-[← 上一篇: 3.3 定义你的第一个 Record](./03-first-record.md) | [目录](../README.md) | [下一篇: 3.5 用 StaticDataManager 管理多个表 →](./05-static-data-manager.md)
+[← 上一篇: 3.3 定义你的第一个 Record](./03-first-record.md) | [目录](../README.md) | [下一篇: 3.5 用 StaticDataManager 管理多张表 →](./05-static-data-manager.md)

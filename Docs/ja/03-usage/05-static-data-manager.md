@@ -116,8 +116,8 @@ await staticData.LoadAsync("./csv", disabledTables: ["ItemTable"]);
 
 `StaticDataManager` は注入された `ILogger` で2つの段階を記録します。
 
-- テーブルごとのロード完了 — `Trace` レベル、メッセージキー `LoadedTable`（`Loaded table {Name} in {ElapsedMs} ms`）。
-- 全体の `LoadAsync` 完了 — `Information` レベル、メッセージキー `LoadAsyncCompleted`（`LoadAsync completed in {ElapsedMs} ms`）。
+- テーブルごとのロード完了 — `Trace` レベル、メッセージキー `LoadedTable`（`テーブル {Name} ロード完了 ({ElapsedMs}ms)`）。
+- 全体の `LoadAsync` 完了 — `Information` レベル、メッセージキー `LoadAsyncCompleted`（`LoadAsync 完了 ({ElapsedMs}ms)`）。
 
 テーブルごとの時間を個別に見たい場合は、ホスト側で最小ログレベルを `Trace` まで下げます。通常運用のログをきれいに保つには、`Information` のままにしておけば全体の完了時間だけが残ります。
 

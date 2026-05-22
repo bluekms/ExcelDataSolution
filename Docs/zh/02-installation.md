@@ -14,7 +14,7 @@
 
 |文件|用途|
 |-|-|
-|`ExcelColumnExtractor-v<版本>-win-x64.exe` / `-linux-x64`|Excel → CSV 抽取 CLI|
+|`ExcelColumnExtractor-v<版本>-win-x64.exe` / `-linux-x64`|Excel → CSV 提取 CLI|
 |`StaticDataHeaderGenerator-v<版本>-win-x64.exe` / `-linux-x64`|标准表头生成 CLI|
 |`Sdp.dll`|运行时库 —— 从你的项目中引用|
 
