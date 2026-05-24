@@ -71,6 +71,3 @@ See the [Quick Start](./Docs/en/quickstart.md) for the full walkthrough.
 
 Korean is the source of truth. The English, Japanese, and Chinese documentation
 is machine-translated by AI.
-
-Korean is the source of truth. The English, Japanese, and Chinese documentation
-is machine-translated by AI.
