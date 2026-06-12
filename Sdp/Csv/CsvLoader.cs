@@ -1,36 +1,36 @@
 using System.Collections.Immutable;
 using System.Globalization;
-using System.Reflection;
 using System.Text;
 using Sdp.Resources;
 
 namespace Sdp.Csv;
 
-internal static class CsvLoader
+public static class CsvLoader
 {
-    private static readonly MethodInfo BuildImmutableArrayGenericMethod = typeof(CsvLoader)
-        .GetMethod(nameof(BuildImmutableArrayTyped), BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    public static async Task<object> LoadAsync(string filePath, Type recordType)
+    // CSV 행 매핑은 인터페이스 계약 대신 델리게이트로 받는다. 생성 테이블 코드가 record 의
+    // 생성 매퍼(MapFromCsvRow)를 메서드 그룹으로 넘기므로 record 쪽에 별도 계약 타입이 필요 없다.
+    public static async Task<ImmutableArray<TRecord>> LoadAsync<TRecord>(
+        string filePath,
+        Func<CsvHeaderIndex, string[], TRecord> mapFromCsvRow)
     {
         var content = await File.ReadAllTextAsync(filePath);
-        return Parse(content, recordType, filePath);
+        return Parse(content, mapFromCsvRow, filePath);
     }
 
-    public static async Task<ImmutableArray<TRecord>> LoadAsync<TRecord>(string filePath)
-        where TRecord : notnull
-        => (ImmutableArray<TRecord>)await LoadAsync(filePath, typeof(TRecord));
-
-    private static object Parse(string csvContent, Type recordType, string? filePath = null)
+    public static ImmutableArray<TRecord> Parse<TRecord>(
+        string csvContent,
+        Func<CsvHeaderIndex, string[], TRecord> mapFromCsvRow,
+        string? filePath = null)
     {
         var rows = ParseCsvContent(csvContent);
         if (rows.Count == 0)
         {
-            return BuildEmptyArray(recordType);
+            return ImmutableArray<TRecord>.Empty;
         }
 
-        var headers = rows[0];
-        var records = new List<object>(rows.Count - 1);
+        var headers = new CsvHeaderIndex(rows[0], filePath);
+
+        var builder = ImmutableArray.CreateBuilder<TRecord>(rows.Count - 1);
 
         for (var i = 1; i < rows.Count; i++)
         {
@@ -42,8 +42,7 @@ internal static class CsvLoader
 
             try
             {
-                var record = CsvRecordMapper.MapToRecord(recordType, headers, values);
-                records.Add(record);
+                builder.Add(mapFromCsvRow(headers, values));
             }
             catch (Exception ex)
             {
@@ -67,22 +66,11 @@ internal static class CsvLoader
             }
         }
 
-        return BuildImmutableArray(recordType, records);
+        // 빈 행을 건너뛰면 Count < Capacity 가 되어 ToImmutable() 이 배열을 다시 복사한다.
+        // 용량을 실제 개수에 맞춘 뒤 MoveToImmutable() 으로 내부 버퍼를 그대로 넘긴다.
+        builder.Capacity = builder.Count;
+        return builder.MoveToImmutable();
     }
-
-    public static ImmutableArray<TRecord> Parse<TRecord>(string csvContent, string? filePath = null)
-        where TRecord : notnull
-        => (ImmutableArray<TRecord>)Parse(csvContent, typeof(TRecord), filePath);
-
-    private static object BuildImmutableArray(Type recordType, List<object> records)
-        => BuildImmutableArrayGenericMethod.MakeGenericMethod(recordType).Invoke(null, [records])!;
-
-    private static object BuildEmptyArray(Type recordType)
-    => BuildImmutableArrayGenericMethod.MakeGenericMethod(recordType).Invoke(null, [new List<object>()])!;
-
-    private static ImmutableArray<T> BuildImmutableArrayTyped<T>(List<object> records)
-        where T : notnull
-        => records.Cast<T>().ToImmutableArray();
 
     private static List<string[]> ParseCsvContent(string content)
     {
