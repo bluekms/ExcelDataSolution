@@ -1,6 +1,6 @@
 namespace Sdp.View;
 
-public abstract class StaticDataView<TSelf, TTableSet>(TTableSet tables) : IStaticDataView
+public abstract class StaticDataView<TSelf, TTableSet>(TTableSet tables)
     where TSelf : StaticDataView<TSelf, TTableSet>
     where TTableSet : class
 {
@@ -9,6 +9,4 @@ public abstract class StaticDataView<TSelf, TTableSet>(TTableSet tables) : IStat
     protected virtual void Validate()
     {
     }
-
-    void IStaticDataView.Validate() => Validate();
 }
