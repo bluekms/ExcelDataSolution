@@ -7,8 +7,6 @@ namespace Sdp.Csv;
 
 public static class CsvLoader
 {
-    // CSV 행 매핑은 인터페이스 계약 대신 델리게이트로 받는다. 생성 테이블 코드가 record 의
-    // 생성 매퍼(MapFromCsvRow)를 메서드 그룹으로 넘기므로 record 쪽에 별도 계약 타입이 필요 없다.
     public static async Task<ImmutableArray<TRecord>> LoadAsync<TRecord>(
         string filePath,
         Func<CsvHeaderIndex, string[], TRecord> mapFromCsvRow)
@@ -22,13 +20,14 @@ public static class CsvLoader
         Func<CsvHeaderIndex, string[], TRecord> mapFromCsvRow,
         string? filePath = null)
     {
-        var rows = ParseCsvContent(csvContent);
+        var rows = ParseCsvContent(csvContent, filePath);
         if (rows.Count == 0)
         {
-            return ImmutableArray<TRecord>.Empty;
+            return [];
         }
 
         var headers = new CsvHeaderIndex(rows[0], filePath);
+        var headerCellCount = rows[0].Length;
 
         var builder = ImmutableArray.CreateBuilder<TRecord>(rows.Count - 1);
 
@@ -42,6 +41,16 @@ public static class CsvLoader
 
             try
             {
+                // 필드가 부족한 경우
+                if (values.Length < headerCellCount)
+                {
+                    throw new InvalidOperationException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        Messages.Composite.CsvRowFieldCountShortage,
+                        values.Length,
+                        headerCellCount));
+                }
+
                 builder.Add(mapFromCsvRow(headers, values));
             }
             catch (Exception ex)
@@ -66,13 +75,11 @@ public static class CsvLoader
             }
         }
 
-        // 빈 행을 건너뛰면 Count < Capacity 가 되어 ToImmutable() 이 배열을 다시 복사한다.
-        // 용량을 실제 개수에 맞춘 뒤 MoveToImmutable() 으로 내부 버퍼를 그대로 넘긴다.
         builder.Capacity = builder.Count;
         return builder.MoveToImmutable();
     }
 
-    private static List<string[]> ParseCsvContent(string content)
+    private static List<string[]> ParseCsvContent(string content, string? filePath)
     {
         var rows = new List<string[]>();
         var fields = new List<string>();
@@ -99,17 +106,9 @@ public static class CsvLoader
                         i++;
                     }
                 }
-                else if (c == '\r')
-                {
-                    field.Append('\n');
-                    i++;
-                    if (i < content.Length && content[i] == '\n')
-                    {
-                        i++;
-                    }
-                }
                 else
                 {
+                    // 따옴표 안의 개행(CRLF 포함)은 RFC 4180 대로 원문 그대로 보존
                     field.Append(c);
                     i++;
                 }
@@ -153,6 +152,18 @@ public static class CsvLoader
                     i++;
                 }
             }
+        }
+
+        // 따옴표가 닫히지 않은 채 끝난 경우
+        if (inQuotes)
+        {
+            var fileLabel = filePath is not null
+                ? string.Format(
+                    CultureInfo.CurrentCulture,
+                    Messages.Composite.CsvFileLabel,
+                    Path.GetFileName(filePath))
+                : string.Empty;
+            throw new InvalidOperationException(fileLabel + Messages.CsvUnterminatedQuote);
         }
 
         if (field.Length > 0 || fields.Count > 0)
