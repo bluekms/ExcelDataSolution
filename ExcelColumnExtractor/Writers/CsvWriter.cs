@@ -22,7 +22,10 @@ public static class CsvWriter
             var sheetName = recordSchema.GetAttributeValue<StaticDataRecordAttribute, string>(1);
             var fileName = Path.Combine(path, $"{excelFileName}.{sheetName}.csv");
             var sb = new StringBuilder();
-            sb.AppendLine(string.Join(",", table.Headers));
+
+            // 헤더에도 데이터 행과 같은 escape를 적용한다. 헤더명에 특수문자(쉼표 등)가
+            // 들어가면 escape 없는 헤더 행이 CSV 구조를 깨뜨린다.
+            sb.AppendLine(string.Join(",", table.Headers.Select(EscapeCell)));
 
             using var writer = new StreamWriter(fileName, false, encoding);
             foreach (var row in table.Rows)
@@ -49,19 +52,7 @@ public static class CsvWriter
 
         foreach (var cell in row.Data)
         {
-            var value = cell.Value ?? string.Empty;
-
-            if (value.IndexOfAny(SpecialChars) != -1)
-            {
-                sb.Append('"');
-                sb.Append(value.Replace("\"", "\"\""));
-                sb.Append('"');
-            }
-            else
-            {
-                sb.Append(value);
-            }
-
+            sb.Append(EscapeCell(cell.Value ?? string.Empty));
             sb.Append(',');
         }
 
@@ -71,5 +62,15 @@ public static class CsvWriter
         }
 
         return sb.ToString();
+    }
+
+    private static string EscapeCell(string value)
+    {
+        if (value.IndexOfAny(SpecialChars) == -1)
+        {
+            return value;
+        }
+
+        return "\"" + value.Replace("\"", "\"\"") + "\"";
     }
 }
