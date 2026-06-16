@@ -847,7 +847,7 @@ internal static class CsvMapperEmitter
         var baseConversion = EmitElementBaseConversion(info, valueExpr, param, nestedTokens);
 
         // [Range]/[RegularExpression] 가 컬렉션에 붙으면 원소를 각각 검증한다. 검증 attribute 가 붙은
-        // nullable 원소 컬렉션은 IsElementValidationCompatible 이 emit 자체를 거부하므로, nullable 원소가
+        // nullable 원소 컬렉션은 AreValidationAttributesApplicable 이 emit 자체를 거부하므로, nullable 원소가
         // 여기 도달하는 경우 WrapValidations 는 no-op 이다.
         var converted = WrapValidations(param, baseConversion, ownerToken);
 

@@ -932,8 +932,7 @@ internal static class CsvMapperGenerator
     }
 
     // FrozenDictionary 의 [Key] 구성 오류는 generic SDP0004 로는 원인이 드러나지 않으므로 전용 진단으로
-    // 거부한다. 중첩 record 안의 dict 는 컬렉션 자체가 미지원이라 키를 고쳐도 해결되지 않으므로
-    // root 파라미터만 검사한다.
+    // 거부한다. dict 는 root 든 nested 든 emit 되므로 평탄화한 전체 파라미터를 검사한다.
     private static HashSet<string> ValidateFrozenDictionaryKeys(
         INamedTypeSymbol symbol,
         RecordDeclarationSyntax syntax,
@@ -944,11 +943,6 @@ internal static class CsvMapperGenerator
 
         foreach (var qualified in allParameters)
         {
-            if (qualified.Path.IndexOf('.') >= 0)
-            {
-                continue;
-            }
-
             var param = qualified.Parameter;
             if (param.Collection is not { Kind: CollectionKind.FrozenDictionary, ValueNested: { } valueNested } info)
             {
