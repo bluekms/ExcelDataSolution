@@ -27,6 +27,10 @@ internal sealed record ParameterAnalysis(
 
     public bool IsRecord => Nested is not null;
 
+    public ScalarKind EffectiveKind => Collection is { } collection ? collection.ElementKind : Kind;
+
+    public ITypeSymbol EffectiveType => Collection is { } collection ? collection.ElementType : Type;
+
     public static ParameterAnalysis Ignored(string name, string columnName, ITypeSymbol type)
     {
         return new ParameterAnalysis(

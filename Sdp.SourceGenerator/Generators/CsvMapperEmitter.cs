@@ -118,19 +118,19 @@ internal static class CsvMapperEmitter
                 CollectNestedTokens(nested.Parameters, map);
             }
 
+            if (param.Collection is { ElementNested: { } elementNested }
+                && !map.ContainsKey(elementNested.Symbol))
+            {
+                map[elementNested.Symbol] = MakeToken(elementNested.Symbol.Name, map);
+                CollectNestedTokens(elementNested.Parameters, map);
+            }
+
             if (param.Collection is { Kind: CollectionKind.FrozenDictionary } collection
                 && collection.ValueNested is { } valueNested
                 && !map.ContainsKey(valueNested.Symbol))
             {
                 map[valueNested.Symbol] = MakeToken(valueNested.Symbol.Name, map);
                 CollectNestedTokens(valueNested.Parameters, map);
-            }
-
-            if (param.Collection is { ElementNested: { } elementNested }
-                && !map.ContainsKey(elementNested.Symbol))
-            {
-                map[elementNested.Symbol] = MakeToken(elementNested.Symbol.Name, map);
-                CollectNestedTokens(elementNested.Parameters, map);
             }
 
             if (param.Collection is { ElementKind: ScalarKind.Enum, ElementNested: null } enumCollection)
