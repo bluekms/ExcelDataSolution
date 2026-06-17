@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using System.Collections.Immutable;
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Sdp.Attributes;
 using Sdp.Csv;
@@ -220,6 +221,33 @@ public partial class DateTimeFormatMappingTests(ITestOutputHelper testOutputHelp
         Assert.Contains(new DateTime(2026, 5, 1), (IEnumerable<DateTime>)record.Dates);
         Assert.Contains(new DateTime(2026, 5, 2), (IEnumerable<DateTime>)record.Dates);
         logger.LogInformation("Date set mapped with {Count} elements", record.Dates.Count);
+    }
+
+    [Theory]
+    [InlineData("yyyy-MM-ddTHH:mm:ss", "2026-05-19T09:30:00", true)]
+    [InlineData("yyyy-MM-dd'T'HH:mm:ss", "2026-05-19T09:30:00", true)]
+    [InlineData("yyyy-MM-dd,HH:mm:ss", "2026-05-19,09:30:00", true)]
+    [InlineData("yyyy-MM-dd','HH:mm:ss", "2026-05-19,09:30:00", true)]
+    [InlineData("yyyy-MM-ddFooHH:mm:ss", "2026-05-19Foo09:30:00", false)]
+    [InlineData("yyyy-MM-dd'Foo'HH:mm:ss", "2026-05-19Foo09:30:00", true)]
+    public void DateTimeFormat_LiteralSeparator(string format, string input, bool shouldSucceed)
+    {
+        var logger = CreateLogger();
+
+        if (shouldSucceed)
+        {
+            var parsed = DateTime.ParseExact(input, format, CultureInfo.InvariantCulture);
+
+            Assert.Equal(new DateTime(2026, 5, 19, 9, 30, 0), parsed);
+            logger.LogInformation("format '{Format}' parsed '{Input}' to {Parsed}", format, input, parsed);
+        }
+        else
+        {
+            var ex = Assert.Throws<FormatException>(
+                () => DateTime.ParseExact(input, format, CultureInfo.InvariantCulture));
+
+            logger.LogInformation("format '{Format}' on '{Input}' threw: {Message}", format, input, ex.Message);
+        }
     }
 
     private TestOutputLogger<DateTimeFormatMappingTests> CreateLogger()
